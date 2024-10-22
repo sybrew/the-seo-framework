@@ -429,7 +429,7 @@ class Title {
 
 		if ( Title\Conditions::use_generated_archive_prefix( $object ) ) {
 			if ( $prefix ) {
-				$title = sprintf(
+				$title = \sprintf(
 					/* translators: 1: Title prefix. 2: Title. */
 					\_x( '%1$s %2$s', 'archive title', 'default' ),
 					$prefix,
@@ -548,7 +548,7 @@ class Title {
 
 			if ( $term ) {
 				$title  = static::get_term_title( $term );
-				$prefix = sprintf(
+				$prefix = \sprintf(
 					/* translators: %s: Taxonomy singular name. */
 					\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
 					Sanitize::metadata_content( Taxonomy::get_label( $term->taxonomy ?? '' ) ),
@@ -583,7 +583,7 @@ class Title {
 					$prefix = \_x( 'Tag:', 'tag archive title prefix', 'default' );
 					break;
 				default:
-					$prefix = sprintf(
+					$prefix = \sprintf(
 						/* translators: %s: Taxonomy singular name. */
 						\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
 						Taxonomy::get_label( $object->taxonomy ),
@@ -765,7 +765,7 @@ class Title {
 	public static function get_search_query_title() {
 		return Sanitize::metadata_content(
 			/* translators: %s: search phrase */
-			sprintf( \__( 'Search Results for &#8220;%s&#8221;', 'default' ), \get_search_query( true ) )
+			\sprintf( \__( 'Search Results for &#8220;%s&#8221;', 'default' ), \get_search_query( true ) )
 		);
 	}
 
@@ -861,7 +861,7 @@ class Title {
 			$sep = static::get_separator();
 
 			/* translators: %s: Page number. */
-			$paging = sprintf( \__( 'Page %s', 'default' ), $page );
+			$paging = \sprintf( \__( 'Page %s', 'default' ), $page );
 
 			return \is_rtl() ? "$paging $sep $title" : "$title $sep $paging";
 		}
@@ -893,7 +893,7 @@ class Title {
 		$post = \get_post( $args['id'] ?? Query::get_the_real_id() );
 
 		if ( ! empty( $post->post_password ) ) {
-			return sprintf(
+			return \sprintf(
 				/**
 				 * Filters the text prepended to the post title of private posts.
 				 *
@@ -914,7 +914,7 @@ class Title {
 				$title,
 			);
 		} elseif ( 'private' === ( $post->post_status ?? null ) ) {
-			return sprintf(
+			return \sprintf(
 				/**
 				 * Filters the text prepended to the post title of private posts.
 				 *

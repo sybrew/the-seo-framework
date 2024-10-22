@@ -53,7 +53,7 @@ switch ( $instance ) :
 			$_multilingual_warning = \esc_html__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' );
 			if ( $home_id ) {
 				$_multilingual_warning .= '<br>' . Markdown::convert(
-					sprintf(
+					\sprintf(
 						/* translators: %s = Homepage URL markdown */
 						\esc_html__( 'Edit the fields on the [homepage](%s) instead.', 'autodescription' ),
 						\esc_url( \admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) ),
@@ -447,7 +447,7 @@ switch ( $instance ) :
 				'name'     => Input::get_field_name( 'homepage_twitter_card_type' ),
 				'label'    => '',
 				'options'  => array_merge(
-					[ '' => sprintf( $_default_i18n, $tw_card_default ) ],
+					[ '' => \sprintf( $_default_i18n, $tw_card_default ) ],
 					array_combine( $tw_suported_cards, $tw_suported_cards ),
 				),
 				'selected' => Data\Plugin::get_option( 'homepage_twitter_card_type' ),
@@ -559,9 +559,9 @@ switch ( $instance ) :
 		 * Adds starting - with space to maintain readability.
 		 */
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {
-			$checked_home = sprintf(
+			$checked_home = \sprintf(
 				'- %s',
-				sprintf(
+				\sprintf(
 					'<a href="%s" title="%s" target=_blank class=attention>%s</a>',
 					\esc_url( \admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) ),
 					\esc_attr_x( 'Edit homepage page settings', 'Bear with me: the homepage can be edited globally, or via its page. Thus "homepage page".', 'autodescription' ),
@@ -572,7 +572,7 @@ switch ( $instance ) :
 
 		HTML::header_title( \__( 'Robots Meta Settings', 'autodescription' ) );
 
-		$i_label = sprintf(
+		$i_label = \sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
 			\esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
 			Markdown::convert(
@@ -588,7 +588,7 @@ switch ( $instance ) :
 			$noindex_post ? $checked_home : '',
 		);
 
-		$f_label = sprintf(
+		$f_label = \sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
 			\esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
 			Markdown::convert(
@@ -604,7 +604,7 @@ switch ( $instance ) :
 			$nofollow_post ? $checked_home : '',
 		);
 
-		$a_label = sprintf(
+		$a_label = \sprintf(
 			/* translators: 1: Option label, 2: [?] option info note, 3: Optional warning */
 			\esc_html_x( '%1$s %2$s %3$s', 'robots setting', 'autodescription' ),
 			Markdown::convert(
@@ -646,7 +646,7 @@ switch ( $instance ) :
 		if ( $home_id ) {
 			HTML::description_noesc(
 				Markdown::convert(
-					sprintf(
+					\sprintf(
 						/* translators: %s = Homepage URL markdown */
 						\esc_html__( 'Note: These options may be overwritten by the [page settings](%s).', 'autodescription' ),
 						\esc_url( \admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) ),

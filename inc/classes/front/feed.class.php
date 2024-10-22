@@ -93,7 +93,7 @@ final class Feed {
 		}
 
 		if ( Data\Plugin::get_option( 'source_the_feed' ) ) {
-			$content .= sprintf(
+			$content .= \sprintf(
 				"\n" . '<p><a href="%s" rel="nofollow">%s</a></p>', // Keep XHTML valid!
 				\esc_url( \get_permalink() ),
 				\esc_html(

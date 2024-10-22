@@ -87,7 +87,7 @@ class Utils {
 			printf(
 				'<p><strong>%s</strong></p>',
 				Markdown::convert(
-					sprintf(
+					\sprintf(
 						/* translators: %s = Redirect URL markdown */
 						\esc_html__( 'There has been an error redirecting. Refresh the page or follow [this link](%s).', 'autodescription' ),
 						\esc_url( $target ),

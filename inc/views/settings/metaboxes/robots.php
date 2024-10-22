@@ -192,7 +192,7 @@ switch ( $instance ) :
 		];
 		foreach ( range( 1, 600, 1 ) as $_n ) {
 			/* translators: %d = number */
-			$_text_snippet_types['number'][ $_n ] = sprintf( \_n( '%d character', '%d characters', $_n, 'autodescription' ), $_n );
+			$_text_snippet_types['number'][ $_n ] = \sprintf( \_n( '%d character', '%d characters', $_n, 'autodescription' ), $_n );
 		}
 		$text_snippet_options = '';
 		$_current             = Data\Plugin::get_option( 'max_snippet_length' );
@@ -203,7 +203,7 @@ switch ( $instance ) :
 
 			$_options = '';
 			foreach ( $_values as $_value => $_name ) {
-				$_options .= sprintf(
+				$_options .= \sprintf(
 					'<option value="%s" %s>%s</option>',
 					\esc_attr( $_value ),
 					\selected( $_current, \esc_attr( $_value ), false ),
@@ -211,7 +211,7 @@ switch ( $instance ) :
 				);
 			}
 
-			$text_snippet_options .= sprintf( '<optgroup label="%s">%s</optgroup>', \esc_attr( $_label ), $_options );
+			$text_snippet_options .= \sprintf( '<optgroup label="%s">%s</optgroup>', \esc_attr( $_label ), $_options );
 		}
 		HTML::wrap_fields(
 			vsprintf(
@@ -242,7 +242,7 @@ switch ( $instance ) :
 			'large'    => \__( 'Large or full size', 'autodescription' ),
 		];
 		foreach ( $_image_preview_types as $_value => $_name ) {
-			$image_preview_options .= sprintf(
+			$image_preview_options .= \sprintf(
 				'<option value="%s" %s>%s</option>',
 				\esc_attr( $_value ),
 				\selected( $_current, \esc_attr( $_value ), false ),
@@ -276,7 +276,7 @@ switch ( $instance ) :
 		];
 		foreach ( range( 1, 600, 1 ) as $_n ) {
 			/* translators: %d = number */
-			$_video_snippet_types['number'][ $_n ] = sprintf( \_n( '%d second', '%d seconds', $_n, 'autodescription' ), $_n );
+			$_video_snippet_types['number'][ $_n ] = \sprintf( \_n( '%d second', '%d seconds', $_n, 'autodescription' ), $_n );
 		}
 		$video_preview_options = '';
 		$_current              = Data\Plugin::get_option( 'max_video_preview' );
@@ -287,7 +287,7 @@ switch ( $instance ) :
 
 			$_options = '';
 			foreach ( $_values as $_value => $_name ) {
-				$_options .= sprintf(
+				$_options .= \sprintf(
 					'<option value="%s" %s>%s</option>',
 					\esc_attr( $_value ),
 					\selected( $_current, \esc_attr( $_value ), false ),
@@ -295,7 +295,7 @@ switch ( $instance ) :
 				);
 			}
 
-			$video_preview_options .= sprintf( '<optgroup label="%s">%s</optgroup>', \esc_attr( $_label ), $_options );
+			$video_preview_options .= \sprintf( '<optgroup label="%s">%s</optgroup>', \esc_attr( $_label ), $_options );
 		}
 		HTML::wrap_fields(
 			vsprintf(
@@ -354,10 +354,10 @@ switch ( $instance ) :
 			$checkboxes[] = Input::make_checkbox( [
 				'id'     => [ $pt_option_id, $post_type ],
 				'class'  => 'tsf-robots-post-types',
-				'label'  => sprintf(
+				'label'  => \sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
-					sprintf(
+					\sprintf(
 						$apply_x_to_y_i18n_plural,
 						$ro_name_wrapped,
 						\esc_html( Post_Type::get_label( $post_type, false ) ),
@@ -387,10 +387,10 @@ switch ( $instance ) :
 			$checkboxes[] = Input::make_checkbox( [
 				'id'     => [ $tax_option_id, $taxonomy ],
 				'class'  => 'tsf-robots-taxonomies',
-				'label'  => sprintf(
+				'label'  => \sprintf(
 					// RTL supported: Because the post types are Roman, browsers enforce the order.
 					'%s &ndash; <code>%s</code>',
-					sprintf(
+					\sprintf(
 						$apply_x_to_y_i18n_plural,
 						$ro_name_wrapped,
 						\esc_html( Taxonomy::get_label( $taxonomy, false ) ),
@@ -417,7 +417,7 @@ switch ( $instance ) :
 		$checkboxes = '';
 		foreach ( $args['global_types'] as $type => $data ) {
 
-			$label = sprintf(
+			$label = \sprintf(
 				'singular' === $data['i18ntype'] ? $apply_x_to_y_i18n_singular : $apply_x_to_y_i18n_plural,
 				$ro_name_wrapped,
 				\esc_html( $data['i18n'] )
@@ -431,7 +431,7 @@ switch ( $instance ) :
 				$checkboxes .= '<hr class=tsf-option-spacer>';
 
 				if ( \in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
-					$checkboxes .= sprintf(
+					$checkboxes .= \sprintf(
 						'<p><span class="description attention">%s</span></p>',
 						\esc_html__( 'Warning: No public site should ever enable this option.', 'autodescription' )
 					);
@@ -462,7 +462,7 @@ switch ( $instance ) :
 		// HTML::description( \__( 'Without robots.txt, the crawler may assume an error and may not crawl your website.', 'autodescription' ) );
 
 		if ( $robots_url ) {
-			HTML::description_noesc( sprintf(
+			HTML::description_noesc( \sprintf(
 				'<a href="%s" target=_blank rel=noopener>%s</a>',
 				\esc_url( $robots_url, [ 'https', 'http' ] ),
 				\esc_html__( 'View the robots.txt output.', 'autodescription' ),
@@ -488,7 +488,7 @@ switch ( $instance ) :
 				);
 				HTML::description_noesc(
 					Markdown::convert(
-						sprintf(
+						\sprintf(
 							/* translators: 1 = Link to settings, Markdown. 2 = example input, also markdown! Preserve the Markdown as-is! */
 							\esc_html__( 'Change your [Permalink Settings](%1$s). Recommended structure: `%2$s`.', 'autodescription' ),
 							\esc_url( \admin_url( 'options-permalink.php' ), [ 'https', 'http' ] ),

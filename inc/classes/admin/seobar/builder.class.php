@@ -241,7 +241,7 @@ final class Builder {
 			$blocks[] = $block;
 
 		// Always return the wrap, may it be filled in via JS in the future.
-		return sprintf(
+		return \sprintf(
 			'<div class="tsf-seo-bar tsf-tooltip-super-wrap"><span class=tsf-seo-bar-inner-wrap>%s</span></div>',
 			implode( $blocks )
 		);
@@ -317,11 +317,11 @@ final class Builder {
 				$symbol = $item['symbol'];
 			}
 
-			$html = sprintf(
+			$html = \sprintf(
 				'<strong>%s:</strong> %s<br>%s',
 				$item['title'],
 				$item['reason'],
-				sprintf(
+				\sprintf(
 					'<ol>%s</ol>',
 					implode(
 						'',
@@ -338,22 +338,22 @@ final class Builder {
 			} else {
 				$i = 0;
 				foreach ( $item['assess'] as $text ) {
-					$assessments[] = sprintf( $gettext['enum'], ++$i, $text );
+					$assessments[] = \sprintf( $gettext['enum'], ++$i, $text );
 				}
 			}
 
-			$aria = sprintf(
+			$aria = \sprintf(
 				$gettext['aria'],
 				$item['title'],
 				$item['reason'],
-				sprintf(
+				\sprintf(
 					$gettext['list'],
 					$count < 2 ? $gettext['assessment'] : $gettext['assessments'],
 					implode( ' ', $assessments ),
 				),
 			);
 
-			yield sprintf(
+			yield \sprintf(
 				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
 				$status,
 				\esc_attr( $aria ),

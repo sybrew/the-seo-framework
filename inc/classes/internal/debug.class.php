@@ -92,7 +92,7 @@ final class Debug {
 		if ( \WP_DEBUG && \apply_filters( 'deprecated_function_trigger_error', true ) ) {
 
 			if ( isset( $replacement ) ) {
-				$message = sprintf(
+				$message = \sprintf(
 					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification, 4: Replacement function */
 					\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework! Use %4$s instead.', 'autodescription' ),
 					\esc_html( $function ),
@@ -101,7 +101,7 @@ final class Debug {
 					$replacement, // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
 				);
 			} else {
-				$message = sprintf(
+				$message = \sprintf(
 					/* translators: 1: Function name, 2: 'Deprecated', 3: Plugin Version notification */
 					\esc_html__( '%1$s is %2$s since version %3$s of The SEO Framework with no alternative available.', 'autodescription' ),
 					\esc_html( $function ),
@@ -154,10 +154,10 @@ final class Debug {
 
 			$ver_message = $version
 				/* translators: 1: plugin version */
-				? sprintf( \__( '(This message was added in version %s of The SEO Framework.)', 'autodescription' ), $version )
+				? \sprintf( \__( '(This message was added in version %s of The SEO Framework.)', 'autodescription' ), $version )
 				: '';
 
-			$message = sprintf(
+			$message = \sprintf(
 				/* translators: 1: Function name, 2: 'Incorrectly', 3: Error message 4: Plugin Version notification */
 				\esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
 				\esc_html( $function ),
@@ -209,12 +209,12 @@ final class Debug {
 		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
 		 */
 		if ( \WP_DEBUG && \apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
-			$message = sprintf(
+			$message = \sprintf(
 				/* translators: 1: Method or Property name, 2: "inaccessible", 3: Class name. 4: Message */
 				\esc_html__( '%1$s is %2$s in %3$s. %4$s', 'autodescription' ),
 				'<code>' . \esc_html( $p_or_m ) . '</code>',
 				'<strong>' . \esc_html__( 'inaccessible', 'autodescription' ) . '</strong>',
-				sprintf( '<b>%s</b>', \esc_html( $handle ) ),
+				\sprintf( '<b>%s</b>', \esc_html( $handle ) ),
 				\esc_html( $message ),
 			);
 

@@ -195,7 +195,7 @@ class Registry {
 			 * @since 4.0.2 Made the endpoints' regex case-insensitive.
 			 * @link Example: https://github.com/sybrew/tsf-term-sitemap
 			 * @param array[] $list {
-			 *   A list of sitemap endpoints keyed by ID.
+			 *     A list of sitemap endpoints keyed by ID.
 			 *
 			 *     @type string|false $lock_id  Optional. The cache key to use for locking. Defaults to index 'id'.
 			 *                                  Set to false to disable locking.
@@ -426,7 +426,7 @@ class Registry {
 		array_walk(
 			$schemas,
 			function ( &$schema, $key ) {
-				$schema = sprintf( '%s="%s"', $key, implode( ' ', (array) $schema ) );
+				$schema = \sprintf( '%s="%s"', $key, implode( ' ', (array) $schema ) );
 			}
 		);
 

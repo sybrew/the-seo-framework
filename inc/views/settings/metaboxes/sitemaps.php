@@ -85,7 +85,7 @@ switch ( $instance ) :
 
 		HTML::description_noesc(
 			Markdown::convert(
-				sprintf(
+				\sprintf(
 					/* translators: %s = Learn more URL. Markdown! */
 					\esc_html__( 'The sitemap does not contribute to ranking; [it can only help with indexing](%s). Search engines process smaller, less complicated sitemaps quicker, which shortens the time required for indexing pages.', 'autodescription' ),
 					'https://kb.theseoframework.com/?p=119',
@@ -130,7 +130,7 @@ switch ( $instance ) :
 		if ( ! $has_sitemap_plugin && ! $sitemap_detected ) {
 			// Note to self: Do not toggle this condition in JS. The user would get a 404 message if the options have yet to be saved.
 			if ( Data\Plugin::get_option( 'sitemaps_output' ) ) {
-				HTML::description_noesc( sprintf(
+				HTML::description_noesc( \sprintf(
 					'<a href="%s" target=_blank rel=noopener>%s</a>',
 					\esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
 					\esc_html__( 'View the base sitemap.', 'autodescription' ),
@@ -140,7 +140,7 @@ switch ( $instance ) :
 			} elseif ( Sitemap\Utils::use_core_sitemaps() ) {
 				$_index_url = \get_sitemap_url( 'index' );
 				if ( $_index_url )
-					HTML::description_noesc( sprintf(
+					HTML::description_noesc( \sprintf(
 						'<a href="%s" target=_blank rel=noopener>%s</a>',
 						\esc_url( $_index_url, [ 'https', 'http' ] ),
 						\esc_html__( 'View the sitemap index.', 'autodescription' ),
@@ -151,7 +151,7 @@ switch ( $instance ) :
 				HTML::attention_noesc(
 					// Markdown escapes.
 					Markdown::convert(
-						sprintf(
+						\sprintf(
 							/* translators: %s = Documentation URL in markdown */
 							\esc_html__( 'A multilingual plugin has been detected, so your site may have multiple sitemaps. [Learn more](%s).', 'autodescription' ),
 							'https://kb.theseoframework.com/?p=104#same-site-sitemaps',
@@ -246,7 +246,7 @@ switch ( $instance ) :
 				);
 				HTML::description_noesc(
 					Markdown::convert(
-						sprintf(
+						\sprintf(
 							/* translators: 1 = Link to settings, Markdown. 2 = example input, also markdown! Preserve the Markdown as-is! */
 							\esc_html__( 'Change your [Permalink Settings](%1$s). Recommended structure: `%2$s`.', 'autodescription' ),
 							\esc_url( \admin_url( 'options-permalink.php' ), [ 'https', 'http' ] ),
@@ -270,7 +270,7 @@ switch ( $instance ) :
 		);
 
 		if ( $robots_url ) {
-			HTML::description_noesc( sprintf(
+			HTML::description_noesc( \sprintf(
 				'<a href="%s" target=_blank rel=noopener>%s</a>',
 				\esc_url( $robots_url, [ 'https', 'http' ] ),
 				\esc_html__( 'View the robots.txt output.', 'autodescription' ),

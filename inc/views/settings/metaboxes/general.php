@@ -190,7 +190,7 @@ switch ( $instance ) :
 		$search_query_select_options = '';
 		$_current                    = Data\Plugin::get_option( 'alter_search_query_type' );
 		foreach ( $query_types as $value => $name ) {
-			$search_query_select_options .= sprintf(
+			$search_query_select_options .= \sprintf(
 				'<option value="%s" %s>%s</option>',
 				\esc_attr( $value ),
 				\selected( $_current, \esc_attr( $value ), false ),
@@ -201,7 +201,7 @@ switch ( $instance ) :
 		$archive_query_select_options = '';
 		$_current                     = Data\Plugin::get_option( 'alter_archive_query_type' );
 		foreach ( $query_types as $value => $name ) {
-			$archive_query_select_options .= sprintf(
+			$archive_query_select_options .= \sprintf(
 				'<option value="%s" %s>%s</option>',
 				\esc_attr( $value ),
 				\selected( $_current, \esc_attr( $value ), false ),
@@ -274,7 +274,7 @@ switch ( $instance ) :
 			$scheme_types = (array) \apply_filters(
 				'the_seo_framework_canonical_scheme_types',
 				[
-					'automatic' => sprintf(
+					'automatic' => \sprintf(
 						/* translators: %s = HTTP or HTTPS */
 						\__( 'Detect automatically (%s)', 'autodescription' ),
 						strtoupper( Meta\URI\Utils::detect_site_url_scheme() ),
@@ -381,7 +381,7 @@ switch ( $instance ) :
 		HTML::header_title( \__( 'Exclusion Settings', 'autodescription' ) );
 		HTML::description( \__( 'Check these options to remove meta optimizations, SEO suggestions, and sitemap inclusions for selected post types and taxonomies.', 'autodescription' ) );
 		HTML::attention_description_noesc( Markdown::convert(
-			sprintf(
+			\sprintf(
 				/* translators: backticks are code wraps. Markdown! */
 				\esc_html__( "Exclusions don't block search engines. If a post type is publicly queryable and shouldn't be indexed, don't exclude it. Instead, consider applying `noindex` via Robots Settings.", 'autodescription' ),
 				'#autodescription-robots-settings',
@@ -404,7 +404,7 @@ switch ( $instance ) :
 			$_label = Post_Type::get_label( $post_type, false );
 			if ( ! \strlen( $_label ) ) continue;
 
-			$_label = sprintf(
+			$_label = \sprintf(
 				'%s &ndash; <code>%s</code>',
 				\esc_html( $_label ),
 				\esc_html( $post_type ),
@@ -435,7 +435,7 @@ switch ( $instance ) :
 			$_label = Taxonomy::get_label( $taxonomy, false );
 			if ( ! \strlen( $_label ) ) continue;
 
-			$_label = sprintf(
+			$_label = \sprintf(
 				'%s &ndash; <code>%s</code>',
 				\esc_html( $_label ),
 				\esc_html( $taxonomy ),

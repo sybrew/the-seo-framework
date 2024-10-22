@@ -137,7 +137,7 @@ class Excerpt {
 	 * @return string
 	 */
 	private static function get_blog_page_excerpt() {
-		return sprintf(
+		return \sprintf(
 			/* translators: %s = Blog page title. Front-end output. */
 			\__( 'Latest posts: %s', 'autodescription' ),
 			Data\Blog::get_public_blog_name(),

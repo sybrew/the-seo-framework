@@ -178,11 +178,11 @@ class Menu {
 
 		$notice_i18n = \number_format_i18n( $issue_count );
 
-		return ' ' . sprintf(
+		return ' ' . \sprintf(
 			'<span class="tsf-menu-issue menu-counter count-%d"><span class=tsf-menu-issue-text aria-hidden=true>%s</span><span class=screen-reader-text>%s</span></span>',
 			$issue_count,
 			$notice_i18n,
-			sprintf(
+			\sprintf(
 				/* translators: %s: number of issues waiting */
 				\_n( '%s issue waiting', '%s issues waiting', $issue_count, 'autodescription' ),
 				$notice_i18n,

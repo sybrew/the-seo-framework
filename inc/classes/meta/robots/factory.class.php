@@ -112,7 +112,7 @@ class Factory {
 			default:
 				static::$tsf->_doing_it_wrong(
 					__METHOD__,
-					sprintf( 'Unregistered robots-generator getter provided: <code>%s</code>.', \esc_html( $sender ) ),
+					\sprintf( 'Unregistered robots-generator getter provided: <code>%s</code>.', \esc_html( $sender ) ),
 					'4.2.0',
 				);
 				yield static::HALT;

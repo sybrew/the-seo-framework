@@ -80,7 +80,7 @@ trait Static_Deprecator {
 			\tsf()->_inaccessible_p_or_m(
 				"$$name",
 				trim(
-					sprintf(
+					\sprintf(
 						'%s;%s',
 						$since ? "Since $since of The SEO Framework" : '',
 						$alternative ? " Use $alternative instead" : '',
@@ -123,7 +123,7 @@ trait Static_Deprecator {
 			\tsf()->_inaccessible_p_or_m(
 				"$$name",
 				trim(
-					sprintf(
+					\sprintf(
 						'%s;%s',
 						$since ? "Since $since of The SEO Framework" : '',
 						$alternative ? " Use $alternative instead" : '',

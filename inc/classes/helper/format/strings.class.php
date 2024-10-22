@@ -213,7 +213,7 @@ class Strings {
 		// Tries to match "\x20" when the sentence contains no spaces, subsequently failing because trim() already removed that.
 		// Uses $ to consider cut-off endings under $max_char_length
 		preg_match(
-			sprintf(
+			\sprintf(
 				'/^.{0,%d}(?:[^\P{Po}\'\":]|[\p{Pc}\p{Pd}\p{Pf}\p{Z}]|\x20|$)/su',
 				$max_char_length,
 			),

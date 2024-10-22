@@ -134,7 +134,7 @@ class Markdown {
 		foreach ( $matches as $match ) {
 			$text = str_replace(
 				$match[0],
-				sprintf( '<strong><em>%s</em></strong>', \esc_html( $match[1] ) ),
+				\sprintf( '<strong><em>%s</em></strong>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -159,7 +159,7 @@ class Markdown {
 		foreach ( $matches as $match ) {
 			$text = str_replace(
 				$match[0],
-				sprintf( '<strong>%s</strong>', \esc_html( $match[1] ) ),
+				\sprintf( '<strong>%s</strong>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -184,7 +184,7 @@ class Markdown {
 		foreach ( $matches as $match ) {
 			$text = str_replace(
 				$match[0],
-				sprintf( '<em>%s</em>', \esc_html( $match[1] ) ),
+				\sprintf( '<em>%s</em>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -209,7 +209,7 @@ class Markdown {
 		foreach ( $matches as $match ) {
 			$text = str_replace(
 				$match[0],
-				sprintf( '<code>%s</code>', \esc_html( $match[1] ) ),
+				\sprintf( '<code>%s</code>', \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -231,7 +231,7 @@ class Markdown {
 
 		preg_match_all(
 			// Considers word non-boundary. @TODO consider removing that?
-			sprintf(
+			\sprintf(
 				'/\={%1$d}\s(.+)\s\={%1$d}/',
 				filter_var( $type, \FILTER_SANITIZE_NUMBER_INT )
 			),
@@ -245,7 +245,7 @@ class Markdown {
 		foreach ( $matches as $match ) {
 			$text = str_replace(
 				$match[0],
-				sprintf( '<%1$s>%2$s</%1$s>', $type, \esc_html( $match[1] ) ),
+				\sprintf( '<%1$s>%2$s</%1$s>', $type, \esc_html( $match[1] ) ),
 				$text,
 			);
 		}
@@ -276,7 +276,7 @@ class Markdown {
 		foreach ( $matches as $match ) {
 			$text = str_replace(
 				$match[0],
-				sprintf( $format, \esc_url( $match[2], [ 'https', 'http' ] ), \esc_html( $match[1] ) ),
+				\sprintf( $format, \esc_url( $match[2], [ 'https', 'http' ] ), \esc_html( $match[1] ) ),
 				$text,
 			);
 		}

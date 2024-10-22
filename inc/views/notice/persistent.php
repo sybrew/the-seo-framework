@@ -66,7 +66,7 @@ $dismiss_title_i18n = \__( 'Dismiss this notice', 'default' );
 
 $nonce_action = Admin\Notice\Persistent::_get_dismiss_nonce_action( $sanitized_key );
 
-$button_js = sprintf(
+$button_js = \sprintf(
 	'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s" %s></a>',
 	\esc_attr( $dismiss_title_i18n ),
 	HTML::make_data_attributes( [
@@ -92,7 +92,7 @@ $button_nojs = vsprintf(
 						$sanitized_key,
 						$sanitized_key,
 						\esc_attr( $dismiss_title_i18n ),
-						sprintf( '<span class=screen-reader-text>%s</span>', \esc_html( $dismiss_title_i18n ) ),
+						\sprintf( '<span class=screen-reader-text>%s</span>', \esc_html( $dismiss_title_i18n ) ),
 					],
 				),
 			],
@@ -105,7 +105,7 @@ vprintf(
 	[
 		\esc_attr( $args['type'] ),
 		( $args['icon'] ? 'tsf-show-icon' : '' ),
-		sprintf(
+		\sprintf(
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- conditionals bug.
 			( ! $args['escape'] && 0 === stripos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- the invoker should be mindful.

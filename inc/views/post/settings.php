@@ -423,7 +423,7 @@ switch ( $instance ) :
 					'name'     => 'autodescription[_tsf_twitter_card_type]',
 					'label'    => '',
 					'options'  => array_merge(
-						[ '' => sprintf( $_default_i18n, $_twitter_card ) ],
+						[ '' => \sprintf( $_default_i18n, $_twitter_card ) ],
 						array_combine( $tw_suported_cards, $tw_suported_cards ),
 					),
 					'selected' => $meta['_tsf_twitter_card_type'],
@@ -605,10 +605,10 @@ switch ( $instance ) :
 							echo Form::make_single_select_form( [
 								'id'       => $_s['id'],
 								'class'    => 'tsf-select-block',
-								'name'     => sprintf( 'autodescription[%s]', $_s['option'] ),
+								'name'     => \sprintf( 'autodescription[%s]', $_s['option'] ),
 								'label'    => '',
 								'options'  => [
-									0  => sprintf( $_default_i18n, $_s['_default'] ),
+									0  => \sprintf( $_default_i18n, $_s['_default'] ),
 									-1 => $_s['force_on'],
 									1  => $_s['force_off'],
 								],

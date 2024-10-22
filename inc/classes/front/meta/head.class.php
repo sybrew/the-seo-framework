@@ -281,7 +281,7 @@ final class Head {
 				break;
 			case 'after':
 				if ( $cache['show_timer'] && $meta_timer && $bootstrap_timer ) {
-					$timers = sprintf(
+					$timers = \sprintf(
 						' | %s meta | %s boot',
 						number_format( $meta_timer * 1e3, 2, null, '' ) . 'ms',
 						number_format( $bootstrap_timer * 1e3, 2, null, '' ) . 'ms',

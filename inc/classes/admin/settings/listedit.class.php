@@ -251,7 +251,7 @@ final class ListEdit extends Admin\Lists\Table {
 		printf(
 			// '<span class=hidden id=%s data-le="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeData[%s]', (int) $post_id ),
+			\sprintf( 'tsfLeData[%s]', (int) $post_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
@@ -325,28 +325,28 @@ final class ListEdit extends Admin\Lists\Table {
 		printf(
 			// '<span class=hidden id=%s data-le-post-data="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLePostData[%s]', (int) $post_id ),
+			\sprintf( 'tsfLePostData[%s]', (int) $post_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'lePostData' => $post_data ] )
 		);
 		printf(
 			// '<span class=hidden id=%s data-le-title="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeTitleData[%s]', (int) $post_id ),
+			\sprintf( 'tsfLeTitleData[%s]', (int) $post_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leTitle' => $title_data ] )
 		);
 		printf(
 			// '<span class=hidden id=%s data-le-description="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeDescriptionData[%s]', (int) $post_id ),
+			\sprintf( 'tsfLeDescriptionData[%s]', (int) $post_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leDescription' => $desc_data ] )
 		);
 		printf(
 			// '<span class=hidden id=%s data-le-canonical="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeCanonicalData[%s]', (int) $post_id ),
+			\sprintf( 'tsfLeCanonicalData[%s]', (int) $post_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leCanonical' => $canonical_data ] )
 		);
@@ -442,15 +442,15 @@ final class ListEdit extends Admin\Lists\Table {
 
 		$container = '';
 
-		$container .= sprintf(
+		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeData[%s]', (int) $term_id ),
+			\sprintf( 'tsfLeData[%s]', (int) $term_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
 		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $generator_args['id'], $generator_args['tax'] ) )
-			? sprintf(
+			? \sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
 				Taxonomy::get_label( $generator_args['tax'] ),
@@ -476,21 +476,21 @@ final class ListEdit extends Admin\Lists\Table {
 			'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
 		];
 
-		$container .= sprintf(
+		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeTitleData[%s]', (int) $term_id ),
+			\sprintf( 'tsfLeTitleData[%s]', (int) $term_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leTitle' => $title_data ] )
 		);
-		$container .= sprintf(
+		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeDescriptionData[%s]', (int) $term_id ),
+			\sprintf( 'tsfLeDescriptionData[%s]', (int) $term_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leDescription' => $desc_data ] )
 		);
-		$container .= sprintf(
+		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
-			sprintf( 'tsfLeCanonicalData[%s]', (int) $term_id ),
+			\sprintf( 'tsfLeCanonicalData[%s]', (int) $term_id ),
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'leCanonical' => $canonical_data ] )
 		);

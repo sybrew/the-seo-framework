@@ -201,7 +201,7 @@ final class Tags {
 					$_secure_attr_value = \esc_attr( $value );
 			}
 
-			$attr .= sprintf(
+			$attr .= \sprintf(
 				' %s="%s"',
 				/**
 				 * This will also strip "safe" characters outside of the alphabet, 0-9, and :_-.

@@ -158,7 +158,7 @@ class Input {
 			array_push( $cb_classes, ...static::get_conditional_checked_classes( ...(array) $args['id'] ) );
 		}
 
-		return sprintf(
+		return \sprintf(
 			'<span class=tsf-toblock>%s</span>%s',
 			vsprintf(
 				'<label for="%s"%s>%s</label>',
@@ -180,7 +180,7 @@ class Input {
 				],
 			),
 			$args['description']
-				? sprintf( '<p class="description tsf-option-spacer">%s</p>', $args['description'] )
+				? \sprintf( '<p class="description tsf-option-spacer">%s</p>', $args['description'] )
 				: '',
 		);
 	}

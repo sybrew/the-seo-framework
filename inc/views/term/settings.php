@@ -325,7 +325,7 @@ Input::output_js_social_data(
 					'class'    => 'tsf-term-select-wrap',
 					'name'     => 'autodescription-meta[tw_card_type]',
 					'options'  => array_merge(
-						[ '' => sprintf( $_default_i18n, Meta\Twitter::get_generated_card_type( $generator_args ) ) ],
+						[ '' => \sprintf( $_default_i18n, Meta\Twitter::get_generated_card_type( $generator_args ) ) ],
 						array_combine( $tw_suported_cards, $tw_suported_cards ),
 					),
 					'selected' => $meta['tw_card_type'],
@@ -419,7 +419,7 @@ Input::output_js_social_data(
 						'name'     => $_s['name'],
 						'label'    => $_s['label'],
 						'options'  => [
-							0  => sprintf( $_default_i18n, $_s['_default'] ),
+							0  => \sprintf( $_default_i18n, $_s['_default'] ),
 							-1 => $_s['force_on'],
 							1  => $_s['force_off'],
 						],

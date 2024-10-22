@@ -218,19 +218,19 @@ class HTML {
 	public static function make_info( $description = '', $link = '', $echo = true ) {
 
 		if ( $link ) {
-			$output = sprintf(
+			$output = \sprintf(
 				'<a href="%1$s" class="tsf-tooltip-item tsf-help" target=_blank rel="nofollow noreferrer noopener" title="%2$s" data-desc="%2$s">[?]</a>',
 				\esc_url( $link, [ 'https', 'http' ] ),
 				\esc_attr( $description ),
 			);
 		} else {
-			$output = sprintf(
+			$output = \sprintf(
 				'<span class="tsf-tooltip-item tsf-help" title="%1$s" data-desc="%1$s" tabindex=0>[?]</span>',
 				\esc_attr( $description )
 			);
 		}
 
-		$output = sprintf( '<span class=tsf-tooltip-wrap>%s</span>', $output );
+		$output = \sprintf( '<span class=tsf-tooltip-wrap>%s</span>', $output );
 
 		if ( $echo ) {
 			// phpcs:ignore, WordPress.Security.EscapeOutput
@@ -258,7 +258,7 @@ class HTML {
 		$ret = [];
 
 		foreach ( $data as $k => $v ) {
-			$ret[] = sprintf(
+			$ret[] = \sprintf(
 				'data-%s="%s"',
 				strtolower( preg_replace(
 					'/([A-Z])/',

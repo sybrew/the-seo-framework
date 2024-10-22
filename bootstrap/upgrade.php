@@ -367,7 +367,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully downgraded.
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
-				sprintf(
+				\sprintf(
 					/* translators: %1$s = New, lower version number, surrounded in markdown-backticks. %2$s = Old, higher version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Your website has been downgraded successfully to use The SEO Framework at database version `%1$s` from `%2$s`.', 'autodescription' ),
 					\esc_html( $current_version ),
@@ -418,7 +418,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully upgraded.
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
-				sprintf(
+				\sprintf(
 					/* translators: %s = Version number, surrounded in markdown-backticks. */
 					\esc_html__( 'Thank you for updating The SEO Framework! Your website has been upgraded successfully to use The SEO Framework at database version `%s`.', 'autodescription' ),
 					\esc_html( $current_version ),
@@ -446,11 +446,11 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 		// Only show notices when not in network mode, or on main site otherwise.
 		if ( ! $network_mode || \is_main_site() ) {
 			Admin\Notice\Persistent::register_notice(
-				sprintf(
+				\sprintf(
 					'<p>%s</p><p>%s</p>',
 					\esc_html__( 'The SEO Framework automatically optimizes your website for search engines and social media.', 'autodescription' ),
 					Markdown::convert(
-						sprintf(
+						\sprintf(
 							/* translators: %s = Link, markdown. */
 							\esc_html__( 'To take full advantage of all SEO features, please follow our [5-minute setup guide](%s).', 'autodescription' ),
 							'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
@@ -520,10 +520,10 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 		}
 
 		$found_titles and Admin\Notice\Persistent::register_notice(
-			sprintf(
+			\sprintf(
 				'<p>%s</p>',
 				Markdown::convert(
-					sprintf(
+					\sprintf(
 						/* translators: 1: SEO plugin name(s), 2: link to guide, in Markdown! */
 						\esc_html__( 'The SEO Framework detected metadata from %1$s. Whenever you are set, read our [migration guide](%2$s).', 'autodescription' ),
 						\esc_html(

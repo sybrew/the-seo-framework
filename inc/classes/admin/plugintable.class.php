@@ -50,19 +50,19 @@ final class PluginTable {
 		$tsf_links = [];
 
 		if ( ! is_headless( 'settings' ) ) {
-			$tsf_links['settings'] = sprintf(
+			$tsf_links['settings'] = \sprintf(
 				'<a href="%s">%s</a>',
 				\esc_url( \admin_url( 'admin.php?page=' . \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG ) ),
 				\esc_html__( 'Settings', 'autodescription' ),
 			);
 		}
 
-		$tsf_links['tsfem']   = sprintf(
+		$tsf_links['tsfem']   = \sprintf(
 			'<a href="%s" rel="noreferrer noopener" target=_blank>%s</a>',
 			'https://theseoframework.com/extensions/',
 			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
 		);
-		$tsf_links['pricing'] = sprintf(
+		$tsf_links['pricing'] = \sprintf(
 			'<a href="%s" rel="noreferrer noopener" target=_blank>%s</a>',
 			'https://theseoframework.com/pricing/',
 			\esc_html_x( 'Pricing', 'Plugin pricing', 'autodescription' )
@@ -93,22 +93,22 @@ final class PluginTable {
 		return array_merge(
 			$plugin_meta,
 			[
-				'support' => sprintf(
+				'support' => \sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
 					'https://tsf.fyi/support',
 					\esc_html__( 'Support', 'autodescription' ),
 				),
-				'docs'    => sprintf(
+				'docs'    => \sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
 					'https://tsf.fyi/docs',
 					\esc_html__( 'Documentation', 'autodescription' ),
 				),
-				'Git'     => sprintf(
+				'Git'     => \sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
 					'https://tsf.fyi/github',
 					'GitHub',
 				),
-				'EM'      => sprintf(
+				'EM'      => \sprintf(
 					'<a href="%s" rel="noreferrer noopener nofollow" target=_blank>%s</a>',
 					'https://tsf.fyi/extension-manager',
 					'Extension Manager',

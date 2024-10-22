@@ -122,13 +122,13 @@ class Notice {
 				\esc_attr( $args['type'] ),
 				$args['icon'] ? 'tsf-show-icon' : '',
 				$args['inline'] ? 'inline' : '',
-				sprintf(
+				\sprintf(
 					! $args['escape'] && 0 === stripos( $message, '<p' )
 						? '%s'
 						: '<p>%s</p>',
 					$args['escape'] ? \esc_html( $message ) : $message,
 				),
-				sprintf(
+				\sprintf(
 					'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s"></a>',
 					\esc_attr__( 'Dismiss this notice', 'default' )
 				),

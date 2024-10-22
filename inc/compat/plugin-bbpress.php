@@ -215,7 +215,7 @@ function _bbpress_filter_title( $title, $args ) {
 	);
 
 	// Get the formatted raw title
-	$new_title = sprintf( $new_title['format'], $new_title['text'] );
+	$new_title = \sprintf( $new_title['format'], $new_title['text'] );
 
 	// Filter the raw title.
 	$new_title = \apply_filters( 'bbp_raw_title', $new_title, $sep = '&raquo;', $seplocation = '' ); // phpcs:ignore,VariableAnalysis -- readability.

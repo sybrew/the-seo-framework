@@ -51,7 +51,7 @@ function _wpml_register_sitemap_languages( $list ) {
 		   empty( $sitepress )
 		|| ! Helper\Compatibility::can_i_use(
 			[
-				'methods' => [
+				'methods'   => [
 					[ $sitepress, 'get_default_language' ],
 					[ $sitepress, 'get_active_languages' ],
 					[ $sitepress, 'get_setting' ],

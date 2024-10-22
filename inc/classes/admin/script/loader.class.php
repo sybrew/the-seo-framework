@@ -475,7 +475,7 @@ class Loader {
 		$additions_forced_disabled = (bool) Data\Plugin::get_option( 'title_rem_additions' );
 
 		if ( Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $id, $taxonomy ) ) ) {
-			$term_prefix = sprintf(
+			$term_prefix = \sprintf(
 				/* translators: %s: Taxonomy singular name. */
 				\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
 				Taxonomy::get_label( $taxonomy ),
@@ -753,7 +753,7 @@ class Loader {
 				'primary' => $primary_term_id, // if 0, it'll use hints from the interface.
 				'i18n'    => [
 					/* translators: %s = term name */
-					'selectPrimary' => sprintf( \esc_html__( 'Select primary %s', 'autodescription' ), $singular_name ),
+					'selectPrimary' => \sprintf( \esc_html__( 'Select primary %s', 'autodescription' ), $singular_name ),
 				],
 			];
 		}

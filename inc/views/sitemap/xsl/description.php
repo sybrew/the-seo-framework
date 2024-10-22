@@ -52,7 +52,7 @@ if ( Data\Plugin::get_option( 'sitemap_logo' ) ) {
 	$_src = (array) \apply_filters( 'the_seo_framework_sitemap_logo', $_src );
 
 	if ( ! empty( $_src[0] ) ) {
-		$logo = sprintf(
+		$logo = \sprintf(
 			'<img src="%s" width="%s" height="%s" />',
 			\esc_url( $_src[0] ),
 			\esc_attr( $_src[1] ?? '' ),

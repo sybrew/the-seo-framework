@@ -148,7 +148,7 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 		// Clear all assessments.
 		$item['assess'] = [];
 
-		$item['assess']['base'] = sprintf(
+		$item['assess']['base'] = \sprintf(
 			// translators: %s = Plugin name.
 			\__( 'This is managed by plugin "%s."', 'autodescription' ),
 			'wpForo Forum',

@@ -113,7 +113,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		);
 
 		HTML::description_noesc(
-			sprintf(
+			\sprintf(
 				'<a href="%s" target=_blank rel="noreferrer noopener">%s</a>',
 				'https://kb.theseoframework.com/?p=65#html-passes',
 				\esc_html__( 'Learn how this works.', 'autodescription' )

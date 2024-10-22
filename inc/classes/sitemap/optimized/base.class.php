@@ -182,9 +182,9 @@ class Base extends Main {
 		$timestamp = (bool) \apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp )
-			$content .= sprintf(
+			$content .= \sprintf(
 				"<!-- %s -->\n",
-				sprintf(
+				\sprintf(
 					$this->base_is_prerendering
 						/* translators: %s = timestamp */
 						? \esc_html__( 'Sitemap is prerendered on %s', 'autodescription' )

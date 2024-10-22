@@ -93,7 +93,7 @@ class Form {
 			 * @param mixed  $selected The current selected value.
 			 */
 			function ( &$name, $value, $selected ) {
-				$name = sprintf(
+				$name = \sprintf(
 					'<option value="%s"%s>%s</option>',
 					\esc_attr( $value ),
 					(string) $value === (string) $selected ? ' selected' : '',
@@ -104,16 +104,16 @@ class Form {
 		);
 
 		return vsprintf(
-			sprintf(
+			\sprintf(
 				'<div class="%s">%s</div>',
 				\esc_attr( $args['class'] ),
 				\is_rtl() ? '%2$s%1$s%3$s' : '%1$s%2$s%3$s',
 			),
 			[
-				$args['label'] ? sprintf(
+				$args['label'] ? \sprintf(
 					'<label for="%s">%s</label> ', // superfluous space!
 					Escape::option_name_attribute( $args['id'] ),
-					sprintf(
+					\sprintf(
 						$args['labelstrong'] ? '<strong>%s</strong>' : '%s',
 						\esc_html( $args['label'] )
 					)
@@ -151,10 +151,10 @@ class Form {
 			[
 				( $display ? '' : 'style=display:none;' ),
 				\esc_attr__( 'Click to change the counter type', 'autodescription' ),
-				sprintf(
+				\sprintf(
 					/* translators: %s = number */
 					\esc_html__( 'Characters: %s', 'autodescription' ),
-					sprintf(
+					\sprintf(
 						'<span id="%s">0</span>',
 						\esc_attr( "{$for}_chars" ),
 					),
@@ -177,12 +177,12 @@ class Form {
 			'<div class="tsf-pixel-counter-wrap hide-if-no-tsf-js" %s>%s%s</div>',
 			[
 				( $display ? '' : 'style="display:none;"' ),
-				sprintf(
+				\sprintf(
 					'<div id="%s" class=tsf-tooltip-wrap>%s</div>',
 					\esc_attr( "{$for}_pixels" ),
 					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label data-desc tabindex=0><span class=tsf-pixel-counter-fluid></span></span>',
 				),
-				sprintf(
+				\sprintf(
 					'<div class=tsf-pixel-shadow-wrap><span class="tsf-pixel-counter-shadow %s"></span></div>',
 					\esc_attr( "tsf-{$type}-pixel-counter-shadow" )
 				),
@@ -282,7 +282,7 @@ class Form {
 			],
 		);
 
-		$content .= sprintf(
+		$content .= \sprintf(
 			'<span class=tsf-tooltip-wrap><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
 			\esc_attr( $args['id'] )
 		);

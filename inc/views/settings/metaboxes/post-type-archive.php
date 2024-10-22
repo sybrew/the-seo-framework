@@ -129,13 +129,13 @@ switch ( $instance ) :
 					echo HTML::get_header_title( vsprintf(
 						'%s &ndash; <span class=tsf-post-type-archive-details><code>%s</code> %s</span>',
 						[
-							sprintf(
+							\sprintf(
 								/* translators: 1 = Post Type Archive name */
 								\esc_html__( 'Editing archive of %s', 'autodescription' ),
 								\esc_html( $post_types_data[ $post_type ]['label'] ),
 							),
 							\esc_html( $post_type ),
-							sprintf(
+							\sprintf(
 								'<span class=tsf-post-type-archive-link><a href="%s" target=_blank rel=noopener>[%s]</a></span>',
 								\esc_url( $post_types_data[ $post_type ]['url'] ),
 								\esc_html__( 'View archive', 'autodescription' ),
@@ -391,7 +391,7 @@ switch ( $instance ) :
 				'name'     => Input::get_field_name( $args['options']['tw_card_type'] ),
 				'label'    => '',
 				'options'  => array_merge(
-					[ '' => sprintf( $_default_i18n, Meta\Twitter::get_generated_card_type() ) ],
+					[ '' => \sprintf( $_default_i18n, Meta\Twitter::get_generated_card_type() ) ],
 					array_combine( $tw_suported_cards, $tw_suported_cards ),
 				),
 				'selected' => Data\Plugin\PTA::get_meta_item( 'tw_card_type', $args['post_type'] ),

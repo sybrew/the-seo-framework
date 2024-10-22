@@ -101,7 +101,7 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 	if ( $previous_version < '4300' && $current_version < '5010' ) {
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
-				sprintf(
+				\sprintf(
 					'<p>For The SEO Framework v5.0, we added over 1000 improvements in the past 7 months.</p><p>To celebrate this update (and Black Friday), we are offering a [50%% lifetime discount on our extensions](%s).</p><p>This notification will vanish December 2nd or when you dismiss it.</p>',
 					'https://theseoframework.com/?p=3527',
 				),

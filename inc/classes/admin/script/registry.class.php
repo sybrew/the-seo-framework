@@ -453,7 +453,7 @@ class Registry {
 		$out = '';
 
 		foreach ( $styles as $selector => $declaration ) {
-			$out .= sprintf(
+			$out .= \sprintf(
 				'%s{%s}',
 				$selector,
 				implode( ';', static::convert_color_css_declaration( $declaration ) )

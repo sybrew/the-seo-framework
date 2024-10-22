@@ -53,10 +53,10 @@ if ( \count( $tabs ) > 1 ) {
 				$input_name    = \esc_attr( "tsf-flex-{$id}-tabs" );
 
 				if ( $dashicon )
-					$dashicon = sprintf( '<span class="tsf-flex dashicons %s tsf-flex-nav-dashicon"></span>', \esc_attr( "dashicons-$dashicon" ) );
+					$dashicon = \sprintf( '<span class="tsf-flex dashicons %s tsf-flex-nav-dashicon"></span>', \esc_attr( "dashicons-$dashicon" ) );
 
 				if ( $label_name )
-					$label_name = sprintf( '<span class="tsf-flex tsf-flex-nav-name">%s</span>', \esc_attr( $label_name ) );
+					$label_name = \sprintf( '<span class="tsf-flex tsf-flex-nav-name">%s</span>', \esc_attr( $label_name ) );
 
 				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- All output below is escaped.
 				echo <<<HTML
