@@ -35,17 +35,17 @@ use \The_SEO_Framework\{
  *
  * @hook the_seo_framework_sitemap_endpoint_list 20
  * @since 5.0.5
- * @param array[] $list The endpoints: {
- *   'id' => array: {
- *      'lock_id'  => string|false Optional. The cache key to use for locking. Defaults to index 'id'.
- *                                           Set to false to disable locking.
- *      'cache_id' => string|false Optional. The cache key to use for storing. Defaults to index 'id'.
- *                                           Set to false to disable caching.
- *      'endpoint' => string       The expected "pretty" endpoint, meant for administrative display.
- *      'epregex'  => string       The endpoint regex, following the home path regex.
- *      'callback' => callable     The callback for the sitemap output.
- *      'robots'   => bool         Whether the endpoint should be mentioned in the robots.txt file.
- *   }
+ * @param array[] $list {
+ *     A list of sitemap endpoints keyed by ID.
+ *
+ *     @type string|false $lock_id  Optional. The cache key to use for locking. Defaults to index 'id'.
+ *                                  Set to false to disable locking.
+ *     @type string|false $cache_id Optional. The cache key to use for storing. Defaults to index 'id'.
+ *                                  Set to false to disable caching.
+ *     @type string       $endpoint The expected "pretty" endpoint, meant for administrative display.
+ *     @type string       $epregex  The endpoint regex, following the home path regex.
+ *     @type callable     $callback The callback for the sitemap output.
+ *     @type bool         $robots   Whether the endpoint should be mentioned in the robots.txt file.
  * }
  * @return array[]
  */

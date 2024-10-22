@@ -198,13 +198,15 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  * @since 4.2.8 Now uses `Query::is_singular()` instead of `is_singular()` (for debug support).
  * @access private
  *
- * @param array      $meta The parsed robots meta. {
- *    string 'noindex', ideally be empty or 'noindex'
- *    string 'nofollow', ideally be empty or 'nofollow'
- *    string 'noarchive', ideally be empty or 'noarchive'
- *    string 'max_snippet', ideally be empty or 'max-snippet:<R>=-1>'
- *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
- *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
+ * @param array      $meta    {
+ *     The parsed robots meta.
+ *
+ *     @type string $noindex           Ideally be empty or 'noindex'
+ *     @type string $nofollow          Ideally be empty or 'nofollow'
+ *     @type string $noarchive         Ideally be empty or 'noarchive'
+ *     @type string $max_snippet       Ideally be empty or 'max-snippet:<R>=-1>'
+ *     @type string $max_image_preview Ideally be empty or 'max-image-preview:<none|standard|large>'
+ *     @type string $max_video_preview Ideally be empty or 'max-video-preview:<R>=-1>'
  * }
  * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
  *                            Is null when the query is auto-determined.
@@ -297,11 +299,13 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
  * @since 4.2.8 Fixed the taxonomy query for the admin area.
  * @access private
  *
- * @param array      $params : [
- *    string  size:     The image size to use.
- *    boolean multi:    Whether to allow multiple images to be returned.
- *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
- *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
+ * @param array      $params {
+ *     The image generation parameters.
+ *
+ *     @type string  $size     The image size to use.
+ *     @type boolean $multi    Whether to allow multiple images to be returned.
+ *     @type array   $cbs      The callbacks to parse. Ideally be generators, so we can halt remotely.
+ *     @type array   $fallback The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
  * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
  *                         Is null when the query is auto-determined.
@@ -349,9 +353,11 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
- * @yield array : {
- *    string url: The image URL location,
- *    int    id:  The image ID,
+ * @yield array {
+ *     The image details.
+ *
+ *     @type string $url      The image URL.
+ *     @type int    $id       The image ID.
  * }
  */
 function _get_product_gallery_image_details( $args = null, $size = 'full' ) {

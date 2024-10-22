@@ -745,10 +745,8 @@ class URI {
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param null|array $args The redirect URL arguments, leave null to autodetermine query : {
-	 *    int    $id       The Post, Page or Term ID to generate the URL for.
-	 *    string $taxonomy The taxonomy.
-	 * }
+	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                            Leave null to autodetermine query.
 	 * @return string The canonical URL if found, empty string otherwise.
 	 */
 	public static function get_redirect_url( $args = null ) {

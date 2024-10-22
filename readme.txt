@@ -309,18 +309,9 @@ TODO regression: the "popular categories" are no longer listened for changes.
 TODO the locale on the frontend is now loaded "just in time."
 	-> We'd have to change "The SEO Framework <by> Sybre Waaijer" (hard code?)
 
-TODO code style: make function() function () in JS for consistency with PHP.
-
 TODO remove HTML4 closers in admin? It's definitly 5.
 	-> Also remove HTML4 support on the front-end? How many themes are still using 4?
 
-TODO use new PHPdoc for array entries:
-	`@param array $data {
-		An array of something.
-
-		@type string $param1 Explanation
-		@type bool   $param2 Explanation
-	}`
 TODO the correct indentation for comments seems to be 4 per tab (+1 initial)
 
 TODO LinkedIn Post Inspector recommends the "Author" tag, which is often ambiguously described. We could opt-in this feature via the Social Sharing settings, stating that LinkedIn uses it.
@@ -337,6 +328,8 @@ TODO patch WP Core bug https://core.trac.wordpress.org/ticket/51912 using https:
 TODO check if bbPress/BuddyPress needs breadcrumb support?
 
 TODO the title prefix doesn't appear to work in quick-edit for Terms.
+
+TODO optimized performance for PHP 8.4.
 
 Punt:
 - remove jQuery dependencies in UI?
@@ -467,6 +460,10 @@ Punt:
 		* Added index `homepage_redirect`. Default empty.
 		* Added index `homepage_canonical`. Default empty.
 	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
+* **Action notes:**
+	* **Changed:**
+		* `the_seo_framework_flex_tab_content`, now uses `'args'` instead of `'params'` for its first parameter's indexes.
+			* I didn't deprecate this because I don't think anyone uses it.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.

@@ -53,21 +53,25 @@ class Persistent {
 	 *                           or it will be added for you--regardless of proper semantics.
 	 * @param string $key        The notice key. Must be unique--prevents double-registering of the notice, and allows for
 	 *                           deregistering of the notice.
-	 * @param array  $args       : {
-	 *    'type'   => string Optional. The notification type. Default 'updated'.
-	 *    'icon'   => bool   Optional. Whether to enable icon. Default true.
-	 *    'escape' => bool   Optional. Whether to escape the $message. Default true.
+	 * @param array  $args       {
+	 *     The notice creation arguments.
+	 *
+	 *     @type string $type   Optional. The notification type. Default 'updated'.
+	 *     @type bool   $icon   Optional. Whether to enable icon. Default true.
+	 *     @type bool   $escape Optional. Whether to escape the $message. Default true.
 	 * }
-	 * @param array  $conditions : {
-	 *     'capability'   => string Required. The user capability required for the notice to display. Defaults to settings capability.
-	 *     'screens'      => array  Optional. The screen bases the notice may be displayed on. When left empty, it'll output on any page.
-	 *     'excl_screens' => array  Optional. The screen bases the notice may NOT be displayed on. When left empty, only `screens` applies.
-	 *     'user'         => int    Optional. The user ID to display the notice for. Capability will not be ignored.
-	 *     'count'        => int    Optional. The number of times the persistent notice may appear (for everyone allowed to see it).
-	 *                              Set to -1 for unlimited. When -1, the notice must be removed from display manually.
-	 *     'timeout'      => int    Optional. The number of seconds the notice should remain valid for display. Set to -1 to disable check.
-	 *                              When the timeout is below -1, then the notification will not be outputted.
-	 *                              Do not input non-integer values (such as `false`), for those might cause adverse events.
+	 * @param array  $conditions {
+	 *     The notice output conditions.
+	 *
+	 *     @type string $capability   Required. The user capability required for the notice to display. Defaults to settings capability.
+	 *     @type array  $screens      Optional. The screen bases the notice may be displayed on. When left empty, it'll output on any page.
+	 *     @type array  $excl_screens Optional. The screen bases the notice may NOT be displayed on. When left empty, only `screens` applies.
+	 *     @type int    $user         Optional. The user ID to display the notice for. Capability will not be ignored.
+	 *     @type int    $count        Optional. The number of times the persistent notice may appear (for everyone allowed to see it).
+	 *                                Set to -1 for unlimited. When -1, the notice must be removed from display manually.
+	 *     @type int    $timeout      Optional. The number of seconds the notice should remain valid for display. Set to -1 to disable check.
+	 *                                When the timeout is below -1, then the notification will not be outputted.
+	 *                                Do not input non-integer values (such as `false`), for those might cause adverse events.
 	 * }
 	 */
 	public static function register_notice( $message, $key, $args = [], $conditions = [] ) {

@@ -112,14 +112,16 @@ class Image {
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @since 5.0.0 Deprecated.
 		 * @deprecated
-		 * @param array      $details The image details array, sequential: int => {
-		 *    string url:      The image URL,
-		 *    int    id:       The image ID,
-		 *    int    width:    The image width in pixels,
-		 *    int    height:   The image height in pixels,
-		 *    string alt:      The image alt tag,
-		 *    string caption:  The image caption,
-		 *    int    filesize: The image filesize in bytes,
+		 * @param array      $details {
+		 *     The image details array, sequential.
+		 *
+		 *     @type string $url      The image URL.
+		 *     @type int    $id       The image ID.
+		 *     @type int    $width    The image width in pixels.
+		 *     @type int    $height   The image height in pixels.
+		 *     @type string $alt      The image alt tag.
+		 *     @type string $caption  The image caption.
+		 *     @type int    $filesize The image filesize in bytes.
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
@@ -170,14 +172,16 @@ class Image {
 	public static function get_custom_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
 		 * @since 5.0.0
-		 * @param array      $details The image details array, sequential: int => {
-		 *    string url:      The image URL,
-		 *    int    id:       The image ID,
-		 *    int    width:    The image width in pixels,
-		 *    int    height:   The image height in pixels,
-		 *    string alt:      The image alt tag,
-		 *    string caption:  The image caption,
-		 *    int    filesize: The image filesize in bytes,
+		 * @param array      $details {
+		 *     The image details array, sequential.
+		 *
+		 *     @type string $url      The image URL.
+		 *     @type int    $id       The image ID.
+		 *     @type int    $width    The image width in pixels.
+		 *     @type int    $height   The image height in pixels.
+		 *     @type string $alt      The image alt tag.
+		 *     @type string $caption  The image caption.
+		 *     @type int    $filesize The image filesize in bytes.
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
@@ -217,14 +221,16 @@ class Image {
 	public static function get_generated_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
 		 * @since 5.0.0
-		 * @param array      $details The image details array, sequential: int => {
-		 *    string url:      The image URL,
-		 *    int    id:       The image ID,
-		 *    int    width:    The image width in pixels,
-		 *    int    height:   The image height in pixels,
-		 *    string alt:      The image alt tag,
-		 *    string caption:  The image caption,
-		 *    int    filesize: The image filesize in bytes,
+		 * @param array      $details {
+		 *     The image details array, sequential.
+		 *
+		 *     @type string $url      The image URL.
+		 *     @type int    $id       The image ID.
+		 *     @type int    $width    The image width in pixels.
+		 *     @type int    $height   The image height in pixels.
+		 *     @type string $alt      The image alt tag.
+		 *     @type string $caption  The image caption.
+		 *     @type int    $filesize The image filesize in bytes.
 		 * }
 		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
@@ -417,14 +423,16 @@ class Image {
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @yield array The image details array {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @yield array {
+	 *     The image details array.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function generate_custom_image_details_from_args( $args, $context = 'social' ) {
@@ -552,11 +560,13 @@ class Image {
 		/**
 		 * @since 4.0.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 * @param array      $params  : [
-		 *    string  size:     The image size to use.
-		 *    boolean multi:    Whether to allow multiple images to be returned. This may be overwritten by generators to 'false'.
-		 *    array   cbs:      The callbacks to parse. Ideally be generators, so we can halt remotely.
-		 *    array   fallback: The callbacks to parse. Ideally be generators, so we can halt remotely.
+		 * @param array      $params  {
+		 *    The image generation parameters.
+		 *
+		 *     @type string  $size     The image size to use.
+		 *     @type boolean $multi    Whether to allow multiple images to be returned. This may be overwritten by generators to 'false'.
+		 *     @type array   $cbs      The callbacks to parse. Ideally be generators, so we can halt remotely.
+		 *     @type array   $fallback The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
 		 * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                            Is null when the query is auto-determined.
@@ -663,19 +673,23 @@ class Image {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array  $details The image details array, associative: {
-	 *    string url:    The image URL,
-	 *    int    id:     The image ID,
+	 * @param array  $details {
+	 *     The image details array, associative.
+	 *
+	 *     @type string $url    The image URL.
+	 *     @type int    $id     The image ID.
 	 * }
 	 * @param string $size    The size of the image used.
-	 * @return array The image details array, associative: {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @return array {
+	 *     The image details array, associative.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function merge_extra_image_details( $details, $size = 'full' ) {

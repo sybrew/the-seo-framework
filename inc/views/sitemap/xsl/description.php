@@ -41,10 +41,12 @@ if ( Data\Plugin::get_option( 'sitemap_logo' ) ) {
 
 	/**
 	 * @since 2.8.0
-	 * @param array $_src An empty array, or the logo details: {
-	 *    0 => string The image URL,
-	 *    1 => int    The width in px,
-	 *    2 => int    The height in px,
+	 * @param array $_src {
+	 *     An empty array or the logo details.
+	 *
+	 *     @type string $0 The image URL.
+	 *     @type int    $1 The width in pixels.
+	 *     @type int    $2 The height in pixels.
 	 * }
 	 */
 	$_src = (array) \apply_filters( 'the_seo_framework_sitemap_logo', $_src );

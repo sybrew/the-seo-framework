@@ -137,14 +137,16 @@ abstract class Main {
 	 * @access private
 	 * @generator
 	 *
-	 * @param array $query : {
-	 *   int    $id        : Required. The current post or term ID.
-	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
-	 *   string $post_type : Optional. If not set, this will be automatically filled.
-	 *                                 This parameter is ignored for taxonomies.
+	 * @param array $query {
+	 *     The query parameters.
+	 *
+	 *     @type int    $id        Required. The current post or term ID.
+	 *     @type string $taxonomy  Optional. If not set, this will interpret it as a post.
+	 *     @type string $post_type Optional. If not set, this will be automatically filled.
+	 *                             This parameter is ignored for taxonomies.
 	 * }
-	 * @yield array : {
-	 *    string $test => array The testing results.
+	 * @yield array {
+	 *     @type string $test => @type array The testing results.
 	 * }
 	 */
 	public function run_all_tests( $query ) {
@@ -160,15 +162,17 @@ abstract class Main {
 	 * @access private
 	 * @generator
 	 *
-	 * @param array|string $tests The test(s) to perform.
-	 * @param array        $query  : {
-	 *   int    $id        : Required. The current post or term ID.
-	 *   string $taxonomy  : Optional. If not set, this will interpret it as a post.
-	 *   string $post_type : Optional. If not set, this will be automatically filled.
-	 *                                 This parameter is ignored for taxonomies.
+	 * @param string|string[] $tests The test(s) to perform.
+	 * @param array           $query {
+	 *     The query parameters.
+	 *
+	 *     @type int    $id        Required. The current post or term ID.
+	 *     @type string $taxonomy  Optional. If not set, this will interpret it as a post.
+	 *     @type string $post_type Optional. If not set, this will be automatically filled.
+	 *                             This parameter is ignored for taxonomies.
 	 * }
-	 * @yield array : {
-	 *    string $test => array $item The SEO Bar compatible results.
+	 * @yield array {
+	 *     @type array ${$test} The testing results.
 	 * }
 	 */
 	final public function run_test( $tests, $query ) {

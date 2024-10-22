@@ -286,13 +286,15 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
  * @since 4.2.8
  * @access private
  *
- * @param array      $meta The parsed robots meta. {
- *    string 'noindex', ideally be empty or 'noindex'
- *    string 'nofollow', ideally be empty or 'nofollow'
- *    string 'noarchive', ideally be empty or 'noarchive'
- *    string 'max_snippet', ideally be empty or 'max-snippet:<R>=-1>'
- *    string 'max_image_preview', ideally be empty or 'max-image-preview:<none|standard|large>'
- *    string 'max_video_preview', ideally be empty or 'max-video-preview:<R>=-1>'
+ * @param array      $meta    {
+ *     The parsed robots meta.
+ *
+ *     @type string $noindex           Ideally be empty or 'noindex'
+ *     @type string $nofollow          Ideally be empty or 'nofollow'
+ *     @type string $noarchive         Ideally be empty or 'noarchive'
+ *     @type string $max_snippet       Ideally be empty or 'max-snippet:<R>=-1>'
+ *     @type string $max_image_preview Ideally be empty or 'max-image-preview:<none|standard|large>'
+ *     @type string $max_video_preview Ideally be empty or 'max-video-preview:<R>=-1>'
  * }
  * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
  *                         Is null when the query is auto-determined.

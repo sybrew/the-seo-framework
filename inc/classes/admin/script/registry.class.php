@@ -236,27 +236,35 @@ class Registry {
 	 * @NOTE If the script is associative, it'll be registered as-is.
 	 *       If the script is sequential, it'll be iterated over, and then registered.
 	 *
-	 * @param array|array[] $script The script or sequential array of scripts : {
-	 *   'id'       : string The script unique ID,
-	 *   'type'     : string The script type, either 'css' or 'js',
-	 *   'hasrtl'   : boolean Optional. If true, the script will consider .rtl and .rtl.min versions.
-	 *                        Default false.
-	 *   'autoload' : boolean If true, the script will be loaded directly.
-	 *                        If false, it'll only be registered for dependencies.
-	 *   'name'     : string The script file name,
-	 *   'deps'     : array  Any script dependencies by name,
-	 *   'ver'      : string Script version,
-	 *   'l10n'     : array Optional. If type is 'js' : {
-	 *      'name' : string The JavaScript variable,
-	 *      'data' : mixed  The l10n properties,
-	 *   }
-	 *   'tmpl'     : array Optional. If type is 'js', either multidimensional or single : {
-	 *      'file' : string $file. The full file location,
-	 *      'args' : array $args. Optional. Any arguments added to the $view_args array,
-	 *    }
-	 *   'inline'   : array Optional. If type is 'css' : {
-	 *      'selector' : array : { iterable => 'style' }
-	 *    }
+	 * @param array|array[] $script {
+	 *     The script arguments or sequential array of scripts and their arguments.
+	 *
+	 *     @type string        $id       The script unique ID.
+	 *     @type string        $type     The script type, either 'js' or 'css'.
+	 *     @type boolean       $hasrtl   Optional. If true, the script will consider .rtl and .rtl.min versions.
+	 *                                   Default false.
+	 *     @type boolean       $autoload If true, the script will be loaded directly.
+	 *                                   If false, it'll only be registered for dependencies.
+	 *     @type string        $name     The script file name.
+	 *     @type array         $deps     Any script dependencies by name.
+	 *     @type string        $ver      Script version.
+	 *     @type array         $l10n     {
+	 *         Optional. Use if type is 'js'.
+	 *
+	 *         @type string $name The JavaScript variable.
+	 *         @type mixed  $data The l10n properties.
+	 *     }
+	 *     @type array|array[] $tmpl     {
+	 *         Optional. Use if type is 'js'. One or more templates.
+	 *
+	 *         @type string $file The full file location.
+	 *         @type array  $args Optional. Any arguments added to the $view_args array.
+	 *     }
+	 *     @type array         $inline   {
+	 *         Optional. Use if type is 'css'.
+	 *
+	 *         @type array $selector : { iterable => 'style' }
+	 *     }
 	 * }
 	 */
 	public static function register( $script ) {
@@ -538,10 +546,12 @@ class Registry {
 	 * @since 3.1.0
 	 * @since 5.0.0 Is now static.
 	 *
-	 * @param string $id        The related script handle/ID.
-	 * @param array  $templates Associative-&-singul-, or sequential-&-multi-dimensional : {
-	 *   'file' => string $file. The full file location,
-	 *   'args' => array $args. Optional,
+	 * @param string      $id        The related script handle/ID.
+	 * @param array|[?][] $templates {
+	 *     Associative-&-singul-, or sequential-&-multi-dimensional array of templates.
+	 *
+	 *     @type string $file The full file location.
+	 *     @type array  $args Optional. Any arguments added to the $view_args array.
 	 * }
 	 */
 	private static function register_template( $id, $templates ) {

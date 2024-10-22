@@ -349,9 +349,11 @@ class Base extends Main {
 		 * @since 4.0.0 Added $args parameter.
 		 * @since 4.2.0 No longer forwards the 'show_priority' index in the second ($args) parameter.
 		 * @param string $extend Custom sitemap extension. Must be escaped.
-		 * @param array $args : {
-		 *   bool $show_modified : Whether to display modified date.
-		 *   int  $count         : The total sitemap items before adding additional URLs.
+		 * @param array $args {
+		 *     The sitemap extension arguments.
+		 *
+		 *     @type bool $show_modified Whether to display modified date.
+		 *     @type int  $count         The total sitemap items before adding additional URLs.
 		 * }
 		 */
 		$extend = (string) \apply_filters(
@@ -378,11 +380,14 @@ class Base extends Main {
 	 *              2. Now tests for is_protected and is_draft for the posts page.
 	 * @generator
 	 *
-	 * @param array $args The generator arguments.
+	 * @param array $args {
+	 *     The generator arguments.
+	 *
+	 *     @type bool $show_modified Whether to display the last modified date.
+	 * }
 	 * @yield array|void : {
-	 *   string loc
-	 *   string lastmod
-	 *   string priority
+	 *     @type string $loc      The URI of the page.
+	 *     @type string $lastmod  The page's last modified date.
 	 * }
 	 */
 	protected function generate_front_and_blog_url_items( $args ) {
@@ -493,11 +498,14 @@ class Base extends Main {
 	 * @iterator
 	 *
 	 * @param int[] $post_ids The post IDs to go over.
-	 * @param array $args     The generator arguments.
+	 * @param array $args     {
+	 *     The generator arguments.
+	 *
+	 *     @type bool $show_modified Whether to display the last modified date.
+	 * }
 	 * @yield array|void : {
 	 *   string loc
 	 *   string lastmod
-	 *   string priority
 	 * }
 	 */
 	protected function generate_url_item_values( $post_ids, $args ) {
@@ -530,9 +538,11 @@ class Base extends Main {
 	 * @since 4.1.1 Now uses `create_xml_entry()` to parse the XML.
 	 * @since 5.0.0 Is now static.
 	 *
-	 * @param array $args : {
-	 *   string  $loc     : The item's URI.
-	 *   ?string $lastmod : SQL timestamp string (Y-m-d H:i:s). Expected to be GMT. Null or '0000-00-00 00:00:00' to omit.
+	 * @param array $args {
+	 *     The URL item arguments.
+	 *
+	 *     @type string  $loc     The item's URI.
+	 *     @type ?string $lastmod SQL timestamp string (Y-m-d H:i:s). Expected to be GMT. Null or '0000-00-00 00:00:00' to omit.
 	 * }
 	 * @return string The sitemap item.
 	 */
@@ -562,14 +572,13 @@ class Base extends Main {
 	 * @generator
 	 * @iterator
 	 *
-	 * @param array $args  : {
-	 *   bool $show_modified : Whether to display modified date.
-	 *   int  $count         : The total sitemap items before adding additional URLs.
+	 * @param array $args {
+	 *     @type bool $show_modified Whether to display modified date.
+	 *     @type int  $count         The total sitemap items before adding additional URLs.
 	 * }
 	 * @yield array|void : {
-	 *   string loc
-	 *   string lastmod
-	 *   string priority
+	 *     @type string $loc      The URI of the page.
+	 *     @type string $lastmod  The page's last modified date.
 	 * }
 	 */
 	protected function generate_additional_base_urls( $args ) {
@@ -579,14 +588,16 @@ class Base extends Main {
 		 * @since 4.0.0 Added $args parameter.
 		 * @since 4.2.0 No longer forwards the 'show_priority' index in the second ($args) parameter.
 		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '2024-04-10 14:52:06' ] ]
-		 * @param array $custom_urls : {
-		 *    string (key) $url The absolute url to the page. : array {
-		 *       string $lastmod  : UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
-		 *    }
+		 * @param array $custom_urls {
+		 *     An array of custom URLs, keyed by the absolute url to the page.
+		 *
+		 *     @type string $lastmod UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
 		 * }
-		 * @param array $args : {
-		 *   bool $show_modified : Whether to display modified date.
-		 *   int  $count         : Estimate: The total sitemap items before adding additional URLs.
+		 * @param array $args {
+		 *     The sitemap URL extension arguments.
+		 *
+		 *     @type bool $show_modified Whether to display modified date.
+		 *     @type int  $count         Estimate: The total sitemap items before adding additional URLs.
 		 * }
 		 */
 		$custom_urls = (array) \apply_filters( 'the_seo_framework_sitemap_additional_urls', [], $args );

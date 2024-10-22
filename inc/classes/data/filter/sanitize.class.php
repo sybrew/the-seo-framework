@@ -371,15 +371,27 @@ class Sanitize {
 	 *              2. Renamed from `s_image_details`.
 	 *              3. Now sanitizes the caption.
 	 *
-	 * @param array|array[] $details The image details, either associative (see $defaults) or sequential.
-	 * @return array|array[] The image details array. Matches type of $details : {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @param array|array[] $details {
+	 *     An array of image details, or an array of an array thereof.
+	 *
+	 *     @type string $url      Required. The image URL.
+	 *     @type int    $id       Optional. The image ID. Used to fetch the largest image possible.
+	 *     @type int    $width    Optional. The image width in pixels.
+	 *     @type int    $height   Optional. The image height in pixels.
+	 *     @type string $alt      Optional. The image alt tag.
+	 *     @type string $caption  Optional. The image caption.
+	 *     @type int    $filesize Optional. The image filesize in bytes.
+	 * }
+	 * @return array|array[] $details {
+	 *     An array of image details, or an array of an array thereof if the input was multidimensional.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function image_details( $details ) {

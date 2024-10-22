@@ -119,13 +119,14 @@ final class Post {
 	 *              3. Renamed from `_flex_nav_tab_wrapper`.
 	 *
 	 * @param string $id   The nav-tab ID.
-	 * @param array  $tabs The tab content {
-	 *    string tab ID => array : {
-	 *       string   name     : Tab name.
-	 *       callable callback : Output function.
-	 *       string   dashicon : The dashicon to use.
-	 *       mixed    args     : Optional callback function args.
-	 *    }
+	 * @param array  $tabs {
+	 *     The tab creation arguments keyed by tab name.
+	 *
+	 *     @type string   $name     Tab name.
+	 *     @type callable $callback Output function.
+	 *     @type string   $dashicon The dashicon to use.
+	 *     @type mixed    $args     Optional callback function args. These arguments
+	 *                              will be extracted to variables in scope of the view.
 	 * }
 	 */
 	public static function flex_nav_tab_wrapper( $id, $tabs = [] ) {

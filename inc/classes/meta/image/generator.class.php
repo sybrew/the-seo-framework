@@ -55,9 +55,11 @@ final class Generator {
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
-	 * @yield array : {
-	 *    string url: The image URL location,
-	 *    int    id:  The image ID,
+	 * @yield array {
+	 *     The image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
 	 * }
 	 */
 	public static function generate_attachment_image_details( $args = null, $size = 'full' ) {
@@ -82,9 +84,11 @@ final class Generator {
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
-	 * @yield array : {
-	 *    string url: The image URL location,
-	 *    int    id:  The image ID,
+	 * @yield array {
+	 *     The image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
 	 * }
 	 */
 	public static function generate_featured_image_details( $args = null, $size = 'full' ) {
@@ -116,9 +120,11 @@ final class Generator {
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
-	 * @yield array : {
-	 *    string url: The image URL location,
-	 *    int    id:  The image ID,
+	 * @yield array {
+	 *     The image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
 	 * }
 	 */
 	public static function generate_content_image_details( $args = null ) {
@@ -179,9 +185,11 @@ final class Generator {
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @yield array : {
-	 *    string url: The image URL location,
-	 *    int    id:  The image ID,
+	 * @yield array {
+	 *     The image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
 	 * }
 	 */
 	public static function generate_fallback_image_details() {
@@ -253,9 +261,11 @@ final class Generator {
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
-	 * @yield array : {
-	 *    string url: The image URL location,
-	 *    int    id:  The image ID,
+	 * @yield array {
+	 *     The image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
 	 * }
 	 */
 	public static function generate_site_logo_image_details( $args = null, $size = 'full' ) {
@@ -281,9 +291,11 @@ final class Generator {
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
 	 * @param string     $size The size of the image to get.
-	 * @yield array : {
-	 *    string url: The image URL location,
-	 *    int    id:  The image ID,
+	 * @yield array {
+	 *     The image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
 	 * }
 	 */
 	public static function generate_site_icon_image_details( $args = null, $size = 'full' ) {

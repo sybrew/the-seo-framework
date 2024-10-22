@@ -246,8 +246,10 @@ class HTML {
 	 * @since 4.0.0
 	 * @since 4.1.0 No longer adds an extra space in front of the return value when no data is generated.
 	 *
-	 * @param iterable $data : {
-	 *    string $k => mixed $v
+	 * @param iterable $data {
+	 *     The data attributes.
+	 *
+	 *     @type mixed {$k} The data attribute value, keyed by string.
 	 * }
 	 * @return string The HTML data attributes, with added space to the start if something's created.
 	 */

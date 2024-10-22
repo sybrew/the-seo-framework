@@ -39,7 +39,7 @@ $tab_index = 1;
  *
  * The content is relative to the navigation, and uses CSS to become visible.
  */
-foreach ( $tabs as $tab => $params ) {
+foreach ( $tabs as $tab => $args ) {
 
 	$radio_id    = "tsf-flex-{$id}-tab-{$tab}-content";
 	$radio_class = "tsf-flex-{$id}-tabs-content";
@@ -52,8 +52,8 @@ foreach ( $tabs as $tab => $params ) {
 		<?php
 		// No-JS tabs.
 		if ( $show_tabs ) {
-			$dashicon   = $params['dashicon'] ?? '';
-			$label_name = $params['name'] ?? '';
+			$dashicon   = $args['dashicon'] ?? '';
+			$label_name = $args['name'] ?? '';
 
 			?>
 			<div class="tsf-flex tsf-flex-hide-if-js tsf-flex-tabs-content-no-js">
@@ -67,23 +67,34 @@ foreach ( $tabs as $tab => $params ) {
 			<?php
 		}
 
-		if ( ! empty( $params['callback'] ) )
-			\call_user_func_array( $params['callback'], ( $params['args'] ?? [] ) );
+		if ( ! empty( $args['callback'] ) )
+			\call_user_func_array( $args['callback'], ( $args['args'] ?? [] ) );
 
 		/**
 		 * @since 4.2.0
-		 * @param array $args The tab arguments: {
-		 *    @param string id
-		 *    @param string tab
-		 *    @param array  params
+		 * @since 5.0.7 Renamed 'params' to 'args'.
+		 * @param array $args {
+		 *     The tab creation data.
+		 *
+		 *     @type string $id     The nav-tab ID.
+		 *     @type string $tab    The tab name.
+		 *     @type array  $params {
+		 *         The tab creation arguments.
+		 *
+		 *         @type string   $name     Tab name.
+		 *         @type callable $callback Output function.
+		 *         @type string   $dashicon The dashicon to use.
+		 *         @type mixed    $args     Optional callback function args. These arguments
+		 *                                  will be extracted to variables in scope of the view.
+		 *     }
 		 * }
 		 */
 		\do_action(
 			'the_seo_framework_flex_tab_content',
 			[
-				'id'     => $id,
-				'tab'    => $tab,
-				'params' => $params,
+				'id'   => $id,
+				'tab'  => $tab,
+				'args' => $args,
 			],
 		);
 	?>

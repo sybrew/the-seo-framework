@@ -51,16 +51,19 @@ class Form {
 	 * @since 4.1.4
 	 * @since 5.0.0 'default' is now synonymous to 'selected'. 'default' is no longer promoted.
 	 *
-	 * @param array $args : {
-	 *    string     $id       The select field ID.
-	 *    string     $class    The div wrapper class.
-	 *    string     $name     The option name.
-	 *    int|string $selected The selected option value.
-	 *    array      $options  The select option values : { value => name }
-	 *    string     $label    The option label.
-	 *    string     $required Whether the field must be required.
-	 *    array      $data     The select field data. Sub-items are expected to be escaped if they're not an array.
-	 *    array      $info     Extra info field data.
+	 * @param array $args {
+	 *     The select field creation arguments.
+	 *
+	 *     @type string     $id       The select field ID.
+	 *     @type string     $class    The div wrapper class.
+	 *     @type string     $name     The option name.
+	 *     @type int|string $selected The selected option value.
+	 *     @type array      $options  The select option values : { value => name }
+	 *     @type string     $label    The option label.
+	 *     @type bool       $labelstrong Whether the label should be strong.
+	 *     @type bool       $required Whether the field must be required.
+	 *     @type array      $data     The select field data. Sub-items are expected to be escaped if they're not an array.
+	 *     @type array      $info     Extra info field data.
 	 * }
 	 * @return string The option field.
 	 */
@@ -196,26 +199,34 @@ class Form {
 	 * @since 4.1.4
 	 * @since 4.2.8 Added 'button_class' as a supported index for `$args`.
 	 *
-	 * @param array $args Required. The image uploader arguments : {
-	 *   'id'         => string          Required. The HTML input id to pass URL into.
-	 *   'post_id'    => int             Optional. The Post ID to bind the uploaded file to. Default current post ID.
-	 *   'data'       => [
-	 *      'inputType' => string Optional. Whether the upload type is 'social' or 'logo' for i18n. Default 'social'.
-	 *      'width'     => int    Optional. The suggested image width. Default 1200.
-	 *      'height'    => int    Optional. The suggested image height. Default 630.
-	 *      'minWidth'  => int    Optional. The minimum image width. Default 200.
-	 *      'minHeight' => int    Optional. The minimum image height. Default 200.
-	 *      'flex'      => bool   Optional. Whether the image W:H ratio may be changed. Default true.
-	 *   ],
-	 *   'i18n'       => [
-	 *      'button_title' => string Optional. The image-select button on-hover title for accessibility. Default ''.
-	 *                                         Tip: Only fill if 'button_text' is ambiguous.
-	 *      'button_text'  => string Optional. The image-select button title. Defaults l10n 'Select Image',
-	 *   ],
-	 *   'button_class' => [
-	 *      'set'    => array Optional. The image set button classes.
-	 *      'remove' => array Optional. The imag eremoval button classes.
-	 *   ],
+	 * @param array $args {
+	 *     The image uploader arguments.
+	 *
+	 *     @type string $id                Required. The HTML input id to pass URL into.
+	 *     @type int    $post_id           Optional. The Post ID to bind the uploaded file to. Default current post ID.
+	 *     @type array  $data              {
+	 *         Optional. The data attributes for the image uploader.
+	 *
+	 *         @type string $inputType      Optional. Whether the upload type is 'social' or 'logo' for i18n. Default 'social'.
+	 *         @type int    $width          Optional. The suggested image width. Default 1200.
+	 *         @type int    $height         Optional. The suggested image height. Default 630.
+	 *         @type int    $minWidth       Optional. The minimum image width. Default 200.
+	 *         @type int    $minHeight      Optional. The minimum image height. Default 200.
+	 *         @type bool   $flex           Optional. Whether the image W:H ratio may be changed. Default true.
+	 *     },
+	 *     @type array  $i18n              {
+	 *         Optional. The internationalization strings.
+	 *
+	 *         @type string $button_title   Optional. The image-select button on-hover title for accessibility. Default ''.
+	 *                                   Tip: Only fill if 'button_text' is ambiguous.
+	 *         @type string $button_text    Optional. The image-select button title. Defaults l10n 'Select Image'.
+	 *     },
+	 *     @type array  $button_class      {
+	 *         Optional. The button classes.
+	 *
+	 *         @type array $set             Optional. The image set button classes.
+	 *         @type array $remove          Optional. The image removal button classes.
+	 *     },
 	 * }
 	 * @return string The image uploader button.
 	 */

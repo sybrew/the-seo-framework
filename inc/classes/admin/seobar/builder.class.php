@@ -81,12 +81,14 @@ final class Builder {
 	 * @since 4.0.0
 	 * @since 4.1.4 Now manages the builder, too.
 	 *
-	 * @param array $query : {
-	 *   int    $id        : Required. The current post or term ID.
-	 *   string $tax       : Optional. If not set, this will interpret it as a post.
-	 *   string $pta       : Not implemented. Do not populate.
-	 *   string $post_type : Optional. If not set, this will be automatically filled.
-	 *                                 This parameter is ignored for taxonomies.
+	 * @param array $query {
+	 *     The query arguments for the SEO Bar.
+	 *
+	 *     @type int    $id        Required. The current post or term ID.
+	 *     @type string $tax       Optional. If not set, this will interpret it as a post.
+	 *     @type string $pta       Not implemented. Do not populate.
+	 *     @type string $post_type Optional. If not set, this will be automatically filled.
+	 *                             This parameter is ignored for taxonomies.
 	 * }
 	 * @return string The SEO Bar.
 	 */
@@ -158,13 +160,14 @@ final class Builder {
 	 * @since 4.1.1 Is now static.
 	 * @collector
 	 *
-	 * @return array SEO Bar items. Passed by reference. {
-	 *    string $symbol : The displayed symbol that identifies your bar.
-	 *    string $title  : The title of the assessment.
-	 *    string $status : Accepts 'good', 'okay', 'bad', 'unknown'.
-	 *    string $reason : The final assessment: The reason for the $status.
-	 *    string $assess : The assessments on why the reason is set. Keep it short and concise!
-	 *                     Does not accept HTML for performant ARIA support.
+	 * @return array {
+	 *     An array of SEO Bar items.
+	 *
+	 *     @type string $symbol The displayed symbol that identifies your bar.
+	 *     @type string $title  The title of the assessment.
+	 *     @type string $status Either 'good', 'okay', 'bad', or 'unknown'.
+	 *     @type string $reason The final assessment: The reason for the $status.
+	 *     @type string $assess The assessments on why the reason is set.
 	 * }
 	 */
 	public static function &collect_seo_bar_items() {
@@ -176,14 +179,16 @@ final class Builder {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param string $key The item key.
-	 * @param array  $item : {
-	 *    string $symbol : Required. The displayed symbol that identifies your bar.
-	 *    string $title  : Required. The title of the assessment.
-	 *    string $status : Required. Accepts 'good', 'okay', 'bad', 'unknown'.
-	 *    string $reason : Required. The final assessment: The reason for the $status.
-	 *    string $assess : Required. The assessments on why the reason is set. Keep it short and concise!
-	 *                               Does not accept HTML for performant ARIA support.
+	 * @param string $key  The item key.
+	 * @param array  $item {
+	 *     The SEO Bar item.
+	 *
+	 *     @type string $symbol Required. The displayed symbol that identifies your bar.
+	 *     @type string $title  Required. The title of the assessment.
+	 *     @type string $status Required. Accepts 'good', 'okay', 'bad', 'unknown'.
+	 *     @type string $reason Required. The final assessment: The reason for the $status.
+	 *     @type string $assess Required. The assessments on why the reason is set. Keep it short and concise!
+	 *                          Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	public static function register_seo_bar_item( $key, $item ) {

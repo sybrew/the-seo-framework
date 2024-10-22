@@ -236,13 +236,13 @@ final class ListEdit extends Admin\Lists\Table {
 		 * @since 4.0.5
 		 * @since 4.1.0 Now has `doctitle` and `description` indexes in its first parameter.
 		 * @since 4.2.3 Now supports the `placeholder` index for $data.
-		 * @param array $data            The current data : {
-		 *    string Index => @param array : {
-		 *       @param mixed  $value       The current value.
-		 *       @param bool   $isSelect    Optional. Whether the field is a select field.
-		 *       @param string $default     Optional. Only works when $isSelect is true. The default value to be set in select index 0.
-		 *       @param string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
-		 *    }
+		 * @param array $data           {
+		 *     The current data keyed by input field name.
+		 *
+		 *     @type mixed  $value       The current value.
+		 *     @type bool   $isSelect    Optional. Whether the field is a select field.
+		 *     @type string $default     Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *     @type string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
 		 * }
 		 * @param array $generator_args The query data. Contains 'id' or 'taxonomy'.
 		 */
@@ -428,13 +428,13 @@ final class ListEdit extends Admin\Lists\Table {
 		 * @since 4.0.5
 		 * @since 4.1.0 Now has `doctitle` and `description` indexes in its first parameter.
 		 * @since 4.2.3 Now supports the `placeholder` index for $data.
-		 * @param array $data            The current data : {
-		 *    string Index => @param array : {
-		 *       @param mixed  $value       The current value.
-		 *       @param bool   $isSelect    Optional. Whether the field is a select field.
-		 *       @param string $default     Optional. Only works when $isSelect is true. The default value to be set in select index 0.
-		 *       @param string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
-		 *    }
+		 * @param array $data           {
+		 *     The current data keyed by input field name.
+		 *
+		 *     @type mixed  $value       The current value.
+		 *     @type bool   $isSelect    Optional. Whether the field is a select field.
+		 *     @type string $default     Optional. Only works when $isSelect is true. The default value to be set in select index 0.
+		 *     @type string $placeholder Optional. Only works when $isSelect is false. Sets a placeholder for the input field.
 		 * }
 		 * @param array $generator_args The query data. Contains 'id' and 'tax'.
 		 */

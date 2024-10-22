@@ -35,10 +35,12 @@ final class Tags {
 
 	/**
 	 * @since 5.0.0
-	 * @var array[] The meta tags' render data defaults : {
-	 *    @param ?array        attributes A list of attributes by [ name => value ].
-	 *    @param ?string       tag        The tag name. Defaults to 'meta' if left empty.
-	 *    @param ?string|array content    The tag's content. Leave null to not render content.
+	 * @var array[] {
+	 *     The meta tags' render data defaults.
+	 *
+	 *     @type ?array        $attributes A list of attributes by [ name => value ].
+	 *     @type ?string       $tag        The tag name. Defaults to 'meta' if left empty.
+	 *     @type ?string|array $content    The tag's content. Leave null to not render content.
 	 * }
 	 */
 	private const DATA_DEFAULTS = [
@@ -55,11 +57,13 @@ final class Tags {
 
 	/**
 	 * @since 5.0.0
-	 * @var array[] The meta tags' render data : {
-	 *    @param ?array        attributes A list of attributes by [ name => value ].
-	 *    @param ?string       tag        The tag name. Defaults to 'meta' if left empty.
-	 *    @param ?string|array content    The tag's content. Leave null to not render content.
-	 *    @param ?true         rendered   Private, whether the tag is rendered.
+	 * @var array[] {
+	 *     The meta tags' render data.
+	 *
+	 *     @type ?array        $attributes A list of attributes by [ name => value ].
+	 *     @type ?string       $tag        The tag name. Defaults to 'meta' if left empty.
+	 *     @type ?string|array $content    The tag's content. Leave null to not render content.
+	 *     @type ?true         $rendered   Private, whether the tag is rendered.
 	 * }
 	 */
 	private static $tags_render_data = [];
@@ -138,8 +142,10 @@ final class Tags {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array         $attributes Associative array of tag names and tag values : {
-	 *                          string $name => string $value
+	 * @param array         $attributes {
+	 *                          Associative array of tag names and tag values.
+	 *
+	 *                          @type string $value The attributes's value, keyed by name.
 	 *                      }
 	 * @param string        $tag        The element's tag-name.
 	 * @param ?string|array $content    The tag's content. Leave null to not render content.
