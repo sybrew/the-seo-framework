@@ -118,10 +118,7 @@ final class AJAX {
 		Data\Plugin\User::update_single_meta_item( Query::get_current_user_id(), 'counter_type', $value );
 
 		// Encode and echo results. Requires JSON decode within JS.
-		\wp_send_json_success( [
-			'type'  => 'success',
-			'value' => $value,
-		] );
+		\wp_send_json_success();
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
@@ -352,6 +349,39 @@ final class AJAX {
 			'data'      => $data,
 			'processed' => $get,
 		] );
+		// phpcs:enable, WordPress.Security.NonceVerification
+	}
+
+	/**
+	 * Gets term parent slugs for a term. It appends the requested term itself.
+	 *
+	 * We use the capability 'edit_posts'; there's no data processing, and we can safely
+	 * assume that any user that can edit posts can also view all term parent slugs.
+	 *
+	 * @hook wp_ajax_tsf_get_term_parent_slugs 10
+	 * @since 5.0.7
+	 * @access private
+	 */
+	public static function get_term_parent_slugs() {
+
+		Helper\Headers::clean_response_header();
+
+		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		Utils::check_ajax_capability_referer( 'edit_posts' );
+
+		if ( ! isset( $_POST['term_id'], $_POST['taxonomy'] ) )
+			\wp_send_json_error();
+
+		$term_id = \absint( $_POST['term_id'] );
+
+		if ( ! $term_id )
+			\wp_send_json_error();
+
+		\wp_send_json_success( array_column(
+			Data\Term::get_term_parents( $term_id, $_POST['taxonomy'], true ),
+			'slug',
+			'term_id',
+		) );
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }

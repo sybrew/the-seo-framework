@@ -314,6 +314,10 @@ TODO remove HTML4 closers in admin? It's definitly 5.
 
 TODO the correct indentation for comments seems to be 4 per tab (+1 initial)
 
+TODO add canonical URL predictions to the homepage settings.
+TODO add canonical URL predictions to the pta settings.
+	-> aren't these just simple "noindex" checks??
+
 TODO LinkedIn Post Inspector recommends the "Author" tag, which is often ambiguously described. We could opt-in this feature via the Social Sharing settings, stating that LinkedIn uses it.
 
 TODO add ignore for Asgaros forums. See https://wordpress.org/support/topic/canonical-on-forum/.
@@ -328,8 +332,6 @@ TODO patch WP Core bug https://core.trac.wordpress.org/ticket/51912 using https:
 TODO check if bbPress/BuddyPress needs breadcrumb support?
 
 TODO the title prefix doesn't appear to work in quick-edit for Terms.
-
-TODO optimized performance for PHP 8.4.
 
 Punt:
 - remove jQuery dependencies in UI?
@@ -352,8 +354,10 @@ Punt:
 	* You can now block AI language model trainers and SEO analysis crawlers from using your content via the "Robots Settings."
 	* Added a canonical URL input field for the homepage.
 	* Added a redirect URL input field for the homepage.
-	* TSF now dynamically updates the example canonical URL when editing a post, editing a term, and TODO when editing a post or term via quick-edit.
+	* We implemented the bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a post, term, either via their edit screens, or via quick-edit.
 		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
+			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, `%post_tag%`, and `%author%`.
+			* It doesn't respond to `%pagename%`, because it's vestiga and should be removed from WordPress. Instead, use `%postname%`, which does the same, but for all post types.
 			* TODO We might need to invoke more database requests to fetch the category slugs? -> PT already has a handler for this, no?
 				-> We could freeze it to the last category selected if we run out of time for the release.
 * **Improved:**
@@ -440,6 +444,7 @@ Punt:
 		* JS Event `tsf-updated-block-editor-${type}` is now available.
 		* JS file `utils.js` is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
 		* JS file `ui.js` is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
+		* JS file `termSlugs.js` is now available and loaded with `post.js`, `term.js`, and `le.js`; it handles term selections to update the canonical URLs accordingly. It has an advanced caching system to prevent repeated lookups.
 		* JS Events `tsf-updated-block-editor` and `tsf-updated-block-editor-${type}` now respond to `'slug'` type changes.
 		* jQuery Event `tsf-updated-gutenberg-${type}` now also respond to `'slug'` type changes.
 			* But this event is deprecated. Use the JS Event `tsf-updated-block-editor-${type}` instead.
@@ -476,6 +481,9 @@ Punt:
 * **Other:**
 	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
 	* Removed support for obsolete `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
+	* We optimized opcodes for PHP 8.4:
+		* In short, PHP 8.4's OPcache module now also precaches `sprintf`. But, when working inside a namespace, we can only utilize that by namespace-escaping calls to `sprintf`.
+		* We maintain static code checks for this via [WPCS-TSF](https://github.com/theseoframework/wpcs-tsf).
 
 ### 5.0.6
 

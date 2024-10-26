@@ -43,3 +43,6 @@ use \The_SEO_Framework\Admin\Script\AJAX;
 
 // Admin AJAX for Gutenberg data update.
 \add_action( 'wp_ajax_tsf_update_post_data', [ AJAX::class, 'get_post_data' ] );
+
+// Admin AJAX for Gutenberg data update.
+\add_action( 'wp_ajax_tsf_get_term_parent_slugs', [ AJAX::class, 'get_term_parent_slugs' ] );
