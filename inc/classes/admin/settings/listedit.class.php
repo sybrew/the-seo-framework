@@ -290,12 +290,12 @@ final class ListEdit extends Admin\Lists\Table {
 			$is_canonical_ref_locked = false;
 			$default_canonical       = Meta\URI::get_generated_url( $generator_args );
 
-			// Homepage cannot have an author.
+			// Homepage cannot have an author. This value cannot be changed via quick-edit, so we populate it here.
 			if ( str_contains( \get_option( 'permalink_structure' ), '%author%' ) ) {
 				$author_id = Query::get_post_author_id( $generator_args['id'] );
 				if ( $author_id ) {
 					// Don't use get_the_author_meta(). See WP Core \get_author_posts_url().
-					$author_nicename = \get_userdata( $author_id )->user_nicename ?? '';
+					$author_nicename = Data\User::get_userdata( $author_id, 'user_nicename' ) ?? '';
 				}
 			}
 		}

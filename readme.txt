@@ -416,6 +416,7 @@ Punt:
 		* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
 		* Method `tsf()->format()->arrays()->array_diff_assoc_recursive()` is now available. It's the first of its kind that supports more than two array inputs.
 		* Method `tsf()->description()->excerpt()->get_excerpt()` is now available. It's an alias of `get_post_excerpt()`, which is marked for deprecation due to being mislabeled.
+		* Method `tsf()->data()->user()->get_userdata()` is now available. It's an alias of WordPress's `get_userdata()`, but with proper memoization for improved performance.
 	* **Changed:**
 		* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
 		* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`) now returns the default meta if the PTA isn't supported.
