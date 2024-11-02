@@ -357,6 +357,7 @@ final class AJAX {
 	 *
 	 * We use the capability 'edit_posts'; there's no data processing, and we can safely
 	 * assume that any user that can edit posts can also view all term parent slugs.
+	 * See WP Core `post_categories_meta_box()`
 	 *
 	 * @hook wp_ajax_tsf_get_term_parent_slugs 10
 	 * @since 5.0.7
@@ -382,6 +383,38 @@ final class AJAX {
 			'slug',
 			'term_id',
 		) );
+		// phpcs:enable, WordPress.Security.NonceVerification
+	}
+
+	/**
+	 * Gets the author slug for a user ID.
+	 *
+	 * We use the capability 'edit_posts'; there's no data processing, and we can safely
+	 * assume that any user that can edit posts can also view all other post authors.
+	 * See WP Core `post_author_meta_box()`
+	 *
+	 * @hook wp_ajax_tsf_get_author_slug 10
+	 * @since 5.0.7
+	 * @access private
+	 */
+	public static function get_author_slug() {
+
+		Helper\Headers::clean_response_header();
+
+		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		Utils::check_ajax_capability_referer( 'edit_posts' );
+
+		if ( ! isset( $_POST['author_id'] ) )
+			\wp_send_json_error();
+
+		$author_id = \absint( $_POST['author_id'] );
+
+		if ( ! $author_id )
+			\wp_send_json_error();
+
+		\wp_send_json_success(
+			[ $author_id => Data\User::get_userdata( $author_id, 'user_nicename' ) ],
+		);
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }

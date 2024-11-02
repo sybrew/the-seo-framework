@@ -388,8 +388,12 @@ Input::output_js_social_data(
 				$is_taxonomy_hierarchical = $tax_object->hierarchical && $tax_object->rewrite['hierarchical'];
 
 				// '/%category%/' is always part of the structure on terms, so we need not test for that.
-				$parent_terms = $is_taxonomy_hierarchical
-					? Data\Term::get_term_parents( $term_id, $taxonomy )
+				$parent_term_slugs = $is_taxonomy_hierarchical
+					? array_column(
+						Data\Term::get_term_parents( $term_id, $taxonomy ),
+						'slug',
+						'term_id',
+					)
 					: [];
 
 				Input::output_js_canonical_data(
@@ -401,7 +405,7 @@ Input::output_js_social_data(
 							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
 							'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
 							// '/%category%/' is always part of the structure on terms, so we need not test for that.
-							'parentTermSlugs'    => array_column( $parent_terms, 'slug', 'term_id' ),
+							'parentTermSlugs'    => $parent_term_slugs,
 							'isHierarchical'     => $is_taxonomy_hierarchical,
 						],
 					],

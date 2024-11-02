@@ -19,6 +19,7 @@ use \The_SEO_Framework\{
 	Data\Filter\Sanitize,
 	Helper\Post_Type,
 	Helper\Query,
+	Helper\Taxonomy,
 };
 use \The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
@@ -541,17 +542,66 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<input class=large-text type=url name="autodescription[_genesis_canonical_uri]" id=autodescription_canonical placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( $meta['_genesis_canonical_uri'] ) ?>" autocomplete=off />
 				<?php
-					Input::output_js_canonical_data(
-						'autodescription_canonical',
-						[
-							'state' => [
-								'refCanonicalLocked' => $canonical_ref_locked,
-								'defaultCanonical'   => \esc_url( $default_canonical ),
-								'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
-								'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
-							],
-						],
+				$post_type   = Query::get_admin_post_type();
+				$permastruct = Meta\URI\Utils::get_url_permastruct( $generator_args );
+
+				// Only hierarchical taxonomies can be used in the URL.
+				$taxonomies               = $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
+				$parent_term_slugs_by_tax = []; // We use a different name here because it has a different structure than at Terms.
+
+				foreach ( $taxonomies as $tax ) {
+					if ( str_contains( $permastruct, "%{$tax}%" ) ) {
+						// Broken in Core. Skip.
+						if ( 'post_tag' === $tax ) continue;
+
+						// There's no need to test for hierarchy, because we want the full structure anyway (third parameter).
+						$parent_term_slugs_by_tax[ $tax ] = array_column(
+							Data\Term::get_term_parents(
+								Data\Plugin\Post::get_primary_term_id( $post_id, $tax ),
+								$tax,
+								true,
+							),
+							'slug',
+							'term_id',
+						);
+					}
+				}
+
+				if ( str_contains( $permastruct, '%author%' ) ) {
+					$author_id = Query::get_post_author_id( $post_id );
+
+					if ( $author_id ) {
+						$author_slugs = [
+							$author_id => Data\User::get_userdata( $author_id, 'user_nicename' ),
+						];
+					}
+				}
+
+				$is_post_type_hierarchical = \is_post_type_hierarchical( $post_type );
+
+				if ( $is_post_type_hierarchical && str_contains( $permastruct, '%postname%' ) ) {
+					$parent_page_slugs = array_column(
+						Data\Post::get_post_ancestors( $post_id ),
+						'post_name',
+						'ID',
 					);
+				}
+
+				Input::output_js_canonical_data(
+					'autodescription_canonical',
+					[
+						'state' => [
+							'refCanonicalLocked' => $canonical_ref_locked,
+							'defaultCanonical'   => \esc_url( $default_canonical ),
+							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+							'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
+							'parentTermSlugs'    => $parent_term_slugs_by_tax,
+							'authorSlugs'        => $author_slugs ?? [],
+							'parentPageSlugs'    => $parent_page_slugs ?? [],
+							'isHierarchical'     => $is_post_type_hierarchical,
+						],
+					],
+				);
 				?>
 			</div>
 		</div>

@@ -330,7 +330,7 @@ class Loader {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-termslugs', 'tsf', 'tsf-tt', 'tsf-utils' ],
+				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -428,7 +428,7 @@ class Loader {
 			[
 				'id'       => 'tsf-post',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-termslugs', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
+				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-termslugs', 'tsf-authorslugs', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'post',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -727,8 +727,17 @@ class Loader {
 				'id'       => 'tsf-termslugs',
 				'type'     => 'js',
 				'deps'     => [],
-				'autoload' => true,
+				'autoload' => false, // Not all screens require this.
 				'name'     => 'termslugs',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-authorslugs',
+				'type'     => 'js',
+				'deps'     => [],
+				'autoload' => false, // Not all screens require this.
+				'name'     => 'authorslugs',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
 			],
@@ -748,19 +757,17 @@ class Loader {
 		$post_id = Query::get_the_real_admin_id();
 
 		$post_type   = Query::get_admin_post_type();
-		$_taxonomies = $post_type ? Taxonomy::get_hierarchical( 'objects', $post_type ) : [];
+		$_taxonomies = $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
 		$taxonomies  = [];
 
-		$gutenberg = Query::is_block_editor();
+		foreach ( $_taxonomies as $tax ) {
+			if ( ! Taxonomy::is_supported( $tax ) ) continue;
 
-		foreach ( $_taxonomies as $_t ) {
-			if ( ! Taxonomy::is_supported( $_t->name ) ) continue;
+			$singular_name   = Taxonomy::get_label( $tax );
+			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $post_id, $tax );
 
-			$singular_name   = Taxonomy::get_label( $_t->name );
-			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $post_id, $_t->name );
-
-			$taxonomies[ $_t->name ] = [
-				'name'    => $_t->name,
+			$taxonomies[ $tax ] = [
+				'name'    => $tax,
 				'primary' => $primary_term_id, // if 0, it'll use hints from the interface.
 				'i18n'    => [
 					/* translators: %s = term name */
@@ -769,7 +776,7 @@ class Loader {
 			];
 		}
 
-		if ( $gutenberg ) {
+		if ( Query::is_block_editor() ) {
 			$vars = [
 				'id'   => 'tsf-pt-gb',
 				'name' => 'pt-gb',

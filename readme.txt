@@ -333,6 +333,12 @@ TODO check if bbPress/BuddyPress needs breadcrumb support?
 
 TODO the title prefix doesn't appear to work in quick-edit for Terms.
 
+TODO "Most Used" term selection is still borked..
+
+TODO make the homepage canonical URL input respond to noindex.
+
+TODO write https://kb.theseoframework.com/?p=256#default-blocklist-ai and https://kb.theseoframework.com/?p=256#default-blocklist-seo
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -357,6 +363,7 @@ Punt:
 	* We implemented the bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a post, term, either via their edit screens, or via quick-edit.
 		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
 			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, `%post_tag%`, and `%author%`.
+				* TODO We also added `%product_cat%` (TODO and `%product_tag%`?) support for WooCommerce.
 			* It doesn't respond to `%pagename%`, because it's vestiga and should be removed from WordPress. Instead, use `%postname%`, which does the same, but for all post types.
 			* TODO We might need to invoke more database requests to fetch the category slugs? -> PT already has a handler for this, no?
 				-> We could freeze it to the last category selected if we run out of time for the release.
@@ -369,7 +376,7 @@ Punt:
 	* The Canonical URL input field's placeholder now blurs on focus (Quick Edit, Post Edit, Term Edit, SEO Settings).
 	* The plugin now better conveys where to modify the homepage's title "additions."
 	* The canonical URL placeholder is now populated for Quick Edit.
-		* TODO and it responds to changes like it would on a page edit screen.
+		* TODO Please note that it doesn't react to category changes, because we still need to find a good way to implement primary term selection here. So, it assumes the category selection as it was when the Quick Edit was opened.
 	* After saving a page in Gutenberg, the SEO Bar (if displayed) fades in much quicker now.
 	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
 	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
@@ -443,14 +450,16 @@ Punt:
 	* **Added:**
 		* JS Event `tsf-updated-block-editor` is now available.
 		* JS Event `tsf-updated-block-editor-${type}` is now available.
+		* JS Event `tsf-updated-primary-term` is now available.
 		* JS file `utils.js` is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
 		* JS file `ui.js` is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
-		* JS file `termSlugs.js` is now available and loaded with `post.js`, `term.js`, and `le.js`; it handles term selections to update the canonical URLs accordingly. It has an advanced caching system to prevent repeated lookups.
-		* JS Events `tsf-updated-block-editor` and `tsf-updated-block-editor-${type}` now respond to `'slug'` type changes.
+		* JS file `termSlugs.js` is now available and loaded with `post.js`, `term.js`, and `le.js`; it handles term selections to update the canonical URLs accordingly. It has an advanced caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requests it it (`%category%`, `%product_cat%`, etc.).
+		* JS file `authorSlugs.js` is now available and loaded with `post.js` and `le.js`; it handles author selections to update the canonical URLs accordingly. It has a caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requires it (`%author%`).
 		* jQuery Event `tsf-updated-gutenberg-${type}` now also respond to `'slug'` type changes.
 			* But this event is deprecated. Use the JS Event `tsf-updated-block-editor-${type}` instead.
 		* `tsfTerm.taxonomy` is now available.
 	* **Improved:**
+		* JS Events `tsf-updated-block-editor` and `tsf-updated-block-editor-${type}` now respond to `'slug'` type changes.
 		* Removed redundant lookups and processing in quick-edit by testing if we're editing a post or taxonomy.
 		* Updating the Post's password in the Classic Editor no longer triggers 3 updates sequentially.
 	* **Changed:**
