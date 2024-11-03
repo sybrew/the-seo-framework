@@ -383,18 +383,22 @@ Input::output_js_social_data(
 			<td>
 				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= \esc_attr( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off />
 				<?php
+				$tax_object  = \get_taxonomy( $taxonomy );
+				$permastruct = Meta\URI\Utils::get_url_permastruct( $generator_args );
 
-				$tax_object               = \get_taxonomy( $taxonomy );
+				$parent_term_slugs        = [];
 				$is_taxonomy_hierarchical = $tax_object->hierarchical && $tax_object->rewrite['hierarchical'];
 
-				// '/%category%/' is always part of the structure on terms, so we need not test for that.
-				$parent_term_slugs = $is_taxonomy_hierarchical
-					? array_column(
-						Data\Term::get_term_parents( $term_id, $taxonomy ),
-						'slug',
-						'term_id',
-					)
-					: [];
+				if ( $is_taxonomy_hierarchical && str_contains( $permastruct, "%$taxonomy%" ) ) {
+					// self is filled by current term name.
+					foreach ( Data\Term::get_term_parents( $term_id, $taxonomy ) as $parent_term ) {
+						// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
+						$parent_term_slugs[] = [
+							'id'   => $parent_term->term_id,
+							'slug' => $parent_term->slug,
+						];
+					}
+				}
 
 				Input::output_js_canonical_data(
 					'autodescription-meta[canonical]',
@@ -404,7 +408,6 @@ Input::output_js_social_data(
 							'defaultCanonical'   => \esc_url( $default_canonical ),
 							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
 							'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
-							// '/%category%/' is always part of the structure on terms, so we need not test for that.
 							'parentTermSlugs'    => $parent_term_slugs,
 							'isHierarchical'     => $is_taxonomy_hierarchical,
 						],

@@ -511,6 +511,8 @@ class Utils {
 						? $wp_rewrite->get_page_permastruct()
 						: "{$wp_rewrite->root}{$wp_rewrite->permalink_structure}";
 				}
+
+				$permastruct = str_replace( '%pagename%', '%postname%', $permastruct );
 				break;
 			case 'homeblog':
 				$permastruct = $wp_rewrite->front;
@@ -525,6 +527,7 @@ class Utils {
 				$permastruct = $wp_rewrite->get_author_permastruct();
 		}
 
+		// var_dump() filter me for WooCommerce?
 		return '/' . ltrim( \user_trailingslashit( $permastruct ?? '' ), '/' );
 	}
 }

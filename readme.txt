@@ -339,6 +339,9 @@ TODO make the homepage canonical URL input respond to noindex.
 
 TODO write https://kb.theseoframework.com/?p=256#default-blocklist-ai and https://kb.theseoframework.com/?p=256#default-blocklist-seo
 
+TODO canonical URLs for attachments prepend /attachment/  if the name is numeric (op permalink structure contains %category%).
+	* See get_attachment_link()
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -364,7 +367,7 @@ Punt:
 		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
 			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, `%post_tag%`, and `%author%`.
 				* TODO We also added `%product_cat%` (TODO and `%product_tag%`?) support for WooCommerce.
-			* It doesn't respond to `%pagename%`, because it's vestiga and should be removed from WordPress. Instead, use `%postname%`, which does the same, but for all post types.
+			* Please note that you should never use `%pagename%` in your permalink structure. `%postname%` gets transformed to `%pagename%` automatically when needed.
 			* TODO We might need to invoke more database requests to fetch the category slugs? -> PT already has a handler for this, no?
 				-> We could freeze it to the last category selected if we run out of time for the release.
 * **Improved:**

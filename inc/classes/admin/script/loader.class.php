@@ -330,7 +330,7 @@ class Loader {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ],
+				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -428,7 +428,7 @@ class Loader {
 			[
 				'id'       => 'tsf-post',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-termslugs', 'tsf-authorslugs', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
+				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'post',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -722,6 +722,15 @@ class Loader {
 						],
 					],
 				],
+			],
+			[
+				'id'       => 'tsf-postslugs',
+				'type'     => 'js',
+				'deps'     => [],
+				'autoload' => false, // Not all screens require this.
+				'name'     => 'postslugs',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
 			],
 			[
 				'id'       => 'tsf-termslugs',

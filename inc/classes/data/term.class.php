@@ -103,27 +103,27 @@ class Term {
 	 *
 	 * @since 5.0.7
 	 *
-	 * @param int    $id           The term ID.
+	 * @param int    $term_id      The term ID.
 	 * @param string $taxonomy     The taxonomy.
 	 * @param bool   $include_self Whether to include the initial term itself.
 	 * @return WP_Term[] The term ancestors, indexed by term ID.
 	 */
-	public static function get_term_parents( $id, $taxonomy, $include_self = false ) {
+	public static function get_term_parents( $term_id, $taxonomy, $include_self = false ) {
 
 		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $id, $include_self ) ) return $memo;
+		if ( null !== $memo = memo( null, $term_id, $include_self ) ) return $memo;
 
 		// This method is inefficient, but it applies filters we must invoke for compatibility with other plugins.
-		$ancestors = \get_ancestors( $id, $taxonomy, 'taxonomy' );
+		$ancestors = \get_ancestors( $term_id, $taxonomy, 'taxonomy' );
 
 		if ( $include_self )
-			array_unshift( $ancestors, $id );
+			array_unshift( $ancestors, $term_id );
 
 		$parents = [];
 
-		foreach ( array_reverse( $ancestors ) as $term_id )
-			$parents[ $term_id ] = \get_term( $term_id, $taxonomy );
+		foreach ( array_reverse( $ancestors ) as $_term_id )
+			$parents[ $_term_id ] = \get_term( $_term_id, $taxonomy );
 
-		return memo( $parents, $id, $include_self );
+		return memo( $parents, $term_id, $include_self );
 	}
 }

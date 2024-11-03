@@ -291,4 +291,31 @@ class Post {
 			\get_post( $id ?? Query::get_the_real_id() )->post_modified_gmt ?? '',
 		);
 	}
+
+	/**
+	 * Returns the post ancestors.
+	 *
+	 * @since 5.0.7
+	 *
+	 * @param ?int $id           The post ID. Leave null to autodetermine.
+	 * @param bool $include_self Whether to include the initial post itself.
+	 * @return \WP_Post[] A list of post ancestors, indexed by post ID.
+	 */
+	public static function get_post_parents( $id = null, $include_self = false ) {
+
+		$post = \get_post( $id ?? Query::get_the_real_id() );
+		$pto  = \get_post_type_object( $post->post_type ?? '' );
+
+		$ancestors = $pto->hierarchical ? $post->ancestors : [];
+
+		$parents = [];
+
+		foreach ( array_reverse( $ancestors ) as $post_id )
+			$parents[ $post_id ] = \get_post( $post_id );
+
+		if ( $include_self )
+			$parents[ $id ] = $post;
+
+		return $parents;
+	}
 }

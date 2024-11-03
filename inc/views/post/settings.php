@@ -545,25 +545,45 @@ switch ( $instance ) :
 				$post_type   = Query::get_admin_post_type();
 				$permastruct = Meta\URI\Utils::get_url_permastruct( $generator_args );
 
+				$parent_post_slugs         = [];
+				$is_post_type_hierarchical = \is_post_type_hierarchical( $post_type );
+
+				// We rewrote %pagename% to %postname% at `Meta\URI\Utils::get_url_permastruct()`.
+				if ( $is_post_type_hierarchical && str_contains( $permastruct, '%postname%' ) ) {
+					// self is filled by current post name.
+					foreach ( Data\Post::get_post_parents( $post_id ) as $parent_post ) {
+						// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
+						$parent_post_slugs[] = [
+							'id'   => $parent_post->ID,
+							'slug' => $parent_post->post_name,
+						];
+					}
+				}
+
 				// Only hierarchical taxonomies can be used in the URL.
 				$taxonomies               = $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
-				$parent_term_slugs_by_tax = []; // We use a different name here because it has a different structure than at Terms.
+				$parent_term_slugs_by_tax = [];
 
-				foreach ( $taxonomies as $tax ) {
-					if ( str_contains( $permastruct, "%{$tax}%" ) ) {
+				foreach ( $taxonomies as $taxonomy ) {
+					if ( str_contains( $permastruct, "%$taxonomy%" ) ) {
 						// Broken in Core. Skip.
-						if ( 'post_tag' === $tax ) continue;
+						if ( 'post_tag' === $taxonomy ) continue;
 
 						// There's no need to test for hierarchy, because we want the full structure anyway (third parameter).
-						$parent_term_slugs_by_tax[ $tax ] = array_column(
+						foreach (
 							Data\Term::get_term_parents(
-								Data\Plugin\Post::get_primary_term_id( $post_id, $tax ),
-								$tax,
+								Data\Plugin\Post::get_primary_term_id( $post_id, $taxonomy ),
+								$taxonomy,
 								true,
-							),
-							'slug',
-							'term_id',
-						);
+							)
+							as $parent_term
+						) {
+							// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
+							$parent_term_slugs_by_tax[ $taxonomy ][] = [
+								'id'   => $parent_term->term_id,
+								'slug' => $parent_term->slug,
+							];
+						}
 					}
 				}
 
@@ -572,19 +592,12 @@ switch ( $instance ) :
 
 					if ( $author_id ) {
 						$author_slugs = [
-							$author_id => Data\User::get_userdata( $author_id, 'user_nicename' ),
+							[
+								'id'   => $author_id,
+								'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
+							],
 						];
 					}
-				}
-
-				$is_post_type_hierarchical = \is_post_type_hierarchical( $post_type );
-
-				if ( $is_post_type_hierarchical && str_contains( $permastruct, '%postname%' ) ) {
-					$parent_page_slugs = array_column(
-						Data\Post::get_post_ancestors( $post_id ),
-						'post_name',
-						'ID',
-					);
 				}
 
 				Input::output_js_canonical_data(
@@ -595,9 +608,9 @@ switch ( $instance ) :
 							'defaultCanonical'   => \esc_url( $default_canonical ),
 							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
 							'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
+							'parentPostSlugs'    => $parent_post_slugs ?? [],
 							'parentTermSlugs'    => $parent_term_slugs_by_tax,
 							'authorSlugs'        => $author_slugs ?? [],
-							'parentPageSlugs'    => $parent_page_slugs ?? [],
 							'isHierarchical'     => $is_post_type_hierarchical,
 						],
 					],

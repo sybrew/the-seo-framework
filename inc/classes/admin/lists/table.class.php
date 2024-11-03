@@ -126,6 +126,7 @@ abstract class Table {
 	 * @hook wp_ajax_inline-save -1
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_prepare_columns_wp_ajax_inline_save`.
+	 * @since 5.0.7 Simplified capability check, akin to how `wp_ajax_inline_save()` does things.
 	 * @access private
 	 */
 	public function prepare_columns_wp_ajax_inline_save() {
@@ -134,14 +135,13 @@ abstract class Table {
 			   ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false )
 			|| empty( $_POST['post_ID'] )
 			|| empty( $_POST['post_type'] )
+			|| ! \current_user_can(
+				'page' === $_POST['post_type'] ? 'edit_page' : 'edit_post',
+				(int) $_POST['post_ID']
+			)
 		) return;
 
-		$post_type = stripslashes( $_POST['post_type'] );
-		$pto       = $post_type ? \get_post_type_object( $post_type ) : false;
-
-		// TODO shouldn't we just use `edit_post`? See output_column_contents_for_post && get_post_type_capabilities
-		if ( $pto && \current_user_can( "edit_{$pto->capability_type}", (int) $_POST['post_ID'] ) )
-			$this->init_columns_ajax();
+		$this->init_columns_ajax();
 	}
 
 	/**
@@ -157,10 +157,10 @@ abstract class Table {
 		if (
 			   ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
 			|| empty( $_POST['tax_ID'] )
+			|| ! \current_user_can( 'edit_term', (int) $_POST['tax_ID'] )
 		) return;
 
-		if ( \current_user_can( 'edit_term', (int) $_POST['tax_ID'] ) )
-			$this->init_columns_ajax();
+		$this->init_columns_ajax();
 	}
 
 	/**

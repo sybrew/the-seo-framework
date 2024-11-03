@@ -47,5 +47,8 @@ use \The_SEO_Framework\Admin\Script\AJAX;
 // Admin AJAX for Term slug fetching.
 \add_action( 'wp_ajax_tsf_get_term_parent_slugs', [ AJAX::class, 'get_term_parent_slugs' ] );
 
+// Admin AJAX for Post slug fetching.
+\add_action( 'wp_ajax_tsf_get_post_parent_slugs', [ AJAX::class, 'get_post_parent_slugs' ] );
+
 // Admin AJAX for Author slug fetching.
 \add_action( 'wp_ajax_tsf_get_author_slug', [ AJAX::class, 'get_author_slug' ] );

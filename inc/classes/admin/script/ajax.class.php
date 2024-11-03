@@ -357,7 +357,8 @@ final class AJAX {
 	 *
 	 * We use the capability 'edit_posts'; there's no data processing, and we can safely
 	 * assume that any user that can edit posts can also view all term parent slugs.
-	 * See WP Core `post_categories_meta_box()`
+	 * See WP Core `post_categories_meta_box()` -- exercising the same assumptions.
+	 * There's no capability check to view terms; a flaw in WP Core.
 	 *
 	 * @hook wp_ajax_tsf_get_term_parent_slugs 10
 	 * @since 5.0.7
@@ -378,11 +379,70 @@ final class AJAX {
 		if ( ! $term_id )
 			\wp_send_json_error();
 
-		\wp_send_json_success( array_column(
-			Data\Term::get_term_parents( $term_id, $_POST['taxonomy'], true ),
-			'slug',
-			'term_id',
-		) );
+		$parent_term_slugs = [];
+
+		foreach ( Data\Term::get_term_parents( $term_id, $_POST['taxonomy'], true ) as $parent_term ) {
+			// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
+			$parent_term_slugs[] = [
+				'id'   => $parent_term->term_id,
+				'slug' => $parent_term->slug,
+			];
+		}
+
+		\wp_send_json_success( $parent_term_slugs );
+		// phpcs:enable, WordPress.Security.NonceVerification
+	}
+
+	/**
+	 * Gets page parent slugs for a page. It appends the requested page itself.
+	 *
+	 * We use the base capability 'edit_posts'; there's no data processing.
+	 * See WP Core `page_attributes_meta_box()` -- there's no check in there at all.
+	 *
+	 * Still, we added an extra check for the post type object, because everything is a post type in WordPress.
+	 * Albeit customizer, cache, requests, blocks, templates, CSS, menus, fonts, templates... it's all a post type.
+	 * This moronic abuse of the Post Type API exist because Gutenberg needed to speedrun features for it flopped.
+	 *
+	 * @hook wp_ajax_tsf_get_post_parent_slugs 10
+	 * @since 5.0.7
+	 * @access private
+	 */
+	public static function get_post_parent_slugs() {
+
+		Helper\Headers::clean_response_header();
+
+		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		Utils::check_ajax_capability_referer( 'edit_posts' );
+
+		if ( ! isset( $_POST['post_id'] ) )
+			\wp_send_json_error();
+
+		$post_id = \absint( $_POST['post_id'] );
+
+		if ( ! $post_id )
+			\wp_send_json_error();
+
+		$post_type_object = \get_post_type_object( \get_post( $post_id )->post_type ?? '' );
+
+		// This prevents snooping around special post types instated by individuals with an underdeveloped sense of logic.
+		if (
+			   empty( $post_type_object )
+			|| ! \current_user_can( $post_type_object->cap->edit_posts )
+		) {
+			\wp_send_json_error();
+		}
+
+		$parent_post_slugs = [];
+
+		foreach ( Data\Post::get_post_parents( $post_id, true ) as $parent_post ) {
+			// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
+			$parent_post_slugs[] = [
+				'id'   => $parent_post->ID,
+				'slug' => $parent_post->post_name,
+			];
+		}
+
+		\wp_send_json_success( $parent_post_slugs );
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
@@ -391,7 +451,7 @@ final class AJAX {
 	 *
 	 * We use the capability 'edit_posts'; there's no data processing, and we can safely
 	 * assume that any user that can edit posts can also view all other post authors.
-	 * See WP Core `post_author_meta_box()`
+	 * See WP Core `post_author_meta_box()` -- exercising the same assumptions.
 	 *
 	 * @hook wp_ajax_tsf_get_author_slug 10
 	 * @since 5.0.7
@@ -412,9 +472,13 @@ final class AJAX {
 		if ( ! $author_id )
 			\wp_send_json_error();
 
-		\wp_send_json_success(
-			[ $author_id => Data\User::get_userdata( $author_id, 'user_nicename' ) ],
-		);
+		$author_slugs   = [];
+		$author_slugs[] = [
+			'id'   => $author_id,
+			'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
+		];
+
+		\wp_send_json_success( $author_slugs );
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }
