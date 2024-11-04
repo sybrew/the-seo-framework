@@ -342,6 +342,8 @@ TODO write https://kb.theseoframework.com/?p=256#default-blocklist-ai and https:
 TODO canonical URLs for attachments prepend /attachment/  if the name is numeric (op permalink structure contains %category%).
 	* See get_attachment_link()
 
+TODO add 1 spaces to `\*    [a-z]`
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -365,11 +367,12 @@ Punt:
 	* Added a redirect URL input field for the homepage.
 	* We implemented the bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a post, term, either via their edit screens, or via quick-edit.
 		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
-			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, `%post_tag%`, and `%author%`.
+			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, and `%author%`.
+				* `%pagename%` is treated as `%postname%` internally. You should never make this part of the permalink structure, anyway.
+				* `%post_tag%` somehow exists but is ignored; it doesn't work in WordPress. TODO is this useful information?
 				* TODO We also added `%product_cat%` (TODO and `%product_tag%`?) support for WooCommerce.
 			* Please note that you should never use `%pagename%` in your permalink structure. `%postname%` gets transformed to `%pagename%` automatically when needed.
-			* TODO We might need to invoke more database requests to fetch the category slugs? -> PT already has a handler for this, no?
-				-> We could freeze it to the last category selected if we run out of time for the release.
+			* This system dynamically fetches page ancestor, author, and term slugs as needed. These are then cached in the browser. This dynamic fetching may appear as a delay in writing the canonical URL when making changes.
 * **Improved:**
 	* References to X and Twitter Card are more distinctive now.
 	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
@@ -380,7 +383,7 @@ Punt:
 	* The plugin now better conveys where to modify the homepage's title "additions."
 	* The canonical URL placeholder is now populated for Quick Edit.
 		* TODO Please note that it doesn't react to category changes, because we still need to find a good way to implement primary term selection here. So, it assumes the category selection as it was when the Quick Edit was opened.
-	* After saving a page in Gutenberg, the SEO Bar (if displayed) fades in much quicker now.
+	* After saving a page in the Block Editor, the SEO Bar (if displayed) fades in much quicker now.
 	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
 	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
 	* Floating title parts now also disappear when there are fewer than 1.33 characters are visible, so that they won't overlap your input.
@@ -388,11 +391,12 @@ Punt:
 	* Reduced the sitemap stylesheet size by also implementing modern logical declarations for that.
 	* The SEO meta box tab labels are now inline when there's enough space.
 	* The quick-edit default indexing state now updates to the post password or private status accordingly.
+	* The Block Editor on WP 6.7 proposes a new layout for their select fields, which we've opted in for with the Primary Term selection.
 * **Changed:**
 	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
 		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
 	* The Primary Term selector for the Classic Editor has been rewritten for accessibility, performance, and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
-		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes.
+		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes. This mimics the behavior we have for the Block Editor, simultaneously resolving some z-fighting issues we had with some languages for the tooltip placement.
 	* The "Robots Meta Settings" are now called "Robots Settings" because we added a tab for AI blocking via Robots.txt (when available).
 	* TODO The "Robots" meta settings for the homepage is now called "Visibility" settings, because it now includes a canonical URL and redirect URL input field.
 * **Fixed:**
@@ -412,6 +416,7 @@ Punt:
 	* Resolved an issue where the floating title prefix (e.g., `Private: `) didn't trim when the site title was removed.
 	* When setting '0' as a password via quick-edit, WordPress actually doesn't consider it a valid password. So, TSF now won't reflect this via its quick-edit interface either.
 		* We already considered this behavior for the Classic and Block editor.
+	* An "Are you sure?" notice is now emitted when leaving the page without saving after the Primary Term is changed on Classic Editor.
 * **Note:** WordPress 6.0 is now required, from 5.9. This allowed us to drop legacy Gutenberg support.
 
 **For translators:**

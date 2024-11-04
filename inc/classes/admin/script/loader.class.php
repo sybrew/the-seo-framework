@@ -398,6 +398,7 @@ class Loader {
 		$id = Query::get_the_real_id();
 
 		$is_static_front_page = Query::is_static_front_page( $id );
+		$is_block_editor      = Query::is_block_editor();
 
 		if ( $is_static_front_page ) {
 			$additions_forced_disabled = ! Data\Plugin::get_option( 'homepage_tagline' );
@@ -406,6 +407,7 @@ class Loader {
 			$additions_forced_disabled = (bool) Data\Plugin::get_option( 'title_rem_additions' );
 			$additions_forced_enabled  = false;
 		}
+
 
 		return [
 			[
@@ -439,10 +441,12 @@ class Loader {
 						'states' => [
 							'isPrivate'       => Data\Post::is_private( $id ),
 							'isProtected'     => Data\Post::is_password_protected( $id ),
-							'isGutenbergPage' => Query::is_block_editor(), /* FIXME: this must be a parameter... */
-							'id'              => $id, /* FIXME: this must be a parameter... */
+							'isGutenbergPage' => $is_block_editor, // TODO: Deprecate
+							'id'              => $id, // TODO: Deprecate
 						],
 						'params' => [
+							'id'                      => $id,
+							'isBlockEditor'           => $is_block_editor,
 							'isFront'                 => $is_static_front_page,
 							'additionsForcedDisabled' => $additions_forced_disabled,
 							'additionsForcedEnabled'  => $additions_forced_enabled,
@@ -758,6 +762,7 @@ class Loader {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now filters out unsupported taxonomies.
+	 * @since 5.0.7 Changed the dependencies for pt, because we now use a select field.
 	 *
 	 * @return array The script params.
 	 */
@@ -796,7 +801,7 @@ class Loader {
 				'id'   => 'tsf-pt',
 				'name' => 'pt',
 			];
-			$deps = [ 'tsf', 'tsf-post', 'tsf-tt', 'wp-util' ];
+			$deps = [ 'tsf', 'tsf-ays', 'wp-util' ];
 		}
 
 		return [

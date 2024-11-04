@@ -282,9 +282,14 @@ final class ListEdit extends Admin\Lists\Table {
 			$permastruct               = Meta\URI\Utils::get_url_permastruct( $generator_args );
 			$is_post_type_hierarchical = false; // Homepage cannot have a parent page.
 		} else {
+			static $memo = [];
+
+			$memo['addition']    ??= Meta\Title::get_addition();
+			$memo['seplocation'] ??= Meta\Title::get_addition_location();
+
 			$default_title       = Meta\Title::get_bare_generated_title( $generator_args );
-			$addition            = Meta\Title::get_addition();
-			$seplocation         = Meta\Title::get_addition_location();
+			$addition            = $memo['addition'];
+			$seplocation         = $memo['seplocation'];
 			$is_title_ref_locked = false;
 
 			$default_description = Meta\Description::get_generated_description( $generator_args );
@@ -293,41 +298,41 @@ final class ListEdit extends Admin\Lists\Table {
 			$is_canonical_ref_locked = false;
 			$default_canonical       = Meta\URI::get_generated_url( $generator_args );
 
-			static $memo = [];
-
 			$memo['post_type']                 ??= Query::get_admin_post_type();
 			$memo['permastruct']               ??= Meta\URI\Utils::get_url_permastruct( $generator_args );
 			$memo['is_post_type_hierarchical'] ??= \is_post_type_hierarchical( $memo['post_type'] );
 
-			$permastruct               = $memo['permastruct'];
+			$post_type   = $memo['post_type'];
+			$permastruct = $memo['permastruct'];
+
+			$parent_post_slugs         = [];
 			$is_post_type_hierarchical = $memo['is_post_type_hierarchical'];
 
 			// Homepage doesn't care about its parent page.
 			if ( $is_post_type_hierarchical && str_contains( $permastruct, '%postname%' ) ) {
-				$parent_post_slugs = array_column(
-					Data\Post::get_post_parents( $post_id ),
-					'post_name',
-					'ID',
-				);
+				// self is filled by current post name.
+				foreach ( Data\Post::get_post_parents( $post_id ) as $parent_post ) {
+					// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
+					$parent_post_slugs[] = [
+						'id'   => $parent_post->ID,
+						'slug' => $parent_post->post_name,
+					];
+				}
 			}
 
 			// Only hierarchical taxonomies can be used in the URL.
-			$memo['taxonomies']               ??= $memo['post_type'] ? Taxonomy::get_hierarchical( 'names', $memo['post_type'] ) : [];
-			$memo['parent_term_slugs_by_tax'] ??= [];
-
+			$memo['taxonomies']     ??= $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
 			$parent_term_slugs_by_tax = [];
 
+			// Yes, on its surface, this is a very expensive procedure.
+			// However, WordPress needs to walk all the terms already to create the post links.
+			// Hence, it ought to net to zero impact.
 			foreach ( $memo['taxonomies'] as $taxonomy ) {
-				if ( isset( $memo['parent_term_slugs_by_tax'][ $taxonomy ] ) ) {
-					$parent_term_slugs_by_tax[ $taxonomy ] = $memo['parent_term_slugs_by_tax'][ $taxonomy ];
-					continue;
-				}
-
 				if ( str_contains( $permastruct, "%$taxonomy%" ) ) {
 					// Broken in Core. Skip writing cache. We may reach this line 200 times, but nobody should be using %post_tag% anyway.
 					if ( 'post_tag' === $taxonomy ) continue;
 
-					$parent_term_slugs = [];
+					$parent_term_slugs_by_tax[ $taxonomy ] = [];
 					// There's no need to test for hierarchy, because we want the full structure anyway (third parameter).
 					foreach (
 						Data\Term::get_term_parents(
@@ -338,12 +343,11 @@ final class ListEdit extends Admin\Lists\Table {
 						as $parent_term
 					) {
 						// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
-						$parent_term_slugs[] = [
+						$parent_term_slugs_by_tax[ $taxonomy ][] = [
 							'id'   => $parent_term->term_id,
 							'slug' => $parent_term->slug,
 						];
 					}
-					$memo['parent_term_slugs_by_tax'][ $taxonomy ] = $parent_term_slugs_by_tax[ $taxonomy ] = $parent_term_slugs;
 				}
 			}
 
@@ -353,7 +357,10 @@ final class ListEdit extends Admin\Lists\Table {
 
 				if ( $author_id ) {
 					$author_slugs = [
-						$author_id => Data\User::get_userdata( $author_id, 'user_nicename' ),
+						[
+							'id'   => $author_id,
+							'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
+						],
 					];
 				}
 			}
@@ -442,9 +449,11 @@ final class ListEdit extends Admin\Lists\Table {
 		if ( $this->column_name !== $column_name )          return $string;
 		if ( ! \current_user_can( 'edit_term', $term_id ) ) return $string;
 
+		$taxonomy = $this->taxonomy;
+
 		$generator_args = [
 			'id'  => $term_id,
-			'tax' => $this->taxonomy,
+			'tax' => $taxonomy,
 		];
 
 		$r_defaults = Meta\Robots::get_generated_meta(
@@ -505,6 +514,34 @@ final class ListEdit extends Admin\Lists\Table {
 		 */
 		$data = \apply_filters( 'the_seo_framework_list_table_data', $data, $generator_args );
 
+		static $memo = [];
+
+		$memo['addition']    ??= Meta\Title::get_addition();
+		$memo['seplocation'] ??= Meta\Title::get_addition_location();
+
+		$addition    = $memo['addition'];
+		$seplocation = $memo['seplocation'];
+
+		$memo['tax_object']               ??= \get_taxonomy( $taxonomy );
+		$memo['permastruct']              ??= Meta\URI\Utils::get_url_permastruct( $generator_args );
+		$memo['is_taxonomy_hierarchical'] ??= $memo['tax_object']->hierarchical && $memo['tax_object']->rewrite['hierarchical'];
+
+		$permastruct = $memo['permastruct'];
+
+		$parent_term_slugs        = [];
+		$is_taxonomy_hierarchical = $memo['is_taxonomy_hierarchical'];
+
+		if ( $is_taxonomy_hierarchical && str_contains( $permastruct, "%$taxonomy%" ) ) {
+			// self is filled by current term name.
+			foreach ( Data\Term::get_term_parents( $term_id, $taxonomy ) as $parent_term ) {
+				// We write it like this instead of [ id => slug ] to prevent reordering numericals via JSON.parse.
+				$parent_term_slugs[] = [
+					'id'   => $parent_term->term_id,
+					'slug' => $parent_term->slug,
+				];
+			}
+		}
+
 		$container = '';
 
 		$container .= \sprintf(
@@ -531,8 +568,8 @@ final class ListEdit extends Admin\Lists\Table {
 					'refTitleLocked'    => false,
 					'defaultTitle'      => \esc_html( Meta\Title::get_bare_generated_title( $generator_args ) ),
 					'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
-					'additionValue'     => \esc_html( Meta\Title::get_addition() ),
-					'additionPlacement' => 'left' === Meta\Title::get_addition_location() ? 'before' : 'after',
+					'additionValue'     => \esc_html( $addition ),
+					'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 					'termPrefix'        => $term_prefix,
 				],
 			] ),
@@ -557,7 +594,9 @@ final class ListEdit extends Admin\Lists\Table {
 					'refCanonicalLocked' => false,
 					'defaultCanonical'   => \esc_url( Meta\URI::get_generated_url( $generator_args ) ),
 					'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
-					'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
+					'urlStructure'       => $permastruct,
+					'parentTermSlugs'    => $parent_term_slugs,
+					'isHierarchical'     => $is_taxonomy_hierarchical,
 				],
 			] ),
 		);
