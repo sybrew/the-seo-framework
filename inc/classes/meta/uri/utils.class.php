@@ -575,7 +575,6 @@ class Utils {
 				$permastruct = $wp_rewrite->get_author_permastruct();
 		}
 
-		// var_dump() filter me for WooCommerce?
 		return '/' . ltrim( \user_trailingslashit( $permastruct ?? '' ), '/' );
 	}
 }

@@ -347,6 +347,10 @@ TODO add 1 spaces to `\*    [a-z]`
 TODO add scheme listener for canonical URL at settings page.
 	Take from `document.body.addEventListener( 'tsf-site-robots-changed', _registerSiteDefaultRobotsValue );`
 
+TODO do we consider multiple taxonomies for a single post type?
+	* See email from Damien. -> We can test this with ACF Pro.
+
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -385,7 +389,7 @@ Punt:
 	* The Canonical URL input field's placeholder now blurs on focus (Quick Edit, Post Edit, Term Edit, SEO Settings).
 	* The plugin now better conveys where to modify the homepage's title "additions."
 	* The canonical URL placeholder is now populated for Quick Edit.
-		* TODO Please note that it doesn't react to category changes, because we still need to find a good way to implement primary term selection here. So, it assumes the category selection as it was when the Quick Edit was opened.
+		* Please note that it doesn't respond to category changes, because we still need to find a good way to implement primary term selection here. So, it assumes the category selection as it was when the Quick Edit was opened. For more details, [see issue 512](https://github.com/sybrew/the-seo-framework/issues/512).
 	* After saving a page in the Block Editor, the SEO Bar (if displayed) fades in much quicker now.
 	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
 	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
@@ -404,7 +408,7 @@ Punt:
 	* The Primary Term selector for the Classic Editor has been rewritten for accessibility, performance, and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
 		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes. This mimics the behavior we have for the Block Editor, simultaneously resolving some z-fighting issues we had with some languages for the tooltip placement.
 	* The "Robots Meta Settings" are now called "Robots Settings" because we added a tab for AI blocking via Robots.txt (when available).
-	* TODO The "Robots" meta settings for the homepage is now called "Visibility" settings, because it now includes a canonical URL and redirect URL input field.
+	* The "Robots" meta settings for the homepage is now called "Visibility" settings, because it now includes Canonical URL and Redirect URL input fields.
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
