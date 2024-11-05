@@ -545,32 +545,6 @@ switch ( $instance ) :
 				$post_type   = Query::get_admin_post_type();
 				$permastruct = Meta\URI\Utils::get_url_permastruct( $generator_args );
 
-				if ( 'attachment' === $post_type && Query\Utils::using_pretty_permalinks() ) {
-					$attachment  = \get_post( $post_id );
-					$parent_post = $attachment->post_parent;
-
-					if ( $parent_post ) {
-						$parentlink = \get_permalink( $parent_post );
-
-						// This was probably a workaround for paginated parent links. See `get_attachment_link()`.
-						// We should also account for this on the Canonical URL Notation Tool, but this is an extreme oddity.
-						// We doubt anyone is managing attachment slugs, especially switching from numericals to non-numericals.
-						if ( is_numeric( $attachment->post_name ) || str_contains( $parentlink, '%pagename%' ) )
-							$attachmentprefix = str_contains( $permastruct, '%category%' ) ? 'attachment/' : '';
-
-						// Odd case is odd. See `get_attachment_link()`.
-						if ( str_contains( $parentlink, '?' ) ) {
-							$permastruct = str_replace( '%postname%', "$attachmentprefix%postname%", $permastruct );
-						} else {
-							$permastruct = \user_trailingslashit(
-								\trailingslashit( $parentlink ) . "$attachmentprefix%postname%"
-							);
-						}
-					} else {
-						$permastruct = \user_trailingslashit( '/%postname%' );
-					}
-				}
-
 				$parent_post_slugs         = [];
 				$is_post_type_hierarchical = \is_post_type_hierarchical( $post_type );
 

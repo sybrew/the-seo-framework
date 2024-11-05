@@ -492,6 +492,10 @@ class Utils {
 	 *
 	 * This method is meant for canonical URL prediction in JavaScript.
 	 *
+	 * Ref, WP Core:
+	 * - `get_permalink()`, leads to: `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`
+	 * - `get_term_link()`
+	 *
 	 * @since 5.0.7
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -507,12 +511,56 @@ class Utils {
 				if ( Query::is_static_front_page( $args['id'] ) ) {
 					$permastruct = $wp_rewrite->front;
 				} else {
-					$permastruct = \is_post_type_hierarchical( Query::get_post_type_real_id( $args['id'] ) )
-						? $wp_rewrite->get_page_permastruct()
-						: "{$wp_rewrite->root}{$wp_rewrite->permalink_structure}";
-				}
+					$post_type = Query::get_post_type_real_id( $args['id'] );
 
-				$permastruct = str_replace( '%pagename%', '%postname%', $permastruct );
+					switch ( $post_type ) {
+						case 'page':
+							$permastruct = $wp_rewrite->get_page_permastruct();
+							break;
+						case 'attachment':
+							if ( Query\Utils::using_pretty_permalinks() ) {
+								$attachment  = \get_post( $args['id'] );
+								$parent_post = $attachment->post_parent;
+
+								if ( $parent_post ) {
+									$parentslug = static::get_relative_part_from_url( \get_permalink( $parent_post ) );
+
+									// This was probably a workaround for paginated parent links. See `get_attachment_link()`.
+									// We should also account for this on the Canonical URL Notation Tool, but this is an extreme oddity.
+									// I doubt anyone is managing attachment slugs, especially switching from numericals to non-numericals.
+									if (
+										   is_numeric( $attachment->post_name )
+										|| str_contains( \get_option( 'permalink_structure' ), '%category%' )
+									) {
+										$namestruct = 'attachment/%postname%';
+									} else {
+										$namestruct = '%postname%';
+									}
+
+									// Odd case is odd. See `get_attachment_link()`.
+									if ( str_contains( $parentslug, '?' ) ) {
+										$permastruct = $namestruct; // var_dump() test me.
+									} else {
+										$permastruct = \trailingslashit( $parentslug ) . $namestruct; // var_dump() test me.
+									}
+								} else {
+									$permastruct = '%postname%';
+								}
+								break;
+							} // else: ?attachment_id=%post_id%, but this is handled via default.
+							break;
+						case 'post':
+							$permastruct = $wp_rewrite->permalink_structure;
+							break;
+						// actually: `\in_array( $post_type, \get_post_types( [ '_builtin' => false ] ), true )`, but we covered all others above.
+						default:
+							$permastruct = \is_post_type_hierarchical( $post_type )
+								? $wp_rewrite->get_page_permastruct()
+								: $wp_rewrite->get_extra_permastruct( $post_type );
+
+							$permastruct = str_replace( [ '%pagename%', "%{$post_type}%" ], '%postname%', $permastruct );
+					}
+				}
 				break;
 			case 'homeblog':
 				$permastruct = $wp_rewrite->front;
