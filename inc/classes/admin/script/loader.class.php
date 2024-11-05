@@ -408,7 +408,6 @@ class Loader {
 			$additions_forced_enabled  = false;
 		}
 
-
 		return [
 			[
 				'id'       => 'tsf-post',

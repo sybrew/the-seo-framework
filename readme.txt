@@ -344,6 +344,9 @@ TODO canonical URLs for attachments prepend /attachment/  if the name is numeric
 
 TODO add 1 spaces to `\*    [a-z]`
 
+TODO add scheme listener for canonical URL at settings page.
+	Take from `document.body.addEventListener( 'tsf-site-robots-changed', _registerSiteDefaultRobotsValue );`
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -365,7 +368,7 @@ Punt:
 	* You can now block AI language model trainers and SEO analysis crawlers from using your content via the "Robots Settings."
 	* Added a canonical URL input field for the homepage.
 	* Added a redirect URL input field for the homepage.
-	* We implemented the bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a post, term, either via their edit screens, or via quick-edit.
+	* We implemented the bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a post or term, either via their edit screens, or via quick-edit.
 		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
 			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, and `%author%`.
 				* `%pagename%` is treated as `%postname%` internally. You should never make this part of the permalink structure, anyway.
@@ -392,6 +395,9 @@ Punt:
 	* The SEO meta box tab labels are now inline when there's enough space.
 	* The quick-edit default indexing state now updates to the post password or private status accordingly.
 	* The Block Editor on WP 6.7 proposes a new layout for their select fields, which we've opted in for with the Primary Term selection.
+	* If a settings listeners fails for any reason, other listeners may still continue. Leaving you with a semi-broken interface, instead of completely broken. For example, if the code crosses and unexpected value for the Homepage title input, only its character counters will be borked, but you can still upload an image for social sharing.
+		* This works for the Settings, Post Edit, Term Edit, and List Edit pages.
+		* This is a targeted fail-safe and won't work everywhere all the time.
 * **Changed:**
 	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
 		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
@@ -417,7 +423,8 @@ Punt:
 	* When setting '0' as a password via quick-edit, WordPress actually doesn't consider it a valid password. So, TSF now won't reflect this via its quick-edit interface either.
 		* We already considered this behavior for the Classic and Block editor.
 	* An "Are you sure?" notice is now emitted when leaving the page without saving after the Primary Term is changed on Classic Editor.
-* **Note:** WordPress 6.0 is now required, from 5.9. This allowed us to drop legacy Gutenberg support.
+* **Notes:**
+	* WordPress 6.0 is now required, from 5.9. This allowed us to drop legacy Gutenberg support.
 
 **For translators:**
 

@@ -419,6 +419,8 @@ final class ListEdit extends Admin\Lists\Table {
 					'parentTermSlugs'    => $parent_term_slugs_by_tax ?? [],
 					'authorSlugs'        => $author_slugs ?? [],
 					'isHierarchical'     => $is_post_type_hierarchical,
+					// phpcs:ignore, WordPress.DateTime.RestrictedFunctions -- date() is used for URL generation. See `get_permalink()`.
+					'publishDate'        => date( 'c', strtotime( \get_post( $post_id )->post_date ?? 'now' ) ),
 				],
 			] ),
 		);

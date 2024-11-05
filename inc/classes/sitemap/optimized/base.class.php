@@ -504,8 +504,8 @@ class Base extends Main {
 	 *     @type bool $show_modified Whether to display the last modified date.
 	 * }
 	 * @yield array|void : {
-	 *   string loc
-	 *   string lastmod
+	 *     string loc
+	 *     string lastmod
 	 * }
 	 */
 	protected function generate_url_item_values( $post_ids, $args ) {

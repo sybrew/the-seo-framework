@@ -41,7 +41,7 @@ use \The_SEO_Framework\Data;
 class Time {
 
 	/**
-	 * Converts the input
+	 * Converts the input time to the preferred format.
 	 *
 	 * @since 5.0.0
 	 *
