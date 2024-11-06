@@ -381,7 +381,7 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= \esc_attr( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off />
+				<input type=url name="autodescription-meta[canonical]" id="autodescription-meta[canonical]" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off />
 				<?php
 				$tax_object  = \get_taxonomy( $taxonomy );
 				$permastruct = Meta\URI\Utils::get_url_permastruct( $generator_args );

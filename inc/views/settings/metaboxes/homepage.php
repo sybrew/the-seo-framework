@@ -510,13 +510,19 @@ switch ( $instance ) :
 			$noindex_post   = Data\Plugin\Post::get_meta_item( '_genesis_noindex', $home_id );
 			$nofollow_post  = Data\Plugin\Post::get_meta_item( '_genesis_nofollow', $home_id );
 			$noarchive_post = Data\Plugin\Post::get_meta_item( '_genesis_noarchive', $home_id );
+
+			$is_protected = Data\Post::is_protected( $home_id );
+			$home_is_page = true;
 		} else {
 			$canonical_post = '';
 			$redirect_post  = '';
 
-			$noindex_post   = '';
-			$nofollow_post  = '';
-			$noarchive_post = '';
+			$noindex_post   = 0;
+			$nofollow_post  = 0;
+			$noarchive_post = 0;
+
+			$is_protected = false;
+			$home_is_page = false;
 		}
 
 		$default_canonical = $canonical_post ?: Meta\URI::get_generated_url( $generator_args );
@@ -540,6 +546,10 @@ switch ( $instance ) :
 							'refCanonicalLocked' => false, // This is the motherfield.
 							'defaultCanonical'   => \esc_url( $default_canonical ),
 							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+							'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
+							'noindexQubit'       => Sanitize::qubit( $noindex_post ),
+							'isProtected'        => $is_protected,
+							'isPage'             => $home_is_page,
 						],
 					],
 				);
@@ -555,7 +565,7 @@ switch ( $instance ) :
 
 		$checked_home = '';
 		/**
-		 * Shows user that the setting is checked on the homepage.
+		 * Shows user that the setting is set on the homepage.
 		 * Adds starting - with space to maintain readability.
 		 */
 		if ( $noindex_post || $nofollow_post || $noarchive_post ) {

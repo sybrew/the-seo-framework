@@ -431,6 +431,8 @@ switch ( $instance ) :
 		break;
 	case 'visibility':
 		[ , $args ] = $view_args;
+
+		$default_canonical = Meta\URI::get_generated_url( $args['generator_args'] );
 		?>
 		<p>
 			<label for="<?php Input::field_id( $args['options']['canonical'] ); ?>" class=tsf-toblock>
@@ -445,7 +447,20 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $args['options']['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['canonical'] ); ?>" placeholder="<?= \esc_url( Meta\URI::get_generated_url( $args['generator_args'] ) ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'canonical', $args['post_type'] ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $args['options']['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['canonical'] ); ?>" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'canonical', $args['post_type'] ) ) ?>" autocomplete=off />
+			<?php
+			Input::output_js_canonical_data(
+				Input::get_field_id( $args['options']['canonical'] ),
+				[
+					'state' => [
+						'refCanonicalLocked' => false,
+						'defaultCanonical'   => \esc_url( $default_canonical ),
+						'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
+						'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $args['generator_args'] ),
+					],
+				],
+			);
+			?>
 		</p>
 
 		<hr>

@@ -284,8 +284,6 @@ TODO: expand WPML string translation for TSF metadata
 
 TODO translatepress multilingual sitemap? Is this possible? See backlogged emails with them.
 
-TODO to the snippets zipper, wrap the plugin inside its namesake folder so that WordPress won't assume the location based on filename, which can be appended (1) to if downloaded for a second time.
-
 TODO test image type support and warn users about Facebook not supporting webp (etc.)?
 
 TODO validate the URL field before showing an image preview?
@@ -304,19 +302,12 @@ TODO add TikTok social profile hint? eh...
 	-> Also, there appears to be a specific format: https://support.google.com/business/answer/13580646.
 
 TODO regression: the "popular categories" are no longer listened for changes.
-	-> This is caused by jQuery being dumb with events.
-
-TODO the locale on the frontend is now loaded "just in time."
-	-> We'd have to change "The SEO Framework <by> Sybre Waaijer" (hard code?)
+	-> This is an issue with WP 6.7???
 
 TODO remove HTML4 closers in admin? It's definitly 5.
 	-> Also remove HTML4 support on the front-end? How many themes are still using 4?
 
 TODO the correct indentation for comments seems to be 4 per tab (+1 initial)
-
-TODO add canonical URL predictions to the homepage settings.
-TODO add canonical URL predictions to the pta settings.
-	-> aren't these just simple "noindex" checks??
 
 TODO LinkedIn Post Inspector recommends the "Author" tag, which is often ambiguously described. We could opt-in this feature via the Social Sharing settings, stating that LinkedIn uses it.
 
@@ -333,14 +324,7 @@ TODO check if bbPress/BuddyPress needs breadcrumb support?
 
 TODO the title prefix doesn't appear to work in quick-edit for Terms.
 
-TODO "Most Used" term selection is still borked..
-
-TODO make the homepage canonical URL input respond to noindex.
-
 TODO write https://kb.theseoframework.com/?p=256#default-blocklist-ai and https://kb.theseoframework.com/?p=256#default-blocklist-seo
-
-TODO canonical URLs for attachments prepend /attachment/  if the name is numeric (op permalink structure contains %category%).
-	* See get_attachment_link()
 
 TODO add 1 spaces to `\*    [a-z]`
 
@@ -350,6 +334,12 @@ TODO add scheme listener for canonical URL at settings page.
 TODO do we consider multiple taxonomies for a single post type?
 	* See email from Damien. -> We can test this with ACF Pro.
 
+TODO add Bricks Templates to exclusions like we did for Elementor (they are not publicly accessible...)
+	-> Post Type: bricks_template
+	-> Taxonomy: template_tag, template_bundle
+
+TODO rename "Twitter Profile"
+	-> Also update TSF links on main site accordingly.
 
 Punt:
 - remove jQuery dependencies in UI?
@@ -415,7 +405,7 @@ Punt:
 	* Awesome Motive's All in One SEO Pack plugin outputs a notice urging to deactivate other SEO plugins, but without clarifying which SEO plugin emits this notice or telling which plugins get deactivated. So, we now hide this deceptive notice.
 	* Resolved a regression from WordPress 6.6 where a CSS identifier disappeared. We used this identifier to apply styling for the sidebar. We now use a different, more specific identifier that's in all WordPress versions we support; from `.edit-post-sidebar`, now `#edit-post\:document`.
 	* Resolved an issue where the counter AJAX spinner wasn't offset by 3 pixels from the character counter's loader text. It's now also changed to 0.5 character widths.
-	* Resolved a typo where the description placeholders didn't blur on focus on Firefox on the SEO Settings page.
+	* Resolved a typo causing the description placeholders to not blur on focus on the SEO Settings page when using Firefox.
 	* Resolved an issue where the Classic Editor's Primary Term selection label's cursor wasn't a pointer in WP 6.5 and later.
 	* Resolved an issue where horizontal scrolling bars would appear when the inputted title is wider than the screen when measured from the container.
 	* Resolved a long-standing regression where WordPress 5.3 changed the checkbox mark from a colorable item to an immutable image, so it was no longer green or red colored for The SEO Framework's default and warned settings, respectively. Thanks to this fix, Firefox is now also fully supported (it doesn't natively support checkbox colors), although it might be more demanding of your device to render the checkboxes.

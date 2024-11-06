@@ -515,7 +515,8 @@ class Utils {
 
 					switch ( $post_type ) {
 						case 'page':
-							$permastruct = $wp_rewrite->get_page_permastruct();
+							// Both translate to the post's name; this translation eases later processing.
+							$permastruct = str_replace( '%pagename%', '%postname%', $wp_rewrite->get_page_permastruct() );
 							break;
 						case 'attachment':
 							if ( Query\Utils::using_pretty_permalinks() ) {
@@ -538,10 +539,11 @@ class Utils {
 									}
 
 									// Odd case is odd. See `get_attachment_link()`.
+									// Introduced at https://core.trac.wordpress.org/ticket/1776 -- no explanation provided.
 									if ( str_contains( $parentslug, '?' ) ) {
-										$permastruct = $namestruct; // var_dump() test me.
+										$permastruct = $namestruct;
 									} else {
-										$permastruct = \trailingslashit( $parentslug ) . $namestruct; // var_dump() test me.
+										$permastruct = \trailingslashit( $parentslug ) . $namestruct;
 									}
 								} else {
 									$permastruct = '%postname%';
@@ -558,7 +560,8 @@ class Utils {
 								? $wp_rewrite->get_page_permastruct()
 								: $wp_rewrite->get_extra_permastruct( $post_type );
 
-							$permastruct = str_replace( [ '%pagename%', "%{$post_type}%" ], '%postname%', $permastruct );
+							// Both translate to the post's name; this translation eases later processing.
+							$permastruct = str_replace( "%{$post_type}%", '%postname%', $permastruct );
 					}
 				}
 				break;
