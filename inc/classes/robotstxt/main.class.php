@@ -68,12 +68,17 @@ class Main {
 
 		/**
 		 * @since 2.5.0
-		 * @todo deprecate 5.1.0
+		 * @since 5.1.0 Deprecated.
+		 * @deprecated
 		 * @param bool $disallow Whether to disallow robots queries.
 		 */
-		$disallow_queries = \apply_filters( 'the_seo_framework_robots_disallow_queries', false )
-			? '/*?*'
-			: '';
+		$disallow_queries = \apply_filters_deprecated(
+			'the_seo_framework_robots_disallow_queries',
+			[ false ],
+			'5.1.0 of The SEO Framework',
+			'the_seo_framework_robots'
+		) ? '/*?*'
+		  : '';
 
 		$sitemaps = [];
 
@@ -100,51 +105,15 @@ class Main {
 		 *     The robots directives, associative by key.
 		 *     All input is expected to be escaped.
 		 *
-		 *     @type array $derpecated_before {
-		 *         Do not use. Legacy support. The directives before this plugin's output.
+		 *     @type array {$key} {
+		 *         The default or custom directives.
 		 *
-		 *         @type string $raw      Raw robots.txt output. A newline is automatically added.
-		 *                                Content from this entry is added before all other output.
-		 *                                Hint: It can be used for "# comments."
-		 *         @type int    $priority The priority of the output, a lower priority means earlier output.
-		 *                                Defaults to 0.
-		 *     }
-		 *     @type array $default           {
-		 *         The default directives.
-		 *
+		 *         @type string   $raw        The raw output to prepend.
 		 *         @type string[] $user-agent The user agent to apply the directives for.
 		 *         @type string[] $disallow   The disallow directives.
 		 *         @type string[] $allow      The allow directives.
 		 *         @type int      $priority   The priority of the output, a lower priority means earlier output.
 		 *                                    Defaults to 10.
-		 *     }
-		 *     @type array $block_ai          {
-		 *         The directives for AI user agents.
-		 *
-		 *         @type string[] $user-agent The user agent to apply the directives for.
-		 *         @type string[] $disallow   The disallow directives.
-		 *     }
-		 *     @type array $block_seo         {
-		 *         The directives for SEO user agents.
-		 *
-		 *         @type string[] $user-agent The user agent to apply the directives for.
-		 *         @type string[] $disallow   The disallow directives.
-		 *     }
-		 *     @type array $derpecated_after  {
-		 *         Do not use. Legacy support. The directives after this plugin's output.
-		 *
-		 *         @type string $raw      Raw robots.txt output. A newline is automatically added.
-		 *                                Content from this entry is added before all other output.
-		 *                                Hint: It can be used for "# comments."
-		 *         @type int    $priority The priority of the output, a lower priority means earlier output.
-		 *                                Defaults to 500.
-		 *     }
-		 *     @type array $sitemaps          {
-		 *         The sitemap directives.
-		 *
-		 *         @type string[] $sitemaps The sitemap directives. You shouldn't combine this with other directives.
-		 *         @type int     $ priority The priority of the output, a lower priority means earlier output.
-		 *                                  Defaults to 1000.
 		 *     }
 		 * }
 		 * @param string $site_path The determined site path. Use this path to prefix URLs.
@@ -152,14 +121,20 @@ class Main {
 		$robots = (array) \apply_filters(
 			'the_seo_framework_robots',
 			[
-				'derpecated_before' => [
+				'deprecated_before' => [
 					/**
 					 * @since 2.5.0
-					 * @todo deprecate 5.1.0
+					 * @since 5.1.0 Deprecated.
+					 * @deprecated
 					 * @param string $pre The output before this plugin's output.
 					 *                    Don't forget to add line breaks ( "\n" )!
 					 */
-					'raw'      => (string) \apply_filters( 'the_seo_framework_robots_txt_pre', '' ),
+					'raw'      => (string) \apply_filters_deprecated(
+						'the_seo_framework_robots_txt_pre',
+						[ '' ],
+						'5.1.0 of The SEO Framework',
+						'the_seo_framework_robots',
+					),
 					'priority' => 0,
 				],
 				'default'           => [
@@ -175,14 +150,20 @@ class Main {
 					'user-agent' => array_keys( RobotsTXT\Utils::get_user_agents( 'seo' ) ),
 					'disallow'   => [ '/' ],
 				] : [],
-				'derpecated_after'  => [
+				'deprecated_after'  => [
 					/**
 					 * @since 2.5.0
-					 * @todo deprecate 5.1.0
+					 * @since 5.1.0 Deprecated.
+					 * @deprecated
 					 * @param string $pro The output after this plugin's output.
 					 *                    Don't forget to add line breaks ( "\n" )!
 					 */
-					'raw'      => (string) \apply_filters( 'the_seo_framework_robots_txt_pro', '' ),
+					'raw'      => (string) \apply_filters_deprecated(
+						'the_seo_framework_robots_txt_pro',
+						[ '' ],
+						'5.1.0 of The SEO Framework',
+						'the_seo_framework_robots',
+					),
 					'priority' => 500,
 				],
 				'sitemaps'          => [
@@ -229,7 +210,7 @@ class Main {
 			$correct_location = \esc_url(
 				\trailingslashit( Meta\URI\Utils::set_preferred_url_scheme(
 					Meta\URI\Utils::get_site_host()
-				) ) . 'robots.txt'
+				) ) . 'robots.txt',
 			);
 
 			$output = "# This is an invalid robots.txt location.\n# Please visit: $correct_location\n\n$output";

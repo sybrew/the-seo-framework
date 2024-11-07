@@ -336,8 +336,6 @@ TODO add Bricks Templates to exclusions like we did for Elementor (they are not 
 TODO rename "Twitter Profile"
 	-> Also update TSF links on main site accordingly.
 
-TODO follow through on the  @todo deprecate 5.1.0
-
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -473,7 +471,9 @@ Punt:
 			* With that, for all affected functions, we removed `@function` JSDoc annotation, since that's now redundant.
 		* `tsf.selectByValue()` now also tries to select by label, which is tried together with the content.
 	* **Deprecated:**
-		* `tsf-updated-gutenberg-${type}` is now deprecated. Use JS Event `tsf-updated-block-editor-${type}` instead.
+		* jQuery event `tsf-updated-gutenberg-${type}` is now deprecated. Use JS Event `tsf-updated-block-editor-${type}` instead.
+		* `tsf.ampHTMLtoText()` is now deprecated, with no alternative available.
+		* `tsfAys.getChangedState()` is now deprecated. Use `tsfAys.areSettingsChanged()` instead.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
 		* Added index `robotstxt_block_ai`. Default 0.
@@ -489,7 +489,15 @@ Punt:
 	* **Added:**
 		* `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 		* `the_seo_framework_robots` is now available. It's used to create a map of robots directives to generate.
-			* In effect, `the_seo_framework_robots_txt_pre` and `the_seo_framework_robots_txt_pro` are marked for deprecation.
+			* In effect, `the_seo_framework_robots_txt_pre` and `the_seo_framework_robots_txt_pro` are deprecated.
+		* `the_seo_framework_get_excerpt` is now available. It's used to get an excerpt, used before parsing the entire post content, for description generation.
+	* **Deprecated:**
+		* `the_seo_framework_robots_disallow_queries`, use `the_seo_framework_robots` instead.
+		* `the_seo_framework_robots_txt_pre`, use `the_seo_framework_robots` instead.
+		* `the_seo_framework_robots_txt_pro`, use `the_seo_framework_robots` instead.
+		* `the_seo_framework_generated_archive_excerpt`, use `the_seo_framework_get_excerpt` instead.
+		* `the_seo_framework_pta_description_excerpt`, use `the_seo_framework_get_excerpt` instead.
+		* `the_seo_framework_fallback_archive_description_excerpt`, use `the_seo_framework_get_excerpt` instead.
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
 	* Removed the jQuery dependency for scripts `tsf`, `tsf-post`, and `tsf-media` by refactoring animations to vanilla JS and CSS.
