@@ -1670,7 +1670,7 @@ final class Deprecated {
 	 *
 	 * @since 1.0.0
 	 * @since 5.0.0 Deprecated.
-	 * @since 5.0.7 Resolved an issue with a wrong callback; now returns the meta tag again.
+	 * @since 5.1.0 Resolved an issue with a wrong callback; now returns the meta tag again.
 	 * @deprecated
 	 *
 	 * @return string The Open Graph locale meta tag.
@@ -3179,7 +3179,7 @@ final class Deprecated {
 	 *
 	 * @since 2.5.2
 	 * @since 5.0.0 Deleted accidentally.
-	 * @since 5.0.7 1. Deprecated.
+	 * @since 5.1.0 1. Deprecated.
 	 *              2. Removed the first parameter. Now always uses the current locale.
 	 * @deprecated
 	 *

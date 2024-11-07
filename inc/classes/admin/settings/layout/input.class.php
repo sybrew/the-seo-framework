@@ -281,7 +281,7 @@ class Input {
 	/**
 	 * Outputs reference canonical HTML elements for JavaScript for a specific ID.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @param string $id   The canonical URL input ID.
 	 * @param array  $data The input data.

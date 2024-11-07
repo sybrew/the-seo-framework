@@ -361,7 +361,7 @@ class Image {
 	 * Yields custom image details from query.
 	 *
 	 * @since 5.0.0
-	 * @since 5.0.7 Is now public.
+	 * @since 5.1.0 Is now public.
 	 * @generator
 	 *
 	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
@@ -433,7 +433,7 @@ class Image {
 	 * Yields custom image details from args.
 	 *
 	 * @since 5.0.0
-	 * @since 5.0.7 Is now public.
+	 * @since 5.1.0 Is now public.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.

@@ -45,7 +45,7 @@ class Utils {
 	/**
 	 * Returns a list of filterable user-agents that can be blocked.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @param string $type The type of user-agents to get. Accepts 'ai' and 'seo'.
 	 * @return array {
@@ -145,7 +145,7 @@ class Utils {
 		}
 
 		/**
-		 * @since 5.0.7
+		 * @since 5.1.0
 		 * @param array $agents The user-agent list for $type.
 		 * @param arrary $type  The agent type requested by the method caller.
 		 */
@@ -185,7 +185,7 @@ class Utils {
 	 * @since 2.9.2
 	 * @since 4.0.2 Now uses the preferred URL scheme.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @since 5.0.7 Now memoizes the return value.
+	 * @since 5.1.0 Now memoizes the return value.
 	 *
 	 * @return string URL location of robots.txt. Unescaped.
 	 */

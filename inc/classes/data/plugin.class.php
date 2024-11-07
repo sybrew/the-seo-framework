@@ -135,7 +135,7 @@ class Plugin {
 	 * @since 2.9.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.0.2 Now falls back to default for merge: If the option disappears for some reason, we won't crash.
-	 * @since 5.0.7 No longer considers headlessness. The headless filters are ought
+	 * @since 5.1.0 No longer considers headlessness. The headless filters are ought
 	 *              to stay in place throughout the request, affecting `get_option()`.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.

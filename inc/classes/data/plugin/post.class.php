@@ -38,7 +38,7 @@ use \The_SEO_Framework\{
  * Holds a collection of Post data interface methods for TSF.
  *
  * @since 5.0.0
- * @since 5.0.7 Added the Property_Refresher trait.
+ * @since 5.1.0 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->post() instead.
  */
@@ -98,7 +98,7 @@ class Post {
 	 * @since 5.0.0 1. Removed the third `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_post_meta`.
-	 * @since 5.0.7 Now returns the default meta if the post type isn't supported.
+	 * @since 5.1.0 Now returns the default meta if the post type isn't supported.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return array The post meta.

@@ -38,7 +38,7 @@ namespace The_SEO_Framework\Traits;
 trait Property_Refresher {
 
 	/**
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 * @access private
 	 * @var ?bool Whether the refresh has been registered.
 	 */
@@ -46,7 +46,7 @@ trait Property_Refresher {
 
 	/**
 	 * @since 5.0.0
-	 * @since 5.0.7 Renamed from `marked_for_refresh`.
+	 * @since 5.1.0 Renamed from `marked_for_refresh`.
 	 * @access private
 	 * @var bool[] An associative list of properties marked for refresh.
 	 */
@@ -56,7 +56,7 @@ trait Property_Refresher {
 	 * Registers automated refreshes.
 	 *
 	 * @since 5.0.0
-	 * @since 5.0.7 No longer relies on "has_run" checks.
+	 * @since 5.1.0 No longer relies on "has_run" checks.
 	 *
 	 * @param string $property The property that's marked for refresh.
 	 */

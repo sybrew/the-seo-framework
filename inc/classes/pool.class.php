@@ -827,7 +827,7 @@ class Pool extends Legacy_API {
 
 			/**
 			 * @since 5.0.0
-			 * @since 5.0.7 Now actually lists the existing class names.
+			 * @since 5.1.0 Now actually lists the existing class names.
 			 * @readonly
 			 * @var array[string,string] A list of accessible entity class names.
 			 */

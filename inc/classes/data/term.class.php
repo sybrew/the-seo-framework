@@ -101,7 +101,7 @@ class Term {
 	/**
 	 * Returns the term ancestors.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @param int    $term_id      The term ID.
 	 * @param string $taxonomy     The taxonomy.

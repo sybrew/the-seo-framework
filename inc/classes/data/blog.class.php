@@ -36,7 +36,7 @@ use \The_SEO_Framework\Data; // Yes, it is legal to import the same namespace.
  * Holds a collection of data helper methods for the blog.
  *
  * @since 5.0.0
- * @since 5.0.7 Removed the unused Property_Refresher trait.
+ * @since 5.1.0 Removed the unused Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->blog() instead.
  */

@@ -94,7 +94,7 @@ class Plugin {
 	 * Resets options on request.
 	 *
 	 * @since 5.0.0
-	 * @since 5.0.7 1. Now differentiates the options independently of the order.
+	 * @since 5.1.0 1. Now differentiates the options independently of the order.
 	 *              2. Now resets options regardless of whether settings are changed from defaults.
 	 *
 	 * @return void Early if not on SEO settings page.

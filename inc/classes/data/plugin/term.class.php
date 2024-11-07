@@ -37,7 +37,7 @@ use \The_SEO_Framework\{
  * Holds a collection of Term data interface methods for TSF.
  *
  * @since 5.0.0
- * @since 5.0.7 Added the Property_Refresher trait.
+ * @since 5.1.0 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->term() instead.
  */
@@ -90,7 +90,7 @@ class Term {
 	 * @since 5.0.0 1. Removed the second `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `get_term_meta`.
-	 * @since 5.0.7 Now returns the default meta if the term's taxonomy isn't supported.
+	 * @since 5.1.0 Now returns the default meta if the term's taxonomy isn't supported.
 	 *
 	 * @param int $term_id The Term ID.
 	 * @return array The term meta data.

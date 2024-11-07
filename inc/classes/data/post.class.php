@@ -295,7 +295,7 @@ class Post {
 	/**
 	 * Returns the post ancestors.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @param ?int $id           The post ID. Leave null to autodetermine.
 	 * @param bool $include_self Whether to include the initial post itself.

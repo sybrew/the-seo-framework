@@ -344,11 +344,11 @@ Punt:
 	-> It does update on Save.
 	-> Also affects Classic Editor, but perhaps we never implemented something like this.
 
-### 5.0.7
+### 5.1.0 - Hope
 
 **For everyone:**
 
-* **Upgraded:** Now uses TSF database version `5071`
+* **Upgraded:** Now uses TSF database version `5100`
 	* Two new options are available: `robotstxt_block_ai` and `robotstxt_block_seo`.
 * **Added:**
 	* For WPML Multilingual Plugin, the following fields are automatically registered with their String Translation tool under domain `admin_texts_autodescription-site-settings`. Please note that these are only shown when they have a value inputted via the SEO Settings page:

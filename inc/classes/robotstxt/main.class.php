@@ -57,7 +57,7 @@ class Main {
 	 *
 	 * @hook robots_txt 10
 	 * @since 5.0.0
-	 * @since 5.0.7 Refactored to output the directives via a priority system.
+	 * @since 5.1.0 Refactored to output the directives via a priority system.
 	 * @link <https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt>
 	 *
 	 * @return string Robots.txt output.
@@ -95,7 +95,7 @@ class Main {
 		}
 
 		/**
-		 * @since 5.0.7
+		 * @since 5.1.0
 		 * @param array  $robots {
 		 *     The robots directives, associative by key.
 		 *     All input is expected to be escaped.

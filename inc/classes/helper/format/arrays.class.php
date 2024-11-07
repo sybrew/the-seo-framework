@@ -152,7 +152,7 @@ class Arrays {
 	 * @link <https://3v4l.org/CuItX> Test it here.
 	 * TODO consider array_reduce() for improved performance?
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @param array ...$arrays The arrays to differentiate. The leftmost array's values are dominant.
 	 * @return array The differentiated array values.

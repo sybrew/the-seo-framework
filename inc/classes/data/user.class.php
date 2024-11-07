@@ -90,7 +90,7 @@ class User {
 	 *
 	 * This is an alias of WP Core's `\get_userdata()`, but with proper memoization.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @param int    $user_id The user ID.
 	 * @param string $key     The data to retrieve.

@@ -456,7 +456,7 @@ final class Plugin {
 	/**
 	 * Robots Meta Box Robots.txt Tab output.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 */
 	public static function _robots_metabox_robotstxt_tab() {
 		Template::output_view( 'settings/metaboxes/robots', 'robotstxt' );
@@ -502,7 +502,7 @@ final class Plugin {
 	/**
 	 * Homepage meta box Visibility Output
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 * @see static::homepage_metabox() Callback for Homepage Settings box.
 	 */
 	public static function _homepage_metabox_visibility_tab() {

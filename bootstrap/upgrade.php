@@ -214,7 +214,7 @@ function _upgrade( $previous_version ) {
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5071',
+		'5001', '5050', '5100',
 	];
 	// phpcs:enable, WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
@@ -956,11 +956,11 @@ function _do_upgrade_5050() {
 /**
  * Registers new options 'robotstxt_block_ai', 'robotstxt_block_seo', 'homepage_canonical', and 'homepage_redirect'.
  *
- * @since 5.0.7
+ * @since 5.1.0
  */
-function _do_upgrade_5071() {
+function _do_upgrade_5100() {
 
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5071' ) {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5100' ) {
 		Data\Plugin::update_option( 'robotstxt_block_ai', 0 );
 		Data\Plugin::update_option( 'robotstxt_block_seo', 0 );
 		Data\Plugin::update_option( 'homepage_canonical', '' );

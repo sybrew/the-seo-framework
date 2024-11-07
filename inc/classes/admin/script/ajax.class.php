@@ -262,7 +262,7 @@ final class AJAX {
 	 * @since 4.0.0
 	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
 	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
-	 * @since 5.0.7 Now relays the 'edit_post' capability check to the reference handler.
+	 * @since 5.1.0 Now relays the 'edit_post' capability check to the reference handler.
 	 * @access private
 	 */
 	public static function get_post_data() {
@@ -361,7 +361,7 @@ final class AJAX {
 	 * There's no capability check to view terms; a flaw in WP Core.
 	 *
 	 * @hook wp_ajax_tsf_get_term_parent_slugs 10
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 * @access private
 	 */
 	public static function get_term_parent_slugs() {
@@ -404,7 +404,7 @@ final class AJAX {
 	 * This moronic abuse of the Post Type API exist because Gutenberg needed to speedrun features for it flopped.
 	 *
 	 * @hook wp_ajax_tsf_get_post_parent_slugs 10
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 * @access private
 	 */
 	public static function get_post_parent_slugs() {
@@ -454,7 +454,7 @@ final class AJAX {
 	 * See WP Core `post_author_meta_box()` -- exercising the same assumptions.
 	 *
 	 * @hook wp_ajax_tsf_get_author_slug 10
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 * @access private
 	 */
 	public static function get_author_slug() {

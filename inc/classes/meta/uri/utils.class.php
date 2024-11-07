@@ -496,7 +496,7 @@ class Utils {
 	 * - `get_permalink()`, leads to: `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`
 	 * - `get_term_link()`
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The URL permastructure for the given query.

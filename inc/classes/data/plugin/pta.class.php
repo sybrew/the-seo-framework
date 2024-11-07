@@ -38,7 +38,7 @@ use \The_SEO_Framework\{
  * Holds a collection of Post Type Archive data interface methods for TSF.
  *
  * @since 5.0.0
- * @since 5.0.7 Added the Property_Refresher trait.
+ * @since 5.1.0 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->pta() instead.
  */
@@ -84,7 +84,7 @@ class PTA {
 	 *              2. Removed the second `$use_cache` parameter.
 	 *              3. Moved from `\The_SEO_Framework\Load`.
 	 *              4. Renamed from `get_post_type_archive_meta`.
-	 * @since 5.0.7 1. Now returns the default meta if the PTA isn't supported.
+	 * @since 5.1.0 1. Now returns the default meta if the PTA isn't supported.
 	 *              2. Now registers `meta_memo` for automated refreshes.
 	 *
 	 * @param string $post_type The post type.

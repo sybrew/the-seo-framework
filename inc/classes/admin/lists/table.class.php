@@ -126,7 +126,7 @@ abstract class Table {
 	 * @hook wp_ajax_inline-save -1
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_prepare_columns_wp_ajax_inline_save`.
-	 * @since 5.0.7 Simplified capability check, akin to how `wp_ajax_inline_save()` does things.
+	 * @since 5.1.0 Simplified capability check, akin to how `wp_ajax_inline_save()` does things.
 	 * @access private
 	 */
 	public function prepare_columns_wp_ajax_inline_save() {

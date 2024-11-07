@@ -169,7 +169,7 @@ class Loader {
 	/**
 	 * Returns the common TSF scripts.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @return array The script params.
 	 */
@@ -695,7 +695,7 @@ class Loader {
 	/**
 	 * Returns Canonical scripts params.
 	 *
-	 * @since 5.0.7
+	 * @since 5.1.0
 	 *
 	 * @return array The script params.
 	 */
@@ -761,7 +761,7 @@ class Loader {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now filters out unsupported taxonomies.
-	 * @since 5.0.7 Changed the dependencies for pt, because we now use a select field.
+	 * @since 5.1.0 Changed the dependencies for pt, because we now use a select field.
 	 *
 	 * @return array The script params.
 	 */
