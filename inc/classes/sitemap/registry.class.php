@@ -495,9 +495,11 @@ class Registry {
 	 * @since 5.0.0 Is now static.
 	 * @global \WP_Rewrite $wp_rewrite
 	 *
-	 * @return array : {
-	 *    string path          : The sitemap base path, like subdirectories or translations.
-	 *    bool   use_query_var : Whether to use the query var.
+	 * @return array {
+	 *     The sitemap base path information.
+	 *
+	 *     @type string $path          The sitemap base path, like subdirectories or translations.
+	 *     @type bool   $use_query_var Whether to use the query var.
 	 * }
 	 */
 	private static function get_sitemap_base_path_info() {

@@ -96,14 +96,16 @@ class Image {
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @return array[] The image details array, sequential: int => {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @return array[] {
+	 *     An array of image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function get_image_details( $args = null, $single = false, $context = 'social' ) {
@@ -159,14 +161,16 @@ class Image {
 	 *                           Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @return array The image details array, sequential: int => {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @return array[] {
+	 *     An array of image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function get_custom_image_details( $args = null, $single = false, $context = 'social' ) {
@@ -208,14 +212,16 @@ class Image {
 	 *                            Leave null to autodetermine query.
 	 * @param bool       $single  Whether to fetch one image, or multiple.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @return array[] The image details array, sequential: int => {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @return array[] {
+	 *     An array of image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function get_generated_image_details( $args = null, $single = false, $context = 'social' ) {
@@ -257,14 +263,16 @@ class Image {
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @yield array The image details array {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @yield array[] {
+	 *     An array of image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function generate_image_details( $args = null, $context = 'social' ) {
@@ -288,14 +296,16 @@ class Image {
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @yield array The image details array {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @yield array[] {
+	 *     An array of image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function generate_custom_image_details( $args = null, $context = 'social' ) {
@@ -317,14 +327,16 @@ class Image {
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @yield array The image details array {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @yield array[] {
+	 *     An array of image details.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function generate_generated_image_details( $args = null, $context = 'social' ) {
@@ -353,14 +365,16 @@ class Image {
 	 * @generator
 	 *
 	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 * @yield array The image details array {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @yield array {
+	 *     The image details array.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	public static function generate_custom_image_details_from_query( $context = 'social' ) {
@@ -498,14 +512,16 @@ class Image {
 	 *                            Use null to autodetermine query.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
-	 * @return array The image generation parameters, associative: {
-	 *    string  size:     The image size by name,
-	 *    boolean multi:    Whether multiple images may be returned,
-	 *    array   cbs:      An array of image generation callbacks, in order of most important to least.
-	 *                      When 'multi' (or $single input) parameter is "false", it will use the first found.
-	 *    array   fallback: An array of image generation callbacks, in order of most important to least,
-	 *                      Only one image is obtained from the fallback, and only if the regular cbs don't
-	 *                      return any image.
+	 * @return array {
+	 *     The image generation parameters, associative.
+	 *
+	 *     @type string  $size     The image size by name.
+	 *     @type boolean $multi    Whether multiple images may be returned.
+	 *     @type array   $cbs:     An array of image generation callbacks, in order of most important to least.
+	 *                             When 'multi' (or $single input) parameter is "false", it will use the first found.
+	 *     @type array   $fallback An array of image generation callbacks, in order of most important to least.
+	 *                             Only one image is obtained from the fallback, and only if the regular cbs don't
+	 *                             return any image.
 	 * }
 	 */
 	private static function get_image_generation_params( $args, $context ) {
@@ -561,7 +577,7 @@ class Image {
 		 * @since 4.0.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @param array      $params  {
-		 *    The image generation parameters.
+		 *     The image generation parameters.
 		 *
 		 *     @type string  $size     The image size to use.
 		 *     @type boolean $multi    Whether to allow multiple images to be returned. This may be overwritten by generators to 'false'.
@@ -598,14 +614,16 @@ class Image {
 	 * @param callable[] $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param string     $size   The image size to use.
 	 * @param bool       $single Whether to fetch one image, or multiple.
-	 * @yield array The image details array, sequential: int => {
-	 *    string url:      The image URL,
-	 *    int    id:       The image ID,
-	 *    int    width:    The image width in pixels,
-	 *    int    height:   The image height in pixels,
-	 *    string alt:      The image alt tag,
-	 *    string caption:  The image caption,
-	 *    int    filesize: The image filesize in bytes,
+	 * @yield array {
+	 *     The image details array.
+	 *
+	 *     @type string $url      The image URL.
+	 *     @type int    $id       The image ID.
+	 *     @type int    $width    The image width in pixels.
+	 *     @type int    $height   The image height in pixels.
+	 *     @type string $alt      The image alt tag.
+	 *     @type string $caption  The image caption.
+	 *     @type int    $filesize The image filesize in bytes.
 	 * }
 	 */
 	private static function generate_image_from_callbacks( $args, $cbs, $size, $single ) {

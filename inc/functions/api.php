@@ -367,8 +367,8 @@ namespace The_SEO_Framework {
 	 *     return $arg * 2;
 	 * }
 	 * function my_function( $arg ) {
-	 *    return memo( null, $arg );
-	 *        ?? memo( expensive_call( $arg ), $arg );
+	 *     return memo( null, $arg );
+	 *         ?? memo( expensive_call( $arg ), $arg );
 	 * }
 	 * my_function( 1 ); // prints "expensive 1!", returns 2.
 	 * my_function( 1 ); // returns 2.
@@ -389,11 +389,8 @@ namespace The_SEO_Framework {
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiaty callbacks.
 	 *                            Arguments may not contain \Closure()s.
-	 * @return mixed : {
-	 *    mixed The cached value if set and $value_to_set is null.
-	 *       null When no value has been set.
-	 *       If $value_to_set is set, the new value.
-	 * }
+	 * @return mixed The cached value if $value_to_set is null.
+	 *               Otherwise, the $value_to_set.
 	 */
 	function memo( $value_to_set = null, ...$args ) {
 
@@ -429,8 +426,8 @@ namespace The_SEO_Framework {
 	 *     return $arg * 2;
 	 * }
 	 * function my_function( $arg ) {
-	 *    return umemo( __METHOD__, null, $arg );
-	 *        ?? umemo( __METHOD__, expensive_call( $arg ), $arg );
+	 *     return umemo( __METHOD__, null, $arg );
+	 *         ?? umemo( __METHOD__, expensive_call( $arg ), $arg );
 	 * }
 	 * my_function( 1 ); // prints "expensive 1!", returns 2.
 	 * my_function( 1 ); // returns 2.
@@ -447,11 +444,8 @@ namespace The_SEO_Framework {
 	 * @param mixed  $value_to_set The value to set.
 	 * @param mixed  ...$args      Extra arguments, that are used to differentiate callbacks.
 	 *                             Arguments may not contain \Closure()s.
-	 * @return mixed : {
-	 *    mixed The cached value if set and $value_to_set is null.
-	 *       null When no value has been set.
-	 *       If $value_to_set is set, the new value.
-	 * }
+	 * @return mixed The cached value if $value_to_set is null.
+	 *               Otherwise, the $value_to_set.
 	 */
 	function umemo( $key, $value_to_set = null, ...$args ) {
 
@@ -496,12 +490,10 @@ namespace The_SEO_Framework {
 	 * @api
 	 * TODO Can we use callables as $fn? If so, adjust docs and apply internally.
 	 *
-	 * @param \Closure $fn The Closure or function to memoize.
-	 * @return mixed : {
-	 *    mixed The cached value if set and $value_to_set is null.
-	 *       null When no value has been set.
-	 *       If $value_to_set is set, the new value.
-	 * }
+	 * @param callable $fn The Closure or function to memoize.
+	 *                     The Closure can only be cached properly if it's staticlaly stored.
+	 * @return mixed The cached value if $value_to_set is null.
+	 *               Otherwise, the $value_to_set.
 	 */
 	function fmemo( $fn ) {
 

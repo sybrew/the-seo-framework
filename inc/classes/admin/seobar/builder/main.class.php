@@ -146,7 +146,7 @@ abstract class Main {
 	 *                             This parameter is ignored for taxonomies.
 	 * }
 	 * @yield array {
-	 *     @type string $test => @type array The testing results.
+	 *     @type array {$test} The testing results.
 	 * }
 	 */
 	public function run_all_tests( $query ) {
@@ -172,7 +172,7 @@ abstract class Main {
 	 *                             This parameter is ignored for taxonomies.
 	 * }
 	 * @yield array {
-	 *     @type array ${$test} The testing results.
+	 *     @type array {$test} The testing results.
 	 * }
 	 */
 	final public function run_test( $tests, $query ) {

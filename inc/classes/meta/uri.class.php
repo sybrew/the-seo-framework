@@ -673,9 +673,11 @@ class URI {
 	 * @since 5.0.5 Reinstated missing option checks.
 	 * @todo make this a getter via $args.
 	 *
-	 * @return array Escaped site Pagination URLs: {
-	 *    string 'prev'
-	 *    string 'next'
+	 * @return array {
+	 *     Paginated URLs for the current request. May be empty if settings do not permit generation.
+	 *
+	 *     @type string $prev The previous URL. May be empty if no previous URL is available.
+	 *     @type string $next The next URL. May be empty if no next URL is available.
 	 * }
 	 */
 	public static function get_paged_urls() {
@@ -698,9 +700,11 @@ class URI {
 	 *
 	 * @since 5.0.5
 	 *
-	 * @return array Escaped site Pagination URLs: {
-	 *    string 'prev'
-	 *    string 'next'
+	 * @return array {
+	 *     Paginated URLs for the current request.
+	 *
+	 *     @type string $prev The previous URL. May be empty if no previous URL is available.
+	 *     @type string $next The next URL. May be empty if no next URL is available.
 	 * }
 	 */
 	public static function get_generated_paged_urls() {
@@ -818,7 +822,7 @@ class URI {
 	 * @since 5.0.0
 	 * @todo Append queries of other plugins for other pages as well?
 	 *
-	 * @return string|null Escaped site Shortlink URL.
+	 * @return string The shortlink URL.
 	 */
 	public static function get_generated_shortlink_url() {
 

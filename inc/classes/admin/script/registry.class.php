@@ -255,7 +255,7 @@ class Registry {
 	 *         @type mixed  $data The l10n properties.
 	 *     }
 	 *     @type array|array[] $tmpl     {
-	 *         Optional. Use if type is 'js'. One or more templates.
+	 *         Optional. Use if type is 'js'. One templates or an array of templates.
 	 *
 	 *         @type string $file The full file location.
 	 *         @type array  $args Optional. Any arguments added to the $view_args array.

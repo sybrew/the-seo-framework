@@ -326,11 +326,6 @@ TODO the title prefix doesn't appear to work in quick-edit for Terms.
 
 TODO write https://kb.theseoframework.com/?p=256#default-blocklist-ai and https://kb.theseoframework.com/?p=256#default-blocklist-seo
 
-TODO add 1 spaces to `\*    [a-z]`
-
-TODO add scheme listener for canonical URL at settings page.
-	Take from `document.body.addEventListener( 'tsf-site-robots-changed', _registerSiteDefaultRobotsValue );`
-
 TODO do we consider multiple taxonomies for a single post type?
 	* See email from Damien. -> We can test this with ACF Pro.
 
@@ -340,6 +335,8 @@ TODO add Bricks Templates to exclusions like we did for Elementor (they are not 
 
 TODO rename "Twitter Profile"
 	-> Also update TSF links on main site accordingly.
+
+TODO follow through on the  @todo deprecate 5.1.0
 
 Punt:
 - remove jQuery dependencies in UI?

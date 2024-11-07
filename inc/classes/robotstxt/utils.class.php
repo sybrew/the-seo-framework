@@ -48,8 +48,15 @@ class Utils {
 	 * @since 5.0.7
 	 *
 	 * @param string $type The type of user-agents to get. Accepts 'ai' and 'seo'.
-	 * @return array A list of user-agents with extra info: {
-	 *    string user-agent => array{ by: string, link: string }
+	 * @return array {
+	 *     A list of user-agents with extra info.
+	 *
+	 *     @type array $user_agent {
+	 *         The user-agent's information.
+	 *
+	 *         @type string $by   The entity behind the user-agent.
+	 *         @type string $link The link to the user-agent's documentation.
+	 *     }
 	 * }
 	 */
 	public static function get_user_agents( $type ) {

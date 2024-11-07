@@ -402,9 +402,11 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
  *                         Leave null to autodetermine query.
  * @param string     $size The size of the image to get.
- * @yield array : {
- *    string url: The image URL location,
- *    int    id:  The image ID,
+ * @yield array {
+ *     The image details.
+ *
+ *     @type string $url The image URL location.
+ *     @type int    $id  The image ID.
  * }
  */
 function _get_product_category_thumbnail_image_details( $args = null, $size = 'full' ) {

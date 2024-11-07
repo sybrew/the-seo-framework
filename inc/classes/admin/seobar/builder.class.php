@@ -58,13 +58,15 @@ final class Builder {
 
 	/**
 	 * @since 4.0.0
-	 * @var array $item The current SEO Bar item list. {
-	 *    string $symbol : The displayed symbol that identifies your bar.
-	 *    string $title  : The title of the assessment.
-	 *    string $status : Accepts 'good', 'okay', 'bad', 'unknown'.
-	 *    string $reason : The final assessment: The reason for the $status.
-	 *    string $assess : The assessments on why the reason is set. Keep it short and concise!
-	 *                     Does not accept HTML for performant ARIA support.
+	 * @var array $item {
+	 *     The current SEO Bar item list.
+	 *
+	 *     @type string $symbol The displayed symbol that identifies your bar.
+	 *     @type string $title  The title of the assessment.
+	 *     @type int    $status Power of two. See SEOBar's class constants.
+	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                          Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	private static $items = [];

@@ -40,10 +40,13 @@ class Utils {
 	 * @since 5.0.0
 	 *
 	 * @param int    $src_id The source ID of the image.
-	 * @param string $size   The size of the image used.
+	 * @param string $size   The size of the image to get.
+	 *                       It falls back to the original image if not found.
 	 * @return array The image dimensions, associative: {
-	 *    int width:  The image width in pixels,
-	 *    int height: The image height in pixels,
+	 *     The image's dimensions.
+	 *
+	 *     @type int $width  The image width in pixels.
+	 *     @type int $height The image height in pixels.
 	 * }
 	 */
 	public static function get_image_dimensions( $src_id, $size ) {
@@ -107,14 +110,20 @@ class Utils {
 	 * Returns the largest acceptable image size's details.
 	 * Skips the original image, which may also be acceptable.
 	 *
-	 * TODO: Can we maintain an aspect ratio? This must be registered first with WP, so it's unlikely.
-	 *
 	 * @since 5.0.0
+	 * @todo Can we maintain an aspect ratio? This must be registered first with WP, so it's unlikely.
 	 *
 	 * @param int $id           The image ID.
 	 * @param int $max_size     The largest acceptable dimension in pixels. Accounts for both width and height.
 	 * @param int $max_filesize The largest acceptable filesize in bytes. Default 5MB (5242880).
-	 * @return false|array Returns an array (url, width, height, is_intermediate), or false, if no image is available.
+	 * @return array|false {
+	 *     Array of image data, or boolean false if no image is available.
+	 *
+	 *     @type string $0 Image source URL.
+	 *     @type int    $1 Image width in pixels.
+	 *     @type int    $2 Image height in pixels.
+	 *     @type bool   $3 Whether the image is a resized image.
+	 * }
 	 */
 	public static function get_largest_image_src( $id, $max_size = 4096, $max_filesize = 5242880 ) {
 
@@ -130,7 +139,7 @@ class Utils {
 				continue;
 
 			if (
-					isset( $_d['width'], $_d['height'] )
+				   isset( $_d['width'], $_d['height'] )
 				&& $_d['width'] > $law
 				&& $_d['width'] <= $max_size
 				&& $_d['height'] <= $max_size

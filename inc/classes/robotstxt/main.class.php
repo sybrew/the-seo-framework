@@ -96,17 +96,56 @@ class Main {
 
 		/**
 		 * @since 5.0.7
-		 * @param array  $robots The robots directives, associative by key.
-		 *                       All input is expected to be escaped: string => {
-		 *    string raw:           Raw robots.txt output. A newline is automatically added.
-		 *                          Content from this entry is added before all other output.
-		 *                          Hint: It can be used for "# comments."
-		 *    ?string[] user-agent: The user agent to apply the directives for.
-		 *    ?string[] disallow:   The disallow directives.
-		 *    ?string[] allow:      The allow directives.
-		 *    ?string[] sitemaps:   The sitemap directives. You shouldn't combine this with other directives.
-		 *    int       priority:   The priority of the output, a lower priority means earlier output.
-		 *                          Defaults to 10.
+		 * @param array  $robots {
+		 *     The robots directives, associative by key.
+		 *     All input is expected to be escaped.
+		 *
+		 *     @type array $derpecated_before {
+		 *         Do not use. Legacy support. The directives before this plugin's output.
+		 *
+		 *         @type string $raw      Raw robots.txt output. A newline is automatically added.
+		 *                                Content from this entry is added before all other output.
+		 *                                Hint: It can be used for "# comments."
+		 *         @type int    $priority The priority of the output, a lower priority means earlier output.
+		 *                                Defaults to 0.
+		 *     }
+		 *     @type array $default           {
+		 *         The default directives.
+		 *
+		 *         @type string[] $user-agent The user agent to apply the directives for.
+		 *         @type string[] $disallow   The disallow directives.
+		 *         @type string[] $allow      The allow directives.
+		 *         @type int      $priority   The priority of the output, a lower priority means earlier output.
+		 *                                    Defaults to 10.
+		 *     }
+		 *     @type array $block_ai          {
+		 *         The directives for AI user agents.
+		 *
+		 *         @type string[] $user-agent The user agent to apply the directives for.
+		 *         @type string[] $disallow   The disallow directives.
+		 *     }
+		 *     @type array $block_seo         {
+		 *         The directives for SEO user agents.
+		 *
+		 *         @type string[] $user-agent The user agent to apply the directives for.
+		 *         @type string[] $disallow   The disallow directives.
+		 *     }
+		 *     @type array $derpecated_after  {
+		 *         Do not use. Legacy support. The directives after this plugin's output.
+		 *
+		 *         @type string $raw      Raw robots.txt output. A newline is automatically added.
+		 *                                Content from this entry is added before all other output.
+		 *                                Hint: It can be used for "# comments."
+		 *         @type int    $priority The priority of the output, a lower priority means earlier output.
+		 *                                Defaults to 500.
+		 *     }
+		 *     @type array $sitemaps          {
+		 *         The sitemap directives.
+		 *
+		 *         @type string[] $sitemaps The sitemap directives. You shouldn't combine this with other directives.
+		 *         @type int     $ priority The priority of the output, a lower priority means earlier output.
+		 *                                  Defaults to 1000.
+		 *     }
 		 * }
 		 * @param string $site_path The determined site path. Use this path to prefix URLs.
 		 */

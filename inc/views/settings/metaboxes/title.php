@@ -131,7 +131,7 @@ switch ( $instance ) :
 		<hr>
 		<?php
 		if (
-				Admin\Utils::display_extension_suggestions()
+			   Admin\Utils::display_extension_suggestions()
 			&& ! \current_theme_supports( 'title-tag' )
 			&& ! \defined( 'TSFEM_E_TITLE_FIX' )
 		) {

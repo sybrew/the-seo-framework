@@ -68,7 +68,12 @@ class Exclusion {
 	 * @since 5.0.0 1. Now uses the static cache methods instead of non-expiring-transients.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @return array : { 'archive', 'search' }
+	 * @return array {
+	 *     The excluded post IDs.
+	 *
+	 *     @type int[] $archive The excluded post IDs for the archive.
+	 *     @type int[] $search  The excluded post IDs for the search.
+	 * }
 	 */
 	public static function get_excluded_ids_from_cache() {
 

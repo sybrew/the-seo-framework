@@ -81,9 +81,9 @@ class Strings {
 	 * @param array  $args   {
 	 *     Optional. The word counting arguments.
 	 *
-	 *     @type int filter_under       Consider word duplication under this number not a duplicate, default 3.
-	 *     @type int filter_short_under Consider short word duplication under this number not a duplicate, default 5.
-	 *     @type int short_word_length  Consider words under this character length "short", default 3.
+	 *     @type int $filter_under       Consider word duplication under this number not a duplicate, default 3.
+	 *     @type int $filter_short_under Consider short word duplication under this number not a duplicate, default 5.
+	 *     @type int $short_word_length  Consider words under this character length "short", default 3.
 	 * }
 	 * @return array Containing arrays of words with their count.
 	 */

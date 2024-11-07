@@ -94,8 +94,18 @@ class Robots {
 	 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
 	 *    4 = 0b100: Collect assertions. (\The_SEO_Framework\ROBOTS_ASSERT)
 	 * }
-	 * @return array Only values actualized for display: {
-	 *    string index : string value
+	 * @return array {
+	 *     The generated robots meta. Only values actualized for display are sent back.
+	 *
+	 *     @type ?string $noindex           If set, it should be 'noindex'.
+	 *     @type ?string $nofollow          If set, it should be 'nofollow'.
+	 *     @type ?string $noarchive         If set, it should be 'noarchive'.
+	 *     @type ?string $max_snippet       If set, it should be 'max-snippet:<R>=-1>',
+	 *                                      where '<R>=-1>' is a number of or above -1.
+	 *     @type ?string $max_image_preview If set, it should be 'max-image-preview:<none|standard|large>',
+	 *                                      where any of 'none', 'standard', or 'large' is chosen.
+	 *     @type ?string $max_video_preview If set, it should be 'max-video-preview:<R>=-1>',
+	 *                                      where '<R>=-1>' is a number of or above -1.
 	 * }
 	 */
 	public static function get_generated_meta( $args = null, $get = null, $options = 0b00 ) {
@@ -136,6 +146,7 @@ class Robots {
 		 *
 		 * @param array      $meta {
 		 *     The current robots meta.
+		 *
 		 *     @type ?string $noindex           If set, it should be 'noindex'.
 		 *     @type ?string $nofollow          If set, it should be 'nofollow'.
 		 *     @type ?string $noarchive         If set, it should be 'noarchive'.

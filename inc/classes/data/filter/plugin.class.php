@@ -81,7 +81,7 @@ class Plugin {
 		 * @param array $filters {
 		 *     A map of option filters and their callbacks.
 		 *
-		 *     @type callable[] {$option} => $callback,
+		 *     @type callable[] {$option} The callback to sanitize the option indexed by option name.
 		 * }
 		 */
 		$sanitizers = \apply_filters(
@@ -118,7 +118,8 @@ class Plugin {
 	 * @param array $filters {
 	 *     A map of option filters and their callbacks.
 	 *
-	 *     @type callable|callable[] {$option} => $callback,
+	 *     @type callable|callable[] {$option} The callback to sanitize the option, or an array of callbacks.
+	 *                                         Indexed by option name.
 	 * }
 	 */
 	public static function register_sanitizers( $filters ) {

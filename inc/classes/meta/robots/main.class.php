@@ -40,10 +40,8 @@ final class Main {
 
 	/**
 	 * @since 4.2.0
-	 * @var array|null Null to autodetermine query, otherwise the query arguments. : {
-	 *    int    $id       The Post, Page or Term ID to generate robots for.
-	 *    string $taxonomy The taxonomy.
-	 * }
+	 * @var array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                       Leave null to autodetermine query.
 	 */
 	private $args;
 
