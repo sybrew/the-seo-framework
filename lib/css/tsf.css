@@ -275,16 +275,6 @@ input.tsf-disabled {
 	color: #057c99;
 }
 
-.tsf-set-image-button.button,
-.tsf-remove-image-button.button {
-	margin-inline-end: 8px;
-}
-
-.tsf-image-preview {
-	line-height: inherit;
-	vertical-align: text-bottom;
-}
-
 :is( .tsf-metaboxes, #tsf-inpost-box, .tsf-term-meta, .tsf-quick-edit-columns ) :is( input[type=text], input[type=url], textarea )::placeholder {
 	transition: color .165s ease-in, text-shadow .165s ease-in;
 	text-shadow: 0 0 0 rgba( 114, 119, 124, .75 );

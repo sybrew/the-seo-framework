@@ -349,8 +349,8 @@ class Setup {
 
 				// Feed.
 				'excerpt_the_feed' => 1, // Generate feed Excerpts.
-				'source_the_feed'  => 1, // Add backlink at the end of the feed.
-				'index_the_feed'   => 0, // Add backlink at the end of the feed.
+				'source_the_feed'  => 1, // Add backlink to the end of the feed.
+				'index_the_feed'   => 0, // Add backlink to the end of the feed.
 			],
 		);
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment

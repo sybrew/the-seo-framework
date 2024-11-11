@@ -101,7 +101,7 @@ final class ListTable extends Admin\Lists\Table {
 
 		// It tried but found nothing
 		if ( false === $offset ) {
-			// Add SEO bar at the end of columns.
+			// Add SEO bar to the end of columns.
 			$columns = array_merge( $columns, $seocolumn );
 		} else {
 			// Add seo bar between columns.

@@ -198,6 +198,7 @@ class Form {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 Added 'button_class' as a supported index for `$args`.
+	 * @since 5.1.0 Added warning icon.
 	 *
 	 * @param array $args {
 	 *     The image uploader arguments.
@@ -266,13 +267,15 @@ class Form {
 			$args,
 		);
 
+		$s_id = \esc_attr( $args['id'] );
+
 		$content = vsprintf(
 			'<button type=button data-href="%s" class="tsf-set-image-button %s" title="%s" id="%s-select" %s>%s</button>',
 			[
 				\esc_url( \get_upload_iframe_src( 'image', $args['post_id'] ) ),
 				\esc_attr( implode( ' ', (array) $args['button_class']['set'] ) ),
 				\esc_attr( $args['i18n']['button_title'] ),
-				\esc_attr( $args['id'] ),
+				$s_id,
 				HTML::make_data_attributes(
 					[ 'inputId' => $args['id'] ]
 					+ $args['data']
@@ -282,10 +285,9 @@ class Form {
 			],
 		);
 
-		$content .= \sprintf(
-			'<span class=tsf-tooltip-wrap><span id="%1$s-preview" class="tsf-image-preview tsf-tooltip-item dashicons dashicons-format-image" data-for="%1$s" tabindex=0></span></span>',
-			\esc_attr( $args['id'] )
-		);
+		$content .= <<<HTML
+			<span class=tsf-image-notifications data-for="{$s_id}"><span class=tsf-tooltip-wrap><span id="{$s_id}-preview" class="tsf-image-preview tsf-tooltip-item hidden" tabindex=0></span></span><span class=tsf-tooltip-wrap><span id="{$s_id}-image-warning" class="tsf-image-warning tsf-tooltip-item hidden" tabindex=0></span></span></span>
+		HTML;
 
 		return $content;
 	}

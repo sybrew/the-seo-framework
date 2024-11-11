@@ -260,8 +260,6 @@ TODO when double-clicking the submit button, we process the settings submission 
 TODO new translations are available.
 TODO add that TSF is an independent project that doesn't need to hit profit margins; ergo, it's made for the benefit of its users, not the creator.
 
-TODO note the var_dump()
-
 TODO https://wordpress.org/support/topic/about-homepage-meta-description-with-wpml/#post-17715796?
 	-> Also note the KB article mention which we need to address.
 
@@ -283,8 +281,6 @@ TODO: expand WPML string translation for TSF metadata
 	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
 
 TODO translatepress multilingual sitemap? Is this possible? See backlogged emails with them.
-
-TODO test image type support and warn users about Facebook not supporting webp (etc.)?
 
 TODO validate the URL field before showing an image preview?
 
@@ -336,6 +332,8 @@ TODO add Bricks Templates to exclusions like we did for Elementor (they are not 
 TODO rename "Twitter Profile"
 	-> Also update TSF links on main site accordingly.
 
+TODO we updated Babel, we need to reparse all scripts to prevent discrepancies.
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -349,22 +347,26 @@ Punt:
 * **Upgraded:** Now uses TSF database version `5100`
 	* Two new options are available: `robotstxt_block_ai` and `robotstxt_block_seo`.
 * **Added:**
+	* We introduce our bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a page or term, either via their edit screens, or via quick-edit.
+		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
+			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, and `%author%`.
+				* `%pagename%` is treated as `%postname%` internally. You should never make this part of the permalink structure, anyway.
+			* It also works for custom post types and taxonomies, such as those created by WooCommerce and bbPress.
+				* TODO it works with all of bbPress but the Forum pages. What's up with that?
+			* This system dynamically fetches page ancestor, author, and term slugs as needed. These are then cached in the browser. This dynamic fetching may appear as a delay in writing the canonical URL when making changes.
+			* Please note that you should never use `%pagename%` in your permalink structure. `%postname%` gets transformed to `%pagename%` automatically when needed.
+	* You can now block crawlers like AI language model trainers and SEO analysis from using your content via the "Robots Settings."
+	* You can now specify a redirect URL for the homepage.
+		* If the homepage is a page, this will take precedence over the page's metadata redirect URL.
+	* You can now specify a canonical URL for the homepage.
+		* If the homepage is a page, this will take precedence over the page's metadata canonical URL.
+	* You'll now be informed when an image type isn't compatible with most social platforms. This is displayed next to the image preview icon.
+		* Also, the preview icon no longer shows when the image cannot be loaded. You'll now see an error message instead.
 	* For WPML Multilingual Plugin, the following fields are automatically registered with their String Translation tool under domain `admin_texts_autodescription-site-settings`. Please note that these are only shown when they have a value inputted via the SEO Settings page:
 		* **Homepage:** title, description, social image URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings]homepage_*`.
 		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
 			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
-	* You can now block AI language model trainers and SEO analysis crawlers from using your content via the "Robots Settings."
-	* Added a canonical URL input field for the homepage.
-	* Added a redirect URL input field for the homepage.
-	* We implemented the bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a post or term, either via their edit screens, or via quick-edit.
-		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
-			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, and `%author%`.
-				* `%pagename%` is treated as `%postname%` internally. You should never make this part of the permalink structure, anyway.
-				* `%post_tag%` somehow exists but is ignored; it doesn't work in WordPress. TODO is this useful information?
-				* TODO We also added `%product_cat%` (TODO and `%product_tag%`?) support for WooCommerce.
-			* Please note that you should never use `%pagename%` in your permalink structure. `%postname%` gets transformed to `%pagename%` automatically when needed.
-			* This system dynamically fetches page ancestor, author, and term slugs as needed. These are then cached in the browser. This dynamic fetching may appear as a delay in writing the canonical URL when making changes.
 * **Improved:**
 	* References to X and Twitter Card are more distinctive now.
 	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
@@ -480,7 +482,7 @@ Punt:
 		* Added index `robotstxt_block_seo`. Default 0.
 		* Added index `homepage_redirect`. Default empty.
 		* Added index `homepage_canonical`. Default empty.
-	* We're now stipulant about the autoloading status of every option. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
+	* We're now stipulant about the autoloading status of every option by setting `update_option()`'s third parameter. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
 * **Action notes:**
 	* **Changed:**
 		* `the_seo_framework_flex_tab_content`, now uses `'args'` instead of `'params'` for its first parameter's indexes.
@@ -505,6 +507,7 @@ Punt:
 * **Other:**
 	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
 	* Removed support for obsolete `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
+	* CSS file `tsf-media` is now available and will be loaded alongside its namesake script.
 	* We optimized opcodes for PHP 8.4:
 		* In short, PHP 8.4's OPcache module now also precaches `sprintf`. But, when working inside a namespace, we can only utilize that by namespace-escaping calls to `sprintf`.
 		* We maintain static code checks for this via [WPCS-TSF](https://github.com/theseoframework/wpcs-tsf).

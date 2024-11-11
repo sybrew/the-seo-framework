@@ -572,42 +572,78 @@ class Loader {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.2 Removed redundant button titles.
+	 * @since 5.1.0 Added tsf-media CSS. Added `tsfMediaL10n.warning`.
 	 *
 	 * @return array The script params.
 	 */
 	public static function get_media_scripts() {
 		return [
-			'id'       => 'tsf-media',
-			'type'     => 'js',
-			'deps'     => [ 'media', 'tsf', 'tsf-utils', 'tsf-tt', 'tsf-ays' ],
-			'autoload' => true,
-			'name'     => 'media',
-			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
-			'ver'      => \THE_SEO_FRAMEWORK_VERSION,
-			'l10n'     => [
-				'name' => 'tsfMediaL10n',
-				'data' => [
-					'labels' => [
-						'social' => [
-							'imgSelect'      => \esc_attr__( 'Select Image', 'autodescription' ),
-							'imgSelectTitle' => '',
-							'imgChange'      => \esc_attr__( 'Change Image', 'autodescription' ),
-							'imgRemove'      => \esc_attr__( 'Remove Image', 'autodescription' ),
-							'imgRemoveTitle' => '',
-							'imgFrameTitle'  => \esc_attr_x( 'Select Social Image', 'Frame title', 'autodescription' ),
-							'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+			[
+				'id'       => 'tsf-media',
+				'type'     => 'css',
+				'deps'     => [],
+				'autoload' => true,
+				'name'     => 'media',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-media',
+				'type'     => 'js',
+				'deps'     => [ 'media', 'tsf', 'tsf-utils', 'tsf-tt' ],
+				'autoload' => true,
+				'name'     => 'media',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfMediaL10n',
+					'data' => [
+						'labels'  => [
+							'social' => [
+								'imgSelect'      => \esc_attr__( 'Select Image', 'autodescription' ),
+								'imgSelectTitle' => '',
+								'imgChange'      => \esc_attr__( 'Change Image', 'autodescription' ),
+								'imgRemove'      => \esc_attr__( 'Remove Image', 'autodescription' ),
+								'imgRemoveTitle' => '',
+								'imgFrameTitle'  => \esc_attr_x( 'Select Social Image', 'Frame title', 'autodescription' ),
+								'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+							],
+							'logo'   => [
+								'imgSelect'      => \esc_attr__( 'Select Logo', 'autodescription' ),
+								'imgSelectTitle' => '',
+								'imgChange'      => \esc_attr__( 'Change Logo', 'autodescription' ),
+								'imgRemove'      => \esc_attr__( 'Remove Logo', 'autodescription' ),
+								'imgRemoveTitle' => '',
+								'imgFrameTitle'  => \esc_attr_x( 'Select Logo', 'Frame title', 'autodescription' ),
+								'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+							],
 						],
-						'logo'   => [
-							'imgSelect'      => \esc_attr__( 'Select Logo', 'autodescription' ),
-							'imgSelectTitle' => '',
-							'imgChange'      => \esc_attr__( 'Change Logo', 'autodescription' ),
-							'imgRemove'      => \esc_attr__( 'Remove Logo', 'autodescription' ),
-							'imgRemoveTitle' => '',
-							'imgFrameTitle'  => \esc_attr_x( 'Select Logo', 'Frame title', 'autodescription' ),
-							'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+						'warning' => [
+							'warnedTypes'    => [
+								// This is only a short list of increasingly common types.
+								'webp' => 'image/webp',
+								'heic' => 'image/heic',
+							],
+							'forbiddenTypes' => [
+								// See The_SEO_Framework\Data\Filter\Sanitize::image_details().
+								'apng' => 'image/apng',
+								'bmp'  => 'image/bmp',
+								'ico'  => 'image/x-icon',
+								'cur'  => 'image/x-icon',
+								'svg'  => 'image/svg+xml',
+								'tif'  => 'image/tiff',
+								'tiff' => 'image/tiff',
+							],
+							'i18n'           => [
+								'notFound'     => \esc_attr__( 'The image file could not be found.', 'autodescription' ),
+								/* translators: %s is the file extension. */
+								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, preventing your image from being embedded.', 'autodescription' ),
+								/* translators: %s is the file extension. */
+								'extForbidden' => \esc_attr__( 'The file extension "%s" is not supported. Choose a different file.', 'autodescription' ),
+							],
 						],
+						'nonce'   => Utils::create_ajax_capability_nonce( 'upload_files' ),
 					],
-					'nonce'  => Utils::create_ajax_capability_nonce( 'upload_files' ),
 				],
 			],
 		];

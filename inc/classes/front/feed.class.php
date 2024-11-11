@@ -54,7 +54,7 @@ final class Feed {
 	 * Changes feed's content based on options.
 	 *
 	 * This method converts the input $content to an excerpt and is able to add
-	 * a nofollow backlink at the end of the feed.
+	 * a nofollow backlink to the end of the feed.
 	 *
 	 * @hook the_content_feed 10
 	 * @hook the_excerpt_rss 10
