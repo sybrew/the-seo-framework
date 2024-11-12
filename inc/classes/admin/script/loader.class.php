@@ -635,7 +635,7 @@ class Loader {
 								'tiff' => 'image/tiff',
 							],
 							'i18n'           => [
-								'notFound'     => \esc_attr__( 'The image file could not be found.', 'autodescription' ),
+								'notLoaded'    => \esc_attr__( 'The image file could not be loaded.', 'autodescription' ),
 								/* translators: %s is the file extension. */
 								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, preventing your image from being displayed.', 'autodescription' ),
 								/* translators: %s is the file extension. */
