@@ -154,7 +154,7 @@ final class AJAX {
 		Utils::check_ajax_capability_referer( 'upload_files' );
 
 		if ( ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
-			\wp_send_json_error();
+			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Invalid request.', 'autodescription' ) ) ] );
 
 		$attachment_id = \absint( $_POST['id'] );
 
@@ -372,12 +372,12 @@ final class AJAX {
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['term_id'], $_POST['taxonomy'] ) )
-			\wp_send_json_error();
+			\wp_send_json_error( 'invalid_request' );
 
 		$term_id = \absint( $_POST['term_id'] );
 
 		if ( ! $term_id )
-			\wp_send_json_error();
+			\wp_send_json_error( 'invalid_object_id' );
 
 		$parent_term_slugs = [];
 
@@ -415,12 +415,12 @@ final class AJAX {
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['post_id'] ) )
-			\wp_send_json_error();
+			\wp_send_json_error( 'invalid_request' );
 
 		$post_id = \absint( $_POST['post_id'] );
 
 		if ( ! $post_id )
-			\wp_send_json_error();
+			\wp_send_json_error( 'invalid_object_id' );
 
 		$post_type_object = \get_post_type_object( \get_post( $post_id )->post_type ?? '' );
 
@@ -429,7 +429,7 @@ final class AJAX {
 			   empty( $post_type_object )
 			|| ! \current_user_can( $post_type_object->cap->edit_posts )
 		) {
-			\wp_send_json_error();
+			\wp_send_json_error( 'missing_capabilities' );
 		}
 
 		$parent_post_slugs = [];
@@ -465,12 +465,12 @@ final class AJAX {
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['author_id'] ) )
-			\wp_send_json_error();
+			\wp_send_json_error( 'invalid_request' );
 
 		$author_id = \absint( $_POST['author_id'] );
 
 		if ( ! $author_id )
-			\wp_send_json_error();
+			\wp_send_json_error( 'invalid_object_id' );
 
 		$author_slugs   = [];
 		$author_slugs[] = [
