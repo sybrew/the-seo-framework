@@ -637,7 +637,7 @@ class Loader {
 							'i18n'           => [
 								'notFound'     => \esc_attr__( 'The image file could not be found.', 'autodescription' ),
 								/* translators: %s is the file extension. */
-								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, preventing your image from being embedded.', 'autodescription' ),
+								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, preventing your image from being displayed.', 'autodescription' ),
 								/* translators: %s is the file extension. */
 								'extForbidden' => \esc_attr__( 'The file extension "%s" is not supported. Choose a different file.', 'autodescription' ),
 							],

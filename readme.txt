@@ -334,6 +334,9 @@ TODO rename "Twitter Profile"
 
 TODO we updated Babel, we need to reparse all scripts to prevent discrepancies.
 
+TODO when the meta box is loaded without an ID, should we disable output altogether?
+	-> This might cause issues with some dynamically loaded admin pages.
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
@@ -389,6 +392,7 @@ Punt:
 	* If a settings listeners fails for any reason, other listeners may still continue. Leaving you with a semi-broken interface, instead of completely broken. For example, if the code crosses and unexpected value for the Homepage title input, only its character counters will be borked, but you can still upload an image for social sharing.
 		* This works for the Settings, Post Edit, Term Edit, and List Edit pages.
 		* This is a targeted fail-safe and won't work everywhere all the time.
+	* If the primary term is set to a term that doesn't exist, the Primary Term selection will now show a warning message.
 * **Changed:**
 	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
 		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
@@ -436,6 +440,7 @@ Punt:
 		* `The_SEO_Framework\Data\Plugin\Term::get_meta()` (`tsf()->data()->plugin()->term()->get_meta()`) now returns the default meta if the term's taxonomy isn't supported.
 		* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
 		* `The_SEO_Framework\Data\Plugin::update_option()` (`tsf()->data()->plugin()->update_option()`) no longer considers headlessness. The headless filters are ought to stay in place throughout the request, affecting `get_option()`.
+		* `The_SEO_Framework\Data\Plugin\Post::get_primary_term()` (`tsf()->data()->plugin()->post()->get_primary_term()`) now returns a valid primary term if the selected one is gone.
 	* **Removed:**
 		* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
 			* It may come back one day, but we have no plans for that just yet.

@@ -303,6 +303,7 @@ class Post {
 	 *              3. Now considers headlessness.
 	 *              4. Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.0.2 Now selects the last child of a primary term if its parent has the lowest ID.
+	 * @since 5.1.0 Now returns a valid primary term if the selected one is gone.
 	 *
 	 * @param int    $post_id  The post ID.
 	 * @param string $taxonomy The taxonomy name.
@@ -345,7 +346,11 @@ class Post {
 						break;
 					}
 				}
-			} else {
+			}
+
+			if ( ! $primary_term ) {
+				// No primary term has been assigned, or the primary term was deleted or altered. We need to find a new one.
+
 				$term_ids = array_column( $terms, 'term_id' );
 				asort( $term_ids );
 				$primary_term = $terms[ array_key_first( $term_ids ) ] ?? null;
