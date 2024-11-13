@@ -253,16 +253,17 @@ class Compatibility {
 	 * @since 4.2.0 No longer "loads" the theme; instead, simply compares input to active theme options.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_theme`.
+	 * @since 5.1.0 Added memoization.
 	 *
 	 * @param string|string[] $themes The theme names to test.
 	 * @return bool Any of the themes are active.
 	 */
 	public static function is_theme_active( $themes = '' ) {
 
-		$active_theme = [
+		$active_theme = memo() ?? memo( array_unique( [
 			strtolower( \get_option( 'stylesheet' ) ), // Parent.
 			strtolower( \get_option( 'template' ) ),   // Child.
-		];
+		] ) );
 
 		foreach ( (array) $themes as $theme )
 			if ( \in_array( strtolower( $theme ), $active_theme, true ) )
@@ -277,10 +278,13 @@ class Compatibility {
 	 * Detects the following builders:
 	 * - Divi Builder by Elegant Themes
 	 * - Visual Composer by WPBakery
+	 * - Bricks Builder by Bricks
+	 * - Oxygen Builder by Soflyy
 	 *
 	 * @since 4.1.0
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `detect_non_html_page_builder`.
+	 * @since 5.1.0 Added 'CT_VERSION' (Oxygen) and 'BRICKS_VERSION' (Bricks) constants.
 	 *
 	 * @return bool
 	 */
@@ -294,7 +298,10 @@ class Compatibility {
 			 */
 			(bool) \apply_filters(
 				'the_seo_framework_shortcode_based_page_builder_active',
-				\defined( 'ET_BUILDER_VERSION' ) || \defined( 'WPB_VC_VERSION' )
+				\defined( 'ET_BUILDER_VERSION' )
+				|| \defined( 'WPB_VC_VERSION' )
+				|| \defined( 'BRICKS_VERSION' )
+				|| \defined( 'CT_VERSION' ),
 			)
 		);
 	}

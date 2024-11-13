@@ -393,6 +393,14 @@ Punt:
 		* This works for the Settings, Post Edit, Term Edit, and List Edit pages.
 		* This is a targeted fail-safe and won't work everywhere all the time.
 	* If the primary term is set to a term that doesn't exist, the Primary Term selection will now show a warning message.
+	* **Compatibility:**
+		* We added basic compatibility for the Bricks theme:
+			* Templates are no longer supported for SEO or included in the sitemap unless the "Public templates" option is enabled at "Bricks > Settings > Templates > My templates."
+			* Template Bundles and Template Tags are no longer supported for SEO; they weren't meant to be public anyway.
+			* When we detect a page is a Bricks template, the SEO Bar clarifies why no description can be generated.
+				* Bricks's data appears readable without excessive parsing, so we may revisit this and enable description generation in the future. See [issue 677](https://github.com/sybrew/the-seo-framework/issues/677).
+		* We added detection for Oxygen builder pages. The SEO Bar now clarifies why no description can be generated.
+			* Note that TSF detects Oxygen's newer "JSON" type data only. If your data hasn't been converted yet, then TSF will display a generic message about the description not being generated.
 * **Changed:**
 	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
 		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
@@ -497,7 +505,9 @@ Punt:
 		* `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 		* `the_seo_framework_robots` is now available. It's used to create a map of robots directives to generate.
 			* In effect, `the_seo_framework_robots_txt_pre` and `the_seo_framework_robots_txt_pro` are deprecated.
-		* `the_seo_framework_get_excerpt` is now available. It's used to get an excerpt, used before parsing the entire post content, for description generation.
+		* `the_seo_framework_get_excerpt` is now available. It's used to get an excerpt, right before parsing the entire post content, used by the description generator.
+			* There's also `the_seo_framework_description_excerpt`, but that is solely for the description generation.
+				* Actually, TODO: Revert this? Description\Excerpt is a helper class. This new filter adds nothing new, albeit it's at a lower level, which perhaps is better for future-proofing...
 	* **Deprecated:**
 		* `the_seo_framework_robots_disallow_queries`, use `the_seo_framework_robots` instead.
 		* `the_seo_framework_robots_txt_pre`, use `the_seo_framework_robots` instead.

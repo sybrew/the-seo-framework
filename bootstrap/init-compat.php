@@ -31,6 +31,9 @@ namespace The_SEO_Framework;
 if ( Helper\Compatibility::is_theme_active( 'genesis' ) )
 	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-genesis.php';
 
+if ( Helper\Compatibility::is_theme_active( 'bricks' ) )
+	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-bricks.php';
+
 foreach (
 	array_intersect_key(
 		[

@@ -87,10 +87,13 @@ class Post {
 	 * Detects the following builders:
 	 * - Divi Builder by Elegant Themes
 	 * - Visual Composer by WPBakery
+	 * - Oxygen Builder by Soflyy
+	 * - Bricks Builder by Bricks (or Codeer Limited)
 	 *
 	 * @since 4.1.0
 	 * @since 5.0.0 1. First parameter may now be empty to automatically fetch the post ID.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.1.0 Added Bricks and Oxygen Builder.
 	 *
 	 * @param int $post_id The post ID to check.
 	 * @return bool
@@ -117,8 +120,12 @@ class Post {
 
 		// Divi Builder by Elegant Themes
 		// || Visual Composer by WPBakery
+		// || Oxygen Builder by Soflyy
+		// || Bricks Builder by Bricks
 		return ( 'on' === ( $meta['_et_pb_use_builder'][0] ?? '' ) && \defined( 'ET_BUILDER_VERSION' ) )
-			|| ( 'true' === ( $meta['_wpb_vc_js_status'][0] ?? '' ) && \defined( 'WPB_VC_VERSION' ) );
+			|| ( 'true' === ( $meta['_wpb_vc_js_status'][0] ?? '' ) && \defined( 'WPB_VC_VERSION' ) )
+			|| ( 'bricks' === ( $meta['_bricks_editor_mode'][0] ?? '' ) && \defined( 'BRICKS_VERSION' ) )
+			|| ( \strlen( $meta['_ct_builder_json'][0] ?? '' ) && \defined( 'CT_VERSION' ) );
 	}
 
 	/**

@@ -154,7 +154,7 @@ class Taxonomy {
 				 * Do not consider using this filter. Properly register your taxonomy, noob.
 				 *
 				 * @since 4.2.0
-				 * @param string[] $post_types The public post types.
+				 * @param string[] $taxonomies The public taxonomies.
 				 */
 				(array) \apply_filters(
 					'the_seo_framework_public_taxonomies',
@@ -187,7 +187,7 @@ class Taxonomy {
 	public static function get_all_forced_supported() {
 		/**
 		 * @since 4.1.0
-		 * @param string[] $forced Forced supported post types
+		 * @param string[] $forced Forced supported taxonomies.
 		 */
 		return (array) \apply_filters(
 			'the_seo_framework_forced_supported_taxonomies',
