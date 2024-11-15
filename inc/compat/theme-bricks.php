@@ -54,5 +54,5 @@ function _bricks_fix_public_taxonomies( $taxonomies ) {
 	if ( \defined( 'BRICKS_DB_TEMPLATE_TAX_BUNDLE' ) )
 		$unset[] = BRICKS_DB_TEMPLATE_TAX_BUNDLE;
 
-	return array_diff( $taxonomies, $taxonomies );
+	return array_diff( $taxonomies, $unset );
 }
