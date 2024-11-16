@@ -391,6 +391,7 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 	* Reduced the admin stylesheet payload by implementing modern logical declarations.
 	* Reduced the sitemap stylesheet size by also implementing modern logical declarations for that.
 	* The SEO meta box tab labels are now inline when there's enough space.
+	* Fading in and out animations of TSF's UI are now much easier on your device, because we handle them via our bespoke fader now.
 	* The quick-edit default indexing state now updates to the post password or private status accordingly.
 	* The Block Editor on WP 6.7 proposes a new layout for their select fields, which we've opted in for with the Primary Term selection.
 	* If a settings listeners fails for any reason, other listeners may still continue. Leaving you with a semi-broken interface, instead of completely broken. For example, if the code crosses and unexpected value for the Homepage title input, only its character counters will be borked, but you can still upload an image for social sharing.
@@ -481,7 +482,7 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 		* JS Event `tsf-updated-block-editor` is now available.
 		* JS Event `tsf-updated-block-editor-${type}` is now available.
 		* JS Event `tsf-updated-primary-term` is now available.
-		* JS file `utils.js` is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
+		* JS file `utils.js` (`window.tsfUtils`) is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
 		* JS file `ui.js` (`window.tsfUI`) is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
 		* JS file `postslugs.js` (`window.tsfPostSlugs`) is now available and loaded with `post.js` and `le.js`; it handles post parent selections to update the canonical URLs accordingly. It has a caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requires it (`%postname%`).
 		* JS file `termslugs.js` (`window.tsfTermSlugs`) is now available and loaded with `post.js`, `term.js`, and `le.js`; it handles term selections to update the canonical URLs accordingly. It has an advanced caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requests it it (`%category%`, `%product_cat%`, etc.).
@@ -540,6 +541,7 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 	* Added strict Dashicons dependency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
 * **Other:**
 	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
+	* Template id `tsf-primary-term-selector-help` is gone, along with its element `.tsf-primary-term-selector-help-wrap`. We now use a selection field, requiring no tooltip.
 	* Removed support for obsolete `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
 	* CSS file `tsf-media` is now available and will be loaded alongside its namesake script.
 	* We optimized opcodes for PHP 8.4:

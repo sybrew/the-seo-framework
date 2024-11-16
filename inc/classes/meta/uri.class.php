@@ -846,7 +846,7 @@ class URI {
 				if ( $tax && $slug )
 					$query = [ $tax => $slug ];
 			} elseif ( \is_date() && isset( $GLOBALS['wp_query']->query ) ) {
-				// FIXME: Trac ticket: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
+				// FIXME: Make Trac ticket once Matt's gone: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
 				$_query = $GLOBALS['wp_query']->query;
 				$_date  = [
 					'y' => $_query['year'] ?? '',

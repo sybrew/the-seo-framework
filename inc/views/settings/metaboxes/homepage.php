@@ -123,7 +123,7 @@ switch ( $instance ) :
 		<p class=tsf-title-wrap>
 			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off />
 			<?php
-			$meta_title_post = $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
+			$post_meta_title = $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
 
 			Input::output_js_title_data(
 				Input::get_field_id( 'homepage_title' ),
@@ -131,9 +131,9 @@ switch ( $instance ) :
 					'state' => [
 						'refTitleLocked'      => false, // This field is the mother of all references.
 						'defaultTitle'        => \esc_html(
-							coalesce_strlen( $meta_title_post ) ?? Meta\Title::get_bare_generated_title( $generator_args )
+							coalesce_strlen( $post_meta_title ) ?? Meta\Title::get_bare_generated_title( $generator_args )
 						),
-						'_defaultTitleLocked' => (bool) \strlen( $meta_title_post ), // Underscored index because it's non-standard API.
+						'_defaultTitleLocked' => (bool) \strlen( $post_meta_title ), // Underscored index because it's non-standard API.
 						'addAdditions'        => Meta\Title\Conditions::use_branding( $generator_args ),
 						'useSocialTagline'    => Meta\Title\Conditions::use_branding( $generator_args, true ),
 						'additionValue'       => \esc_html( Meta\Title::get_addition_for_front_page() ),
@@ -695,7 +695,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'This will force visitors to go to another URL.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/crawling/301-redirects',
+						'https://developers.google.com/search/docs/crawling-indexing/301-redirects',
 					);
 				?>
 			</label>

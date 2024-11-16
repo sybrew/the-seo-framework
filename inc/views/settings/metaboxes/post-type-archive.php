@@ -554,7 +554,7 @@ switch ( $instance ) :
 					echo ' ';
 					HTML::make_info(
 						\__( 'This will force visitors to go to another URL.', 'autodescription' ),
-						'https://developers.google.com/search/docs/advanced/crawling/301-redirects',
+						'https://developers.google.com/search/docs/crawling-indexing/301-redirects',
 					);
 				?>
 			</label>
