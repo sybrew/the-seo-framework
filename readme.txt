@@ -244,7 +244,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 TODO In Polylang 3.5.x (and 3.6), unsetting " Hide URL language information for default language" will cause the robots.txt URLs to add extraneous language prefixes. The sitemap endpoints still work on their correct URL, however.
 	-> It's also incorrect if the homepage URL isn't of the DEFAULT language. Still, that causes the site to malfunction altogether.
-		-> What homepage URL?
+		-> What homepage URL? Probably the one set in the WP settings.
 	-> https://wordpress.org/support/topic/issue-with-xml-sitemap-generation-in-non-english-languages-polylang/
 	-> UNRELATED but similar: https://wordpress.org/support/topic/sitemap-issue-with-polylang/
 
@@ -337,11 +337,15 @@ TODO we updated Babel, we need to reparse all scripts to prevent discrepancies.
 TODO when the meta box is loaded without an ID, should we disable output altogether?
 	-> This might cause issues with some dynamically loaded admin pages.
 
+TODO list all "@since 5.1.0\s" changes?
+
 Punt:
 - remove jQuery dependencies in UI?
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
 	-> It does update on Save.
 	-> Also affects Classic Editor, but perhaps we never implemented something like this.
+
+TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 
 ### 5.1.0 - Hope
 
@@ -408,6 +412,7 @@ Punt:
 		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes. This mimics the behavior we have for the Block Editor, simultaneously resolving some z-fighting issues we had with some languages for the tooltip placement.
 	* The "Robots Meta Settings" are now called "Robots Settings" because we added a tab for AI blocking via Robots.txt (when available).
 	* The "Robots" meta settings for the homepage is now called "Visibility" settings, because it now includes Canonical URL and Redirect URL input fields.
+	* By default, the "Social Meta Settings" meta box is now placed above the "Homepage Settings," instead of below the "Post Type Archive Settings" (or below the "Homepage Settings" if that's not available).
 * **Fixed:**
 	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
 	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
@@ -441,7 +446,11 @@ Punt:
 		* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
 		* Method `tsf()->format()->arrays()->array_diff_assoc_recursive()` is now available. It's the first of its kind that supports more than two array inputs.
 		* Method `tsf()->description()->excerpt()->get_excerpt()` is now available. It's an alias of `get_post_excerpt()`, which is marked for deprecation due to being mislabeled.
+		* Method `tsf()->data()->post()->get_post_parents()` is now available.
+		* Method `tsf()->data()->term()->get_term_parents()` is now available.
 		* Method `tsf()->data()->user()->get_userdata()` is now available. It's an alias of WordPress's `get_userdata()`, but with proper memoization for improved performance.
+		* Method `tsf()->uri()->utils()->get_url_permastruct()` is now available.
+		* Method `tsf()->robots()->utils()->get_blocked_user_agents()` is now available.
 	* **Changed:**
 		* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
 		* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`) now returns the default meta if the PTA isn't supported.
@@ -454,11 +463,13 @@ Punt:
 			* It may come back one day, but we have no plans for that just yet.
 	* **Fixed:**
 		* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
+		* Pool `tsf()->admin()` is now prepared correctly for deprecated calls
+			* And so is its subpool `tsf()->admin()->layout()`.
 		* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
 			* Its first parameter has been removed and now always uses the current locale.
 			* Use `tsf()->open_graph()->get_locale()` instead.
 		* `tsf()->schema()->entities` now report the correct class names.
-		* TODO  Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL.
+		* Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL on PHP 8.1 and later.
 		* The `schema.org/WebPage` type reference is resetted now when regenerated.
 		* When switching blogs on multisite, all data memoization for TSF's options and site cache now actually flush via trait `The_SEO_Framework\Traits\Property_Refresher`.
 			* Due to a name change of properties during development, this was accidentally disabled.
@@ -471,12 +482,20 @@ Punt:
 		* JS Event `tsf-updated-block-editor-${type}` is now available.
 		* JS Event `tsf-updated-primary-term` is now available.
 		* JS file `utils.js` is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
-		* JS file `ui.js` is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
-		* JS file `termSlugs.js` is now available and loaded with `post.js`, `term.js`, and `le.js`; it handles term selections to update the canonical URLs accordingly. It has an advanced caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requests it it (`%category%`, `%product_cat%`, etc.).
-		* JS file `authorSlugs.js` is now available and loaded with `post.js` and `le.js`; it handles author selections to update the canonical URLs accordingly. It has a caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requires it (`%author%`).
+		* JS file `ui.js` (`window.tsfUI`) is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
+		* JS file `postslugs.js` (`window.tsfPostSlugs`) is now available and loaded with `post.js` and `le.js`; it handles post parent selections to update the canonical URLs accordingly. It has a caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requires it (`%postname%`).
+		* JS file `termslugs.js` (`window.tsfTermSlugs`) is now available and loaded with `post.js`, `term.js`, and `le.js`; it handles term selections to update the canonical URLs accordingly. It has an advanced caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requests it it (`%category%`, `%product_cat%`, etc.).
+		* JS file `authorslugs.js` (`window.tsfAuthorlugs`) is now available and loaded with `post.js` and `le.js`; it handles author selections to update the canonical URLs accordingly. It has a caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requires it (`%author%`).
 		* jQuery Event `tsf-updated-gutenberg-${type}` now also respond to `'slug'` type changes.
 			* But this event is deprecated. Use the JS Event `tsf-updated-block-editor-${type}` instead.
 		* `tsfTerm.taxonomy` is now available.
+		* `tsfPost.l10n.params` now has properties `id` and `isBlockEditor`. They should be used instead of the namesake properties in `tsfPostL10n.states`, but we still need to find a good way to deprecate these.
+		* `tsfPost.l10n.nonces.edit_post` is now available. It's indexed by post ID, unlike `tsf.l10n.nonces.edit_posts`, which is a general capability check.
+		* `tsfTerm.l10n.params` now has properties `id` and `taxonomy`.
+		* `tsfTerm.l10n.nonces.edit_term` is now available. It's indexed by term ID.
+		* `tsfMedia.l10n` now has property `warning`, which is a map of image types that aren't compatible with some or most social platforms, and some explanatory translations.
+		* `tsfPT.l10n.i18n` now has the property `selectPrimary`, while all others have gone.
+			* This is now equal to `tsfPTGB.l10n.i18n`.
 	* **Improved:**
 		* JS Events `tsf-updated-block-editor` and `tsf-updated-block-editor-${type}` now respond to `'slug'` type changes.
 		* Removed redundant lookups and processing in quick-edit by testing if we're editing a post or taxonomy.
@@ -491,10 +510,10 @@ Punt:
 		* `tsfAys.getChangedState()` is now deprecated. Use `tsfAys.areSettingsChanged()` instead.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
-		* Added index `robotstxt_block_ai`. Default 0.
-		* Added index `robotstxt_block_seo`. Default 0.
-		* Added index `homepage_redirect`. Default empty.
-		* Added index `homepage_canonical`. Default empty.
+		* Added index `robotstxt_block_ai`. Default `0`.
+		* Added index `robotstxt_block_seo`. Default `0`.
+		* Added index `homepage_redirect`. Default empty string.
+		* Added index `homepage_canonical`. Default empty string.
 	* We're now stipulant about the autoloading status of every option by setting `update_option()`'s third parameter. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
 * **Action notes:**
 	* **Changed:**
@@ -502,12 +521,12 @@ Punt:
 			* I didn't deprecate this because I don't think anyone uses it.
 * **Filter notes:**
 	* **Added:**
+		* `the_seo_framework_robots_blocked_user_agents` is now available. It's used to assign user agents to block via the robots.txt file.
 		* `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
 		* `the_seo_framework_robots` is now available. It's used to create a map of robots directives to generate.
 			* In effect, `the_seo_framework_robots_txt_pre` and `the_seo_framework_robots_txt_pro` are deprecated.
 		* `the_seo_framework_get_excerpt` is now available. It's used to get an excerpt, right before parsing the entire post content, used by the description generator.
-			* There's also `the_seo_framework_description_excerpt`, but that is solely for the description generation.
-				* Actually, TODO: Revert this? Description\Excerpt is a helper class. This new filter adds nothing new, albeit it's at a lower level, which perhaps is better for future-proofing...
+			* There's also still `the_seo_framework_description_excerpt`, but that is a layer lower and meant for direct description output. Effectively, for now, they'll act the same. When in doubt, use the new one, so you'll affect all excerpts.
 	* **Deprecated:**
 		* `the_seo_framework_robots_disallow_queries`, use `the_seo_framework_robots` instead.
 		* `the_seo_framework_robots_txt_pre`, use `the_seo_framework_robots` instead.
@@ -518,14 +537,15 @@ Punt:
 * **Improved:**
 	* Improved the Markdown parser's performance by using fewer memory operations.
 	* Removed the jQuery dependency for scripts `tsf`, `tsf-post`, and `tsf-media` by refactoring animations to vanilla JS and CSS.
-	* Added the Dashicons depdency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
+	* Added strict Dashicons dependency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
 * **Other:**
 	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
 	* Removed support for obsolete `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
 	* CSS file `tsf-media` is now available and will be loaded alongside its namesake script.
 	* We optimized opcodes for PHP 8.4:
 		* In short, PHP 8.4's OPcache module now also precaches `sprintf`. But, when working inside a namespace, we can only utilize that by namespace-escaping calls to `sprintf`.
-		* We maintain static code checks for this via [WPCS-TSF](https://github.com/theseoframework/wpcs-tsf).
+		* We maintain static code checks for this via [WPCS-TSF](https://github.com/theseoframework/wpcs-tsf).'
+	* The PHPDoc for all arrays has been updated, which contributed to most of the line changes in this release.
 
 ### 5.0.6
 

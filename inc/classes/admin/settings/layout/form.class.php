@@ -198,7 +198,7 @@ class Form {
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 Added 'button_class' as a supported index for `$args`.
-	 * @since 5.1.0 Added warning icon.
+	 * @since 5.1.0 Added warning icon placeholder.
 	 *
 	 * @param array $args {
 	 *     The image uploader arguments.

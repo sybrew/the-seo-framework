@@ -49,7 +49,6 @@ class Excerpt {
 	 * Returns a description excerpt.
 	 *
 	 * @since 5.1.0
-	 * @alias
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -76,6 +75,7 @@ class Excerpt {
 	 * Returns a description excerpt.
 	 *
 	 * @since 5.0.0
+	 * @alias
 	 * @todo deprecate 5.2: use get_excerpt() instead.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.

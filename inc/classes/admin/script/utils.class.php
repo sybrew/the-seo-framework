@@ -72,7 +72,7 @@ class Utils {
 	 * Checks ajax referred set by set_js_nonces based on capability.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.0 Added the `$args` parameter.
+	 * @since 5.1.0 Added the `...$args` parameter.
 	 * @access private
 	 *
 	 * @param string $capability The capability to check for the nonce.
@@ -94,7 +94,7 @@ class Utils {
 	 * @since 3.1.0 Introduced in 2.9.0, but the name changed.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_check_tsf_ajax_referer`.
-	 * @since 5.1.0 Added the `$args` parameter.
+	 * @since 5.1.0 Added the `...$args` parameter.
 	 * @access private
 	 *
 	 * @param string $capability The capability that was required for the nonce check to be created.

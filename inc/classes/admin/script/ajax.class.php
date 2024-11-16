@@ -91,6 +91,7 @@ final class AJAX {
 	 * @since 4.2.0 1. Now uses wp.ajax instead of $.ajax.
 	 *              2. No longer tests if settings-saving was successful.
 	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
+	 * @since 5.1.0 No longer sends the updated value. We can assume it's updated without repercussions.
 	 * @access private
 	 */
 	public static function update_counter_type() {
@@ -117,7 +118,6 @@ final class AJAX {
 		// Update the option and get results of action.
 		Data\Plugin\User::update_single_meta_item( Query::get_current_user_id(), 'counter_type', $value );
 
-		// Encode and echo results. Requires JSON decode within JS.
 		\wp_send_json_success();
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}

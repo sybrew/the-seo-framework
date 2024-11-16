@@ -807,18 +807,21 @@ class Title {
 
 			switch ( get_query_type_from_args( $args ) ) {
 				case 'single':
-					if ( ! Query::is_static_front_page( $args['id'] ) )
-						break;
-					// Fall through, we're asserting the home-as-page now.
+					if ( Query::is_static_front_page( $args['id'] ) ) {
+						$addition    = static::get_addition_for_front_page();
+						$seplocation = static::get_addition_location_for_front_page();
+					} else {
+						$addition    = static::get_addition();
+						$seplocation = static::get_addition_location();
+					}
+					break;
 				case 'homeblog':
 					$addition    = static::get_addition_for_front_page();
 					$seplocation = static::get_addition_location_for_front_page();
 					break;
-			}
-			// This clause and the above switch work in conjunction to set $addition efficiently.
-			if ( ! isset( $addition, $seplocation ) ) {
-				$addition    = static::get_addition();
-				$seplocation = static::get_addition_location();
+				default:
+					$addition    = static::get_addition();
+					$seplocation = static::get_addition_location();
 			}
 		} else {
 			if ( Query::is_real_front_page() ) {

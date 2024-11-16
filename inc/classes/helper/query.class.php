@@ -1159,6 +1159,9 @@ class Query {
 	 * WordPress 6.0 introduced a last minute function called `build_comment_query_vars_from_block()`.
 	 * This function exists to workaround a bug in comment blocks as sub-query by adjusting the main query.
 	 *
+	 * WordPress 6.7 fixed it, but we keep it in place because other themes and plugins might still mess up the query.
+	 * This ensures we're always "right" about the canonical URL.
+	 *
 	 * @since 5.0.6
 	 * @link <https://core.trac.wordpress.org/ticket/60806>
 	 *

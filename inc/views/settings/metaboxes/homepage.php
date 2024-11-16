@@ -144,7 +144,7 @@ switch ( $instance ) :
 			?>
 		</p>
 		<?php
-		HTML::description( \__( "Note: The input value of this field may be used to describe the website's name elsewhere. Therefore, it is best to only write the brand name. Use additions to decorate the title instead.", 'autodescription' ) );
+		HTML::description( \__( 'Note: It is best to only write the site or brand name here. Use additions to decorate the title instead.', 'autodescription' ) );
 
 		if ( $home_id && \strlen( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) )
 			HTML::description( \__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ) );

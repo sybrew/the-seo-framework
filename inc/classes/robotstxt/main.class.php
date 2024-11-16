@@ -143,11 +143,11 @@ class Main {
 					'allow'      => [ "$site_path/wp-admin/admin-ajax.php" ],
 				],
 				'block_ai'          => Data\Plugin::get_option( 'robotstxt_block_ai' ) ? [
-					'user-agent' => array_keys( RobotsTXT\Utils::get_user_agents( 'ai' ) ),
+					'user-agent' => array_keys( RobotsTXT\Utils::get_blocked_user_agents( 'ai' ) ),
 					'disallow'   => [ '/' ],
 				] : [],
 				'block_seo'         => Data\Plugin::get_option( 'robotstxt_block_seo' ) ? [
-					'user-agent' => array_keys( RobotsTXT\Utils::get_user_agents( 'seo' ) ),
+					'user-agent' => array_keys( RobotsTXT\Utils::get_blocked_user_agents( 'seo' ) ),
 					'disallow'   => [ '/' ],
 				] : [],
 				'deprecated_after'  => [

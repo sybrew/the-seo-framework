@@ -502,7 +502,7 @@ switch ( $instance ) :
 			}
 		}
 
-		if ( RobotsTXT\Utils::get_user_agents( 'ai' ) ) {
+		if ( RobotsTXT\Utils::get_blocked_user_agents( 'ai' ) ) {
 			$info = HTML::make_info(
 				\__( 'Discover which AI crawlers are being blocked.', 'autodescription' ),
 				'https://kb.theseoframework.com/?p=256#default-blocklist-ai',
@@ -520,7 +520,7 @@ switch ( $instance ) :
 			);
 		}
 
-		if ( RobotsTXT\Utils::get_user_agents( 'seo' ) ) {
+		if ( RobotsTXT\Utils::get_blocked_user_agents( 'seo' ) ) {
 			$info = HTML::make_info(
 				\__( 'Discover which SEO crawlers are being blocked.', 'autodescription' ),
 				'https://kb.theseoframework.com/?p=256#default-blocklist-seo',

@@ -64,7 +64,7 @@ function _polylang_register_sitemap_languages( $list ) {
 	// Do most work outside of a loop. We have two loops because of this.
 	// We fall back to -1 because null/false match with '0'
 	switch ( \get_option( 'polylang' )['force_lang'] ?? -1 ) {
-		case 0:
+		case 0: // The language is set from content.
 			foreach (
 				array_diff(
 					\pll_languages_list( [ 'hide_empty' => 1 ] ),
@@ -80,7 +80,7 @@ function _polylang_register_sitemap_languages( $list ) {
 				] + $list['base'];
 			}
 			break;
-		case 1:
+		case 1: // The language is set from the directory name in pretty permalinks.
 			foreach (
 				array_diff(
 					\pll_languages_list( [ 'hide_empty' => 1 ] ),

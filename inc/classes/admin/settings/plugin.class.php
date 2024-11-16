@@ -126,6 +126,16 @@ final class Plugin {
 				'main',
 			);
 
+		// Social Meta Box
+		if ( $social )
+			\add_meta_box(
+				'autodescription-social-settings',
+				\esc_html__( 'Social Meta Settings', 'autodescription' ),
+				[ static::class, '_social_metabox' ],
+				$settings_page_hook,
+				'main',
+			);
+
 		// Homepage Meta Box
 		if ( $home )
 			\add_meta_box(
@@ -141,16 +151,6 @@ final class Plugin {
 				'autodescription-post-type-archive-settings',
 				\esc_html__( 'Post Type Archive Settings', 'autodescription' ),
 				[ static::class, '_post_type_archive_metabox' ],
-				$settings_page_hook,
-				'main',
-			);
-
-		// Social Meta Box
-		if ( $social )
-			\add_meta_box(
-				'autodescription-social-settings',
-				\esc_html__( 'Social Meta Settings', 'autodescription' ),
-				[ static::class, '_social_metabox' ],
 				$settings_page_hook,
 				'main',
 			);

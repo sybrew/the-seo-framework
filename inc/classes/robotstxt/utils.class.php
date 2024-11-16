@@ -59,7 +59,7 @@ class Utils {
 	 *     }
 	 * }
 	 */
-	public static function get_user_agents( $type ) {
+	public static function get_blocked_user_agents( $type ) {
 
 		switch ( $type ) {
 			case 'ai':
@@ -150,7 +150,7 @@ class Utils {
 		 * @param arrary $type  The agent type requested by the method caller.
 		 */
 		return (array) \apply_filters(
-			'the_seo_framework_robots_user_agents',
+			'the_seo_framework_robots_blocked_user_agents',
 			$agents ?? [],
 			$type,
 		);
