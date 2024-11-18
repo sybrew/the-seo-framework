@@ -242,12 +242,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO In Polylang 3.5 or 3.6, they reversed the order of columns (another bug) when using quick-edit. _defunct_badly_coded_polylang_script() still addresses the disappearance of TSF's data, but they bork it in PHP this time.
-
 TODO disable Avada's SEO settings.
-
-TODO when double-clicking the submit button, we process the settings submission twice.
-	-> The second time it'll state nothing has changed, and this is what the user then sees.
 
 TODO new translations are available.
 TODO add that TSF is an independent project that doesn't need to hit profit margins; ergo, it's made for the benefit of its users, not the creator.
@@ -423,6 +418,7 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 	* When setting '0' as a password via quick-edit, WordPress actually doesn't consider it a valid password. So, TSF now won't reflect this via its quick-edit interface either.
 		* We already considered this behavior for the Classic and Block editor.
 	* An "Are you sure?" notice is now emitted when leaving the page without saving after the Primary Term is changed on Classic Editor.
+	* Resolved an issue where a double-click would yield an unchanged save state on the SEO Settings page by disabling the submit button after the initial click for 3 seconds.
 * **Notes:**
 	* WordPress 6.0 is now required, from 5.9. This allowed us to drop legacy Gutenberg support.
 
@@ -541,6 +537,7 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 		* In short, PHP 8.4's OPcache module now also precaches `sprintf`. But, when working inside a namespace, we can only utilize that by namespace-escaping calls to `sprintf`.
 		* We maintain static code checks for this via [WPCS-TSF](https://github.com/theseoframework/wpcs-tsf).'
 	* The PHPDoc for all arrays has been updated, which contributed to most of the line changes in this release.
+	* The SEO Framework's main settings form element now has the ID `tsf-settings`.
 
 ### 5.0.6
 

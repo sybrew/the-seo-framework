@@ -75,7 +75,7 @@ $hook_name = Admin\Menu::get_page_hook_name();
 
 ?>
 <div class="wrap tsf-metaboxes">
-	<form method=post action=options.php autocomplete=off data-form-type=other>
+	<form id=tsf-settings method=post action=options.php autocomplete=off data-form-type=other>
 		<?php \wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 		<?php \wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 		<?php \settings_fields( \THE_SEO_FRAMEWORK_SITE_OPTIONS ); ?>
