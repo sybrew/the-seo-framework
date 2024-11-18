@@ -87,8 +87,8 @@ final class ListTable extends Admin\Lists\Table {
 
 		/**
 		 * @since 2.8.0
-		 * @param array $order_keys The keys where the SEO column may be prepended to.
-		 *                          The first key found will be used.
+		 * @param string[] $order_keys The keys where the SEO column may be prepended to.
+		 *                             The first key found will be used.
 		 */
 		$order_keys = (array) \apply_filters( 'the_seo_framework_seo_column_keys_order', $order_keys );
 

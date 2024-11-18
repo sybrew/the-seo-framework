@@ -71,15 +71,15 @@ switch ( $instance ) :
 		$robots = [
 			'noindex'   => [
 				'value' => 'noindex',
-				'desc'  => \__( 'These options most likely prevent indexing of the selected archives and pages. If you enable this, the selected archives or pages will urge to be removed from search engine results pages.', 'autodescription' ),
+				'desc'  => \__( 'These options can prevent indexing of the selected archives and pages. If you enable this, search engines will be urged to remove the selected archives or pages from their result pages.', 'autodescription' ),
 			],
 			'nofollow'  => [
 				'value' => 'nofollow',
-				'desc'  => \__( 'These options most likely prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your internal links.', 'autodescription' ),
+				'desc'  => \__( 'These options can prevent links from being followed on the selected archives and pages. If you enable this, the selected archives or pages in-page links will gain no SEO value, including your internal links.', 'autodescription' ),
 			],
 			'noarchive' => [
 				'value' => 'noarchive',
-				'desc'  => \__( 'These options most likely prevent caching of the selected archives and pages. If you enable this, bots are urged not create a cached copy of the selected archives or pages.', 'autodescription' ),
+				'desc'  => \__( 'These options can prevent caching of the selected archives and pages. If you enable this, bots are urged not create a cached copy of the selected archives or pages.', 'autodescription' ),
 			],
 		];
 
@@ -457,10 +457,6 @@ switch ( $instance ) :
 
 		HTML::description( \__( 'When good web crawlers want to visit your site, they will first look for robots.txt to learn what they may access.', 'autodescription' ) );
 
-		// More info for when we expand these settings:
-		// HTML::description( \__( 'Anyone can see the output of robots.txt. So, do not use robots.txt to hide your information or sensitive parts of your website.', 'autodescription' ) );
-		// HTML::description( \__( 'Without robots.txt, the crawler may assume an error and may not crawl your website.', 'autodescription' ) );
-
 		if ( $robots_url ) {
 			HTML::description_noesc( \sprintf(
 				'<a href="%s" target=_blank rel=noopener>%s</a>',
@@ -505,7 +501,7 @@ switch ( $instance ) :
 		if ( RobotsTXT\Utils::get_blocked_user_agents( 'ai' ) ) {
 			$info = HTML::make_info(
 				\__( 'Discover which AI crawlers are being blocked.', 'autodescription' ),
-				'https://kb.theseoframework.com/?p=256#default-blocklist-ai',
+				'https://kb.theseoframework.com/?p=263#blocking-ai-crawlers',
 				false,
 			);
 
@@ -523,7 +519,7 @@ switch ( $instance ) :
 		if ( RobotsTXT\Utils::get_blocked_user_agents( 'seo' ) ) {
 			$info = HTML::make_info(
 				\__( 'Discover which SEO crawlers are being blocked.', 'autodescription' ),
-				'https://kb.theseoframework.com/?p=256#default-blocklist-seo',
+				'https://kb.theseoframework.com/?p=263#blocking-seo-crawlers',
 				false,
 			);
 

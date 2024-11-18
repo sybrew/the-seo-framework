@@ -13,6 +13,7 @@ use \The_SEO_Framework\{
 	Meta,
 };
 use \The_SEO_Framework\Helper\{
+	Compatibility,
 	Guidelines,
 	Format\Arrays,
 	Query,
@@ -758,6 +759,8 @@ class Loader {
 								'replace'      => $wp_rewrite->rewritereplace,
 								'queryReplace' => $wp_rewrite->queryreplace,
 							],
+							// TEMP: We still have to figure out how to get the right parameters. home_url() is probably key in this.
+							'allowCanonicalURLNotationTool' => ! Compatibility::get_active_conflicting_plugin_types()['multilingual'],
 						],
 					],
 				],

@@ -194,7 +194,7 @@ abstract class Table {
 		if ( $taxonomy )
 			\add_filter( "manage_{$taxonomy}_custom_column", [ $this, 'output_column_contents_for_term' ], 1, 3 );
 
-		\add_filter( "manage_{$screen->id}_columns", [ $this, 'add_column' ], 10, 1 );
+		\add_filter( "manage_{$screen->id}_columns", [ $this, 'add_column' ] );
 		/**
 		 * Always load pages and posts.
 		 * Many CPT plugins rely on these.
@@ -207,6 +207,7 @@ abstract class Table {
 	 * Initializes columns for AJAX.
 	 *
 	 * @since 4.0.0
+	 * @since 5.1.0 Changed the `manage_edit-{$taxonomy}_columns` filter priority from 1 to 10.
 	 * @see callers for CSRF protection.
 	 *    `_prepare_columns_wp_ajax_add_tag()`
 	 *    `_prepare_columns_wp_ajax_inline_save()`
@@ -242,7 +243,7 @@ abstract class Table {
 
 		if ( $screen_id ) {
 			// Everything but inline-save-tax action.
-			\add_filter( "manage_{$screen_id}_columns", [ $this, 'add_column' ], 10, 1 );
+			\add_filter( "manage_{$screen_id}_columns", [ $this, 'add_column' ] );
 
 			/**
 			 * Always load pages and posts.
@@ -257,7 +258,7 @@ abstract class Table {
 			 * @see WP Core wp_ajax_inline_save_tax():
 			 *    `_get_list_table( 'WP_Terms_List_Table', array( 'screen' => "edit-$taxonomy" ) );`
 			 */
-			\add_filter( "manage_edit-{$taxonomy}_columns", [ $this, 'add_column' ], 1, 1 );
+			\add_filter( "manage_edit-{$taxonomy}_columns", [ $this, 'add_column' ] );
 		}
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}

@@ -26,6 +26,7 @@ use \The_SEO_Framework\{
 \add_filter( 'pll_home_url_allow_list', __NAMESPACE__ . '\\_polylang_allow_tsf_home_url' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_polylang_flush_sitemap' );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_defunct_badly_coded_polylang_script', 11 );
+\add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_polylang_seo_column_keys_order' );
 
 /**
  * Registeres more sitemaps for the robots.txt to parse.
@@ -350,4 +351,30 @@ function _polylang_allow_tsf_home_url( $allow_list ) {
 	$allow_list[] = [ 'file' => \THE_SEO_FRAMEWORK_DIR_PATH ];
 
 	return $allow_list;
+}
+
+/**
+ * Polylang and TSF race to prepend their column keys on terms to 'posts'.
+ *
+ * This filter forces TSF to be put before the language selection of Polylang
+ * by prioritizing their column keys to what TSF will prepend itself to.
+ *
+ * @since 5.1.0
+ *
+ * @param string[] $order_keys The column keys order.
+ * @return string[] The column keys order.
+ */
+function _polylang_seo_column_keys_order( $order_keys ) {
+
+	if ( ! \function_exists( 'PLL' ) || ! ( \PLL() instanceof \PLL_Admin ) )
+		return $order_keys;
+
+	$language_keys = array_map(
+		fn( $language ) => "language_{$language->slug}",
+		\PLL()->model->get_languages_list(),
+	);
+
+	array_unshift( $order_keys, ...$language_keys );
+
+	return $order_keys;
 }

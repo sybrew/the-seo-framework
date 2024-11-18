@@ -48,6 +48,7 @@ class Compatibility {
 	 */
 	public static function try_plugin_conflict_notification() {
 
+		// We refresh here because the list is loaded before a plugin is (de)activated.
 		if ( ! static::get_active_conflicting_plugin_types( true )['seo_tools'] ) return;
 
 		Admin\Notice\Persistent::register_notice(
@@ -84,7 +85,16 @@ class Compatibility {
 	 * @since 5.0.0 1. Moved from `The_SEO_Framework\Load`.
 	 *              2. Renamed from `conflicting_plugins`.
 	 *
-	 * @return array List of conflicting plugins.
+	 * @return array[] {
+	 *     The conflicting plugins types.
+	 *
+	 *     @type string[] $seo_tools    The conflicting SEO plugins base files, indexed by plugin name.
+	 *     @type string[] $sitemaps     The conflicting sitemap plugins base files, indexed by plugin name.
+	 *     @type string[] $open_graph   The conflicting Open Graph plugins base files, indexed by plugin name.
+	 *     @type string[] $twitter_card The conflicting Twitter Card plugins base files, indexed by plugin name.
+	 *     @type string[] $schema       The conflicting Schema plugins base files, indexed by plugin name.
+	 *     @type string[] $multilingual The conflicting multilingual plugins base files, indexed by plugin name.
+	 * }
 	 */
 	public static function get_conflicting_plugins() {
 
@@ -123,7 +133,16 @@ class Compatibility {
 		/**
 		 * @since 2.6.0
 		 * @since 5.0.0 Added indexes 'multilingual' and 'schema'.
-		 * @param array $conflicting_plugins The conflicting plugin list.
+		 * @param array[] $conflicting_plugins {
+		 *     The conflicting plugins types. You should not unset any keys.
+		 *
+		 *     @type string[] $seo_tools    The conflicting SEO plugins base files, indexed by plugin name.
+		 *     @type string[] $sitemaps     The conflicting sitemap plugins base files, indexed by plugin name.
+		 *     @type string[] $open_graph   The conflicting Open Graph plugins base files, indexed by plugin name.
+		 *     @type string[] $twitter_card The conflicting Twitter Card plugins base files, indexed by plugin name.
+		 *     @type string[] $schema       The conflicting Schema plugins base files, indexed by plugin name.
+		 *     @type string[] $multilingual The conflicting multilingual plugins base files, indexed by plugin name.
+		 * }
 		 */
 		$conflicting_plugins = (array) \apply_filters(
 			'the_seo_framework_conflicting_plugins',
@@ -160,9 +179,15 @@ class Compatibility {
 	 * @since 5.0.0
 	 *
 	 * @param bool $refresh Whether to refresh the cache.
-	 * @return array[] A list of types that are potentially conflicting : {
-	 *     string type => bool conflicting,
-	 * }
+	 * @return array {
+	 *     The active conflicting plugin types.
+	 *
+	 *     @type bool $seo_tools    Whether an SEO plugin is active.
+	 *     @type bool $sitemaps     Whether a sitemap plugin is active.
+	 *     @type bool $open_graph   Whether an Open Graph plugin is active.
+	 *     @type bool $twitter_card Whether a Twitter Card plugin is active.
+	 *     @type bool $schema       Whether a Schema plugin is active.
+	 *     @type bool $multilingual Whether a multilingual plugin is active.
 	 */
 	public static function get_active_conflicting_plugin_types( $refresh = false ) {
 

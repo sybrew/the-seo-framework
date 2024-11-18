@@ -242,15 +242,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO In Polylang 3.5.x (and 3.6), unsetting " Hide URL language information for default language" will cause the robots.txt URLs to add extraneous language prefixes. The sitemap endpoints still work on their correct URL, however.
-	-> It's also incorrect if the homepage URL isn't of the DEFAULT language. Still, that causes the site to malfunction altogether.
-		-> What homepage URL? Probably the one set in the WP settings.
-	-> https://wordpress.org/support/topic/issue-with-xml-sitemap-generation-in-non-english-languages-polylang/
-	-> UNRELATED but similar: https://wordpress.org/support/topic/sitemap-issue-with-polylang/
-
 TODO In Polylang 3.5 or 3.6, they reversed the order of columns (another bug) when using quick-edit. _defunct_badly_coded_polylang_script() still addresses the disappearance of TSF's data, but they bork it in PHP this time.
-
-TODO add cornerstone as a non-html page builder.
 
 TODO disable Avada's SEO settings.
 
@@ -320,8 +312,6 @@ TODO check if bbPress/BuddyPress needs breadcrumb support?
 
 TODO the title prefix doesn't appear to work in quick-edit for Terms.
 
-TODO write https://kb.theseoframework.com/?p=256#default-blocklist-ai and https://kb.theseoframework.com/?p=256#default-blocklist-seo
-
 TODO do we consider multiple taxonomies for a single post type?
 	* See email from Damien. -> We can test this with ACF Pro.
 
@@ -362,6 +352,7 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 				* TODO it works with all of bbPress but the Forum pages. What's up with that?
 			* This system dynamically fetches page ancestor, author, and term slugs as needed. These are then cached in the browser. This dynamic fetching may appear as a delay in writing the canonical URL when making changes.
 			* Please note that you should never use `%pagename%` in your permalink structure. `%postname%` gets transformed to `%pagename%` automatically when needed.
+		* This feature is disabled when you have a multilingual plugin active on your site. These plugins modify the URL structure in a non-standard way, and we cannot anticipate that from the admin area yet. We'd rather give you the URL WordPress provided that isn't up-to-date but behaves predictably than one that's inaccurate.
 	* You can now block crawlers like AI language model trainers and SEO analysis from using your content via the "Robots Settings."
 	* You can now specify a redirect URL for the homepage.
 		* If the homepage is a page, this will take precedence over the page's metadata redirect URL.
@@ -520,6 +511,8 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 	* **Changed:**
 		* `the_seo_framework_flex_tab_content`, now uses `'args'` instead of `'params'` for its first parameter's indexes.
 			* I didn't deprecate this because I don't think anyone uses it.
+		* We changed the callback priority of `manage_edit-{$taxonomy}_columns` from 1 to 10, so to align with `manage_{$screen_id}_columns`.
+			* This fixes some odd race conditions we found when multiple plugins try to add columns. When they consistently run in the same order, issues are less likely to occur. Yes, we know, race conditions aren't possible in PHP, but this acted much like one, albeit very predictably.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_robots_blocked_user_agents` is now available. It's used to assign user agents to block via the robots.txt file.
