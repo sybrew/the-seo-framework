@@ -56,7 +56,7 @@ trait Property_Refresher {
 	 * Registers automated refreshes.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.0 No longer relies on "has_run" checks.
+	 * @since 5.1.0 No longer relies on "has_run" checks but immediately registers the refresh.
 	 *
 	 * @param string $property The property that's marked for refresh.
 	 */

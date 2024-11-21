@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.4.0
-Stable tag: 5.0.6
+Stable tag: 5.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -242,42 +242,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO jr dot nl/?calendar=$test doesn't invoke aqp?
-	-> Probably some other plugin mangles the request before AQP touches it.
-		-> Ask for list of plugins?
-
-TODO regression: the "popular categories" are no longer listened for changes.
-	-> This is an issue with WP 6.7???
-
-TODO add ignore for Asgaros forums. See https://wordpress.org/support/topic/canonical-on-forum/.
-
-TODO enqueueUnregisteredInputTrigger -> alias enqueueTriggerUnregisteredInput
-	- The latter has a better relation with the other method's name.
-
-TODO patch WP Core bug https://core.trac.wordpress.org/ticket/51912 using https://wp-kama.com/handbook/sitemap/bag-404-pagination.
-	-> We can probably mend this inside the generator.
-	-> Report back to user: https://wordpress.org/support/topic/sitemap-404-error-15/.
-
-TODO check if bbPress/BuddyPress needs breadcrumb support?
-
-TODO do we consider multiple taxonomies for a single post type?
-	* See email from Damien. -> We can test this with ACF Pro.
-
-TODO when the meta box is loaded without an ID, should we disable output altogether?
-	-> This might cause issues with some dynamically loaded admin pages.
-
-TODO list all "@since 5.1.0\s" changes?
-
-Punt:
-- remove jQuery dependencies in UI?
-- The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
-	-> It does update on Save.
-	-> Also affects Classic Editor, but perhaps we never implemented something like this.
-
 TODO In the release notes: "we hope you enjoy this update, we hope you understand why we don't volunteer on w.org anymore, we hope etc."
-
-TODO when an excerpt has no useable content, we should fall back to the actual description.
-	-> This would mean we process two content fields. Should we paste them together, instead?
 
 TODO pot file
 
@@ -394,11 +359,21 @@ TODO pot file
 		* Method `tsf()->robots()->utils()->get_blocked_user_agents()` is now available.
 	* **Changed:**
 		* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
-		* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`) now returns the default meta if the PTA isn't supported.
+		* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`):
+			1. Now returns the default meta if the PTA isn't supported.
+			2. Now registers `meta_memo` for automated refreshes (for Multisite blog switching cache flushes).
 		* `The_SEO_Framework\Data\Plugin\Term::get_meta()` (`tsf()->data()->plugin()->term()->get_meta()`) now returns the default meta if the term's taxonomy isn't supported.
 		* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
 		* `The_SEO_Framework\Data\Plugin::update_option()` (`tsf()->data()->plugin()->update_option()`) no longer considers headlessness. The headless filters are ought to stay in place throughout the request, affecting `get_option()`.
 		* `The_SEO_Framework\Data\Plugin\Post::get_primary_term()` (`tsf()->data()->plugin()->post()->get_primary_term()`) now returns a valid primary term if the selected one is gone.
+		* `The_SEO_Framework\Admin\Settings\Layout\Form::get_image_uploader_form()` (`tsf()->admin()->layout()->form()->get_image_uploader_form()`) now also outputs a warning icon placeholder.
+		* `The_SEO_Framework\Data\Post::uses_non_html_page_builder()` (`tsf()->data()->post()->uses_non_html_page_builder()`) now detects Bricks and Oxygen Builder.
+		* `The_SEO_Framework\Data\Filter\Sanitize::qubit()` (`tsf()->filter()->sanitize()->qubit()`) now considers .3333 (off by .00003) the turnover point for the negative side, instead of -0.3333999...999 (off by .00006).
+		* `The_SEO_Framework\RobotsTXT\Main::get_robots_txt()` (`tsf()->robotstxt()->main()->get_robots_txt()`):
+			1. Refactored to output the directives via a priority system.
+			2. Now supports blocking AI language model trainers and SEO analysis tools.
+		* `The_SEO_Framework\RobotsTXT\Utils::get_robots_txt_url()` (`tsf()->robotstxt()->utils()->get_robots_txt_url()`) now memoizes the return value.
+		* `The_SEO_Framework\Traits\Property_Refresher::register_automated_refresh()` no longer relies on "has_run" checks but immediately registers the refresh.
 	* **Removed:**
 		* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
 			* It may come back one day, but we have no plans for that just yet.
@@ -421,6 +396,8 @@ TODO pot file
 	* **Added:**
 		* JS Event `tsf-updated-block-editor` is now available.
 		* JS Event `tsf-updated-block-editor-${type}` is now available.
+			* Types include: `title`, `link`, `slug`, `parent`, `date`, `author`, `content`, `excerpt`, and `visibility`.
+				* `slug`, `parent`, `date`, and `author` are new types.
 		* JS Event `tsf-updated-primary-term` is now available.
 		* JS file `utils.js` (`window.tsfUtils`) is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
 		* JS file `ui.js` (`window.tsfUI`) is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
@@ -447,7 +424,7 @@ TODO pot file
 		* `tsf.selectByValue()` now also tries to select by label, which is tried together with the content.
 	* **Deprecated:**
 		* jQuery event `tsf-updated-gutenberg-${type}` is now deprecated. Use JS Event `tsf-updated-block-editor-${type}` instead.
-		* `tsf.ampHTMLtoText()` is now deprecated, with no alternative available.
+		* `tsf.ampHTMLtoText()` is now deprecated, with no alternative available. But you probably want to use `tsf.decodeEntities()` instead.
 		* `tsfAys.getChangedState()` is now deprecated. Use `tsfAys.areSettingsChanged()` instead.
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):

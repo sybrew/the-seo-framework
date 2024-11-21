@@ -3179,8 +3179,9 @@ final class Deprecated {
 	 *
 	 * @since 2.5.2
 	 * @since 5.0.0 Deleted accidentally.
-	 * @since 5.1.0 1. Deprecated.
-	 *              2. Removed the first parameter. Now always uses the current locale.
+	 * @since 5.1.0 1. Reintroduced.
+	 *              2. Deprecated.
+	 *              3. Removed the first parameter. Now always uses the current locale.
 	 * @deprecated
 	 *
 	 * @return string Facebook acceptable OG locale.
@@ -3188,7 +3189,7 @@ final class Deprecated {
 	public function fetch_locale() {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->fetch_locale()', '5.0.0', 'tsf()->open_graph()->get_locale()' );
+		$tsf->_deprecated_function( 'tsf()->fetch_locale()', '5.1.0', 'tsf()->open_graph()->get_locale()' );
 
 		return $tsf->open_graph()->get_locale();
 	}

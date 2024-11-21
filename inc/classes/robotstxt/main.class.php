@@ -57,12 +57,27 @@ class Main {
 	 *
 	 * @hook robots_txt 10
 	 * @since 5.0.0
-	 * @since 5.1.0 Refactored to output the directives via a priority system.
+	 * @since 5.1.0 1. Refactored to output the directives via a priority system.
+	 *              2. Now supports blocking AI language model trainers and SEO analysis tools.
 	 * @link <https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt>
 	 *
 	 * @return string Robots.txt output.
 	 */
 	public static function get_robots_txt() {
+
+		$output = '';
+
+		// Simple test for invalid directory depth. Even //robots.txt is an invalid location.
+		// To be fair, though, up to 5 redirects from /robots.txt are allowed. However, nobody has notified us of this usage.
+		if ( strrpos( rawurldecode( stripslashes( $_SERVER['REQUEST_URI'] ) ), '/' ) > 0 ) {
+			$correct_location = \esc_url(
+				\trailingslashit( Meta\URI\Utils::set_preferred_url_scheme(
+					Meta\URI\Utils::get_site_host()
+				) ) . 'robots.txt',
+			);
+
+			$output .= "# This is an invalid robots.txt location.\n# Please visit: $correct_location\n\n";
+		}
 
 		$site_path = parse_url( \site_url(), \PHP_URL_PATH ) ?: '';
 
@@ -199,22 +214,7 @@ class Main {
 				$pieces[] = $piece;
 		}
 
-		$output = implode( "\n", $pieces );
-
-		$raw_uri = rawurldecode( stripslashes( $_SERVER['REQUEST_URI'] ) )
-				?: '/robots.txt';
-
-		// Simple test for invalid directory depth. Even //robots.txt is an invalid location.
-		// To be fair, though, up to 5 redirects from /robots.txt are allowed. However, nobody has notified us of this usage.
-		if ( strrpos( $raw_uri, '/' ) > 0 ) {
-			$correct_location = \esc_url(
-				\trailingslashit( Meta\URI\Utils::set_preferred_url_scheme(
-					Meta\URI\Utils::get_site_host()
-				) ) . 'robots.txt',
-			);
-
-			$output = "# This is an invalid robots.txt location.\n# Please visit: $correct_location\n\n$output";
-		}
+		$output .= implode( "\n", $pieces );
 
 		/**
 		 * The robots.txt output.

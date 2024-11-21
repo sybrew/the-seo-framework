@@ -93,7 +93,7 @@ class Post {
 	 * @since 4.1.0
 	 * @since 5.0.0 1. First parameter may now be empty to automatically fetch the post ID.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
-	 * @since 5.1.0 Added Bricks and Oxygen Builder.
+	 * @since 5.1.0 Now detects Bricks and Oxygen Builder.
 	 *
 	 * @param int $post_id The post ID to check.
 	 * @return bool
