@@ -242,53 +242,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO disable Avada's SEO settings.
-
-TODO new translations are available.
-TODO add that TSF is an independent project that doesn't need to hit profit margins; ergo, it's made for the benefit of its users, not the creator.
-
-TODO https://wordpress.org/support/topic/about-homepage-meta-description-with-wpml/#post-17715796?
-	-> Also note the KB article mention which we need to address.
-
-TODO: expand WPML string translation for TSF metadata
-	-> See https://wordpress.org/support/topic/about-homepage-meta-description-with-wpml/#post-17715796.
-	-> DONE: Also consider adding PTA settings, though these are dynamic
-		-> Figure how we can implement this.
-	-> TODO: Report this to the KB
-		-> Also consider explaining how to translate settings (checkboxes from 1 to 0, etc.)
-			<ol><li>Go to "WPML > String Translation."</li>
-				<li>Scroll down, select "Translate texts in admin screens."</li>
-				<li>Search for "autodescription," and select the Options you want to translate.</li>
-				<li>Hit "Add to String Translation."</li>
-				<li>Return to "WPML > String Translation."</li>
-				<li>Now, you should see the selected option under Name (note: might be on the second page).</li>
-				<li>Hit the big plus under the other languages to set a custom value.</li>
-				<li>Click anywhere on the page to save your translation.</li></ol>
-		-> Note common values (-1 force index, 0 index, 1 noindex, 1 checked, 0 unchecked)
-	-> TODO: https://github.com/sybrew/the-seo-framework/issues/185#issuecomment-2097836954
-
-TODO translatepress multilingual sitemap? Is this possible? See backlogged emails with them.
-
-TODO validate the URL field before showing an image preview?
-
-TODO when zooming in on iOS, the touch registration no longer aligns with the tooltip arrow.
-	-> This will probably involve some annoying relative offset vs screen width maths.
-
 TODO jr dot nl/?calendar=$test doesn't invoke aqp?
 	-> Probably some other plugin mangles the request before AQP touches it.
 		-> Ask for list of plugins?
 
-TODO introduce css --vars
-	-> Applying colors would be a nice starting point.
-
-TODO add TikTok social profile hint? eh...
-	-> Also, there appears to be a specific format: https://support.google.com/business/answer/13580646.
-
 TODO regression: the "popular categories" are no longer listened for changes.
 	-> This is an issue with WP 6.7???
-
-TODO remove HTML4 closers in admin? It's definitly 5.
-	-> Also remove HTML4 support on the front-end? How many themes are still using 4?
 
 TODO add ignore for Asgaros forums. See https://wordpress.org/support/topic/canonical-on-forum/.
 
@@ -314,8 +273,6 @@ Punt:
 - The image placeholder is not considering of the featured image in WP 6.6 Gutenberg.
 	-> It does update on Save.
 	-> Also affects Classic Editor, but perhaps we never implemented something like this.
-
-TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 
 TODO In the release notes: "we hope you enjoy this update, we hope you understand why we don't volunteer on w.org anymore, we hope etc."
 

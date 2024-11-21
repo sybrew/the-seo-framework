@@ -242,8 +242,8 @@ switch ( $instance ) :
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
 				'desc'        => \__( 'X Profile', 'autodescription' ),
-				'placeholder' => "https://twitter.com/$connectedi18n",
-				'examplelink' => 'https://twitter.com/home', // No example link available.
+				'placeholder' => "https://x.com/$connectedi18n",
+				'examplelink' => 'https://x.com/home', // No example link available.
 			],
 			'instagram'  => [
 				'option'      => 'knowledge_instagram',
@@ -263,11 +263,7 @@ switch ( $instance ) :
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
 				'desc'        => \__( 'LinkedIn Profile', 'autodescription' ),
-				/**
-				 * TODO switch to /in/ insteadof /company/ when knowledge-type is personal?
-				 * Note that this feature is DEPRECATED. https://developers.google.com/search/docs/data-types/social-profile
-				 */
-				'placeholder' => "https://www.linkedin.com/company/$connectedi18n/",
+				'placeholder' => "https://www.linkedin.com/in/$connectedi18n/",
 				'examplelink' => 'https://www.linkedin.com/profile/view',
 			],
 			'pinterest'  => [
