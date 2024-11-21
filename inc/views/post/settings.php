@@ -169,7 +169,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div class=tsf-title-wrap>
-					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_genesis_title'] ) ) ?>" autocomplete=off data-form-type=other />
+					<input class=large-text type=text name="autodescription[_genesis_title]" id=autodescription_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_genesis_title'] ) ) ?>" autocomplete=off data-form-type=other>
 					<?php
 					Input::output_js_title_data(
 						'autodescription_title',
@@ -194,15 +194,15 @@ switch ( $instance ) :
 						if ( $is_static_front_page ) {
 							// Disable the input, and hide the previously stored value.
 							?>
-							<input type=checkbox id=autodescription_title_no_blogname value=1 <?php \checked( $title_no_blogname_value ); ?> disabled />
-							<input type=hidden name="autodescription[_tsf_title_no_blogname]" value="<?= (int) $title_no_blogname_value ?>" />
+							<input type=checkbox id=autodescription_title_no_blogname value=1 <?php \checked( $title_no_blogname_value ); ?> disabled>
+							<input type=hidden name="autodescription[_tsf_title_no_blogname]" value="<?= (int) $title_no_blogname_value ?>">
 							<?php
 							\esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';
 							HTML::make_info( \__( 'For the homepage, this option must be managed on the SEO Settings page.', 'autodescription' ) );
 						} else {
 							?>
-							<input type=checkbox name="autodescription[_tsf_title_no_blogname]" id=autodescription_title_no_blogname value=1 <?php \checked( $title_no_blogname_value ); ?> />
+							<input type=checkbox name="autodescription[_tsf_title_no_blogname]" id=autodescription_title_no_blogname value=1 <?php \checked( $title_no_blogname_value ); ?>>
 							<?php
 							\esc_html_e( 'Remove the site title?', 'autodescription' );
 							echo ' ';
@@ -333,7 +333,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-og-title-wrap>
-					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_open_graph_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle />
+					<input class=large-text type=text name="autodescription[_open_graph_title]" id=autodescription_og_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_open_graph_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=ogTitle>
 				</div>
 			</div>
 		</div>
@@ -369,7 +369,7 @@ switch ( $instance ) :
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
 				<div id=tsf-twitter-title-wrap>
-					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_twitter_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle />
+					<input class=large-text type=text name="autodescription[_twitter_title]" id=autodescription_twitter_title value="<?= \esc_html( Sanitize::metadata_content( $meta['_twitter_title'] ) ) ?>" autocomplete=off data-form-type=other data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twTitle>
 				</div>
 			</div>
 		</div>
@@ -461,8 +461,8 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class=large-text type=url name="autodescription[_social_image_url]" id=autodescription_socialimage-url placeholder="<?= \esc_url( $image_placeholder ) ?>" value="<?= \esc_url( $meta['_social_image_url'] ) ?>" autocomplete=off />
-				<input type=hidden name="autodescription[_social_image_id]" id=autodescription_socialimage-id value="<?= \absint( $meta['_social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js />
+				<input class=large-text type=url name="autodescription[_social_image_url]" id=autodescription_socialimage-url placeholder="<?= \esc_url( $image_placeholder ) ?>" value="<?= \esc_url( $meta['_social_image_url'] ) ?>" autocomplete=off>
+				<input type=hidden name="autodescription[_social_image_id]" id=autodescription_socialimage-id value="<?= \absint( $meta['_social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js>
 				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
 					<?php
 					// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
@@ -540,7 +540,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class=large-text type=url name="autodescription[_genesis_canonical_uri]" id=autodescription_canonical placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( $meta['_genesis_canonical_uri'] ) ?>" autocomplete=off />
+				<input class=large-text type=url name="autodescription[_genesis_canonical_uri]" id=autodescription_canonical placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( $meta['_genesis_canonical_uri'] ) ?>" autocomplete=off>
 				<?php
 				$post_type   = Query::get_admin_post_type();
 				$permastruct = Meta\URI\Utils::get_url_permastruct( $generator_args );
@@ -710,7 +710,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-input tsf-flex">
 				<?php if ( $can_do_search_query ) : ?>
 				<div class=tsf-checkbox-wrapper>
-					<label for=autodescription_exclude_local_search><input type=checkbox name="autodescription[exclude_local_search]" id=autodescription_exclude_local_search value=1 <?php \checked( $meta['exclude_local_search'] ); ?> />
+					<label for=autodescription_exclude_local_search><input type=checkbox name="autodescription[exclude_local_search]" id=autodescription_exclude_local_search value=1 <?php \checked( $meta['exclude_local_search'] ); ?>>
 						<?php
 						\esc_html_e( 'Exclude this page from all search queries on this site.', 'autodescription' );
 						?>
@@ -719,7 +719,7 @@ switch ( $instance ) :
 				<?php endif; ?>
 				<?php if ( $can_do_archive_query ) : ?>
 				<div class=tsf-checkbox-wrapper>
-					<label for=autodescription_exclude_from_archive><input type=checkbox name="autodescription[exclude_from_archive]" id=autodescription_exclude_from_archive value=1 <?php \checked( $meta['exclude_from_archive'] ); ?> />
+					<label for=autodescription_exclude_from_archive><input type=checkbox name="autodescription[exclude_from_archive]" id=autodescription_exclude_from_archive value=1 <?php \checked( $meta['exclude_from_archive'] ); ?>>
 						<?php
 						\esc_html_e( 'Exclude this page from all archive queries on this site.', 'autodescription' );
 						?>
@@ -749,7 +749,7 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<input class=large-text type=url name="autodescription[redirect]" id=autodescription_redirect value="<?= \esc_url( $meta['redirect'] ) ?>" autocomplete=off />
+				<input class=large-text type=url name="autodescription[redirect]" id=autodescription_redirect value="<?= \esc_url( $meta['redirect'] ) ?>" autocomplete=off>
 			</div>
 		</div>
 		<?php

@@ -572,7 +572,7 @@ final class ListEdit extends Admin\Lists\Table {
 					'addAdditions'      => Meta\Title\Conditions::use_branding( $generator_args ),
 					'additionValue'     => \esc_html( $addition ),
 					'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
-					'termPrefix'        => $term_prefix,
+					'termPrefix'        => \esc_html( $term_prefix ),
 				],
 			] ),
 		);

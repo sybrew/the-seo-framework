@@ -108,7 +108,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				$setting['info'], // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- should be escaped in list.
 			);
 			printf(
-				'<p><input type=text name=%s class="large-text ltr" id=%s placeholder="%s" value="%s" /></p>',
+				'<p><input type=text name=%s class="large-text ltr" id=%s placeholder="%s" value="%s"></p>',
 				\esc_attr( Input::get_field_name( $setting['setting'] ) ),
 				\esc_attr( Input::get_field_id( $setting['setting'] ) ),
 				\esc_attr( $setting['placeholder'] ),

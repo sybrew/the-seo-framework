@@ -209,7 +209,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( $args['options']['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['doctitle'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'doctitle', $args['post_type'] ) ) ) ?>" autocomplete=off />
+			<input type=text name="<?php Input::field_name( $args['options']['doctitle'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['doctitle'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'doctitle', $args['post_type'] ) ) ) ?>" autocomplete=off>
 			<?php
 			$pto = \get_post_type_object( $args['post_type'] );
 
@@ -327,7 +327,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle>
 		</p>
 
 		<p>
@@ -355,7 +355,7 @@ switch ( $instance ) :
 		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle />
+			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle>
 		</p>
 
 		<p>
@@ -417,8 +417,8 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( $args['options']['social_image_url'] ); ?>" id="<?= \esc_attr( "tsf_pta_socialimage_{$args['post_type']}" ) ?>-url" placeholder="<?= \esc_url( Meta\Image::get_first_generated_image_url( $args['generator_args'], 'social' ) ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['post_type'] ) ) ?>" />
-			<input type=hidden name="<?php Input::field_name( $args['options']['social_image_id'] ); ?>" id="<?= \esc_attr( "tsf_pta_socialimage_{$args['post_type']}" ) ?>-id" value="<?= \absint( Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['post_type'] ) ) ?>" disabled class=tsf-enable-media-if-js />
+			<input class=large-text type=url name="<?php Input::field_name( $args['options']['social_image_url'] ); ?>" id="<?= \esc_attr( "tsf_pta_socialimage_{$args['post_type']}" ) ?>-url" placeholder="<?= \esc_url( Meta\Image::get_first_generated_image_url( $args['generator_args'], 'social' ) ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['post_type'] ) ) ?>">
+			<input type=hidden name="<?php Input::field_name( $args['options']['social_image_id'] ); ?>" id="<?= \esc_attr( "tsf_pta_socialimage_{$args['post_type']}" ) ?>-id" value="<?= \absint( Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['post_type'] ) ) ?>" disabled class=tsf-enable-media-if-js>
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
@@ -447,7 +447,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $args['options']['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['canonical'] ); ?>" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'canonical', $args['post_type'] ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $args['options']['canonical'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['canonical'] ); ?>" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'canonical', $args['post_type'] ) ) ?>" autocomplete=off>
 			<?php
 			Input::output_js_canonical_data(
 				Input::get_field_id( $args['options']['canonical'] ),
@@ -560,7 +560,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( $args['options']['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['redirect'] ); ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'redirect', $args['post_type'] ) ) ?>" autocomplete=off />
+			<input type=url name="<?php Input::field_name( $args['options']['redirect'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['redirect'] ); ?>" value="<?= \esc_url( Data\Plugin\PTA::get_meta_item( 'redirect', $args['post_type'] ) ) ?>" autocomplete=off>
 		</p>
 		<?php
 endswitch;

@@ -290,10 +290,6 @@ TODO regression: the "popular categories" are no longer listened for changes.
 TODO remove HTML4 closers in admin? It's definitly 5.
 	-> Also remove HTML4 support on the front-end? How many themes are still using 4?
 
-TODO the correct indentation for comments seems to be 4 per tab (+1 initial)
-
-TODO LinkedIn Post Inspector recommends the "Author" tag, which is often ambiguously described. We could opt-in this feature via the Social Sharing settings, stating that LinkedIn uses it.
-
 TODO add ignore for Asgaros forums. See https://wordpress.org/support/topic/canonical-on-forum/.
 
 TODO enqueueUnregisteredInputTrigger -> alias enqueueTriggerUnregisteredInput
@@ -305,19 +301,8 @@ TODO patch WP Core bug https://core.trac.wordpress.org/ticket/51912 using https:
 
 TODO check if bbPress/BuddyPress needs breadcrumb support?
 
-TODO the title prefix doesn't appear to work in quick-edit for Terms.
-
 TODO do we consider multiple taxonomies for a single post type?
 	* See email from Damien. -> We can test this with ACF Pro.
-
-TODO add Bricks Templates to exclusions like we did for Elementor (they are not publicly accessible...)
-	-> Post Type: bricks_template
-	-> Taxonomy: template_tag, template_bundle
-
-TODO rename "Twitter Profile"
-	-> Also update TSF links on main site accordingly.
-
-TODO we updated Babel, we need to reparse all scripts to prevent discrepancies.
 
 TODO when the meta box is loaded without an ID, should we disable output altogether?
 	-> This might cause issues with some dynamically loaded admin pages.
@@ -331,6 +316,13 @@ Punt:
 	-> Also affects Classic Editor, but perhaps we never implemented something like this.
 
 TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
+
+TODO In the release notes: "we hope you enjoy this update, we hope you understand why we don't volunteer on w.org anymore, we hope etc."
+
+TODO when an excerpt has no useable content, we should fall back to the actual description.
+	-> This would mean we process two content fields. Should we paste them together, instead?
+
+TODO pot file
 
 ### 5.1.0 - Hope
 
@@ -424,7 +416,11 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 
 **For translators:**
 
-* TODO
+* **Added:**
+	* New sentences have been added.
+* **Updated:**
+	* POT translation file.
+	* As always, various sentences have been updated for clarity.
 
 **For developers:**
 
@@ -538,6 +534,8 @@ TODO sale timeout: December 6th, 2024, 23:00GMT+1, page 3527
 		* We maintain static code checks for this via [WPCS-TSF](https://github.com/theseoframework/wpcs-tsf).'
 	* The PHPDoc for all arrays has been updated, which contributed to most of the line changes in this release.
 	* The SEO Framework's main settings form element now has the ID `tsf-settings`.
+	* We've removed remaining element closers from void elements in the admin area, since we can safely assume HTML5 support.
+		* We cannot do this yet for the front-end output, since we must assume XHTML support. [Over 14 million sites are still using XHMTL](https://trends.builtwith.com/docinfo), but that's all the info we have. [WordPress.org is keeping data hostage from contributors](https://meta.trac.wordpress.org/ticket/6511).
 
 ### 5.0.6
 

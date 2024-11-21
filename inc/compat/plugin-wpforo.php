@@ -91,7 +91,7 @@ function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore
  *                          Is null when the query is auto-determined.
  * @return string $title The wpForo title.
  */
-function _wpforo_filter_pre_title( $title = '', $args = null ) {
+function _wpforo_filter_pre_title( $title, $args ) {
 
 	if ( ! isset( $args ) ) {
 		$sep          = Meta\Title::get_separator();

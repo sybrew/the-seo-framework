@@ -53,7 +53,7 @@ if ( Data\Plugin::get_option( 'sitemap_logo' ) ) {
 
 	if ( ! empty( $_src[0] ) ) {
 		$logo = \sprintf(
-			'<img src="%s" width="%s" height="%s" />',
+			'<img src="%s" width="%s" height="%s" />', // Keep XHTML valid!
 			\esc_url( $_src[0] ),
 			\esc_attr( $_src[1] ?? '' ),
 			\esc_attr( $_src[2] ?? '' ),

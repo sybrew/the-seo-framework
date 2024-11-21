@@ -363,7 +363,7 @@ switch ( $instance ) :
 
 			<p id=sitemaps-timestamp-format class=tsf-fields>
 				<span class=tsf-toblock>
-					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_0' ); ?>" value=0 <?php \checked( Data\Plugin::get_option( 'timestamps_format' ), '0' ); ?> />
+					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_0' ); ?>" value=0 <?php \checked( Data\Plugin::get_option( 'timestamps_format' ), '0' ); ?>>
 					<label for="<?php Input::field_id( 'timestamps_format_0' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
@@ -374,7 +374,7 @@ switch ( $instance ) :
 					</label>
 				</span>
 				<span class=tsf-toblock>
-					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_1' ); ?>" value=1 <?php \checked( Data\Plugin::get_option( 'timestamps_format' ), '1' ); ?> />
+					<input type=radio name="<?php Input::field_name( 'timestamps_format' ); ?>" id="<?php Input::field_id( 'timestamps_format_1' ); ?>" value=1 <?php \checked( Data\Plugin::get_option( 'timestamps_format' ), '1' ); ?>>
 					<label for="<?php Input::field_id( 'timestamps_format_1' ); ?>">
 						<?php
 						// phpcs:ignore, WordPress.Security.EscapeOutput -- code_wrap escapes.
