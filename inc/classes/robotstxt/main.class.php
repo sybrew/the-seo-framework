@@ -69,6 +69,7 @@ class Main {
 
 		// Simple test for invalid directory depth. Even //robots.txt is an invalid location.
 		// To be fair, though, up to 5 redirects from /robots.txt are allowed. However, nobody has notified us of this usage.
+		// TODO Should we add a test for `/?robots=1.*`? Eh...
 		if ( strrpos( rawurldecode( stripslashes( $_SERVER['REQUEST_URI'] ) ), '/' ) > 0 ) {
 			$correct_location = \esc_url(
 				\trailingslashit( Meta\URI\Utils::set_preferred_url_scheme(
@@ -91,7 +92,7 @@ class Main {
 			'the_seo_framework_robots_disallow_queries',
 			[ false ],
 			'5.1.0 of The SEO Framework',
-			'the_seo_framework_robots'
+			'the_seo_framework_robots_txt_sections'
 		) ? '/*?*'
 		  : '';
 
@@ -116,7 +117,7 @@ class Main {
 
 		/**
 		 * @since 5.1.0
-		 * @param array  $robots {
+		 * @param array  $robots_sections {
 		 *     The robots directives, associative by key.
 		 *     All input is expected to be escaped.
 		 *
@@ -133,8 +134,8 @@ class Main {
 		 * }
 		 * @param string $site_path The determined site path. Use this path to prefix URLs.
 		 */
-		$robots = (array) \apply_filters(
-			'the_seo_framework_robots',
+		$robots_sections = (array) \apply_filters(
+			'the_seo_framework_robots_txt_sections',
 			[
 				'deprecated_before' => [
 					/**
@@ -148,7 +149,7 @@ class Main {
 						'the_seo_framework_robots_txt_pre',
 						[ '' ],
 						'5.1.0 of The SEO Framework',
-						'the_seo_framework_robots',
+						'the_seo_framework_robots_txt_sections',
 					),
 					'priority' => 0,
 				],
@@ -177,7 +178,7 @@ class Main {
 						'the_seo_framework_robots_txt_pro',
 						[ '' ],
 						'5.1.0 of The SEO Framework',
-						'the_seo_framework_robots',
+						'the_seo_framework_robots_txt_sections',
 					),
 					'priority' => 500,
 				],
@@ -190,7 +191,7 @@ class Main {
 		);
 
 		// We need to use uasort to maintain index association, but we don't read the indexes.
-		usort( $robots, fn( $a, $b ) => ( $a['priority'] ?? 10 ) <=> ( $b['priority'] ?? 10 ) );
+		usort( $robots_sections, fn( $a, $b ) => ( $a['priority'] ?? 10 ) <=> ( $b['priority'] ?? 10 ) );
 
 		$pieces     = [];
 		$directives = [
@@ -199,7 +200,7 @@ class Main {
 			'allow'      => 'Allow',
 			'sitemaps'   => 'Sitemap',
 		];
-		foreach ( $robots as $section ) {
+		foreach ( $robots_sections as $section ) {
 			$piece = '';
 
 			if ( isset( $section['raw'] ) )

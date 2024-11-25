@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4.0
 Stable tag: 5.1.0
 License: GPLv3
@@ -40,7 +40,7 @@ We made the only SEO plugin that follows Google's webmaster guidelines to the le
 On your post overview pages, you'll find color-coded guidelines. They suggest how to improve your pages as you hover over them with your mouse cursor. For example, when your titles are unbranded or when WordPress blocks indexing. Instinctively, touch-and keyboard navigation is also supported.
 
 * **It includes exceptional support.**
-We don't outsource our support. We're here for you. Feel free to drop by [our support forums](https://wordpress.org/support/plugin/autodescription/) at any time to ask a question. More than 1400 inquiries have been answered personally, typically within 48 hours in the past five years.
+We don't outsource our support. We're here for you. Feel free to drop by [our support channels](https://theseoframework.com/support/) at any time to ask a question. More than 5000 inquiries have been answered personally in the past nine years, typically within 72 hours.
 
 * **It leaves no room for errors.**
 We focus on the quality of features you need over the quantity on features you don't. This trait makes this plugin unique, faster, more accurate, nearly bug-free, and more sustainable. The added benefit is that your site is unlikely to get penalized by search engines. We won't steer you into writing unnatural content or allow you to trick search engines.
@@ -71,7 +71,7 @@ The SEO Framework sends us no information and does not create cookies. Learn mor
 
 ### Getting started
 
-* Used another plugin? Easily [migrate your SEO data](https://theseoframework.com/?p=511).
+* Used another SEO plugin? Easily [migrate your metadata](https://theseoframework.com/?p=511).
 * Need a helping hand getting started? Read our [quick setup guide](https://theseoframework.com/?p=2428).
 * Want to improve your pages? Learn how to [optimize your metadata](https://theseoframework.com/?p=2663).
 
@@ -108,7 +108,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * It discourages search engines from indexing feeds and the sitemap. This doesn't mean they won't use them; only, they won't show them in their search results.
 * It directs search engines from the comment pages back to the post storing those comments.
 
-### Compatibility
+### Compatibility and accessibility
 
 **The SEO Framework supports:**
 
@@ -124,9 +124,10 @@ The SEO Framework works on many things without notifying you, because the best s
 * Primary term (category) selection to influence breadcrumbs and links.
 * Output of structured data via Schema.org JSON-LD scripts.
 * Altering oEmbed for improved sharing on Discord.
-* Detection of various other SEO tools to help you switch graciously.
+* Detection of various other SEO plugins to help you switch graciously.
 * Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
 * E-commerce plugins like WooCommerce and Easy Digital Downloads.
+* Blocking of SEO analysis and AI crawlers for Moz, OpenAI, Apple, and others, [via robots.txt](https://kb.theseoframework.com/?p=263).
 * Forum plugins like bbPress and wpForo.
 * Editing posts and terms via WordPress's native bulk-and-quick-edit interfaces.
 * Headless mode via a single [constant definition](https://kb.theseoframework.com/?p=136).
@@ -136,7 +137,7 @@ The SEO Framework works on many things without notifying you, because the best s
 ### This plugin requires:
 
 * PHP 7.4 or higher.
-* WordPress 5.9 or higher.
+* WordPress 6.0 or higher.
 * Any modern browser for administration.
 
 ### Installation instructions:
@@ -242,320 +243,43 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO In the release notes: "we hope you enjoy this update, we hope you understand why we don't volunteer on w.org anymore, we hope etc."
+### 5.1.0 - Profound
 
-TODO pot file
-
-### 5.1.0 - Hope
-
-**For everyone:**
-
-* **Upgraded:** Now uses TSF database version `5100`
-	* Two new options are available: `robotstxt_block_ai` and `robotstxt_block_seo`.
-* **Added:**
-	* We introduce our bespoke Canonical URL Notation Tool, allowing TSF to dynamically update the example canonical URL when editing a page or term, either via their edit screens, or via quick-edit.
-		* It listens to many changes of the editor that could influence the URL, depending on your site's permalink settings.
-			* Among these, are `%year%`, `%monthnum%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%post_id%`, `%postname%`, `%category%`, and `%author%`.
-				* `%pagename%` is treated as `%postname%` internally. You should never make this part of the permalink structure, anyway.
-			* It also works for custom post types and taxonomies, such as those created by WooCommerce and bbPress.
-				* TODO it works with all of bbPress but the Forum pages. What's up with that?
-			* This system dynamically fetches page ancestor, author, and term slugs as needed. These are then cached in the browser. This dynamic fetching may appear as a delay in writing the canonical URL when making changes.
-			* Please note that you should never use `%pagename%` in your permalink structure. `%postname%` gets transformed to `%pagename%` automatically when needed.
-		* This feature is disabled when you have a multilingual plugin active on your site. These plugins modify the URL structure in a non-standard way, and we cannot anticipate that from the admin area yet. We'd rather give you the URL WordPress provided that isn't up-to-date but behaves predictably than one that's inaccurate.
-	* You can now block crawlers like AI language model trainers and SEO analysis from using your content via the "Robots Settings."
-	* You can now specify a redirect URL for the homepage.
-		* If the homepage is a page, this will take precedence over the page's metadata redirect URL.
-	* You can now specify a canonical URL for the homepage.
-		* If the homepage is a page, this will take precedence over the page's metadata canonical URL.
-	* You'll now be informed when an image type isn't compatible with most social platforms. This is displayed next to the image preview icon.
-		* Also, the preview icon no longer shows when the image cannot be loaded. You'll now see an error message instead.
-	* For WPML Multilingual Plugin, the following fields are automatically registered with their String Translation tool under domain `admin_texts_autodescription-site-settings`. Please note that these are only shown when they have a value inputted via the SEO Settings page:
-		* **Homepage:** title, description, social image URL, Open Graph title and description, Twitter title and description.
-			* Identifyable by name `[autodescription-site-settings]homepage_*`.
-		* **Post Type Archive:** title, description, social image URL, canonical URL, redirect URL, Open Graph title and description, Twitter title and description.
-			* Identifyable by name `[autodescription-site-settings][pta][<post_type_name>]*`.
-* **Improved:**
-	* References to X and Twitter Card are more distinctive now.
-	* Description, title, and canonical URL input placeholders now blur on focus with Quick Edit.
-	* The image selection button and preview icon animations are now twice as fast.
-	* The input placeholder blurring animation is now twice as fast.
-		* Note that [Firefox still doesn't support animations for placeholders](https://bugzilla.mozilla.org/show_bug.cgi?id=1115623). Now, we could workaround this using animations instead of transitions, but that's another can of worms.
-	* The Canonical URL input field's placeholder now blurs on focus (Quick Edit, Post Edit, Term Edit, SEO Settings).
-	* The plugin now better conveys where to modify the homepage's title "additions."
-	* The canonical URL placeholder is now populated for Quick Edit.
-		* Please note that it doesn't respond to category changes, because we still need to find a good way to implement primary term selection here. So, it assumes the category selection as it was when the Quick Edit was opened. For more details, [see issue 512](https://github.com/sybrew/the-seo-framework/issues/512).
-	* After saving a page in the Block Editor, the SEO Bar (if displayed) fades in much quicker now.
-	* The SEO Bar symbols have a tad more contrast now due to a darker text shadow, improving legibility (primarily for a yellow item).
-	* Floating title parts (e.g., `Protected: ` or your site title) have been offset by half a character on overflow, so that their text won't stick to your input.
-	* Floating title parts now also disappear when there are fewer than 1.33 characters are visible, so that they won't overlap your input.
-	* Reduced the admin stylesheet payload by implementing modern logical declarations.
-	* Reduced the sitemap stylesheet size by also implementing modern logical declarations for that.
-	* The SEO meta box tab labels are now inline when there's enough space.
-	* Fading in and out animations of TSF's UI are now much easier on your device, because we handle them via our bespoke fader now.
-	* The quick-edit default indexing state now updates to the post password or private status accordingly.
-	* The Block Editor on WP 6.7 proposes a new layout for their select fields, which we've opted in for with the Primary Term selection.
-	* If a settings listeners fails for any reason, other listeners may still continue. Leaving you with a semi-broken interface, instead of completely broken. For example, if the code crosses and unexpected value for the Homepage title input, only its character counters will be borked, but you can still upload an image for social sharing.
-		* This works for the Settings, Post Edit, Term Edit, and List Edit pages.
-		* This is a targeted fail-safe and won't work everywhere all the time.
-	* If the primary term is set to a term that doesn't exist, the Primary Term selection will now show a warning message.
-	* **Compatibility:**
-		* We added basic compatibility for the Bricks theme:
-			* Templates are no longer supported for SEO or included in the sitemap unless the "Public templates" option is enabled at "Bricks > Settings > Templates > My templates."
-			* Template Bundles and Template Tags are no longer supported for SEO; they weren't meant to be public anyway.
-			* When we detect a page is a Bricks template, the SEO Bar clarifies why no description can be generated.
-				* Bricks's data appears readable without excessive parsing, so we may revisit this and enable description generation in the future. See [issue 677](https://github.com/sybrew/the-seo-framework/issues/677).
-		* We added detection for Oxygen builder pages. The SEO Bar now clarifies why no description can be generated.
-			* Note that TSF detects Oxygen's newer "JSON" type data only. If your data hasn't been converted yet, then TSF will display a generic message about the description not being generated.
-* **Changed:**
-	* WordPress 5.7 brought us a new higher contrast color palette. We found our color scheme matching their colors well, but now think it better to implement those colors into TSF. Notably, you'll find that the SEO Bar is darker and easier on the eyes. The pixel and character counters appear more vigorous.
-		* We didn't copy WordPress's colors one-to-one. At times, we found the yellow too dull, and made it more vibrant.
-	* The Primary Term selector for the Classic Editor has been rewritten for accessibility, performance, and accuracy. We didn't spend time modernizing this before because we thought Classic Editor would've been phased out.
-		* Note that the Primary Term selector is no longer a button, but a dropdown selection field, placed dynamically beneath the term selection checkboxes. This mimics the behavior we have for the Block Editor, simultaneously resolving some z-fighting issues we had with some languages for the tooltip placement.
-	* The "Robots Meta Settings" are now called "Robots Settings" because we added a tab for AI blocking via Robots.txt (when available).
-	* The "Robots" meta settings for the homepage is now called "Visibility" settings, because it now includes Canonical URL and Redirect URL input fields.
-	* By default, the "Social Meta Settings" meta box is now placed above the "Homepage Settings," instead of below the "Post Type Archive Settings" (or below the "Homepage Settings" if that's not available).
-* **Fixed:**
-	* Resolved an issue where comment pagination queries were only ignored after the main query when the Full Site Editor was present; now, they're always ignored.
-	* Resolved a regression where the post-saving sequence wasn't properly debounced, causing multiple save-state requests for TSF's meta box that affected the Block Editor's performance performance and caused the SEO settings UI to flicker.
-	* Awesome Motive's All in One SEO Pack plugin outputs a notice urging to deactivate other SEO plugins, but without clarifying which SEO plugin emits this notice or telling which plugins get deactivated. So, we now hide this deceptive notice.
-	* Resolved a regression from WordPress 6.6 where a CSS identifier disappeared. We used this identifier to apply styling for the sidebar. We now use a different, more specific identifier that's in all WordPress versions we support; from `.edit-post-sidebar`, now `#edit-post\:document`.
-	* Resolved an issue where the counter AJAX spinner wasn't offset by 3 pixels from the character counter's loader text. It's now also changed to 0.5 character widths.
-	* Resolved a typo causing the description placeholders to not blur on focus on the SEO Settings page when using Firefox.
-	* Resolved an issue where the Classic Editor's Primary Term selection label's cursor wasn't a pointer in WP 6.5 and later.
-	* Resolved an issue where horizontal scrolling bars would appear when the inputted title is wider than the screen when measured from the container.
-	* Resolved a long-standing regression where WordPress 5.3 changed the checkbox mark from a colorable item to an immutable image, so it was no longer green or red colored for The SEO Framework's default and warned settings, respectively. Thanks to this fix, Firefox is now also fully supported (it doesn't natively support checkbox colors), although it might be more demanding of your device to render the checkboxes.
-		* It took so long because we needed esoteric CSS that glitches when its container animates, namely, `mix-blend-mode`. We found a workaround with some trial and error.
-	* Resolved an issue where resetting the settings twice in a row would result in an "unknown error." Now, you get a "No SEO settings were changed" message instead.
-	* Resolved an issue where the floating title parts didn't align properly when dealing with subpixel alignment.
-	* Resolved an issue where the floating title parts repositioned or (un)trimmed only when passing the `782px` screen width boundary, while they ought to be recalculated with every screen size change.
-	* Resolved an issue where the floating title prefix (e.g., `Private: `) didn't trim when the site title was removed.
-	* When setting '0' as a password via quick-edit, WordPress actually doesn't consider it a valid password. So, TSF now won't reflect this via its quick-edit interface either.
-		* We already considered this behavior for the Classic and Block editor.
-	* An "Are you sure?" notice is now emitted when leaving the page without saving after the Primary Term is changed on Classic Editor.
-	* Resolved an issue where a double-click would yield an unchanged save state on the SEO Settings page by disabling the submit button after the initial click for 3 seconds.
-* **Notes:**
-	* WordPress 6.0 is now required, from 5.9. This allowed us to drop legacy Gutenberg support.
-
-**For translators:**
-
-* **Added:**
-	* New sentences have been added.
-* **Updated:**
-	* POT translation file.
-	* As always, various sentences have been updated for clarity.
-
-**For developers:**
-
-* **PHP API notes:**
-	* **Added:**
-		* Method `tsf()->image()->generate_custom_image_details_from_query()` is now public.
-		* Method `tsf()->image()->generate_custom_image_details_from_args()` is now public.
-		* Method `tsf()->format()->arrays()->array_diff_assoc_recursive()` is now available. It's the first of its kind that supports more than two array inputs.
-		* Method `tsf()->description()->excerpt()->get_excerpt()` is now available. It's an alias of `get_post_excerpt()`, which is marked for deprecation due to being mislabeled.
-		* Method `tsf()->data()->post()->get_post_parents()` is now available.
-		* Method `tsf()->data()->term()->get_term_parents()` is now available.
-		* Method `tsf()->data()->user()->get_userdata()` is now available. It's an alias of WordPress's `get_userdata()`, but with proper memoization for improved performance.
-		* Method `tsf()->uri()->utils()->get_url_permastruct()` is now available.
-		* Method `tsf()->robots()->utils()->get_blocked_user_agents()` is now available.
-	* **Changed:**
-		* `The_SEO_Framework\Data\Plugin\Post::get_meta()` (`tsf()->data()->plugin()->post()->get_meta()`) now returns the default meta if the post type isn't supported.
-		* `The_SEO_Framework\Data\Plugin\PTA::get_meta()` (`tsf()->data()->plugin()->pta()->get_meta()`):
-			1. Now returns the default meta if the PTA isn't supported.
-			2. Now registers `meta_memo` for automated refreshes (for Multisite blog switching cache flushes).
-		* `The_SEO_Framework\Data\Plugin\Term::get_meta()` (`tsf()->data()->plugin()->term()->get_meta()`) now returns the default meta if the term's taxonomy isn't supported.
-		* `The_SEO_Framework\Data\Plugin\User::get_meta()` (`tsf()->data()->plugin()->user()->get_meta()`) now returns the default meta if the user ID is empty.
-		* `The_SEO_Framework\Data\Plugin::update_option()` (`tsf()->data()->plugin()->update_option()`) no longer considers headlessness. The headless filters are ought to stay in place throughout the request, affecting `get_option()`.
-		* `The_SEO_Framework\Data\Plugin\Post::get_primary_term()` (`tsf()->data()->plugin()->post()->get_primary_term()`) now returns a valid primary term if the selected one is gone.
-		* `The_SEO_Framework\Admin\Settings\Layout\Form::get_image_uploader_form()` (`tsf()->admin()->layout()->form()->get_image_uploader_form()`) now also outputs a warning icon placeholder.
-		* `The_SEO_Framework\Data\Post::uses_non_html_page_builder()` (`tsf()->data()->post()->uses_non_html_page_builder()`) now detects Bricks and Oxygen Builder.
-		* `The_SEO_Framework\Data\Filter\Sanitize::qubit()` (`tsf()->filter()->sanitize()->qubit()`) now considers .3333 (off by .00003) the turnover point for the negative side, instead of -0.3333999...999 (off by .00006).
-		* `The_SEO_Framework\RobotsTXT\Main::get_robots_txt()` (`tsf()->robotstxt()->main()->get_robots_txt()`):
-			1. Refactored to output the directives via a priority system.
-			2. Now supports blocking AI language model trainers and SEO analysis tools.
-		* `The_SEO_Framework\RobotsTXT\Utils::get_robots_txt_url()` (`tsf()->robotstxt()->utils()->get_robots_txt_url()`) now memoizes the return value.
-		* `The_SEO_Framework\Traits\Property_Refresher::register_automated_refresh()` no longer relies on "has_run" checks but immediately registers the refresh.
-	* **Removed:**
-		* Vestigal pool `tsf()->data()->plugin()->home()` is now gone, its object was provisioned but never published.
-			* It may come back one day, but we have no plans for that just yet.
-	* **Fixed:**
-		* Resolved an issue where the deprecated method `tsf()->og_locale()` didn't return the meta tag and gave a warning instead.
-		* Pool `tsf()->admin()` is now prepared correctly for deprecated calls
-			* And so is its subpool `tsf()->admin()->layout()`.
-		* `tsf()->fetch_locale()` is now properly deprecated and returns its original value.
-			* Its first parameter has been removed and now always uses the current locale.
-			* Use `tsf()->open_graph()->get_locale()` instead.
-		* `tsf()->schema()->entities` now report the correct class names.
-		* Resolved an issue where `tsf()->filter()->escape()->xml_uri()` would emit a PHP deprecation notice when a query parameter was present in the URL on PHP 8.1 and later.
-		* The `schema.org/WebPage` type reference is resetted now when regenerated.
-		* When switching blogs on multisite, all data memoization for TSF's options and site cache now actually flush via trait `The_SEO_Framework\Traits\Property_Refresher`.
-			* Due to a name change of properties during development, this was accidentally disabled.
-			* This did work as intended for default options.
-			* This feature resolves edge-cases we have yet to encounter, but it could affect post filtering when fetching data from a different blog inside a network.
-			* We also added PTA, Post, Term, and User settings to the refresher, which were previously omitted for performance reasons, which we've now mitigated.
-* **JavaScript API notes:**
-	* **Added:**
-		* JS Event `tsf-updated-block-editor` is now available.
-		* JS Event `tsf-updated-block-editor-${type}` is now available.
-			* Types include: `title`, `link`, `slug`, `parent`, `date`, `author`, `content`, `excerpt`, and `visibility`.
-				* `slug`, `parent`, `date`, and `author` are new types.
-		* JS Event `tsf-updated-primary-term` is now available.
-		* JS file `utils.js` (`window.tsfUtils`) is now available and considered "common"; it contains two public methods: `debounce` and `delay`.
-		* JS file `ui.js` (`window.tsfUI`) is now available and considered "common"; it handles notices and contains two public methods: `fadeIn`, `fadeOut`, and `traceAnimation`.
-		* JS file `postslugs.js` (`window.tsfPostSlugs`) is now available and loaded with `post.js` and `le.js`; it handles post parent selections to update the canonical URLs accordingly. It has a caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requires it (`%postname%`).
-		* JS file `termslugs.js` (`window.tsfTermSlugs`) is now available and loaded with `post.js`, `term.js`, and `le.js`; it handles term selections to update the canonical URLs accordingly. It has an advanced caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requests it it (`%category%`, `%product_cat%`, etc.).
-		* JS file `authorslugs.js` (`window.tsfAuthorlugs`) is now available and loaded with `post.js` and `le.js`; it handles author selections to update the canonical URLs accordingly. It has a caching system to prevent repeated lookups. The initial lookup is done via PHP, and they're only done when the permalink structure requires it (`%author%`).
-		* jQuery Event `tsf-updated-gutenberg-${type}` now also respond to `'slug'` type changes.
-			* But this event is deprecated. Use the JS Event `tsf-updated-block-editor-${type}` instead.
-		* `tsfTerm.taxonomy` is now available.
-		* `tsfPost.l10n.params` now has properties `id` and `isBlockEditor`. They should be used instead of the namesake properties in `tsfPostL10n.states`, but we still need to find a good way to deprecate these.
-		* `tsfPost.l10n.nonces.edit_post` is now available. It's indexed by post ID, unlike `tsf.l10n.nonces.edit_posts`, which is a general capability check.
-		* `tsfTerm.l10n.params` now has properties `id` and `taxonomy`.
-		* `tsfTerm.l10n.nonces.edit_term` is now available. It's indexed by term ID.
-		* `tsfMedia.l10n` now has property `warning`, which is a map of image types that aren't compatible with some or most social platforms, and some explanatory translations.
-		* `tsfPT.l10n.i18n` now has the property `selectPrimary`, while all others have gone.
-			* This is now equal to `tsfPTGB.l10n.i18n`.
-	* **Improved:**
-		* JS Events `tsf-updated-block-editor` and `tsf-updated-block-editor-${type}` now respond to `'slug'` type changes.
-		* Removed redundant lookups and processing in quick-edit by testing if we're editing a post or taxonomy.
-		* Updating the Post's password in the Classic Editor no longer triggers 3 updates sequentially.
-	* **Changed:**
-		* We now use functions instead of constant-arrow-functions in our JS code. This makes imlpementing utilities, such as debouncers, easier, thanks to function hoisting.
-			* With that, for all affected functions, we removed `@function` JSDoc annotation, since that's now redundant.
-		* `tsf.selectByValue()` now also tries to select by label, which is tried together with the content.
-	* **Deprecated:**
-		* jQuery event `tsf-updated-gutenberg-${type}` is now deprecated. Use JS Event `tsf-updated-block-editor-${type}` instead.
-		* `tsf.ampHTMLtoText()` is now deprecated, with no alternative available. But you probably want to use `tsf.decodeEntities()` instead.
-		* `tsfAys.getChangedState()` is now deprecated. Use `tsfAys.areSettingsChanged()` instead.
-* **Option notes:**
-	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
-		* Added index `robotstxt_block_ai`. Default `0`.
-		* Added index `robotstxt_block_seo`. Default `0`.
-		* Added index `homepage_redirect`. Default empty string.
-		* Added index `homepage_canonical`. Default empty string.
-	* We're now stipulant about the autoloading status of every option by setting `update_option()`'s third parameter. This is because WordPress 6.6 makes up its own mind on the autoloading state based on arbitrary and untested values. Although that shouldn't affect TSF's options directly, one could filter it so it could become our problem. The distinct annotation of always autoloading (and toggling that when the plugin (de)activates) will ensure TSF always performs as intended.
-* **Action notes:**
-	* **Changed:**
-		* `the_seo_framework_flex_tab_content`, now uses `'args'` instead of `'params'` for its first parameter's indexes.
-			* I didn't deprecate this because I don't think anyone uses it.
-		* We changed the callback priority of `manage_edit-{$taxonomy}_columns` from 1 to 10, so to align with `manage_{$screen_id}_columns`.
-			* This fixes some odd race conditions we found when multiple plugins try to add columns. When they consistently run in the same order, issues are less likely to occur. Yes, we know, race conditions aren't possible in PHP, but this acted much like one, albeit very predictably.
-* **Filter notes:**
-	* **Added:**
-		* `the_seo_framework_robots_blocked_user_agents` is now available. It's used to assign user agents to block via the robots.txt file.
-		* `the_seo_framework_schema_queued_graph_data` is now available. It's used to allow creating graph references.
-		* `the_seo_framework_robots` is now available. It's used to create a map of robots directives to generate.
-			* In effect, `the_seo_framework_robots_txt_pre` and `the_seo_framework_robots_txt_pro` are deprecated.
-		* `the_seo_framework_get_excerpt` is now available. It's used to get an excerpt, right before parsing the entire post content, used by the description generator.
-			* There's also still `the_seo_framework_description_excerpt`, but that is a layer lower and meant for direct description output. Effectively, for now, they'll act the same. When in doubt, use the new one, so you'll affect all excerpts.
-	* **Deprecated:**
-		* `the_seo_framework_robots_disallow_queries`, use `the_seo_framework_robots` instead.
-		* `the_seo_framework_robots_txt_pre`, use `the_seo_framework_robots` instead.
-		* `the_seo_framework_robots_txt_pro`, use `the_seo_framework_robots` instead.
-		* `the_seo_framework_generated_archive_excerpt`, use `the_seo_framework_get_excerpt` instead.
-		* `the_seo_framework_pta_description_excerpt`, use `the_seo_framework_get_excerpt` instead.
-		* `the_seo_framework_fallback_archive_description_excerpt`, use `the_seo_framework_get_excerpt` instead.
-* **Improved:**
-	* Improved the Markdown parser's performance by using fewer memory operations.
-	* Removed the jQuery dependency for scripts `tsf`, `tsf-post`, and `tsf-media` by refactoring animations to vanilla JS and CSS.
-	* Added strict Dashicons dependency for scripts `tsf`, `tsf-ui` (new), and `tsf-settings` because it appears this may be unregistered as a default WordPress admin stylesheet.
-* **Other:**
-	* Element `.tsf-notice-wrap` is gone. We've long been relying on `.wp-header-end` instead.
-	* Template id `tsf-primary-term-selector-help` is gone, along with its element `.tsf-primary-term-selector-help-wrap`. We now use a selection field, requiring no tooltip.
-	* Removed support for obsolete `-ms-clear` and `-ms-input-placeholder` vendor-specific CSS pseudo-selectors.
-	* CSS file `tsf-media` is now available and will be loaded alongside its namesake script.
-	* We optimized opcodes for PHP 8.4:
-		* In short, PHP 8.4's OPcache module now also precaches `sprintf`. But, when working inside a namespace, we can only utilize that by namespace-escaping calls to `sprintf`.
-		* We maintain static code checks for this via [WPCS-TSF](https://github.com/theseoframework/wpcs-tsf).'
-	* The PHPDoc for all arrays has been updated, which contributed to most of the line changes in this release.
-	* The SEO Framework's main settings form element now has the ID `tsf-settings`.
-	* We've removed remaining element closers from void elements in the admin area, since we can safely assume HTML5 support.
-		* We cannot do this yet for the front-end output, since we must assume XHTML support. [Over 14 million sites are still using XHMTL](https://trends.builtwith.com/docinfo), but that's all the info we have. [WordPress.org is keeping data hostage from contributors](https://meta.trac.wordpress.org/ticket/6511).
-
-### 5.0.6
-
-This patch addresses an issue where [WordPress 6.0 and higher mistakenly tweaks unpaginated queries as comment-paginated](https://core.trac.wordpress.org/ticket/60806), causing indexing issues when using Full Site Editing or themes that [prerender Blocks before TSF](https://theseoframework.com/?p=4244).
-
-### 5.0.5
-
-In this minor sitemap-centric update, we've integrated WPML and Polylang's language-specific sitemap URLs into robots.txt, clarified support for complex sitemaps, and removed deprecated pinging functionality. We also added seconds to timestamps, resolved issues pertaining to the number 0, and remotely [fixed another compatibility issue in Polylang](https://theseoframework.com/?p=4234).
-
-### 5.0.4
-
-This tiny update [addresses an issue](https://theseoframework.com/?p=4215) that affected detection of the assigned blog page.
-
-### 5.0.3
-
-This minor update fixes compatibility with Polylang Pro. We also perfected the detection of unassigned home and blog pages and improved the Block Editor's load time by [resolving a glitch](https://theseoframework.com/?p=4204).
-
-### 5.0.2
-
-This minor update fixes more issues our community found after the release of TSF v5.0.0. We also improved the calculation of primary terms with child terms and how breadcrumbs handle post type archives. And again, we [improved the performance](https://theseoframework.com/?p=4174).
-
-### 5.0.1
-
-This minor update fixes issues our community found after the release of TSF v5.0.0. We also [improved the performance](https://theseoframework.com/?p=4158).
-
-### 5.0.0 - Apex
-
-*We become just by doing just acts, temperate by doing temperate acts, brave by doing brave acts. - [Aristotle](https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0054%3Abook%3D2%3Achapter%3Dpos%3D17%3Asection%3D4)*
+*The lover of wisdom, then, far surpasses the lover of gain. - [Plato](https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0168%3Abook%3D9)*
 
 **Release highlights**
 
-* There's a brand-new relational Schema.org structured data generator.
-* We added a new shortcode (and function) for breadcrumbs to put in your templates.
-* You can now select a preferred Twitter Card type for every post, term, and custom post type.
-* Do you fancy the SEO Bar but find it distracting? Toggle the new dull, low-contrast color scheme.
-* Special characters are now normalized for SEO Bar assertions, so it is now far more accurate.
-* Users with an author role anywhere in a multisite network can now have their SEO meta tweaked from any site.
-* Tooltip backgrounds and various border accents now adhere to the admin color scheme (once more).
+* This update brings a new color scheme that's easier on your eyes. You'll love it tomorrow.
+* The canonical URL is now tracked in real-time when editing any page or term.
+* You can now block AI trainers and SEO analysis crawlers from using your content.
+* We added a warning for image types that aren't compatible with most social platforms.
+* You can now set a Canonical and Redirect URL for the homepage.
 
-**Apex**
+**Profound**
 
-Even though we dubbed TSF v4.2 "perfect," it couldn't be even better because of its legacy codebase. Many features and tweaks weren't possible because those would've created bugs or made maintenance impossible. In v5.0, we overhauled everything while keeping in mind the future. In doing so, we managed to ascend to a new apex, and we can now see the next summit ahead.
+After the monumental v5.0 "Apex" update, we're proud to present TSF v5.1 "Profound." It's a less impactful update, bringing only 150 improvements, but every single one aims to make TSF even more user-friendly. Meticulously crafted, unlike anything, this update is yet another testament to our dedication to making WordPress SEO bearable.
 
-Its code is unrecognizable, yet somehow very familiar. TSF v5.0 "Apex" is just the beginning of what comes next, and it won't be downhill from here.
+**Canonical URL Notation Tracker**
 
-**New breadcrumb shortcode**
+The canonical URL is a critical part of SEO, but WordPress doesn't convey what it becomes when editing the page, only after saving it. Now, you can see it in real-time as a placeholder, depending on your site's permalink settings.
 
-You can now use shortcode `&#91;tsf_breadcrumb&#93;`. This shortcode is meant to be implemented in your theme and will output the current breadcrumb. It will listen to your meta title settings. You can learn more about its syntax in our [Knowledge Base about the Breadcrumb shortcode](https://tsf.fyi/kb/a/212).
+This tracker is accurate. Still, we plan to make it more sophisticated in future updates. It won't reflect category changes in Quick Edit because we must still add a primary term selector there, and it's disabled when a multilingual plugin is active, as those modify the URL structure in a non-standard way.
 
-**Important for developers**
+**New robots.txt generator**
 
-* We refactored the entire codebase in this update -- over 1.20 million characters were written, and over 0.87 million were removed.
-* The code counts **1229 registered changes**; we added over 70 new classes, 220 new methods, 20 new filters, and a shortcode.
-* For the main object, `tsf()`, we deleted 19 classes, deprecated 388 methods and 1 property, and deleted 110 methods and 10 properties.
-* `uid` is now an accepted custom query parameter for almost all meta-generator methods. If your custom filters for TSF act odd on profile pages, [reach out to us in the forums](https://tsf.fyi/support/tsf/new-topic) and show us your code. **We'll fix it for you.**
-* So, if you ever used the `the_seo_framework()` or `tsf()` function, you almost certainly will get a deprecation notice. If you need assistance resolving this, please [open a new support topic](https://tsf.fyi/support/tsf/new-topic) and **show us your code**.
+We've replaced the existing robots.txt writer with a priority-based generator. We've already added the ability to add your sitemap's location, block AI trainers, block SEO analysis crawlers, and limit access to the admin area. You can append, remove, and modify generator sections using filter `the_seo_framework_robots_txt_sections`.
 
-**New meta tag generator**
+**Updated administrative scripts**
 
-TSF now generates all meta tags via a registry. You can alter the population of the registry via filters `the_seo_framework_meta_generator_pools` and `the_seo_framework_meta_generators`, and you can modify the final registry via filter `the_seo_framework_meta_render_data`. For that, you can [find an example at Github](https://gist.github.com/sybrew/272b746296114cd93c3320e9544a1618).
-
-**New Schema.org graph generator**
-
-We added a new Schema.org structured data generator to TSF. This generator supports every page, post, archive, and custom post type. We built it to be referential and expansive by generating an ID-based graph. For example, if you refer to a Person once, their entity will be put right there, but if you refer to it again, it will use an ID-based reference. This keeps the output code neat and will not waste time generating an entity twice. You can filter it via `the_seo_framework_schema_graph_data`.
-
-**Environment upgrade notes**
-
-WordPress 5.5 through 5.8 are no longer supported. Here's why:
-
-* [Over 75% of all WordPress sites](https://wordpress.org/about/stats/) are using WordPress v5.9 or later.
-* Newer versions of WordPress are faster, more reliable, and easier to work with --- for both you and us.
-* Supporting past versions takes time away that's better used implementing new features.
-
-PHP 7.2 and 7.3 are no longer supported. Here's why:
-
-* [Almost 80% of all WordPress sites](https://wordpress.org/about/stats/) are using PHP v7.4 or later.
-* Newer versions of PHP are faster and more secure. For us, they're also easier to work with.
-* Again, supporting past versions takes time away that's better used implementing new features.
+We've significantly updated the plugin's CSS and JavaScript files. If you find issues with the interface, you may need to flush your browser caches. Check out our [KB article to learn more](https://tsf.fyi/kb/common-update-issues/).
 
 **Support the development**
 
-We hope you'll love this update as much as we do. Please consider supporting us by sharing [a fantastic review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or do your friends and colleagues a favor by installing TSF for them.
+We hope you'll love this update as much as we do. Please consider supporting us by posting [a fantastic review](https://wordpress.org/support/plugin/autodescription/reviews/#new-topic-0), [get a license](https://theseoframework.com/pricing/), or do your friends and colleagues a favor by installing TSF for them.
 
 **Detailed log**
 
-We become brave by training ourselves to despise and endure terrors, and we shall be best able to endure terrors [when we have become brave](https://theseoframework.com/?p=4135#detailed).
+But surely it is obvious to everyone that all the endeavor of the part by which we learn is ever towards [knowledge of the truth of things](https://theseoframework.com/?p=4331#detailed).
 
 ### Full changelog
 

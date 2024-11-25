@@ -304,12 +304,11 @@ class Compatibility {
 	 * - Divi Builder by Elegant Themes
 	 * - Visual Composer by WPBakery
 	 * - Bricks Builder by Bricks
-	 * - Oxygen Builder by Soflyy
 	 *
 	 * @since 4.1.0
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `detect_non_html_page_builder`.
-	 * @since 5.1.0 Added 'CT_VERSION' (Oxygen) and 'BRICKS_VERSION' (Bricks) constants.
+	 * @since 5.1.0 Added 'BRICKS_VERSION' (Bricks) constants.
 	 *
 	 * @return bool
 	 */
@@ -325,8 +324,7 @@ class Compatibility {
 				'the_seo_framework_shortcode_based_page_builder_active',
 				\defined( 'ET_BUILDER_VERSION' )
 				|| \defined( 'WPB_VC_VERSION' )
-				|| \defined( 'BRICKS_VERSION' )
-				|| \defined( 'CT_VERSION' ),
+				|| \defined( 'BRICKS_VERSION' ),
 			)
 		);
 	}

@@ -114,7 +114,7 @@ class Post {
 		empty( static::$meta_memo ) and static::register_automated_refresh( 'meta_memo' );
 
 		// We test post type support for "post_query"-queries might get past this point.
-		if ( empty( $post_id ) || ! Post_Type::is_supported( \get_post( $post_id )->post_type ) )
+		if ( empty( $post_id ) || ! Post_Type::is_supported( \get_post( $post_id )->post_type ?? '' ) )
 			return static::$meta_memo[ $post_id ] = static::get_default_meta( $post_id );
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.

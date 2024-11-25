@@ -527,7 +527,7 @@ class Utils {
 									$parentslug = static::get_relative_part_from_url( \get_permalink( $parent_post ) );
 
 									// This was probably a workaround for paginated parent links. See `get_attachment_link()`.
-									// We should also account for this on the Canonical URL Notation Tool, but this is an extreme oddity.
+									// We should also account for this on the Canonical URL Notation Tracker, but this is an extreme oddity.
 									// I doubt anyone is managing attachment slugs, especially switching from numericals to non-numericals.
 									if (
 										   is_numeric( $attachment->post_name )
