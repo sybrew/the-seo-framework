@@ -181,7 +181,9 @@ class User {
 				}
 			}
 		} else {
-			$meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
+			// FIXME: (array) is a patch. We messed up the datastore in 5.1.1, where strings got stored instead of arrays.
+			// We'll rectify it in a future database upgrade, so we can remove the patch.
+			$meta = (array) ( \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [] );
 		}
 
 		/**

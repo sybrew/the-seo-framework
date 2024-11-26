@@ -63,11 +63,11 @@ class User {
 					break;
 
 				default:
-					unset( $value[ $key ] );
+					unset( $meta_value[ $key ] );
 			}
 		}
 
 		// Store an empty array on failure. Data\Plugin\User::get_meta() repopulates it on demand.
-		return $value ?: [];
+		return $meta_value ?: [];
 	}
 }

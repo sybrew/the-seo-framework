@@ -90,7 +90,7 @@ class Term {
 					break;
 
 				default:
-					unset( $value[ $key ] );
+					unset( $meta_value[ $key ] );
 			}
 		}
 

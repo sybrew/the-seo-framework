@@ -243,6 +243,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+### 5.1.2
+
+This patch [resolves another issue](https://theseoframework.com/?p=4380) where saving author meta data could cause an error.
+
 ### 5.1.1
 
 This tiny update [resolves issues](https://theseoframework.com/?p=4348) our community found with the release of TSF v5.1.
