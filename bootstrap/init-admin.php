@@ -139,7 +139,7 @@ if ( \in_array( false, $headless, true ) ) { // Still got head...
 
 	// Setup user sanitization. If at least something isn't headless, user metadata can be used.
 	\add_action(
-		'sanitize_usermeta_' . \THE_SEO_FRAMEWORK_USER_OPTIONS,
+		'sanitize_user_meta_' . \THE_SEO_FRAMEWORK_USER_OPTIONS,
 		[ Data\Filter\User::class, 'filter_meta_update' ],
 	);
 }

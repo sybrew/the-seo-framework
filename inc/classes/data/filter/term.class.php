@@ -39,7 +39,7 @@ class Term {
 	 * @hook "sanitize_term_meta_ . THE_SEO_FRAMEWORK_TERM_OPTIONS" 10
 	 * @since 5.0.0
 	 *
-	 * @param mixed $meta_value An unsanitized value.
+	 * @param mixed[] $meta_value An unsanitized value.
 	 * @return array The sanitized term meta. An empty array on failure.
 	 */
 	public static function filter_meta_update( $meta_value ) {

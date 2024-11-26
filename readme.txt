@@ -245,11 +245,16 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.1.1
 
-This tiny update [fixes issues](https://theseoframework.com/?p= TODO) our community found after the release of TSF v5.1.
+This tiny update [fixes issues](https://theseoframework.com/?p=4348) our community found after the release of TSF v5.1.
 
 **For everyone:**
 
 * **Fixed:** Resolved a fatal error that occurred when saving a user profile.
+* **Fixed:** Resolved an issue where the user meta sanitizer didn't invoke. Now, Facebook and X (formerly Twitter) handles will be sanitized properly again. This issue was introduced in TSF v5.0.
+	* This means that the Facebook page and X handle will now be correctly converted again to what Facebook and X expect. If you mimicked the placeholder, then the input was already correct.
+	* Only users who can edit posts can have these handles. You'll need to re-save these profiles to apply the sanitization.
+	* We considered sanitizing when outputting the handles, instead of when storing them, but the sanitization process is resource intensive. Moreover, we have not determined the efficacy of these social profile handles; we only added them because the social networks want them. They don't appear to even use them. So, the extra processing would be futile.
+	* We always escape all data on output. This was not a security issue.
 
 **For developers:**
 
@@ -267,7 +272,7 @@ This tiny update [fixes issues](https://theseoframework.com/?p= TODO) our commun
 * The canonical URL is now tracked in real-time when editing any page or term.
 * You can now block AI trainers and SEO analysis crawlers from using your content.
 * We added a warning for image types that aren't compatible with most social platforms.
-* You can now set a Canonical and Redirect URL for the homepage.
+* You can now set a canonical and redirect URL for the homepage.
 
 **Profound**
 

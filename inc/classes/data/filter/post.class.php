@@ -38,7 +38,7 @@ class Post {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @param mixed $meta_value Metadata value to sanitize.
+	 * @param mixed[] $meta_value Metadata value to sanitize.
 	 * @return array[] The sanitized post meta.
 	 */
 	public static function filter_meta_update( $meta_value ) {

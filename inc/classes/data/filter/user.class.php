@@ -37,7 +37,7 @@ class User {
 	 * @hook "sanitize_usermeta_ . THE_SEO_FRAMEWORK_USER_OPTIONS" 10
 	 * @since 5.0.0
 	 *
-	 * @param mixed $meta_value An unsanitized value.
+	 * @param mixed[] $meta_value An unsanitized value.
 	 * @return array[] The sanitized user meta.
 	 */
 	public static function filter_meta_update( $meta_value ) {
