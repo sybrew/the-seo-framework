@@ -243,6 +243,20 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+### 5.1.1
+
+This tiny update [fixes issues](https://theseoframework.com/?p= TODO) our community found after the release of TSF v5.1.
+
+**For everyone:**
+
+* **Fixed:** Resolved a fatal error that occurred when saving a user profile.
+
+**For developers:**
+
+* **Changed** PHP method `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`):
+	1. The second parameter is now nullable and `null` by default.
+	1. Can now return the `WP_User` object as well when the second parameter is `null`.
+
 ### 5.1.0 - Profound
 
 *The lover of wisdom, then, far surpasses the lover of gain. - [Plato](https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0168%3Abook%3D9)*

@@ -91,16 +91,22 @@ class User {
 	 * This is an alias of WP Core's `\get_userdata()`, but with proper memoization.
 	 *
 	 * @since 5.1.0
+	 * @since 5.1.1 1. The second parameter is now nullable and null by default.
+	 *              2. Can now return the user object as well when the second parameter is null.
 	 *
-	 * @param int    $user_id The user ID.
-	 * @param string $key     The data to retrieve.
-	 * @return ?mixed The requested user data. Null on failure.
+	 * @param int     $user_id The user ID.
+	 * @param ?string $key     The data to retrieve. Leave empty to get all data.
+	 * @return ?mixed|?\WP_User The requested user data.
+	 *                          If `$key` isn't set, it'll return the WP_User object.
+	 *                          Null on failure.
 	 */
-	public static function get_userdata( $user_id, $key ) {
+	public static function get_userdata( $user_id, $key = null ) {
 
 		$userdata = umemo( __METHOD__, null, $user_id )
-				 ?? umemo( __METHOD__, \get_userdata( $user_id ), $user_id );
+				 ?? umemo( __METHOD__, \get_userdata( $user_id ) ?: false, $user_id );
 
-		return $userdata->$key ?? null;
+		return isset( $key )
+			? ( $userdata->$key ?? null )
+			: ( $userdata ?: null );
 	}
 }
