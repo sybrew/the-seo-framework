@@ -321,13 +321,15 @@ final class ListEdit extends Admin\Lists\Table {
 			}
 
 			// Only hierarchical taxonomies can be used in the URL.
-			$memo['taxonomies']     ??= $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
+			$memo['taxonomies'] ??= $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
+
+			$taxonomies               = $memo['taxonomies'];
 			$parent_term_slugs_by_tax = [];
 
 			// Yes, on its surface, this is a very expensive procedure.
 			// However, WordPress needs to walk all the terms already to create the post links.
 			// Hence, it ought to net to zero impact.
-			foreach ( $memo['taxonomies'] as $taxonomy ) {
+			foreach ( $taxonomies as $taxonomy ) {
 				if ( str_contains( $permastruct, "%$taxonomy%" ) ) {
 					// Broken in Core. Skip writing cache. We may reach this line 200 times, but nobody should be using %post_tag% anyway.
 					if ( 'post_tag' === $taxonomy ) continue;
@@ -411,16 +413,17 @@ final class ListEdit extends Admin\Lists\Table {
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'leCanonical' => [
-					'refCanonicalLocked' => $is_canonical_ref_locked,
-					'defaultCanonical'   => \esc_url( $default_canonical ),
-					'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
-					'urlStructure'       => $permastruct,
-					'parentPostSlugs'    => $parent_post_slugs ?? [],
-					'parentTermSlugs'    => $parent_term_slugs_by_tax ?? [],
-					'authorSlugs'        => $author_slugs ?? [],
-					'isHierarchical'     => $is_post_type_hierarchical,
+					'refCanonicalLocked'  => $is_canonical_ref_locked,
+					'defaultCanonical'    => \esc_url( $default_canonical ),
+					'preferredScheme'     => Meta\URI\Utils::get_preferred_url_scheme(),
+					'urlStructure'        => $permastruct,
+					'parentPostSlugs'     => $parent_post_slugs ?? [],
+					'parentTermSlugs'     => $parent_term_slugs_by_tax ?? [],
+					'supportedTaxonomies' => $taxonomies ?? [],
+					'authorSlugs'         => $author_slugs ?? [],
+					'isHierarchical'      => $is_post_type_hierarchical,
 					// phpcs:ignore, WordPress.DateTime.RestrictedFunctions -- date() is used for URL generation. See `get_permalink()`.
-					'publishDate'        => date( 'c', strtotime( \get_post( $post_id )->post_date ?? 'now' ) ),
+					'publishDate'         => date( 'c', strtotime( \get_post( $post_id )->post_date ?? 'now' ) ),
 				],
 			] ),
 		);

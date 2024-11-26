@@ -604,16 +604,17 @@ switch ( $instance ) :
 					'autodescription_canonical',
 					[
 						'state' => [
-							'refCanonicalLocked' => $canonical_ref_locked,
-							'defaultCanonical'   => \esc_url( $default_canonical ),
-							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
-							'urlStructure'       => $permastruct,
-							'parentPostSlugs'    => $parent_post_slugs ?? [],
-							'parentTermSlugs'    => $parent_term_slugs_by_tax,
-							'authorSlugs'        => $author_slugs ?? [],
-							'isHierarchical'     => $is_post_type_hierarchical,
+							'refCanonicalLocked'  => $canonical_ref_locked,
+							'defaultCanonical'    => \esc_url( $default_canonical ),
+							'preferredScheme'     => Meta\URI\Utils::get_preferred_url_scheme(),
+							'urlStructure'        => $permastruct,
+							'parentPostSlugs'     => $parent_post_slugs ?? [],
+							'parentTermSlugs'     => $parent_term_slugs_by_tax,
+							'supportedTaxonomies' => $taxonomies,
+							'authorSlugs'         => $author_slugs ?? [],
+							'isHierarchical'      => $is_post_type_hierarchical,
 							// phpcs:ignore, WordPress.DateTime.RestrictedFunctions -- date() is used for URL generation. See `get_permalink()`.
-							'publishDate'        => date( 'c', strtotime( \get_post( $post_id )->post_date ?? 'now' ) ),
+							'publishDate'         => date( 'c', strtotime( \get_post( $post_id )->post_date ?? 'now' ) ),
 						],
 					],
 				);

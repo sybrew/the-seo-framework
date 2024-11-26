@@ -255,12 +255,15 @@ This tiny update [fixes issues](https://theseoframework.com/?p=4348) our communi
 	* Only users who can edit posts can have these handles. You'll need to re-save these profiles to apply the sanitization.
 	* We considered sanitizing when outputting the handles, instead of when storing them, but the sanitization process is resource intensive. Moreover, we have not determined the efficacy of these social profile handles; we only added them because the social networks want them. They don't appear to even use them. So, the extra processing would be futile.
 	* We always escape all data on output. This was not a security issue.
+* **Fixed:** Resolved an issue where the Canonical URL Notation Tracker didn't consider categories on new posts.
+	* In turn, TSF makes an extra AJAX call when you add a new post, for TSF relies on the primary term to select the right category, which is currently only calculable in the editor for new posts. We'll look at improving this in the future.
 
 **For developers:**
 
 * **Changed** PHP method `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`):
 	1. The second parameter is now nullable and `null` by default.
 	1. Can now return the `WP_User` object as well when the second parameter is `null`.
+* **Changed:** JS object `tsfPost.l10n` now has property `supportedTaxonomies`, which is an array of supported taxonomies.
 
 ### 5.1.0 - Profound
 
