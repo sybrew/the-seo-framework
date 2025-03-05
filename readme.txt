@@ -243,6 +243,36 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+TODO Add a parent to a page/product, then delete that parent from WordPress (or database, so WordPress cannot rectify) -- then, see if we can get an "Untitled" page/product in the breadcrumb like that.
+TODO this messes up the breadcrumbs of TSF: https://woocommerce.com/products/brands/.
+TODO set_time_limit() appears to be blocked by many hosts. This might prevent them from using TSF at all?
+TODO move user settings to personal_options?
+TODO check compatibility with Web Stories.
+TODO introduce dark theme for sitemap. Inspired by https://rss.beauty/.
+TODO kevin from clearwater would like to beta test https://github.com/sybrew/the-seo-framework/issues/700?
+	-> But we also have WhatsApp.
+TODO allow invoking the sitemap loader via a filter/constant, so that the Google News Sitemap can be loaded regardless of the main sitemap settings.
+TODO update phpdoc for the_seo_framework_meta_render_data.
+TODO mention we renamed "Twitter meta tags" to "Twitter Card meta tags" -- Translation files need updating!
+TODO add a filter akin to the_seo_framework_supported_twitter_card_types for Open Graph types.
+
+TODO WooCommerce 9.6 changed how categories are recognized (from hierarchical to non-hierarchical?). This affects the breadcrumb output.
+
+### 5.1.3
+
+**For developers:**
+
+* **Fixed:**
+	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+* **Other:**
+	* We now properly capitalize the proper noun Boolean.
+
+**For translators:**
+
+* **Updated:**
+	* POT translation file.
+	* Various sentences have been updated for clarity.
+
 ### 5.1.2
 
 This patch [resolves another issue](https://theseoframework.com/?p=4380) where saving author meta data could cause an error.

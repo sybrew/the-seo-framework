@@ -9,11 +9,11 @@ namespace The_SEO_Framework\Bootstrap;
 
 // phpcs:disable, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- Too many scoped funcs. Test me once in a while.
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Admin,
 	Data,
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Format\Markdown,
 	Query,
 };
@@ -122,7 +122,7 @@ function _do_upgrade() {
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
 	$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
-	if ( 0 !== $ini_max_execution_time )
+	if ( 0 !== $ini_max_execution_time && \function_exists( 'set_time_limit' ) )
 		set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
 	/**
@@ -774,10 +774,10 @@ function _do_upgrade_3300() {
 
 /**
  * Registers the `advanced_query_protection` option. 0 for existing sites. 1 for new sites.
- * Registers the `index_the_feed` option, boolean.
+ * Registers the `index_the_feed` option, Boolean.
  * Registers the `baidu_verification` option, string.
- * Registers the `oembed_scripts` option, boolean.
- * Registers the `oembed_remove_author` option, boolean.
+ * Registers the `oembed_scripts` option, Boolean.
+ * Registers the `oembed_remove_author` option, Boolean.
  * Registers the `theme_color` option, string.
  *
  * @since 4.0.5
@@ -836,8 +836,8 @@ function _do_upgrade_4103() {
 // category_$r and tag_$r must be deleted at 4.2 or 5.0 (whichever comes);
 
 /**
- * Registers the `oembed_use_og_title` option, boolean.
- * Registers the `oembed_use_social_image` option, boolean. Differs from default option.
+ * Registers the `oembed_use_og_title` option, Boolean.
+ * Registers the `oembed_use_social_image` option, Boolean. Differs from default option.
  *
  * @since 4.1.1
  */

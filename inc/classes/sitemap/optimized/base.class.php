@@ -8,13 +8,13 @@ namespace The_SEO_Framework\Sitemap\Optimized;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Escape,
 	Meta,
 	Sitemap,
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Format\Time,
 	Post_Type,
 	Query,
@@ -84,7 +84,7 @@ class Base extends Main {
 		if ( false !== Sitemap\Cache::get_cached_sitemap_content( $sitemap_id ) ) return;
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
-		if ( 0 !== $ini_max_execution_time )
+		if ( 0 !== $ini_max_execution_time && \function_exists( 'set_time_limit' ) )
 			set_time_limit( max( $ini_max_execution_time, 3 * \MINUTE_IN_SECONDS ) );
 
 		// Somehow, the 'base' key is unavailable, the database failed, or a lock is already in place. Either way, bail.
