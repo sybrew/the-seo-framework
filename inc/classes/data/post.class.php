@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Data;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function The_SEO_Framework\memo;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Helper,
 	Helper\Format\Time,
 	Helper\Query,
@@ -104,7 +104,7 @@ class Post {
 
 		/**
 		 * @since 4.1.0
-		 * @param boolean|null $detected Whether a builder should be detected.
+		 * @param Boolean|null $detected Whether a builder should be detected.
 		 * @param int          $post_id The current Post ID.
 		 * @param array        $meta The current post meta.
 		 */
@@ -216,7 +216,7 @@ class Post {
 	 */
 	public static function get_latest_post_id() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
 		$query = new \WP_Query( [
@@ -250,7 +250,7 @@ class Post {
 	 */
 	public static function has_posts_in_pta( $post_type ) {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
 
 		$query = new \WP_Query( [

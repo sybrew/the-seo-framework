@@ -8,9 +8,9 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\get_query_type_from_args;
+use function The_SEO_Framework\get_query_type_from_args;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 	Helper\Query,
@@ -91,10 +91,10 @@ function _is_shop( $post = null ) {
 			? $post
 			: ( \get_post( $post )->ID ?? 0 );
 
-		// phpcs:ignore, TSF.Performance.Opcodes -- local funcs
+		// phpcs:ignore TSF.Performance.Opcodes -- local funcs
 		$is_shop = $id && _get_shop_page_id() === $id;
 	} else {
-		// phpcs:ignore, TSF.Performance.Opcodes -- local funcs
+		// phpcs:ignore TSF.Performance.Opcodes -- local funcs
 		$is_shop = ! \is_admin() && \function_exists( 'is_shop' ) && \is_shop();
 	}
 
@@ -112,7 +112,7 @@ function _is_shop( $post = null ) {
  * @return int
  */
 function _set_real_id_wc_shop( $id ) {
-	// phpcs:ignore, TSF.Performance.Opcodes -- local funcs.
+	// phpcs:ignore TSF.Performance.Opcodes -- local funcs.
 	return _is_shop() ? _get_shop_page_id() : $id;
 }
 
@@ -128,7 +128,7 @@ function _set_real_id_wc_shop( $id ) {
  * @return bool
  */
 function _set_shop_singular_archive( $is_singular_archive, $id ) {
-	// phpcs:ignore, TSF.Performance.Opcodes -- local func
+	// phpcs:ignore TSF.Performance.Opcodes -- local func
 	return $is_singular_archive || ( _get_shop_page_id() && _is_shop( $id ) );
 }
 
@@ -146,7 +146,7 @@ function _set_shop_singular_archive( $is_singular_archive, $id ) {
  * @return bool
  */
 function _set_wc_is_shop( $is_shop, $post ) {
-	// phpcs:ignore, TSF.Performance.Opcodes -- local func
+	// phpcs:ignore TSF.Performance.Opcodes -- local func
 	return $is_shop || _is_shop( $post );
 }
 
@@ -303,7 +303,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
  *     The image generation parameters.
  *
  *     @type string  $size     The image size to use.
- *     @type boolean $multi    Whether to allow multiple images to be returned.
+ *     @type Boolean $multi    Whether to allow multiple images to be returned.
  *     @type array   $cbs      The callbacks to parse. Ideally be generators, so we can halt remotely.
  *     @type array   $fallback The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
@@ -444,7 +444,7 @@ function _get_product_category_thumbnail_image_details( $args = null, $size = 'f
 function _filter_public_wc_post_type_archives( $post_types ) {
 
 	// Don't mess with it on the front-end, or when no post ID is assigned to the shop.
-	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- local func
+	// phpcs:ignore TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- local func
 	if ( ! \is_admin() || ! _get_shop_page_id() ) return $post_types;
 
 	return array_diff( $post_types, [ 'product' ] );
@@ -473,7 +473,7 @@ function _filter_wc_shop_pta_title_items( $items, $object ) {
 
 	if ( ! $replace ) return $items;
 
-	// phpcs:ignore, WordPress.WP.I18n.TextDomainMismatch -- Source: WC_Install::create_pages();
+	// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Source: WC_Install::create_pages();
 	$shop = \_x( 'Shop', 'Page title', 'woocommerce' );
 
 	// Don't return directly, forward compat: may we ever add $items[3].

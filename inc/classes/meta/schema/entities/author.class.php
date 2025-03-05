@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\normalize_generation_args;
+use function The_SEO_Framework\normalize_generation_args;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Meta,
 	Data,
 	Helper\Query,

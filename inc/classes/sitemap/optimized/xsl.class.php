@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Sitemap\Optimized;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Template;
+use The_SEO_Framework\Helper\Template;
 
 /**
  * The SEO Framework plugin

@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Meta\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data;
+use The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -86,7 +86,7 @@ class Factory {
 	 * @generator
 	 */
 	public static function generator() {
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK.
 		while ( true ) switch ( $sender = yield static::START ) {
 			case 'noindex':
 			case 'nofollow':

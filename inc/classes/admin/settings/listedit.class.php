@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Admin,
 	Admin\Settings\Layout\HTML,
 	Data,
@@ -135,7 +135,7 @@ final class ListEdit extends Admin\Lists\Table {
 
 		if ( $this->column_name !== $column_name ) return;
 
-		// phpcs:ignore, Generic.CodeAnalysis.EmptyStatement -- For the future, when WordPress Core decides.
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement -- For the future, when WordPress Core decides.
 		if ( $taxonomy ) {
 			// Not yet.
 		} else {
@@ -252,7 +252,7 @@ final class ListEdit extends Admin\Lists\Table {
 			// '<span class=hidden id=%s data-le="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeData[%s]', (int) $post_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
@@ -321,6 +321,7 @@ final class ListEdit extends Admin\Lists\Table {
 			}
 
 			// Only hierarchical taxonomies can be used in the URL.
+			// TODO filter post_tag here.
 			$memo['taxonomies'] ??= $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
 
 			$taxonomies               = $memo['taxonomies'];
@@ -372,18 +373,19 @@ final class ListEdit extends Admin\Lists\Table {
 			// '<span class=hidden id=%s data-le-post-data="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLePostData[%s]', (int) $post_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:disable WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'lePostData' => [
 					'isFront' => Query::is_static_front_page( $generator_args['id'] ),
 				],
 			] ),
+			// phpcs:enable WordPress.Security.EscapeOutput
 		);
 		printf(
 			// '<span class=hidden id=%s data-le-title="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeTitleData[%s]', (int) $post_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:disable WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'leTitle' => [
 					'refTitleLocked'    => $is_title_ref_locked,
@@ -393,24 +395,26 @@ final class ListEdit extends Admin\Lists\Table {
 					'additionPlacement' => 'left' === $seplocation ? 'before' : 'after',
 				],
 			] ),
+			// phpcs:enable WordPress.Security.EscapeOutput
 		);
 		printf(
 			// '<span class=hidden id=%s data-le-description="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeDescriptionData[%s]', (int) $post_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:disable WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'leDescription' => [
 					'refDescriptionLocked' => $is_desc_ref_locked,
 					'defaultDescription'   => $default_description,
 				],
 			] ),
+			// phpcs:enable WordPress.Security.EscapeOutput
 		);
 		printf(
 			// '<span class=hidden id=%s data-le-canonical="%s"></span>',
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeCanonicalData[%s]', (int) $post_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:disable WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'leCanonical' => [
 					'refCanonicalLocked'  => $is_canonical_ref_locked,
@@ -422,14 +426,15 @@ final class ListEdit extends Admin\Lists\Table {
 					'supportedTaxonomies' => $taxonomies ?? [],
 					'authorSlugs'         => $author_slugs ?? [],
 					'isHierarchical'      => $is_post_type_hierarchical,
-					// phpcs:ignore, WordPress.DateTime.RestrictedFunctions -- date() is used for URL generation. See `get_permalink()`.
+					// phpcs:ignore WordPress.DateTime.RestrictedFunctions -- date() is used for URL generation. See `get_permalink()`.
 					'publishDate'         => date( 'c', strtotime( \get_post( $post_id )->post_date ?? 'now' ) ),
 				],
 			] ),
+			// phpcs:enable WordPress.Security.EscapeOutput
 		);
 
 		if ( $this->doing_ajax )
-			echo $this->get_ajax_dispatch_updated_event(); // phpcs:ignore, WordPress.Security.EscapeOutput
+			echo $this->get_ajax_dispatch_updated_event(); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
 	/**
@@ -552,7 +557,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeData[%s]', (int) $term_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
@@ -567,7 +572,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeTitleData[%s]', (int) $term_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'leTitle' => [
 					'refTitleLocked'    => false,
@@ -582,7 +587,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeDescriptionData[%s]', (int) $term_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'leDescription' => [
 					'refDescriptionLocked' => false,
@@ -593,7 +598,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$container .= \sprintf(
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeCanonicalData[%s]', (int) $term_id ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'leCanonical' => [
 					'refCanonicalLocked' => false,

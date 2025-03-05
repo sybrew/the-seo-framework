@@ -6,14 +6,14 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Helper\Compatibility;
+use The_SEO_Framework\Helper\Compatibility;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -204,7 +204,7 @@ switch ( $instance ) :
 				</p>
 				<p class=hide-if-no-tsf-js>
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 					echo Form::get_image_uploader_form( [
 						'id'   => 'knowledge_logo',
 						'data' => [

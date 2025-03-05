@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Helper;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function The_SEO_Framework\memo;
 
 /**
  * The SEO Framework plugin
@@ -65,7 +65,7 @@ class Guidelines {
 		// Strip the "_formal" and other suffixes. 5 length max: xx_YY
 		$locale = substr( $locale ?? \get_locale(), 0, 5 );
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $locale ) ) return $memo;
 
 		// phpcs:disable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter

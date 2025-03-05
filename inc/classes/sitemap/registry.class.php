@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	memo,
 	has_run,
 };
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper,
 	Helper\Query,
@@ -393,7 +393,7 @@ class Registry {
 		if ( Data\Plugin::get_option( 'sitemap_styles' ) ) {
 			printf(
 				'<?xml-stylesheet type="text/xsl" href="%s"?>' . "\n",
-				// phpcs:ignore, WordPress.Security.EscapeOutput
+				// phpcs:ignore WordPress.Security.EscapeOutput
 				static::get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
 			);
 		}
@@ -430,7 +430,7 @@ class Registry {
 			}
 		);
 
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- Output is expected to be escaped.
+		// phpcs:ignore WordPress.Security.EscapeOutput -- Output is expected to be escaped.
 		printf( "<urlset %s>\n", implode( ' ', $schemas ) );
 	}
 

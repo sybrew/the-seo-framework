@@ -8,13 +8,13 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function The_SEO_Framework\memo;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Front,
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Post_Type,
 	Query,
 	Taxonomy,
@@ -98,7 +98,7 @@ final class Debug {
 					\esc_html( $function ),
 					'<strong>' . \esc_html__( 'deprecated', 'autodescription' ) . '</strong>',
 					\esc_html( $version ) ?: 'unknown',
-					$replacement, // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
+					$replacement, // phpcs:ignore WordPress.Security.EscapeOutput -- See doc comment.
 				);
 			} else {
 				$message = \sprintf(
@@ -111,7 +111,7 @@ final class Debug {
 			}
 
 			trigger_error(
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
 				static::combobulate_error_message( static::get_error(), $message, \E_USER_DEPRECATED ),
 				\E_USER_DEPRECATED,
 			);
@@ -162,12 +162,12 @@ final class Debug {
 				\esc_html__( '%1$s was called %2$s. %3$s %4$s', 'autodescription' ),
 				\esc_html( $function ),
 				'<strong>' . \esc_html__( 'incorrectly', 'autodescription' ) . '</strong>',
-				$message, // phpcs:ignore, WordPress.Security.EscapeOutput -- See doc comment.
+				$message, // phpcs:ignore WordPress.Security.EscapeOutput -- See doc comment.
 				\esc_html( $ver_message ),
 			);
 
 			trigger_error(
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
 				static::combobulate_error_message( static::get_error(), $message, \E_USER_NOTICE ),
 				\E_USER_NOTICE,
 			);
@@ -219,7 +219,7 @@ final class Debug {
 			);
 
 			trigger_error(
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
 				static::combobulate_error_message( static::get_error(), $message, \E_USER_WARNING ),
 				\E_USER_WARNING,
 			);
@@ -334,7 +334,7 @@ final class Debug {
 		if ( Query::is_seo_settings_page( true ) )
 			\add_filter( 'the_seo_framework_current_object_id', static fn() => Query::get_the_front_page_id() );
 
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- callee escapes.
+		// phpcs:ignore WordPress.Security.EscapeOutput -- callee escapes.
 		Template::output_view( 'debug/header' );
 	}
 
@@ -345,7 +345,7 @@ final class Debug {
 	 * @access private
 	 */
 	public static function _output_debug_query() {
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- This escapes.
+		// phpcs:ignore WordPress.Security.EscapeOutput -- This escapes.
 		echo static::get_debug_query_output();
 	}
 
@@ -356,7 +356,7 @@ final class Debug {
 	 * @access private
 	 */
 	public static function _output_debug_query_from_cache() {
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- This escapes.
+		// phpcs:ignore WordPress.Security.EscapeOutput -- This escapes.
 		echo static::get_debug_query_output_from_cache();
 	}
 
@@ -371,7 +371,7 @@ final class Debug {
 	}
 
 	/**
-	 * Wraps query status booleans in human-readable code.
+	 * Wraps query status Booleans in human-readable code.
 	 *
 	 * @since 2.6.6
 	 * @global bool $multipage
@@ -384,7 +384,7 @@ final class Debug {
 	}
 
 	/**
-	 * Wraps query status booleans in human-readable code.
+	 * Wraps query status Booleans in human-readable code.
 	 *
 	 * @since 2.6.6
 	 * @since 4.0.0 Cleaned up global callers; only use TSF methods.
@@ -399,7 +399,6 @@ final class Debug {
 		$_t = hrtime( true );
 
 		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
-		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- get_defined_vars() is used later.
 		$page_id                        = Query::get_the_real_id();
 		$is_query_exploited             = Query\Utils::is_query_exploited();
 		$query_supports_seo             = Query\Utils::query_supports_seo();
@@ -457,7 +456,6 @@ final class Debug {
 		$wp_doing_cron                  = \wp_doing_cron();
 		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && \REST_REQUEST; // TODO WP 6.5+ wp_is_serving_rest_request()
 		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
-		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
 		$timer = ( hrtime( true ) - $_t ) / 1e9;
 

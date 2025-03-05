@@ -69,7 +69,7 @@ class Scripts extends \The_SEO_Framework\Admin\Script\Registry {
 	 * @param string $secret The passed secret.
 	 * @return bool True on success, false on failure.
 	 */
-	public static function verify( $secret ) { // phpcs:ignore, deprecated.
+	public static function verify( $secret ) { // phpcs:ignore -- deprecated.
 		// \The_SEO_Framework\Helper\Template::verify_secret( $secret );
 		// They've been given $_secret, not $secret. This is not a security issue.
 		// For an explanation, see `\The_SEO_Framework\Template::output_view()`.

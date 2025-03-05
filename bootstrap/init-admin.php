@@ -8,9 +8,9 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
+use function The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Compatibility,
 	Query,
 };

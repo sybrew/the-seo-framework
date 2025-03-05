@@ -273,6 +273,11 @@ TODO WooCommerce 9.6 changed how categories are recognized (from hierarchical to
 	* POT translation file.
 	* Various sentences have been updated for clarity.
 
+**For developers:**
+
+* **Other:**
+	* We updated our coding standards, so the code is slightly altered.
+
 ### 5.1.2
 
 This patch [resolves another issue](https://theseoframework.com/?p=4380) where saving author meta data could cause an error.

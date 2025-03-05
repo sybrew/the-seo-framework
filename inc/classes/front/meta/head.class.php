@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Front\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	memo,
 	_bootstrap_timer,
 };
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper\Query,
 };
@@ -139,7 +139,6 @@ final class Head {
 			'5.0.0 of The SEO Framework',
 			'the_seo_framework_meta_generator_pools',
 		) ) {
-			// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- coalescable.
 			$remove_pools[] = 'Open_Graph';
 		}
 		/**
@@ -174,8 +173,8 @@ final class Head {
 		/**
 		 * @since 5.0.0
 		 * @param string[] $generator_pools A list of tag pools requested for the current query.
-		 *                                  The tag pool names correspond directly to the classes'.
-		 *                                  Do not register new pools, it'll cause a fatal error.
+		 *                                  The tag pool names correspond directly to their classes.
+		 *                                  Do not register new pools; it'll cause a fatal error.
 		 */
 		$generator_pools = \apply_filters(
 			'the_seo_framework_meta_generator_pools',
@@ -215,7 +214,7 @@ final class Head {
 		 * @param callable[] $tag_generators   A list of meta tag generator callbacks.
 		 *                                     The generators may offload work to other generators.
 		 */
-		$tags_render_data = \apply_filters( // phpcs:ignore, Generic.Formatting -- bug in PHPCS.
+		$tags_render_data = \apply_filters( // phpcs:ignore Generic.Formatting -- bug in PHPCS.
 			'the_seo_framework_meta_render_data',
 			$tags_render_data = &Tags::tags_render_data(),
 			$tag_generators,
@@ -265,7 +264,7 @@ final class Head {
 					 * @since 2.4.0
 					 * @param bool $sybre Whether to show the author name in the indicator.
 					 */
-					\apply_filters( 'sybre_waaijer_<3', true ) // phpcs:ignore, WordPress.NamingConventions.ValidHookName -- Easter egg.
+					\apply_filters( 'sybre_waaijer_<3', true ) // phpcs:ignore WordPress.NamingConventions.ValidHookName -- Easter egg.
 						? \__( 'by Sybre Waaijer', 'autodescription' )
 						: '',
 				]
@@ -276,7 +275,7 @@ final class Head {
 
 		switch ( $where ) {
 			case 'before':
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped earlier.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped earlier.
 				echo "\n<!-- {$cache['annotation']} -->\n";
 				break;
 			case 'after':
@@ -290,7 +289,7 @@ final class Head {
 					$timers = '';
 				}
 
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped earlier.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped earlier.
 				echo "<!-- / {$cache['annotation']}{$timers} -->\n\n";
 		}
 	}

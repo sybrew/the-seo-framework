@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Traits\Internal\Static_Deprecator;
+use The_SEO_Framework\Traits\Internal\Static_Deprecator;
 
 /**
  * The SEO Framework plugin
@@ -425,7 +425,7 @@ class Pool extends Legacy_API {
 		return static::$pool['escape'] ??= new class extends Data\Filter\Escape {
 			use Static_Deprecator;
 
-			private $colloquial_handle     = 'tsf()->filter()->escape()';
+			private $colloquial_handle     = 'tsf()->escape()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 		};
@@ -802,7 +802,7 @@ class Pool extends Legacy_API {
 		return static::$pool['sanitize'] ??= new class extends Data\Filter\Sanitize {
 			use Static_Deprecator;
 
-			private $colloquial_handle     = 'tsf()->filter()->sanitize()';
+			private $colloquial_handle     = 'tsf()->sanitize()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
 		};

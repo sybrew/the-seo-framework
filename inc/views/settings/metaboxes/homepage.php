@@ -6,15 +6,15 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Data\Filter\Sanitize;
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Data\Filter\Sanitize;
+use The_SEO_Framework\Helper\{
 	Compatibility,
 	Format\Markdown,
 	Query,
@@ -247,7 +247,7 @@ switch ( $instance ) :
 					<label for="<?php Input::field_id( 'home_title_location_left' ); ?>">
 						<span><?php \esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
-						// phpcs:ignore, WordPress.Security.EscapeOutput -- $example_left is already escaped.
+						// phpcs:ignore WordPress.Security.EscapeOutput -- $example_left is already escaped.
 						echo HTML::code_wrap_noesc( $example_left );
 						?>
 					</label>
@@ -257,7 +257,7 @@ switch ( $instance ) :
 					<label for="<?php Input::field_id( 'home_title_location_right' ); ?>">
 						<span><?php \esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php
-						// phpcs:ignore, WordPress.Security.EscapeOutput -- $example_right is already escaped.
+						// phpcs:ignore WordPress.Security.EscapeOutput -- $example_right is already escaped.
 						echo HTML::code_wrap_noesc( $example_right );
 						?>
 					</label>

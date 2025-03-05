@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Data;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	memo,
 	umemo,
 };
 
-use \The_SEO_Framework\Data; // Yes, it is legal to import the same namespace.
+use The_SEO_Framework\Data; // Yes, it is legal to import the same namespace.
 
 /**
  * The SEO Framework plugin

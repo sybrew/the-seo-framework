@@ -6,14 +6,14 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data\Filter\Sanitize,
 	Helper\Compatibility,
 	Helper\Post_Type,
@@ -66,7 +66,7 @@ switch ( $instance ) :
 
 		printf(
 			'<span class=hidden id=tsf-post-type-archive-data %s></span>',
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
 			HTML::make_data_attributes( [ 'postTypes' => $post_types_data ] )
 		);
 
@@ -117,15 +117,15 @@ switch ( $instance ) :
 			// Hide subsequent wraps to prevent layout shifts (bounce) during load: They get hidden by JS anyway.
 			printf(
 				'<div class="tsf-post-type-archive-wrap%s" %s>',
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Shut it, noob.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Shut it, noob.
 				$post_type_index ? ' hide-if-tsf-js' : '',
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
 				HTML::make_data_attributes( [ 'postType' => $post_type ] )
 			);
 			?>
 				<div class=tsf-post-type-header>
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
 					echo HTML::get_header_title( vsprintf(
 						'%s &ndash; <span class=tsf-post-type-archive-details><code>%s</code> %s</span>',
 						[

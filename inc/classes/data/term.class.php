@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Data;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function The_SEO_Framework\memo;
 
 /**
  * The SEO Framework plugin
@@ -50,7 +50,7 @@ class Term {
 	 */
 	public static function get_latest_term_id( $taxonomy = 'category' ) {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $taxonomy ) ) return $memo;
 
 		$cats = \get_terms( [
@@ -79,9 +79,9 @@ class Term {
 	public static function is_term_populated( $term_id, $taxonomy ) {
 		return memo( null, $term_id, $taxonomy )
 			?? memo(
-				// phpcs:ignore, PEAR.Functions.FunctionCallSignature.Indent -- legibility
+				// phpcs:ignore PEAR.Functions.FunctionCallSignature.Indent -- legibility
 				   ! empty( \get_term( $term_id, $taxonomy )->count )
-				|| array_filter( // Filter count => 0 -- if all are 0, we get an empty array, boolean false.
+				|| array_filter( // Filter count => 0 -- if all are 0, we get an empty array, Boolean false.
 					array_column(
 						\get_terms( [
 							'taxonomy'   => $taxonomy,
@@ -110,7 +110,7 @@ class Term {
 	 */
 	public static function get_term_parents( $term_id, $taxonomy, $include_self = false ) {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $term_id, $include_self ) ) return $memo;
 
 		// Term ID may be 0 when no terms are present.

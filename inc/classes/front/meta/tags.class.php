@@ -150,7 +150,7 @@ final class Tags {
 	 * @param string        $tag        The element's tag-name.
 	 * @param ?string|array $content    The tag's content. Leave null to not render content.
 	 *                                  It will create a content-wrapping element when filled.
-	 *                                  When array, accepts keys 'content' and boolean 'escape'.
+	 *                                  When array, accepts keys 'content' and Boolean 'escape'.
 	 */
 	public static function render(
 		$attributes = self::DATA_DEFAULTS['attributes'],
@@ -222,7 +222,7 @@ final class Tags {
 				'<%1$s%2$s>%3$s</%1$s>',
 				[
 					/** @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#syntax-tag-name> */
-					preg_replace( '/[^a-z\d]+/i', '', $tag ), // phpcs:ignore, WordPress.Security.EscapeOutput -- this escapes.
+					preg_replace( '/[^a-z\d]+/i', '', $tag ), // phpcs:ignore WordPress.Security.EscapeOutput -- this escapes.
 					$attr,
 					\is_array( $content )
 						? (

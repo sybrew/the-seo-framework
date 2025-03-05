@@ -8,18 +8,18 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	coalesce_strlen,
 	get_query_type_from_args,
 	memo,
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Post_Type,
 	Query,
 	Taxonomy,
@@ -206,7 +206,7 @@ class Title {
 
 		isset( $args ) and normalize_generation_args( $args );
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $args ) ) return $memo;
 
 		Title\Utils::remove_default_title_filters( false, $args );
@@ -471,8 +471,9 @@ class Title {
 		 * @param String[title,prefix,title_without_prefix] $items                The generated archive title items.
 		 * @param \WP_Term|\WP_User|\WP_Post_Type|null      $object               The archive object.
 		 *                                                                        Is null when query is autodetermined.
-		 * @param string                                    $title_without_prefix Archive title without prefix.
-		 * @param string                                    $prefix               Archive title prefix.
+		 * @param string                                    $title                The unmodified generated artive title.
+		 * @param string                                    $title_without_prefix The unmodified archive title without prefix.
+		 * @param string                                    $prefix               The unmodified archive title prefix.
 		 */
 		return \apply_filters(
 			'the_seo_framework_generated_archive_title_items',

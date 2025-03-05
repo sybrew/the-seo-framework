@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	get_query_type_from_args,
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 	Helper\Query,
@@ -287,7 +287,7 @@ class Image {
 	}
 
 	/**
-	 * Yields generated image details.
+	 * Yields generated custom image details.
 	 * Yes, brilliant name.
 	 *
 	 * @since 5.0.0
@@ -516,7 +516,7 @@ class Image {
 	 *     The image generation parameters, associative.
 	 *
 	 *     @type string  $size     The image size by name.
-	 *     @type boolean $multi    Whether multiple images may be returned.
+	 *     @type Boolean $multi    Whether multiple images may be returned.
 	 *     @type array   $cbs:     An array of image generation callbacks, in order of most important to least.
 	 *                             When 'multi' (or $single input) parameter is "false", it will use the first found.
 	 *     @type array   $fallback An array of image generation callbacks, in order of most important to least.
@@ -580,7 +580,7 @@ class Image {
 		 *     The image generation parameters.
 		 *
 		 *     @type string  $size     The image size to use.
-		 *     @type boolean $multi    Whether to allow multiple images to be returned. This may be overwritten by generators to 'false'.
+		 *     @type Boolean $multi    Whether to allow multiple images to be returned. This may be overwritten by generators to 'false'.
 		 *     @type array   $cbs      The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 *     @type array   $fallback The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
@@ -668,7 +668,7 @@ class Image {
 					$fiber = \call_user_func_array( $cb, [ null, $size ] );
 				}
 
-				// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- gotta check and end early.
+				// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- gotta check and end early.
 				while ( $fiber->valid() || ( $fiber = false ) ) {
 					$details = Sanitize::image_details( static::merge_extra_image_details(
 						$fiber->current(),

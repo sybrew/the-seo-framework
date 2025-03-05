@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Helper\Query,
 	Meta\URI,
 };
@@ -19,8 +19,8 @@ use \The_SEO_Framework\{
 \add_filter( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\\pll__' );
 \add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\pll__' );
-\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' );
 \add_filter( 'the_seo_framework_custom_field_description', __NAMESPACE__ . '\\pll__' );
+\add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\\pll__' );
 \add_filter( 'the_seo_framework_front_init', __NAMESPACE__ . '\\_hijack_polylang_home_url' );
 \add_filter( 'pll_home_url_white_list', __NAMESPACE__ . '\\_polylang_allow_tsf_home_url' );
 \add_filter( 'pll_home_url_allow_list', __NAMESPACE__ . '\\_polylang_allow_tsf_home_url' );
@@ -113,7 +113,7 @@ function _polylang_set_sitemap_language() {
 
 	if ( ! \function_exists( 'PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
 
-	// phpcs:ignore, WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
 	$lang = $_GET['lang'] ?? '';
 
 	// Language codes are user-definable: copy Polylang's filtering.
@@ -318,7 +318,7 @@ function _hijack_polylang_home_url() {
 				return \call_user_func_array( $default_cb, $args );
 
 			// Trick Polylang.
-			// phpcs:ignore, WordPress.WP.GlobalVariablesOverride.Prohibited -- it's called a hijack for a reason.
+			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- it's called a hijack for a reason.
 			$wp_actions['template_redirect'] = 1;
 
 			$url = \call_user_func_array( $default_cb, $args );

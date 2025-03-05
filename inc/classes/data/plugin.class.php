@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Data;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
+use function The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\Traits\Property_Refresher;
+use The_SEO_Framework\Traits\Property_Refresher;
 
 /**
  * The SEO Framework plugin
@@ -110,7 +110,7 @@ class Plugin {
 		/**
 		 * @since 2.0.0
 		 * @since 4.1.4 1. Now considers headlessness.
-		 *              2. Now returns a 3rd parameter: boolean $headless.
+		 *              2. Now returns a 3rd parameter: Boolean $headless.
 		 *
 		 * @param array  $settings The settings
 		 * @param string $setting  The settings name.

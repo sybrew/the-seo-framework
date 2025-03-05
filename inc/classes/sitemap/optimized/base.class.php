@@ -274,7 +274,7 @@ class Base extends Main {
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_nhpt_query_args',
 				[
-					// phpcs:ignore, WordPress.WP.PostsPerPage -- This is a sitemap, it will be slow.
+					// phpcs:ignore WordPress.WP.PostsPerPage -- This is a sitemap, it will be slow.
 					'posts_per_page' => Sitemap\Utils::get_sitemap_post_limit( 'nonhierarchical' ),
 					'post_type'      => $non_hierarchical_post_types,
 					'orderby'        => 'lastmod',

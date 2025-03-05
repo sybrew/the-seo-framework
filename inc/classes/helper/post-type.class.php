@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Helper;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	memo,
 	umemo,
 };
 
-use \The_SEO_Framework\Data;
+use The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -88,7 +88,7 @@ class Post_Type {
 
 		/**
 		 * @since 2.6.2
-		 * @since 3.1.0 The first parameter is always a boolean now.
+		 * @since 3.1.0 The first parameter is always a Boolean now.
 		 * @param bool   $supported           Whether the post type is supported.
 		 * @param string $post_type_evaluated The evaluated post type.
 		 */
@@ -145,7 +145,7 @@ class Post_Type {
 	 */
 	public static function supports_taxonomies( $post_type = '' ) {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
 
 		$post_type = $post_type ?: Query::get_current_post_type();

@@ -52,7 +52,7 @@ class Markdown {
 	 * @param string $text    The text that might contain markdown. Expected to be escaped.
 	 * @param array  $convert The markdown style types wished to be converted.
 	 *                        If left empty, it will convert all.
-	 * @param array  $args    The function arguments. Accepts boolean 'a_internal'.
+	 * @param array  $args    The function arguments. Accepts Boolean 'a_internal'.
 	 * @return string The markdown converted text.
 	 */
 	public static function convert( $text, $convert = [], $args = [] ) {

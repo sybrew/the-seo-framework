@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Helper;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\umemo;
+use function The_SEO_Framework\umemo;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Admin,
 	Data,
 };
@@ -106,7 +106,7 @@ class Query {
 		if ( \is_admin() )
 			return static::get_the_real_admin_id();
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( $use_cache && ( null !== $memo = umemo( __METHOD__ ) ) ) return $memo;
 
 		// Try to get ID from plugins or feed when caching is available.
@@ -184,7 +184,7 @@ class Query {
 	 */
 	public static function get_admin_post_id() {
 		return static::is_post_edit()
-			// phpcs:ignore, WordPress.Security.NonceVerification -- current_screen validated the 'post' object.
+			// phpcs:ignore WordPress.Security.NonceVerification -- current_screen validated the 'post' object.
 			? \absint( $_GET['post'] ?? $_GET['post_id'] ?? 0 )
 			: 0;
 	}
@@ -233,7 +233,7 @@ class Query {
 	 *
 	 * @since 4.1.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
-	 *              2. Now falls back to the current post type instead erroneously to a boolean.
+	 *              2. Now falls back to the current post type instead erroneously to a Boolean.
 	 *              3. Now memoizes the return value.
 	 *
 	 * @return string The queried post type.
@@ -338,7 +338,7 @@ class Query {
 		if ( \is_admin() )
 			return static::is_archive_admin();
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = Query\Cache::memo() ) return $memo;
 
 		if ( \is_archive() && false === static::is_singular() )
@@ -991,7 +991,7 @@ class Query {
 			return $page_hook === $pagehook;
 		} elseif ( \is_admin() && $pageslug ) {
 			// N.B. $_GET['page'] === $plugin_page after admin_init...
-			// phpcs:ignore, WordPress.Security.NonceVerification -- This is a public variable, no data is processed.
+			// phpcs:ignore WordPress.Security.NonceVerification -- This is a public variable, no data is processed.
 			return ( $_GET['page'] ?? '' ) === $pageslug;
 		}
 
@@ -1013,7 +1013,7 @@ class Query {
 	 */
 	public static function page() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
 		if ( null !== $memo = Query\Cache::memo() )
 			return $memo;
 
@@ -1050,7 +1050,7 @@ class Query {
 	 */
 	public static function paged() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
 		if ( null !== $memo = Query\Cache::memo() )
 			return $memo;
 
@@ -1084,7 +1084,7 @@ class Query {
 	 */
 	public static function numpages() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
 		if ( null !== $memo = Query\Cache::memo() )
 			return $memo;
 
@@ -1169,7 +1169,7 @@ class Query {
 	 */
 	public static function is_comment_paged() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
 		if ( null !== $memo = Query\Cache::memo() )
 			return $memo;
 
@@ -1244,7 +1244,7 @@ class Query {
 	 */
 	public static function get_post_author_id( $post_id = 0 ) {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
 		if ( null !== $memo = Query\Cache::memo( null, $post_id ) )
 			return $memo;
 
@@ -1270,7 +1270,7 @@ class Query {
 	 */
 	public static function get_current_user_id() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
 		if ( null !== $memo = Query\Cache::memo() )
 			return $memo;
 

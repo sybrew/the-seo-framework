@@ -24,7 +24,7 @@ namespace The_SEO_Framework;
  */
 function _bricks_fix_public_post_types( $post_types ) {
 
-	// phpcs:ignore, TSF.Performance.Functions.PHP -- this method is memoized via filter, autoload is false.
+	// phpcs:ignore TSF.Performance.Functions.PHP -- this method is memoized via filter, autoload is false.
 	if ( \defined( 'BRICKS_DB_TEMPLATE_SLUG' ) && class_exists( \Bricks\Database::class, false ) )
 		if ( ! \Bricks\Database::get_setting( 'publicTemplates' ) )
 			$post_types = array_diff( $post_types, [ BRICKS_DB_TEMPLATE_SLUG ] );

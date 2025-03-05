@@ -6,9 +6,9 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\Input;
+use The_SEO_Framework\Admin\Settings\Layout\Input;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -84,7 +84,7 @@ $hook_name = Admin\Menu::get_page_hook_name();
 			<h1><?= \esc_html( \get_admin_page_title() ) ?></h1>
 			<div class="tsf-top-buttons tsf-end">
 				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
 				echo $_save_button, $_reset_button, $_extensions_button;
 				?>
 			</div>
@@ -103,13 +103,13 @@ $hook_name = Admin\Menu::get_page_hook_name();
 		<div class=tsf-bottom-wrap>
 			<div class="tsf-bottom-buttons tsf-start">
 				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
 				echo $_extensions_button;
 				?>
 			</div>
 			<div class="tsf-bottom-buttons tsf-end">
 				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- submit_button() escapes (mostly...)
 				echo $_save_button;
 				?>
 			</div>

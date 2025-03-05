@@ -8,14 +8,14 @@ namespace The_SEO_Framework\Meta\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use const \The_SEO_Framework\{
+use const The_SEO_Framework\{
 	ROBOTS_IGNORE_SETTINGS,
 	ROBOTS_IGNORE_PROTECTION,
 };
 
-use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Meta\Robots; // Yes, it is legal to share class and namespaces.
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Meta\Robots; // Yes, it is legal to share class and namespaces.
+use The_SEO_Framework\Helper\{
 	Query,
 	Taxonomy,
 };

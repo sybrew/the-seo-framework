@@ -8,10 +8,10 @@ namespace The_SEO_Framework\Helper\Query;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function The_SEO_Framework\memo;
 
-use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
 	Post_Type,
 	Query, // Yes, it is legal to share class and namespaces.
 	Taxonomy,
@@ -75,7 +75,7 @@ class Utils {
 	 */
 	public static function query_supports_seo() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
 		switch ( true ) {
@@ -162,7 +162,7 @@ class Utils {
 	 */
 	public static function is_query_exploited() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
 		if ( ! Data\Plugin::get_option( 'advanced_query_protection' ) )

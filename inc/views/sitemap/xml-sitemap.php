@@ -6,7 +6,7 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -42,7 +42,7 @@ if ( THE_SEO_FRAMEWORK_DEBUG ) {
 Sitemap\Registry::output_sitemap_urlset_open_tag();
 
 $sitemap_base = new Sitemap\Optimized\Base; // TODO make static? Why would this need to be instantiated anyway?
-// phpcs:ignore, WordPress.Security.EscapeOutput
+// phpcs:ignore WordPress.Security.EscapeOutput
 echo $sitemap_base->generate_sitemap( $sitemap_id );
 
 Sitemap\Registry::output_sitemap_urlset_close_tag();

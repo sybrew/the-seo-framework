@@ -8,11 +8,11 @@ namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Meta,
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Compatibility,
 	Guidelines,
 	Format\Arrays,
@@ -679,9 +679,9 @@ class Loader {
 						'stripTitleTags' => (bool) Data\Plugin::get_option( 'title_strip_tags' ),
 					],
 					'i18n'   => [
-						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+						// phpcs:ignore WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 						'privateTitle'   => Utils::decode_entities( trim( str_replace( '%s', '', \__( 'Private: %s', 'default' ) ) ) ),
-						// phpcs:ignore, WordPress.WP.I18n -- WordPress doesn't have a comment, either.
+						// phpcs:ignore WordPress.WP.I18n -- WordPress doesn't have a comment, either.
 						'protectedTitle' => Utils::decode_entities( trim( str_replace( '%s', '', \__( 'Protected: %s', 'default' ) ) ) ),
 					],
 				],

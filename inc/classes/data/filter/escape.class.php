@@ -30,7 +30,7 @@ namespace The_SEO_Framework\Data\Filter;
  *
  * @since 5.0.0
  * @access protected
- *         Use tsf()->filter()->escape() instead.
+ *         Use tsf()->escape() instead.
  */
 class Escape {
 

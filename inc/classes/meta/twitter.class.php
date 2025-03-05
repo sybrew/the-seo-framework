@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	coalesce_strlen,
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 	Helper\Query,
@@ -154,7 +154,7 @@ class Twitter {
 	 *                         Leave null to autodetermine query.
 	 * @return string The default Twitter Card type for the current request.
 	 */
-	public static function get_generated_card_type( $args = null ) { // phpcs:ignore, VariableAnalysis -- see description note
+	public static function get_generated_card_type( $args = null ) { // phpcs:ignore Generic.CodeAnalysis, VariableAnalysis.CodeAnalysis -- see doc note
 
 		$card = Data\Plugin::get_option( 'twitter_card' );
 

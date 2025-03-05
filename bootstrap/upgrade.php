@@ -103,7 +103,7 @@ function _do_upgrade() {
 	if ( \wp_doing_ajax() ) return;
 
 	if ( Query::is_seo_settings_page( false ) ) {
-		// phpcs:ignore, WordPress.Security.SafeRedirect -- self_admin_url() is safe.
+		// phpcs:ignore WordPress.Security.SafeRedirect -- self_admin_url() is safe.
 		\wp_redirect( \self_admin_url() );
 		exit;
 	}
@@ -183,7 +183,7 @@ function _do_upgrade() {
  * @param string $previous_version The previous version the site downgraded from, if any.
  * @return string $current_version The current database version.
  */
-function _downgrade( $previous_version ) { // phpcs:ignore,VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+function _downgrade( $previous_version ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 	// We aren't (currently) expecting issues where downgrading causes mayem. 4051 did cause some, though. This was added later; just set to current.
 	return _set_to_current_version();
 }
@@ -363,7 +363,7 @@ function _set_to_current_version() {
  */
 function _prepare_downgrade_notice( $previous_version, $current_version ) {
 
-	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
+	// phpcs:ignore Universal.Operators.StrictComparisons.LooseNotEqual -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully downgraded.
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
@@ -414,7 +414,7 @@ function _prepare_downgrade_notice( $previous_version, $current_version ) {
  */
 function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
-	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
+	// phpcs:ignore Universal.Operators.StrictComparisons.LooseNotEqual -- might be mixed types.
 	if ( $previous_version && $previous_version != $current_version ) { // User successfully upgraded.
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
@@ -497,10 +497,10 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 			],
 		];
 
-		$esc_sql_in = function ( $var ) {
-			if ( ! \is_scalar( $var ) )
-				$var = array_filter( (array) $var, 'is_scalar' );
-			return \esc_sql( $var );
+		$esc_sql_in = function ( $val ) {
+			if ( ! \is_scalar( $val ) )
+				$val = array_filter( (array) $val, 'is_scalar' );
+			return \esc_sql( $val );
 		};
 
 		$found_titles = [];
@@ -512,7 +512,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 			$table   = \esc_sql( $data['from'] );
 
 			if ( $wpdb->get_var(
-				// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table/$indexes are escaped.
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table/$indexes are escaped.
 				"SELECT 1 FROM `$table` WHERE meta_key IN ('$indexes') LIMIT 1"
 			) ) {
 				$found_titles[] = $data['title'];
@@ -566,7 +566,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
  * @param string $current_version The current version of the site.
  * @return void Early when already enqueued
  */
-function _prepare_upgrade_suggestion( $previous_version, $current_version ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis
+function _prepare_upgrade_suggestion( $previous_version, $current_version ) { // phpcs:ignore Generic.CodeAnalysis
 	// Don't invoke if the user didn't upgrade.
 	if ( ! $previous_version ) return;
 

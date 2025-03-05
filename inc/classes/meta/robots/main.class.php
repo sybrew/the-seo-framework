@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Meta\Robots;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use const \The_SEO_Framework\ROBOTS_ASSERT;
+use const The_SEO_Framework\ROBOTS_ASSERT;
 
-use function \The_SEO_Framework\umemo;
+use function The_SEO_Framework\umemo;
 
 /**
  * The SEO Framework plugin
@@ -150,7 +150,7 @@ final class Main {
 			$generator->send( $g );
 
 			do {
-				// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK. I'm a professional.
+				// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK. I'm a professional.
 				if ( ( $r = $generator->current() ) === $halt ) continue; // goto while() -- motivating generator.
 
 				$results[ $g ] = $r;
@@ -217,7 +217,7 @@ final class Main {
 	 * @see $this->collect_assertions()
 	 */
 	private function reset_assertions() {
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- No function by reference support?
+		// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- No function by reference support?
 		$assertions = &$this->collect_assertions();
 		$assertions = [];
 	}

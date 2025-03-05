@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Query,
 	Taxonomy,
 	Template,

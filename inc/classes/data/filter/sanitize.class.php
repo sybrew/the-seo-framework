@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Data\Filter;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Helper,
 	Helper\Format\Strings,
 	Meta,
@@ -36,22 +36,22 @@ use \The_SEO_Framework\{
  *
  * @since 5.0.0
  * @access protected
- *         Use tsf()->filter()->sanitize() instead.
+ *         Use tsf()->sanitize() instead.
  */
 class Sanitize {
 
 	/**
-	 * Sanitizes input to a boolean integer, i.e. 0, 1,
+	 * Sanitizes input to a Boolean integer, i.e. 0, 1,
 	 *
-	 * Uses double casting. First, we cast to boolean, then to int.
+	 * Uses double casting. First, we cast to Boolean, then to int.
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_one_zero`.
 	 *
-	 * @param mixed $value The value to cast to a boolean integer.
-	 * @return int A boolean as a string (1 or 0)
+	 * @param mixed $value The value to cast to a Boolean integer.
+	 * @return int A Boolean as a string (1 or 0)
 	 */
 	public static function boolean_integer( $value ) {
 		return (int) (bool) $value;
@@ -400,7 +400,7 @@ class Sanitize {
 		// This is over 350x faster than a polyfill for `array_is_list()`.
 		if ( isset( $details[0] ) && array_values( $details ) === $details ) {
 			foreach ( $details as $deets )
-				$sanitized_details[] = static::image_details( $deets ); // phpcs:ignore, VariableAnalysis.CodeAnalysis
+				$sanitized_details[] = static::image_details( $deets );
 
 			return $sanitized_details ?? [];
 		}

@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Front;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Helper,
 	Helper\Query,
 	Meta,
@@ -111,7 +111,7 @@ final class Redirect {
 			exit;
 		}
 
-		// phpcs:ignore, WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- intended feature.
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- intended feature.
 		\wp_redirect( $url, $redirect_type );
 		exit;
 	}

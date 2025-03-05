@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Data\Filter;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\has_run;
+use function The_SEO_Framework\has_run;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper\Taxonomy,
 	Helper\Post_Type,
@@ -300,7 +300,7 @@ class Plugin {
 	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
-	 * @return int A boolean as a string (1 or 0) option value.
+	 * @return int A Boolean as a string (1 or 0) option value.
 	 */
 	public static function checkbox( $value ) {
 		return Sanitize::boolean_integer( $value );
@@ -421,7 +421,7 @@ class Plugin {
 	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
-	 * @return int[] An array of boolean as a string (1 or 0).
+	 * @return int[] An array of Boolean as a string (1 or 0).
 	 */
 	public static function checkbox_array( $value ) {
 

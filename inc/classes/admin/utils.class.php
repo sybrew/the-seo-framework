@@ -7,7 +7,7 @@ namespace The_SEO_Framework\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Format\Markdown;
+use The_SEO_Framework\Helper\Format\Markdown;
 
 /**
  * The SEO Framework plugin

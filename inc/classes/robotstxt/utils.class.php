@@ -8,9 +8,9 @@ namespace The_SEO_Framework\RobotsTXT;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\umemo;
+use function The_SEO_Framework\umemo;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper\Query,
 	Meta,
@@ -105,39 +105,39 @@ class Utils {
 				break;
 			case 'seo':
 				$agents = [
-					'AhrefsBot'        => [
+					'AhrefsBot'       => [
 						'by'   => 'Ahrefs',
 						'link' => 'https://ahrefs.com/robot',
 					],
-					'AhrefsSiteAudit ' => [
+					'AhrefsSiteAudit' => [
 						'by'   => 'Ahrefs',
 						'link' => 'https://ahrefs.com/robot/site-audit',
 					],
-					'barkrowler'       => [
+					'barkrowler'      => [
 						'by'   => 'Babbar',
 						'link' => 'https://www.babbar.tech/crawler',
 					],
-					'DataForSeoBot'    => [
+					'DataForSeoBot'   => [
 						'by'   => 'DataForSEO',
 						'link' => 'https://dataforseo.com/dataforseo-bot',
 					],
-					'dotbot'           => [
+					'dotbot'          => [
 						'by'   => 'Moz',
 						'link' => 'https://moz.com/help/moz-procedures/crawlers/dotbot',
 					],
-					'rogerbot'         => [
+					'rogerbot'        => [
 						'by'   => 'Moz',
 						'link' => 'https://moz.com/help/moz-procedures/crawlers/rogerbot',
 					],
-					'SemrushBot'       => [
+					'SemrushBot'      => [
 						'by'   => 'SEMrush',
 						'link' => 'https://www.semrush.com/bot/',
 					],
-					'SiteAuditBot'     => [
+					'SiteAuditBot'    => [
 						'by'   => 'SEMrush',
 						'link' => 'https://www.semrush.com/bot/',
 					],
-					'SemrushBot-BA'    => [
+					'SemrushBot-BA'   => [
 						'by'   => 'SEMrush',
 						'link' => 'https://www.semrush.com/bot/',
 					],
@@ -165,7 +165,7 @@ class Utils {
 	 * @return bool Whether the robots.txt file exists.
 	 */
 	public static function has_root_robots_txt() {
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = umemo( __METHOD__ ) ) return $memo;
 
 		// Ensure get_home_path() is declared.
@@ -174,7 +174,7 @@ class Utils {
 
 		$path = \get_home_path() . 'robots.txt';
 
-		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
+		// phpcs:ignore TSF.Performance.Functions.PHP -- we use path, not URL.
 		return umemo( __METHOD__, file_exists( $path ) );
 	}
 
@@ -191,7 +191,7 @@ class Utils {
 	 */
 	public static function get_robots_txt_url() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = umemo( __METHOD__ ) ) return $memo;
 
 		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! Data\Blog::is_subdirectory_installation() ) {

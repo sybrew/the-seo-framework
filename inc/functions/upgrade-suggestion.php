@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Suggestion;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Admin,
 	Helper\Format\Markdown,
 };
@@ -41,7 +41,7 @@ use \The_SEO_Framework\{
  * @access private
  */
 
-// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
+// phpcs:ignore TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 _prepare( $previous_version, $current_version );
 /**
  * Prepares a suggestion notification to ALL applicable plugin users on upgrade;
@@ -66,7 +66,7 @@ _prepare( $previous_version, $current_version );
 function _prepare( $previous_version, $current_version ) {
 
 	// 0
-	// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- might be mixed types.
+	// phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- might be mixed types.
 	if ( $previous_version == $current_version ) return;
 	// 1
 	if ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && \TSF_DISABLE_SUGGESTIONS ) return;
@@ -78,7 +78,7 @@ function _prepare( $previous_version, $current_version ) {
 		$show_sale = ! \tsf_extension_manager()->is_connected_user();
 	}
 	if ( $show_sale ) {
-		// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
+		// phpcs:ignore TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
 		_suggest_temp_sale( $previous_version, $current_version );
 	}
 }

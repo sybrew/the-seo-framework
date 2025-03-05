@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Escape,
 };
@@ -99,7 +99,7 @@ class Input {
 	 * @param string|string[] $name The field name, or a map of indexes therefor.
 	 */
 	public static function field_name( $name ) {
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- field_id escapes.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- field_id escapes.
 		echo static::field_id( $name );
 	}
 
@@ -225,7 +225,7 @@ class Input {
 			),
 			[
 				\esc_attr( $id ),
-				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 				HTML::make_data_attributes( $data ),
 			],
 		);
@@ -245,7 +245,7 @@ class Input {
 			'<span id="tsf-social-data_%1$s" class="hidden wp-exclude-emoji" data-group="%1$s" %2$s></span>',
 			[
 				\esc_attr( $group ),
-				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 				HTML::make_data_attributes( [ 'settings' => $settings ] ),
 			],
 		);
@@ -272,7 +272,7 @@ class Input {
 			),
 			[
 				\esc_attr( $id ),
-				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 				HTML::make_data_attributes( $data ),
 			],
 		);
@@ -291,7 +291,7 @@ class Input {
 			'<span id="tsf-canonical-data_%1$s" class="hidden wp-exclude-emoji" data-for="%1$s" %2$s ></span>',
 			[
 				\esc_attr( $id ),
-				// phpcs:ignore, WordPress.Security.EscapeOutput -- make_data_attributes escapes.
+				// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 				HTML::make_data_attributes( $data ),
 			],
 		);

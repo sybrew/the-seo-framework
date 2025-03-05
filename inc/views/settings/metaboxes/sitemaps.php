@@ -6,14 +6,14 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Compatibility,
 	Format\Markdown,
 	Query,
@@ -373,7 +373,7 @@ switch ( $instance ) :
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+			// phpcs:disable WordPress.Security.EscapeOutput -- already escaped.
 			echo Form::get_image_uploader_form( [
 				'id'   => 'sitemap_logo',
 				'data' => [
@@ -389,6 +389,7 @@ switch ( $instance ) :
 					'button_text'  => \__( 'Select Logo', 'autodescription' ),
 				],
 			] );
+			// phpcs:enable WordPress.Security.EscapeOutput
 			?>
 		</p>
 		<?php

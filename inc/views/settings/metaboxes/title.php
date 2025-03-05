@@ -6,14 +6,14 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Data\Filter\Sanitize;
-use \The_SEO_Framework\Helper\Format\{
+use The_SEO_Framework\Data\Filter\Sanitize;
+use The_SEO_Framework\Helper\Format\{
 	Markdown,
 	Strings,
 };
@@ -87,13 +87,13 @@ switch ( $instance ) :
 			<p>
 				<span class="tsf-title-additions-example-left hidden">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 					echo HTML::code_wrap_noesc( $example_post_left );
 					?>
 				</span>
 				<span class="tsf-title-additions-example-right hidden">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 					echo HTML::code_wrap_noesc( $example_post_right );
 					?>
 				</span>
@@ -103,25 +103,25 @@ switch ( $instance ) :
 			<p>
 				<span class="tsf-title-additions-example-left tsf-title-tax-prefix hidden">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 					echo HTML::code_wrap_noesc( $example_tax_left_full );
 					?>
 				</span>
 				<span class="tsf-title-additions-example-right tsf-title-tax-prefix hidden">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 					echo HTML::code_wrap_noesc( $example_tax_right_full );
 					?>
 				</span>
 				<span class="tsf-title-additions-example-left tsf-title-tax-noprefix hidden">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 					echo HTML::code_wrap_noesc( $example_tax_left );
 					?>
 				</span>
 				<span class="tsf-title-additions-example-right tsf-title-tax-noprefix hidden">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 					echo HTML::code_wrap_noesc( $example_tax_right );
 					?>
 				</span>
@@ -213,7 +213,7 @@ switch ( $instance ) :
 						\esc_attr( Input::get_field_name( 'title_separator' ) ),
 						\esc_attr( Input::get_field_id( "title_separator_{$name}" ) ),
 						\esc_attr( $name ),
-						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- make_data_attributes() escapes.
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- make_data_attributes() escapes.
 						HTML::make_data_attributes( [ 'entity' => \esc_html( $html ) ] ), // This will double escape, but we found no issues.
 						\checked( $default_title_separator, $name, false ),
 						\esc_html( $html ),
@@ -277,7 +277,7 @@ switch ( $instance ) :
 					<label for="<?php Input::field_id( 'title_location_left' ); ?>">
 						<span><?php \esc_html_e( 'Left:', 'autodescription' ); ?></span>
 						<?php
-						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 						echo HTML::code_wrap_noesc( $args['examples']['left'] );
 						?>
 					</label>
@@ -287,7 +287,7 @@ switch ( $instance ) :
 					<label for="<?php Input::field_id( 'title_location_right' ); ?>">
 						<span><?php \esc_html_e( 'Right:', 'autodescription' ); ?></span>
 						<?php
-						// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 						echo HTML::code_wrap_noesc( $args['examples']['right'] );
 						?>
 					</label>

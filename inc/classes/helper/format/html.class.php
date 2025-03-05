@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Helper\Format;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\umemo;
+use function The_SEO_Framework\umemo;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 };
@@ -172,7 +172,7 @@ class HTML {
 		}
 
 		$parse = umemo( __METHOD__ . '/parse', null, $args['space'], $args['clear'] );
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( ! $parse ) {
 			// Void elements never have content. 'param', 'source', 'track',
 			$void = [ 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'wbr' ];
@@ -266,7 +266,7 @@ class HTML {
 			}
 		}
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args defines stripping of 'script' and 'style'.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- $args defines stripping of 'script' and 'style'.
 		return $args['strip'] ? \strip_tags( $input ) : $input;
 	}
 

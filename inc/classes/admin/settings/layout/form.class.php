@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data\Filter\Escape,
 	Helper\Format\Arrays,
 	Helper\Query,
@@ -142,10 +142,10 @@ class Form {
 	 *
 	 * @since 4.1.4
 	 *
-	 * @param string $for     The input ID it's for.
-	 * @param bool   $display Whether to display the counter. (options page gimmick)
+	 * @param string $input_id The input ID it's for.
+	 * @param bool   $display  Whether to display the counter. (options page gimmick)
 	 */
-	public static function output_character_counter_wrap( $for, $display = true ) {
+	public static function output_character_counter_wrap( $input_id, $display = true ) {
 		vprintf(
 			'<div class="tsf-counter-wrap hide-if-no-tsf-js" %s><span class=tsf-counter title="%s">%s</span><span class=tsf-ajax></span></div>',
 			[
@@ -156,7 +156,7 @@ class Form {
 					\esc_html__( 'Characters: %s', 'autodescription' ),
 					\sprintf(
 						'<span id="%s">0</span>',
-						\esc_attr( "{$for}_chars" ),
+						\esc_attr( "{$input_id}_chars" ),
 					),
 				),
 			],
@@ -168,18 +168,18 @@ class Form {
 	 *
 	 * @since 4.1.4
 	 *
-	 * @param string $for  The input ID it's for.
-	 * @param string $type Whether it's a 'title' or 'description' counter.
+	 * @param string $input_id The input ID it's for.
+	 * @param string $type     Whether it's a 'title' or 'description' counter.
 	 * @param bool   $display Whether to display the counter. (Used as options page gimmick)
 	 */
-	public static function output_pixel_counter_wrap( $for, $type, $display = true ) {
+	public static function output_pixel_counter_wrap( $input_id, $type, $display = true ) {
 		vprintf(
 			'<div class="tsf-pixel-counter-wrap hide-if-no-tsf-js" %s>%s%s</div>',
 			[
 				( $display ? '' : 'style="display:none;"' ),
 				\sprintf(
 					'<div id="%s" class=tsf-tooltip-wrap>%s</div>',
-					\esc_attr( "{$for}_pixels" ),
+					\esc_attr( "{$input_id}_pixels" ),
 					'<span class="tsf-pixel-counter-bar tsf-tooltip-item" aria-label data-desc tabindex=0><span class=tsf-pixel-counter-fluid></span></span>',
 				),
 				\sprintf(

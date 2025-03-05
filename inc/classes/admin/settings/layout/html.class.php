@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Data\Filter\Escape;
+use The_SEO_Framework\Data\Filter\Escape;
 
 /**
  * The SEO Framework plugin
@@ -60,7 +60,7 @@ class HTML {
 	 * @param string $title The header title.
 	 */
 	public static function header_title( $title ) {
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
 		echo static::get_header_title( \esc_html( $title ) );
 	}
 
@@ -114,7 +114,7 @@ class HTML {
 	public static function description_noesc( $content, $block = true ) {
 		printf(
 			( $block ? '<p>%s</p>' : '%s' ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
 			"<span class=description>$content</span>",
 		);
 	}
@@ -143,7 +143,7 @@ class HTML {
 	public static function attention_noesc( $content, $block = true ) {
 		printf(
 			( $block ? '<p>%s</p>' : '%s' ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
 			"<span class=attention>$content</span>",
 		);
 	}
@@ -172,7 +172,7 @@ class HTML {
 	public static function attention_description_noesc( $content, $block = true ) {
 		printf(
 			( $block ? '<p>%s</p>' : '%s' ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
+			// phpcs:ignore WordPress.Security.EscapeOutput -- Method clearly states it's not escaped.
 			"<span class=\"description attention\">$content</span>",
 		);
 	}
@@ -196,7 +196,7 @@ class HTML {
 		$output = "<div class=tsf-fields>$input</div>";
 
 		if ( $echo ) {
-			// phpcs:ignore, WordPress.Security.EscapeOutput -- Escape your $input prior!
+			// phpcs:ignore WordPress.Security.EscapeOutput -- Escape your $input prior!
 			echo $output;
 		} else {
 			return $output;
@@ -233,7 +233,7 @@ class HTML {
 		$output = \sprintf( '<span class=tsf-tooltip-wrap>%s</span>', $output );
 
 		if ( $echo ) {
-			// phpcs:ignore, WordPress.Security.EscapeOutput
+			// phpcs:ignore WordPress.Security.EscapeOutput
 			echo $output;
 		} else {
 			return $output;

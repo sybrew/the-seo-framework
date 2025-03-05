@@ -6,14 +6,14 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Data\Filter\Sanitize;
+use The_SEO_Framework\Data\Filter\Sanitize;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -118,7 +118,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 				<th scope=row valign=top><?php \esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 				<td>
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput -- generate_bar() escapes.
+					// phpcs:ignore WordPress.Security.EscapeOutput -- generate_bar() escapes.
 					echo Admin\SEOBar\Builder::generate_bar( $generator_args );
 					?>
 				</td>

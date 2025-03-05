@@ -22,12 +22,6 @@
 		</properties>
 	</rule>
 
-	<rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis">
-		<properties>
-			<property name="validUndefinedVariableRegexp" type="string" value="/secret|view_args/"/>
-		</properties>
-	</rule>
-
 	<rule ref="WordPress.Security.EscapeOutput">
 		<properties>
 			<property name="customEscapingFunctions" type="array">

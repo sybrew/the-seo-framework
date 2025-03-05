@@ -8,9 +8,9 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\normalize_generation_args;
+use function The_SEO_Framework\normalize_generation_args;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data\Filter\Sanitize,
 	Helper\Query,
 };
@@ -164,14 +164,12 @@ function _bbpress_filter_title( $title, $args ) {
 			}
 
 		// User "home"
+		} elseif ( true === $is_user_home ) {
+			$new_title['text'] = \esc_attr__( 'Your Profile', 'bbpress' );
 		} else {
-			if ( true === $is_user_home ) {
-				$new_title['text'] = \esc_attr__( 'Your Profile', 'bbpress' );
-			} else {
-				$new_title['text'] = \get_userdata( \bbp_get_user_id() )->display_name;
-				/* translators: user's display name */
-				$new_title['format'] = \esc_attr__( "%s's Profile", 'bbpress' );
-			}
+			$new_title['text'] = \get_userdata( \bbp_get_user_id() )->display_name;
+			/* translators: user's display name */
+			$new_title['format'] = \esc_attr__( "%s's Profile", 'bbpress' );
 		}
 
 	// Profile edit page
@@ -259,11 +257,11 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
  * @access private
  * @link <https://bbpress.trac.wordpress.org/ticket/2607> (regression)
  *
- * @param bool      $do       Whether to adjust the query.
+ * @param bool      $adjust   Whether to adjust the query.
  * @param \WP_Query $wp_query The query.
  * @return bool
  */
-function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
+function _bbpress_filter_do_adjust_query( $adjust, $wp_query ) {
 
 	if (
 		   isset( $wp_query->query['post_type'] )
@@ -271,10 +269,10 @@ function _bbpress_filter_do_adjust_query( $do, $wp_query ) {
 		&& \function_exists( 'is_bbpress' )
 		&& \is_bbpress()
 	) {
-		$do = false;
+		$adjust = false;
 	}
 
-	return $do;
+	return $adjust;
 }
 
 /**

@@ -6,22 +6,22 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use const \The_SEO_Framework\{
+use const The_SEO_Framework\{
 	ROBOTS_IGNORE_SETTINGS,
 	ROBOTS_IGNORE_PROTECTION,
 };
 
-use function \The_SEO_Framework\coalesce_strlen;
+use function The_SEO_Framework\coalesce_strlen;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data\Filter\Sanitize,
 	Helper\Post_Type,
 	Helper\Query,
 	Helper\Taxonomy,
 };
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
@@ -109,7 +109,7 @@ switch ( $instance ) :
 				</div>
 				<div class="tsf-flex-setting-input tsf-flex">
 					<?php
-					// phpcs:ignore, WordPress.Security.EscapeOutput -- generate_bar() escapes.
+					// phpcs:ignore WordPress.Security.EscapeOutput -- generate_bar() escapes.
 					echo Admin\SEOBar\Builder::generate_bar( $generator_args );
 					?>
 				</div>
@@ -387,10 +387,10 @@ switch ( $instance ) :
 				</div>
 			</div>
 			<div class="tsf-flex-setting-input tsf-flex">
-				<textarea class=large-text name="autodescription[_twitter_description]" id=autodescription_twitter_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore, Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
+				<textarea class=large-text name="autodescription[_twitter_description]" id=autodescription_twitter_description rows=3 cols=4 autocomplete=off data-tsf-social-group=autodescription_social_singular data-tsf-social-type=twDesc><?php // phpcs:ignore Squiz.PHP.EmbeddedPhp -- textarea element's content is input. Do not add spaces/tabs/lines: the php tag should stick to >.
 					// Textareas don't require sanitization in HTML5... other than removing the closing </textarea> tag...?
 					echo \esc_html( Sanitize::metadata_content( $meta['_twitter_description'] ) );
-				// phpcs:ignore, Squiz.PHP.EmbeddedPhp
+				// phpcs:ignore Squiz.PHP.EmbeddedPhp
 				?></textarea>
 			</div>
 		</div>
@@ -561,6 +561,7 @@ switch ( $instance ) :
 				}
 
 				// Only hierarchical taxonomies can be used in the URL.
+				// TODO filter post_tag here.
 				$taxonomies               = $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
 				$parent_term_slugs_by_tax = [];
 
@@ -613,7 +614,7 @@ switch ( $instance ) :
 							'supportedTaxonomies' => $taxonomies,
 							'authorSlugs'         => $author_slugs ?? [],
 							'isHierarchical'      => $is_post_type_hierarchical,
-							// phpcs:ignore, WordPress.DateTime.RestrictedFunctions -- date() is used for URL generation. See `get_permalink()`.
+							// phpcs:ignore WordPress.DateTime.RestrictedFunctions -- date() is used for URL generation. See `get_permalink()`.
 							'publishDate'         => date( 'c', strtotime( \get_post( $post_id )->post_date ?? 'now' ) ),
 						],
 					],

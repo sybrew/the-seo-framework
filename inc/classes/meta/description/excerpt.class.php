@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Meta\Description;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	memo,
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper\Query,
 	Helper\Format,
@@ -57,7 +57,7 @@ class Excerpt {
 	public static function get_excerpt( $args = null ) {
 		/**
 		 * @since 5.1.0
-		 * @param string     $excerpt The generated excerpt.
+		 * @param string     $excerpt The obtained excerpt.
 		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                            Leave null to autodetermine query.
 		 * @return string The post, term, pta, or user excerpt.
@@ -95,7 +95,7 @@ class Excerpt {
 	 */
 	public static function get_excerpt_from_query() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
 		if ( Query::is_static_front_page() ) {

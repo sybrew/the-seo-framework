@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta;
+use The_SEO_Framework\Meta;
 
 \add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wpforo_page_seo_bar' );
 \add_action( 'wpforo_before_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
@@ -28,14 +28,14 @@ function _wpforo_fix_page() {
 
 	if ( \is_admin() || ! \function_exists( 'is_wpforo_page' ) || ! \is_wpforo_page() ) return;
 
-	if ( _wpforo_seo_title_enabled() ) { // phpcs:ignore, TSF.Performance.Opcodes -- is local.
+	if ( _wpforo_seo_title_enabled() ) { // phpcs:ignore TSF.Performance.Opcodes -- is local.
 		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
 		\add_filter( 'the_seo_framework_use_title_branding', '__return_false' );
 	}
 
-	if ( _wpforo_seo_meta_enabled() ) { // phpcs:ignore, TSF.Performance.Opcodes -- is local.
+	if ( _wpforo_seo_meta_enabled() ) { // phpcs:ignore TSF.Performance.Opcodes -- is local.
 		// Remove TSF's output: Twofold, may they change the order of operation in a future update.
-		_wpforo_disable_tsf_html_output(); // phpcs:ignore, TSF.Performance.Opcodes -- is local.
+		_wpforo_disable_tsf_html_output(); // phpcs:ignore TSF.Performance.Opcodes -- is local.
 
 		// This won't run on wpForo at the time of writing (2.1.6), because action the_seo_framework_after_init already happened.
 		\add_action( 'the_seo_framework_after_init', __NAMESPACE__ . '\\_wpforo_disable_tsf_html_output', 1 );
@@ -43,7 +43,7 @@ function _wpforo_fix_page() {
 		// Remove WPForo's SEO meta output.
 		\remove_action( 'wp_head', 'wpforo_add_meta_tags', 1 );
 		// Fix Canonical URL.
-		\add_filter( 'get_canonical_url', __NAMESPACE__ . '\\_wpforo_filter_canonical_url', 10, 2 );
+		\add_filter( 'get_canonical_url', __NAMESPACE__ . '\\_wpforo_filter_canonical_url' );
 	}
 }
 
@@ -67,11 +67,10 @@ function _wpforo_disable_tsf_html_output() {
  * @since 4.0.5 Introduced as function.
  * @access private
  *
- * @param string   $canonical_url The post's canonical URL.
- * @param \WP_Post $post          Post object.
+ * @param string $canonical_url The post's canonical URL.
  * @return string
  */
-function _wpforo_filter_canonical_url( $canonical_url, $post ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis
+function _wpforo_filter_canonical_url( $canonical_url ) {
 	return \function_exists( 'wpforo_get_request_uri' ) ? \wpforo_get_request_uri() : $canonical_url;
 }
 
@@ -117,8 +116,8 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 
 	if ( $interpreter::$query['tax'] ) return;
 
-	$meta_enabled  = _wpforo_seo_meta_enabled();   // phpcs:ignore, TSF.Performance.Opcodes -- is local.
-	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore, TSF.Performance.Opcodes -- is local.
+	$meta_enabled  = _wpforo_seo_meta_enabled();   // phpcs:ignore TSF.Performance.Opcodes -- is local.
+	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore TSF.Performance.Opcodes -- is local.
 
 	if ( ! $meta_enabled && ! $title_enabled ) return;
 

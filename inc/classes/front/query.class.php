@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Front;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper,
 	Helper\Query\Exclusion,
@@ -211,7 +211,7 @@ final class Query {
 		 * This filter affects both 'search-"archives"' and terms/taxonomies.
 		 *
 		 * @since 2.9.4
-		 * @param bool      $do       True is unblocked (do adjustment), false is blocked (don't do adjustment).
+		 * @param bool      $adjust   True is unblocked (do adjustment), false is blocked (don't do adjustment).
 		 * @param \WP_Query $wp_query The current query.
 		 */
 		if ( $has_filter && ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query ) )

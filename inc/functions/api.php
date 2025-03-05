@@ -396,14 +396,14 @@ namespace The_SEO_Framework {
 
 		static $memo = [];
 
-		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects inserted, nor ever unserialized.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- No objects inserted, nor ever unserialized.
 		$hash = serialize(
 			[
 				'args' => $args,
 				'file' => 0,
 				'line' => 0,
 			]
-			// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
 			+ debug_backtrace( \DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1],
 		);
 
@@ -451,7 +451,7 @@ namespace The_SEO_Framework {
 
 		static $memo = [];
 
-		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 		$hash = serialize( [ $key, $args ] );
 
 		if ( isset( $value_to_set ) )
@@ -488,31 +488,31 @@ namespace The_SEO_Framework {
 	 * @see umemo() -- sacrifices cleanliness for performance.
 	 * @ignore We couldn't find a use for this... yet. Probably once we support only PHP7.4+
 	 * @api
-	 * TODO Can we use callables as $fn? If so, adjust docs and apply internally.
+	 * TODO Can we use callables as $func? If so, adjust docs and apply internally.
 	 *
-	 * @param callable $fn The Closure or function to memoize.
-	 *                     The Closure can only be cached properly if it's staticlaly stored.
+	 * @param callable $func The Closure or function to memoize.
+	 *                       The Closure can only be cached properly if it's staticlaly stored.
 	 * @return mixed The cached value if $value_to_set is null.
 	 *               Otherwise, the $value_to_set.
 	 */
-	function fmemo( $fn ) {
+	function fmemo( $func ) {
 
 		static $memo = [];
 
-		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- This is never unserialized.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- This is never unserialized.
 		$hash = serialize(
 			[
 				'file' => '',
 				'line' => 0,
 			]
-			// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
 			+ debug_backtrace( 0, 2 )[1],
 		);
 
 		// Normally, I try to avoid NOTs for they add (tiny) overhead. Here, I chose readability over performance.
 		if ( ! isset( $memo[ $hash ] ) ) {
 			// Store the result of the function. If that's null/void, store hash.
-			$memo[ $hash ] = \call_user_func( $fn ) ?? $hash;
+			$memo[ $hash ] = \call_user_func( $func ) ?? $hash;
 		}
 
 		return $memo[ $hash ] === $hash ? null : $memo[ $hash ];

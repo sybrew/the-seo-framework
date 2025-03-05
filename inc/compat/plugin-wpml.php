@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Helper\Query,
 	Meta\URI,
 };
@@ -151,7 +151,7 @@ function _wpml_sitemap_filter_display_translatables() {
  * @hook the_seo_framework_sitemap_nhpt_query_args 10
  * @since 4.1.4
  * @access private
- * @global $sitepress \SitePress
+ * @global \SitePress $sitepress
  *
  * @param array $args The query arguments.
  * @return array The augmented query arguments.

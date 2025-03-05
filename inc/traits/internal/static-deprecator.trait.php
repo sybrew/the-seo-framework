@@ -179,7 +179,7 @@ trait Static_Deprecator {
 	 * @param array  $arguments The method arguments.
 	 * @return void
 	 */
-	final public static function __callStatic( $name, $arguments ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis -- __callStatic must take 2 args.
+	final public static function __callStatic( $name, $arguments ) { // phpcs:ignore Generic.CodeAnalysis -- __callStatic must take 2 args.
 		\tsf()->_inaccessible_p_or_m(
 			\esc_html( "$name()" ),
 			'Method is of unknown pool. Do not call pool methods statically! A fatal error might follow.',

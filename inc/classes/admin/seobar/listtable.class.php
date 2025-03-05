@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\SEOBar;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Admin;
+use The_SEO_Framework\Admin;
 
 /**
  * The SEO Framework plugin
@@ -135,14 +135,15 @@ final class ListTable extends Admin\Lists\Table {
 
 		if ( $this->column_name !== $column_name ) return;
 
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- generate_bar escapes.
+		// phpcs:disable WordPress.Security.EscapeOutput -- generate_bar escapes.
 		echo Builder::generate_bar( [
 			'id'        => $post_id,
 			'post_type' => $this->post_type,
 		] );
+		// phpcs:enable WordPress.Security.EscapeOutput
 
 		if ( $this->doing_ajax )
-			echo $this->get_ajax_dispatch_updated_event(); // phpcs:ignore, WordPress.Security.EscapeOutput
+			echo $this->get_ajax_dispatch_updated_event(); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
 	/**

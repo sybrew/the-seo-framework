@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Admin,
 	Data,
 	Data\Filter\Sanitize,
@@ -59,7 +59,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = $_POST['tsf_dismiss_key'] ?? '';
 
 		if ( ! $key )
@@ -191,7 +191,7 @@ final class AJAX {
 				$cropped_basename = \wp_basename( $cropped );
 				$url              = str_replace( $parent_basename, $cropped_basename, $parent_url );
 
-				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- See https://core.trac.wordpress.org/ticket/42480
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors -- See https://core.trac.wordpress.org/ticket/42480
 				$size       = \function_exists( 'wp_getimagesize' ) ? \wp_getimagesize( $cropped ) : @getimagesize( $cropped );
 				$image_type = $size ? $size['mime'] : 'image/jpeg';
 

@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Helper;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\memo;
+use function The_SEO_Framework\memo;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Admin,
 	Data,
 };
@@ -191,7 +191,7 @@ class Compatibility {
 	 */
 	public static function get_active_conflicting_plugin_types( $refresh = false ) {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( ! $refresh && null !== $memo = memo() ) return $memo;
 
 		$conflicting_types = [
@@ -259,7 +259,7 @@ class Compatibility {
 
 		// Check for classes
 		foreach ( $plugins['classes'] ?? [] as $name )
-			if ( ! class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+			if ( ! class_exists( $name, false ) ) // phpcs:ignore TSF.Performance.Functions.PHP -- we don't autoload.
 				return false;
 
 		// Check for classes

@@ -7,7 +7,7 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
+use function The_SEO_Framework\is_headless;
 
 /**
  * The SEO Framework plugin
@@ -37,6 +37,7 @@ turn_off_autoloading: if ( ! is_headless( 'settings' ) ) {
 		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) )
 			$options[] = \THE_SEO_FRAMEWORK_SITE_CACHE;
 
+		// WP 6.7+: we should change 'no' to false.
 		\wp_set_options_autoload( $options, 'no' );
 	}
 }

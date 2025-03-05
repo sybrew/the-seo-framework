@@ -8,11 +8,11 @@ namespace The_SEO_Framework\Sitemap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use const \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
+use const The_SEO_Framework\ROBOTS_IGNORE_PROTECTION;
 
-use function \The_SEO_Framework\memo;
+use function The_SEO_Framework\memo;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 	Meta,
@@ -216,7 +216,7 @@ class Utils {
 	 */
 	public static function use_core_sitemaps() {
 
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
 		if ( Data\Plugin::get_option( 'sitemaps_output' ) )
@@ -250,7 +250,7 @@ class Utils {
 	 * @return bool Whether the sitemap.xml file exists.
 	 */
 	public static function has_root_sitemap_xml() {
-		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- I know.
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
 		// Ensure get_home_path() is declared.
@@ -259,7 +259,7 @@ class Utils {
 
 		$path = \get_home_path() . 'sitemap.xml';
 
-		// phpcs:ignore, TSF.Performance.Functions.PHP -- we use path, not URL.
+		// phpcs:ignore TSF.Performance.Functions.PHP -- we use path, not URL.
 		return memo( file_exists( $path ) );
 	}
 }

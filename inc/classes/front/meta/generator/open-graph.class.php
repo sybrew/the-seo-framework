@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Front\Meta\Generator;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Meta,
 };
@@ -298,7 +298,7 @@ final class Open_Graph {
 				];
 			}
 
-			$i++;
+			++$i;
 		}
 	}
 

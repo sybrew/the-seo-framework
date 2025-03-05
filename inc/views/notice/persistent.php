@@ -6,9 +6,9 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\HTML;
+use The_SEO_Framework\Admin\Settings\Layout\HTML;
 
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -106,12 +106,12 @@ vprintf(
 		\esc_attr( $args['type'] ),
 		( $args['icon'] ? 'tsf-show-icon' : '' ),
 		\sprintf(
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- conditionals bug.
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- conditionals bug.
 			( ! $args['escape'] && 0 === stripos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- the invoker should be mindful.
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the invoker should be mindful.
 			( $args['escape'] ? \esc_html( $message ) : $message )
 		),
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- they are.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- they are.
 		$button_js . $button_nojs,
 	],
 );

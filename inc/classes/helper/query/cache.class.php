@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Helper\Query;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Helper\Query; // Yes, it is legal to share class and namespaces.
+use The_SEO_Framework\Helper\Query; // Yes, it is legal to share class and namespaces.
 
 /**
  * The SEO Framework plugin
@@ -72,11 +72,11 @@ class Cache {
 			return $value_to_set;
 		}
 
-		// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
 		$caller = debug_backtrace( \DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]['function'] ?? '';
 
 		// We need not seralize the caller; waste of processing if we'd merge with $args.
-		// phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
 		$hash = "$caller/" . serialize( $args );
 
 		if ( isset( $value_to_set ) )

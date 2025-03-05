@@ -8,9 +8,9 @@ namespace The_SEO_Framework\Data\Plugin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\is_headless;
+use function The_SEO_Framework\is_headless;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper\Post_Type,
 	Helper\Query,
@@ -144,7 +144,7 @@ class Post {
 		/**
 		 * @since 4.0.5
 		 * @since 4.1.4 1. Now considers headlessness.
-		 *              2. Now returns a 3rd parameter: boolean $headless.
+		 *              2. Now returns a 3rd parameter: Boolean $headless.
 		 * @note Do not delete/unset/add indexes! It'll cause errors.
 		 * @param array $meta    The current post meta.
 		 * @param int   $post_id The post ID.
@@ -177,8 +177,8 @@ class Post {
 		 * @since 4.1.4
 		 * @since 4.2.0 1. Now corrects the $post_id when none is supplied.
 		 *              2. No longer returns the third parameter.
-		 * @param array    $defaults
-		 * @param integer  $post_id Post ID.
+		 * @param array $defaults The default post meta.
+		 * @param int   $post_id  Post ID.
 		 * @param \WP_Post $post    Post object.
 		 */
 		return (array) \apply_filters(
@@ -188,14 +188,14 @@ class Post {
 				'_tsf_title_no_blogname'  => 0, // The prefix I should've used from the start...
 				'_genesis_description'    => '',
 				'_genesis_canonical_uri'  => '',
-				'redirect'                => '', //! Will be displayed in custom fields when set...
+				'redirect'                => '', // FIXME: Will be displayed in custom fields when set...
 				'_social_image_url'       => '',
 				'_social_image_id'        => 0,
 				'_genesis_noindex'        => 0,
 				'_genesis_nofollow'       => 0,
 				'_genesis_noarchive'      => 0,
-				'exclude_local_search'    => 0, //! Will be displayed in custom fields when set...
-				'exclude_from_archive'    => 0, //! Will be displayed in custom fields when set...
+				'exclude_local_search'    => 0, // FIXME: Will be displayed in custom fields when set...
+				'exclude_from_archive'    => 0, // FIXME: Will be displayed in custom fields when set...
 				'_open_graph_title'       => '',
 				'_open_graph_description' => '',
 				'_twitter_title'          => '',
@@ -216,9 +216,9 @@ class Post {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_single_post_meta_item`.
 	 *
-	 * @param string  $item    The item to update.
-	 * @param mixed   $value   The value the item should be at.
-	 * @param integer $post_id The post ID. Also accepts Post objects.
+	 * @param string       $item    The item to update.
+	 * @param mixed        $value   The value the item should be at.
+	 * @param int|\WP_Post $post_id The post ID. Also accepts Post objects.
 	 */
 	public static function update_single_meta_item( $item, $value, $post_id ) {
 
@@ -240,8 +240,8 @@ class Post {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `save_post_meta`.
 	 *
-	 * @param integer $post_id The post ID. Also accepts Post objects.
-	 * @param array   $data    The post meta fields, will be merged with the defaults.
+	 * @param int|\WP_Post $post_id The post ID. Also accepts Post objects.
+	 * @param array        $data    The post meta fields, will be merged with the defaults.
 	 */
 	public static function save_meta( $post_id, $data ) {
 

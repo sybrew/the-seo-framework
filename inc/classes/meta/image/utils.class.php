@@ -117,7 +117,7 @@ class Utils {
 	 * @param int $max_size     The largest acceptable dimension in pixels. Accounts for both width and height.
 	 * @param int $max_filesize The largest acceptable filesize in bytes. Default 5MB (5242880).
 	 * @return array|false {
-	 *     Array of image data, or boolean false if no image is available.
+	 *     Array of image data, or Boolean false if no image is available.
 	 *
 	 *     @type string $0 Image source URL.
 	 *     @type int    $1 Image width in pixels.

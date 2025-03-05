@@ -36,11 +36,6 @@ namespace The_SEO_Framework;
 class Legacy_API {
 
 	/**
-	 * Calling any top file without __construct() is forbidden.
-	 */
-	private function __construct() { }
-
-	/**
 	 * Return SEO options from the SEO options database.
 	 *
 	 * @since 2.2.2

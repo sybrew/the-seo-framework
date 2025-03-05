@@ -9,7 +9,7 @@ namespace The_SEO_Framework\Internal;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 // Precautionary.
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	is_headless,
 	normalize_generation_args,
 	get_query_type_from_args,
@@ -18,7 +18,7 @@ use function \The_SEO_Framework\{
 };
 
 // Precautionary.
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Helper,
 	Helper\Query,
@@ -242,7 +242,7 @@ final class Deprecated {
 	 *
 	 * @since 4.1.4
 	 * @since 5.0.0 1. Deprecated.
-	 *              2. Now falls back to the current post type instead erroneously to a boolean.
+	 *              2. Now falls back to the current post type instead erroneously to a Boolean.
 	 *              3. Now memoizes the return value.
 	 * @deprecated
 	 *
@@ -3026,7 +3026,7 @@ final class Deprecated {
 	 *
 	 * @since 2.9.0
 	 * @since 4.0.0 1. Now only asserts the social titles as required.
-	 *              2. Now always returns an array, instead of a boolean (false) on failure.
+	 *              2. Now always returns an array, instead of a Boolean (false) on failure.
 	 * @since 4.2.0 1. No longer memoizes the return value.
 	 *              2. No longer tests for the Twitter title.
 	 * @since 5.0.0 Deprecated.
@@ -4944,7 +4944,7 @@ final class Deprecated {
 		/**
 		 * @since 2.0.0
 		 * @since 4.1.4 1. Now considers headlessness.
-		 *              2. Now returns a 3rd parameter: boolean $headless.
+		 *              2. Now returns a 3rd parameter: Boolean $headless.
 		 *
 		 * @param array  $settings The settings
 		 * @param string $setting  The settings field.
@@ -6676,7 +6676,7 @@ final class Deprecated {
 	 * @since 5.0.0 Deprecated.
 	 * @deprecated
 	 *
-	 * @return boolean Returns true when complete
+	 * @return Boolean Returns true when complete
 	 */
 	public function add_option_filter() {
 		\tsf()->_deprecated_function( 'tsf()->add_option_filter()', '5.0.0', 'filter the_seo_framework_settings_update_sanitizers' );
@@ -6870,7 +6870,7 @@ final class Deprecated {
 	 */
 	public function s_no_html( $text ) {
 		\tsf()->_deprecated_function( 'tsf()->s_no_html()', '5.0.0', 'strip_tags()' );
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		return strip_tags( $text );
 	}
 
@@ -6887,7 +6887,7 @@ final class Deprecated {
 	 */
 	public function s_no_html_space( $text ) {
 		\tsf()->_deprecated_function( 'tsf()->s_no_html_space()', '5.0.0' );
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- This is simple and performant sanity.
 		return str_replace( ' ', '', strip_tags( $text ) );
 	}
 
@@ -8052,7 +8052,7 @@ final class Deprecated {
 	 * @deprecated
 	 *
 	 * @param array $plugins Array of array for constants, classes and / or functions to check for plugin existence.
-	 * @return boolean True if plugin exists or false if plugin constant, class or function not detected.
+	 * @return Boolean True if plugin exists or false if plugin constant, class or function not detected.
 	 */
 	public function detect_plugin( $plugins ) {
 
@@ -8074,7 +8074,7 @@ final class Deprecated {
 
 		// Check for classes
 		foreach ( $plugins['classes'] ?? [] as $name )
-			if ( class_exists( $name, false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- we don't autoload.
+			if ( class_exists( $name, false ) ) // phpcs:ignore TSF.Performance.Functions.PHP -- we don't autoload.
 				return true;
 
 		// No globals, constant, function, or class found to exist

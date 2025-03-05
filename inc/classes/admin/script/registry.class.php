@@ -8,14 +8,14 @@ namespace The_SEO_Framework\Admin\Script;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	has_run,
 	umemo,
 	is_headless,
 };
 
-use \The_SEO_Framework\Data;
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
 	Format,
 	Post_Type,
 	Query,
@@ -241,9 +241,9 @@ class Registry {
 	 *
 	 *     @type string        $id       The script unique ID.
 	 *     @type string        $type     The script type, either 'js' or 'css'.
-	 *     @type boolean       $hasrtl   Optional. If true, the script will consider .rtl and .rtl.min versions.
+	 *     @type Boolean       $hasrtl   Optional. If true, the script will consider .rtl and .rtl.min versions.
 	 *                                   Default false.
-	 *     @type boolean       $autoload If true, the script will be loaded directly.
+	 *     @type Boolean       $autoload If true, the script will be loaded directly.
 	 *                                   If false, it'll only be registered for dependencies.
 	 *     @type string        $name     The script file name.
 	 *     @type array         $deps     Any script dependencies by name.
@@ -371,9 +371,10 @@ class Registry {
 		}
 
 		if ( $registered ) {
+			// Add to bitwise if exists, otherwise, write the variable.
 			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
-				and static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED
-				 or static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED;
+				? ( static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED )
+				: ( static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED );
 		}
 	}
 
@@ -402,9 +403,10 @@ class Registry {
 		}
 
 		if ( $loaded ) {
+			// Add to bitwise if exists, otherwise, write the variable.
 			isset( static::$queue[ $type ][ $id ] )
-				and static::$queue[ $type ][ $id ] |= static::LOADED
-				 or static::$queue[ $type ][ $id ]  = static::LOADED;
+				? ( static::$queue[ $type ][ $id ] |= static::LOADED )
+				: ( static::$queue[ $type ][ $id ]  = static::LOADED );
 		}
 	}
 

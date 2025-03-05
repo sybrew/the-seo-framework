@@ -6,14 +6,14 @@
 
 namespace The_SEO_Framework;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) or die;
+( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use \The_SEO_Framework\Admin\Settings\Layout\{
+use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Compatibility,
 	Format\Markdown,
 };
@@ -117,7 +117,7 @@ switch ( $instance ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'twitter_tags',
-				'label'       => \__( 'Output Twitter meta tags?', 'autodescription' ),
+				'label'       => \__( 'Output Twitter Card meta tags?', 'autodescription' ),
 				'description' => \__( 'X (formerly Twitter), Discord, LinkedIn, and some other networks make use of these meta tags.', 'autodescription' ),
 			] ),
 			true,
@@ -186,7 +186,7 @@ switch ( $instance ) :
 			</p>
 			<p class=hide-if-no-tsf-js>
 				<?php
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 				echo Form::get_image_uploader_form( [ 'id' => 'tsf_fb_socialimage' ] );
 				?>
 			</p>
@@ -301,7 +301,7 @@ switch ( $instance ) :
 					<label for="<?php Input::field_id( "twitter_card_{$type}" ); ?>">
 						<span>
 							<?php
-							echo HTML::code_wrap( $type ); // phpcs:ignore, WordPress.Security.EscapeOutput
+							echo HTML::code_wrap( $type ); // phpcs:ignore WordPress.Security.EscapeOutput
 
 							switch ( $type ) {
 								case 'summary':

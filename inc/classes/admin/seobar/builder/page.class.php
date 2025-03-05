@@ -8,16 +8,16 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use const \The_SEO_Framework\ROBOTS_ASSERT;
+use const The_SEO_Framework\ROBOTS_ASSERT;
 
-use \The_SEO_Framework\{
+use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 	Meta,
 	RobotsTXT,
 	Admin\SEOBar\Builder, // Yes, it is legal to import the same namespace.
 };
-use \The_SEO_Framework\Helper\{
+use The_SEO_Framework\Helper\{
 	Guidelines,
 	Format\Strings,
 	Migrate,

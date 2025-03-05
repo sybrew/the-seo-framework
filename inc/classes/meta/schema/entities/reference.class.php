@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use \The_SEO_Framework\Meta;
+use The_SEO_Framework\Meta;
 
 /**
  * The SEO Framework plugin
@@ -56,7 +56,7 @@ abstract class Reference {
 	 *                         Leave null to autodetermine query.
 	 * @return string The entity ID for $args.
 	 */
-	public static function get_id( $args = null ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- abstract ref.
+	public static function get_id( $args = null ) { // phpcs:ignore Generic.CodeAnalysis -- abstract ref.
 		return Meta\URI::get_bare_front_page_url() . '#/schema/' . current( (array) static::$type );
 	}
 

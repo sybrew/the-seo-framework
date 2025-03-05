@@ -8,12 +8,12 @@ namespace The_SEO_Framework\Meta\Title;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function \The_SEO_Framework\{
+use function The_SEO_Framework\{
 	get_query_type_from_args,
 	normalize_generation_args,
 };
 
-use \The_SEO_Framework\Data;
+use The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -140,7 +140,7 @@ class Utils {
 					// Only grab 10 of these. Yes, one might transform still on the 11th.
 					$it = 10;
 					$i  = 0;
-					// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition
+					// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition
 					while ( false !== ( $priority = \has_filter( $filter, $function ) ) ) {
 						$filtered[] = [ $filter, $function, $priority ];
 						\remove_filter( $filter, $function, $priority );
