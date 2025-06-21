@@ -60,12 +60,12 @@ final class PluginTable {
 		$tsf_links['tsfem']   = \sprintf(
 			'<a href="%s" rel="noreferrer noopener" target=_blank>%s</a>',
 			'https://theseoframework.com/extensions/',
-			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
+			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ),
 		);
 		$tsf_links['pricing'] = \sprintf(
 			'<a href="%s" rel="noreferrer noopener" target=_blank>%s</a>',
 			'https://theseoframework.com/pricing/',
-			\esc_html_x( 'Pricing', 'Plugin pricing', 'autodescription' )
+			\esc_html_x( 'Pricing', 'Plugin pricing', 'autodescription' ),
 		);
 
 		return array_merge( $tsf_links, $links );

@@ -230,10 +230,10 @@ class Markdown {
 	private static function h123456( $text, $type = 'h1' ) {
 
 		preg_match_all(
-			// Considers word non-boundary. @TODO consider removing that?
+			// Considers word non-boundary. @TODO consider removing that consideration?
 			\sprintf(
 				'/\={%1$d}\s(.+)\s\={%1$d}/',
-				filter_var( $type, \FILTER_SANITIZE_NUMBER_INT )
+				filter_var( $type, \FILTER_SANITIZE_NUMBER_INT ),
 			),
 			$text,
 			$matches,

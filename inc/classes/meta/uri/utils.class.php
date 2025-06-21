@@ -284,8 +284,8 @@ class Utils {
 				__METHOD__,
 				static::set_url_scheme( \sanitize_url(
 					Data\Blog::get_front_page_url(),
-					[ 'https', 'http' ]
-				) )
+					[ 'https', 'http' ],
+				) ),
 			);
 
 		// Test for likely match early, before transforming.
@@ -294,7 +294,7 @@ class Utils {
 
 		$url = static::set_url_scheme( \sanitize_url(
 			$url,
-			[ 'https', 'http' ]
+			[ 'https', 'http' ],
 		) );
 
 		// If they start with the same, we can assume it's the same domain.

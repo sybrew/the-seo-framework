@@ -5253,7 +5253,7 @@ final class Deprecated {
 	public function is_term_populated( $term_id, $taxonomy ) {
 
 		$tsf = \tsf();
-		$tsf->_deprecated_function( 'tsf()->get_latest_category_id()', '5.0.0', 'tsf()->data()->term()->is_term_populated()' );
+		$tsf->_deprecated_function( 'tsf()->is_term_populated()', '5.0.0', 'tsf()->data()->term()->is_term_populated()' );
 
 		return $tsf->data()->term()->is_term_populated( $term_id, $taxonomy );
 	}

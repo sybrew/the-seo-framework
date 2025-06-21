@@ -258,6 +258,15 @@ TODO add a filter akin to the_seo_framework_supported_twitter_card_types for Ope
 
 TODO WooCommerce 9.6 changed how categories are recognized (from hierarchical to non-hierarchical?). This affects the breadcrumb output.
 
+TODO update residual trailing commas via: ' \)\n\t*\);
+
+TODO add sort by SEO Bar to list views?
+	-> This is feasible, e.g.:
+		Title/Description: red weight -3, yellow weight -2, grey weight -2, blue -1, green 0.
+		Indexing: Noindex red -5, yellow -4, grey -3, blue -2, green 0, etc.
+	-> This would mean we render ALL seo bar items in the list view for all pages, which is not ideal. But, we can store this as post meta as the SEO bar is shown (and the meta is missing).
+		-> i.e., slow lazy update
+
 ### 5.1.3
 
 **For developers:**

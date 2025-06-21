@@ -4,7 +4,7 @@
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
  * Version: 5.1.3-dev-2
- * Author: The SEO Framework Team
+ * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription

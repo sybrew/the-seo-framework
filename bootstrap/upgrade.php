@@ -655,7 +655,7 @@ function _do_upgrade_2900() {
 		if ( 'photo' === $card_type ) {
 			Data\Plugin::update_option( 'twitter_card', 'summary_large_image' );
 			_add_upgrade_notice(
-				\__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' )
+				\__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' ),
 			);
 		}
 	}
@@ -677,7 +677,7 @@ function _do_upgrade_3001() {
 		if ( '' !== $sitemap_timestamps ) {
 			Data\Plugin::update_option( 'timestamps_format', (string) (int) $sitemap_timestamps );
 			_add_upgrade_notice(
-				\__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' )
+				\__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' ),
 			);
 		} else {
 			Data\Plugin::update_option( 'timestamps_format', '1' );
@@ -767,7 +767,7 @@ function _do_upgrade_3300() {
 		}
 
 		_add_upgrade_notice(
-			\__( 'The positions in the "Meta Title Additions Location" setting for the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again.', 'autodescription' )
+			\__( 'The positions in the "Meta Title Additions Location" setting for the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again.', 'autodescription' ),
 		);
 	}
 }

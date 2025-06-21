@@ -204,7 +204,7 @@ switch ( $instance ) :
 				</p>
 				<p class=hide-if-no-tsf-js>
 					<?php
-					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+					// phpcs:disable WordPress.Security.EscapeOutput -- already escaped.
 					echo Form::get_image_uploader_form( [
 						'id'   => 'knowledge_logo',
 						'data' => [
@@ -220,6 +220,7 @@ switch ( $instance ) :
 							'button_text'  => \__( 'Select Logo', 'autodescription' ),
 						],
 					] );
+					// phpcs:enable WordPress.Security.EscapeOutput
 					?>
 				</p>
 			</div>

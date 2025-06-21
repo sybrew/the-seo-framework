@@ -162,9 +162,9 @@ class Post {
 		 */
 		if ( \wp_is_post_autosave( $post_id ) || \wp_is_post_revision( $post_id ) ) return;
 
-		// Check that the user is allowed to edit the post
+		// Check that the user is allowed to edit the post. This is redundant and may need to be removed for full Gutenberg support.
 		if (
-			   ! \current_user_can( 'edit_post', $post_id )
+			   ! \current_user_can( 'edit_post', $post_id ) // TODO can this interfere with custom post types?
 			|| ! isset( $_POST[ static::$nonce_name ] )
 			|| ! \wp_verify_nonce( $_POST[ static::$nonce_name ], static::$nonce_action )
 		) return;

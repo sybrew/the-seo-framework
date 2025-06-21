@@ -67,7 +67,7 @@ final class Schema {
 					],
 					'tag'        => 'script',
 					'content'    => [
-						'content' => $content, // Yes, we're filling the content with content.
+						'content' => $content, // Yes, we're filling ['content']['content'] with $content. Not confusing at all.
 						'escape'  => false, // Escape::json_encode_script escaped.
 					],
 				];

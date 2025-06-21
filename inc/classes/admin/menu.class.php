@@ -85,7 +85,7 @@ class Menu {
 		if ( \current_user_can( $menu['capability'] ) )
 			\add_action(
 				'load-' . static::get_page_hook_name(),
-				[ Settings\Plugin::class, 'register_seo_settings_meta_boxes' ]
+				[ Settings\Plugin::class, 'register_seo_settings_meta_boxes' ],
 			);
 	}
 

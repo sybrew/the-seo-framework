@@ -111,7 +111,7 @@ class Arrays {
 	 * Merges arrays distinctly, much like `array_merge()`, but then for multidimensionals.
 	 * Unlike PHP's `array_merge_recursive()`, this method doesn't convert non-unique keys as sequential.
 	 *
-	 * This is the only correct function of kind that exists, made bespoke by Sybre for TSF.
+	 * This is the only correct function of kind that exists, made by Sybre, bespoke for TSF.
 	 *
 	 * @link <https://3v4l.org/9pnW1> Test it here.
 	 *
