@@ -34,6 +34,9 @@ if ( Helper\Compatibility::is_theme_active( 'genesis' ) )
 if ( Helper\Compatibility::is_theme_active( 'bricks' ) )
 	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-bricks.php';
 
+if ( Helper\Compatibility::is_theme_active( 'avada' ) )
+	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-avada.php';
+
 foreach (
 	array_intersect_key(
 		[
