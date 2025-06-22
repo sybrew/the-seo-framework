@@ -38,6 +38,16 @@ namespace The_SEO_Framework;
 // Additional compatibility filters for comprehensive coverage
 \add_filter( 'fusion_app_preview_data', __NAMESPACE__ . '\\_announce_tsf_presence', 10, 1 );
 
+// Filter Avada's specific SEO settings to disable them
+\add_filter( 'avada_setting_get_status_opengraph', '__return_false' );
+\add_filter( 'avada_setting_get_meta_tags_separator', '__return_false' );
+\add_filter( 'avada_setting_get_seo_title', '__return_false' );
+\add_filter( 'avada_setting_get_meta_description', '__return_false' );
+\add_filter( 'avada_setting_get_meta_og_image', '__return_false' );
+
+// Filter Avada's metabox sections to remove SEO options
+\add_filter( 'awb_metaboxes_sections', __NAMESPACE__ . '\\_remove_avada_seo_metaboxes', 10, 1 );
+
 /**
  * Disables Avada SEO functionality by announcing TSF presence.
  *
@@ -69,4 +79,30 @@ function _announce_tsf_presence( $data ) {
 	}
 
 	return $data;
+}
+
+/**
+ * Removes Avada SEO metaboxes when TSF is active.
+ *
+ * @hook awb_metaboxes_sections 10
+ * @since 5.1.3
+ * @access private
+ *
+ * @param array $sections The metabox sections.
+ * @return array Modified sections with SEO options removed.
+ */
+function _remove_avada_seo_metaboxes( $sections ) {
+	if ( \is_array( $sections ) ) {
+		// Remove advanced SEO options
+		if ( isset( $sections['advanced']['status_opengraph'] ) ) {
+			unset( $sections['advanced']['status_opengraph'] );
+		}
+		
+		// Remove default SEO section entirely
+		if ( isset( $sections['seo'] ) ) {
+			unset( $sections['seo'] );
+		}
+	}
+
+	return $sections;
 }

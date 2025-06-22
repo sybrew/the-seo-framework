@@ -202,4 +202,18 @@ class Blog {
 
 		return $active_plugins;
 	}
+
+	/**
+	 * Determines list of active themes.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @return string[] List of active themes (stylesheet and template).
+	 */
+	public static function get_active_themes() {
+		return array_unique( [
+			strtolower( \get_option( 'stylesheet' ) ), // Child theme.
+			strtolower( \get_option( 'template' ) ),   // Parent theme.
+		] );
+	}
 }
