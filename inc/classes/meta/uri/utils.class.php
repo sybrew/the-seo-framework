@@ -578,6 +578,19 @@ class Utils {
 				$permastruct = $wp_rewrite->get_author_permastruct();
 		}
 
-		return '/' . ltrim( \user_trailingslashit( $permastruct ?? '' ), '/' );
+		$processed_struct = '/' . ltrim( \user_trailingslashit( $permastruct ?? '' ), '/' );
+
+		// Handle subdirectory WordPress installs: remove subdirectory path from permastruct
+		// to avoid duplication when JavaScript combines with rootUrl
+		$home_path = parse_url( \home_url(), \PHP_URL_PATH );
+		if ( $home_path && '/' !== $home_path ) {
+			$home_path = rtrim( $home_path, '/' );
+			// If the permastruct starts with the subdirectory path, remove it
+			if ( 0 === strpos( $processed_struct, $home_path . '/' ) ) {
+				$processed_struct = '/' . ltrim( substr( $processed_struct, \strlen( $home_path ) ), '/' );
+			}
+		}
+
+		return $processed_struct;
 	}
 }
