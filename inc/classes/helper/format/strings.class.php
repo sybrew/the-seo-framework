@@ -261,7 +261,7 @@ class Strings {
 		 * }
 		 */
 		preg_match(
-			'/(?:\A(?:[\p{P}&&[^.]]\p{Z}]*)?(?:\.+(?![\p{L}]\.))?)??([\P{Po}\p{M}\xBF\xA1:\'\p{Z}\.]+[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3}|[\p{Po}]\Z)(?:[^\p{Pe}\p{Pf}]*+.*[\p{Pe}\p{Pf}]+\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:][^\P{Nd}\p{Z}]*)|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*){1,3})|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
+			'/(?:\A[\p{P}\p{Z}]*?)?((?:(?:\w\.)+[\P{Po}\p{M}\xBF\xA1:\'\p{Z}]*|[\P{Po}\p{M}\xBF\xA1:\'\p{Z}]+)[\p{Z}\w])(?:([^\P{Po}\p{M}\xBF\xA1:]\Z(*ACCEPT))|((?(?=.+(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*)+|[\p{Po}]\Z)(?:[^\p{Pe}\p{Pf}]*+.*[\p{Pe}\p{Pf}]+\Z(*ACCEPT)|.*[^\P{Po}\p{M}\xBF\xA1:][^\P{Nd}\p{Z}]*)|.*\Z(*ACCEPT)))(?>(.+?\p{Z}*(?:\w+[\p{Pc}\p{Pd}\p{Pf}\p{Z}]*)+)|[^\p{Pc}\p{Pd}\p{M}\xBF\xA1:])?)(.+)?/su',
 			$sentence,
 			$matches,
 		);
