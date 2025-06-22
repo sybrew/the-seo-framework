@@ -25,18 +25,8 @@ namespace The_SEO_Framework;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Disable Avada SEO functionality using various common filter patterns
-\add_filter( 'avada_seo_enabled', '__return_false' );
-\add_filter( 'fusion_seo_enabled', '__return_false' );
-\add_filter( 'avada_disable_seo', '__return_true' );
-\add_filter( 'fusion_disable_seo', '__return_true' );
-
-// Hook into Avada's SEO detection system if available
-\add_filter( 'avada_detect_seo_plugins', __NAMESPACE__ . '\\_disable_avada_seo' );
-\add_filter( 'fusion_detect_seo_plugins', __NAMESPACE__ . '\\_disable_avada_seo' );
-
-// Additional compatibility filters for comprehensive coverage
-\add_filter( 'fusion_app_preview_data', __NAMESPACE__ . '\\_announce_tsf_presence', 10, 1 );
+// Filter Avada's pagetype data to remove SEO settings
+\add_filter( 'fusion_pagetype_data', __NAMESPACE__ . '\\_remove_avada_pagetype_seo', 10, 2 );
 
 // Filter Avada's specific SEO settings to disable them
 \add_filter( 'avada_setting_get_status_opengraph', '__return_false' );
@@ -49,36 +39,28 @@ namespace The_SEO_Framework;
 \add_filter( 'awb_metaboxes_sections', __NAMESPACE__ . '\\_remove_avada_seo_metaboxes', 10, 1 );
 
 /**
- * Disables Avada SEO functionality by announcing TSF presence.
+ * Removes SEO settings from Avada pagetype data.
  *
- * @hook avada_detect_seo_plugins 10
- * @hook fusion_detect_seo_plugins 10
+ * @hook fusion_pagetype_data 10
  * @since 5.1.3
  * @access private
  *
- * @return bool Whether SEO plugin is detected.
+ * @param array  $pagetype_data The pagetype data.
+ * @param string $posttype      The post type.
+ * @return array Modified pagetype data with SEO settings removed.
  */
-function _disable_avada_seo() {
-	return true;
-}
-
-/**
- * Announces TSF presence to Avada theme systems.
- *
- * @hook fusion_app_preview_data 10
- * @since 5.1.3
- * @access private
- *
- * @param array $data The preview data.
- * @return array Modified preview data with TSF presence announced.
- */
-function _announce_tsf_presence( $data ) {
-	if ( \is_array( $data ) ) {
-		$data['seo_plugin_active'] = true;
-		$data['the_seo_framework']  = true;
+function _remove_avada_pagetype_seo( $pagetype_data, $posttype ) {
+	if ( \is_array( $pagetype_data ) ) {
+		// Remove SEO for specific post type if it exists
+		if ( isset( $pagetype_data[ $posttype ]['seo'] ) ) {
+			unset( $pagetype_data[ $posttype ]['seo'] );
+		} elseif ( isset( $pagetype_data['default']['seo'] ) ) {
+			// Remove fallback default SEO if post type doesn't exist
+			unset( $pagetype_data['default']['seo'] );
+		}
 	}
 
-	return $data;
+	return $pagetype_data;
 }
 
 /**

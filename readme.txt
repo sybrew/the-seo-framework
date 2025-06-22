@@ -269,6 +269,11 @@ TODO add sort by SEO Bar to list views?
 
 ### 5.1.3
 
+**For everyone:**
+
+* **Improved:**
+	* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
+
 **For developers:**
 
 * **Fixed:**
