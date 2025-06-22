@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -40,7 +40,7 @@ namespace The_SEO_Framework;
 \add_filter( 'avada_setting_get_meta_og_image', '__return_false' );
 
 /**
- * Removes SEO settings from Avada pagetype data.
+ * Removes SEO settings from Avada page type data.
  *
  * @hook fusion_pagetype_data 10
  * @since 5.1.3
@@ -51,15 +51,8 @@ namespace The_SEO_Framework;
  * @return array Modified pagetype data with SEO settings removed.
  */
 function _remove_avada_pagetype_seo( $pagetype_data, $posttype ) {
-
-	if ( \is_array( $pagetype_data ) ) {
-		// Remove SEO for specific post type if it exists
-		if ( isset( $pagetype_data[ $posttype ]['seo'] ) )
-			unset( $pagetype_data[ $posttype ]['seo'] );
-		elseif ( isset( $pagetype_data['default']['seo'] ) )
-			// Remove fallback default SEO if post type doesn't exist
-			unset( $pagetype_data['default']['seo'] );
-	}
+	
+	unset(  $pagetype_data[ $posttype ]['seo'], $pagetype_data['default']['seo'] );
 
 	return $pagetype_data;
 }
@@ -76,15 +69,7 @@ function _remove_avada_pagetype_seo( $pagetype_data, $posttype ) {
  */
 function _remove_avada_seo_metaboxes( $sections ) {
 
-	if ( \is_array( $sections ) ) {
-		// Remove advanced SEO options
-		if ( isset( $sections['advanced']['status_opengraph'] ) )
-			unset( $sections['advanced']['status_opengraph'] );
-
-		// Remove default SEO section entirely
-		if ( isset( $sections['seo'] ) )
-			unset( $sections['seo'] );
-	}
+	unset( $sections['seo'], $sections['advanced']['status_opengraph'] );
 
 	return $sections;
 }
