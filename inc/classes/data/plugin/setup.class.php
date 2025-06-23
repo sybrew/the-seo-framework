@@ -282,6 +282,7 @@ class Setup {
 				'facebook_tags'  => 1, // Output the Facebook meta tags.
 				'twitter_tags'   => 1, // Output the Twitter meta tags.
 				'oembed_scripts' => 1, // Enable WordPress's oEmbed scripts.
+				'author_meta'    => 1, // Output author meta tag.
 
 				// Social title settings.
 				'social_title_rem_additions' => 1, // Remove social title additions.

@@ -118,6 +118,7 @@ final class Head {
 					'Robots',
 					'URI',
 					'Description',
+					'Author',
 					'Theme_Color',
 					'Open_Graph',
 					'Facebook',
