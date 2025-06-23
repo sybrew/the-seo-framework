@@ -273,6 +273,23 @@ TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement thi
 
 ### 5.1.3
 
+**For everyone:**
+
+* **Added:** Comprehensive author meta tag support with global fallback option for improved LinkedIn and social media post sharing.
+* **Added:** Author Name Fallback setting in Social Meta Tags > Author Settings for specifying a default author name.
+* **Added:** Authorial tags toggle now controls visibility of author profile settings and fallback behavior.
+* **Enhanced:** Facebook and Twitter author meta generation now respects the authorial tags setting with proper fallback to global settings.
+* **Enhanced:** Profile settings for authorial information are now conditionally displayed based on authorial tags setting.
+* **Fixed:** Author meta tags implementation follows WordPress coding standards and TSF architecture patterns.
+
+**For developers:**
+
+* **Added:** `tsf()->author()` method for accessing author meta functionality via the pool pattern.
+* **Added:** `post_author` option with proper sanitization and validation.
+* **Enhanced:** JavaScript toggle functionality for hiding author override messages when authorial tags are disabled.
+
+This release augments issues #515, #595, #654, and #690 by providing comprehensive author meta tag functionality with global fallback support.
+
 TODO we should probably make this v5.2 (major), and add all the author stuff.
 TODO remove all deprecated filters, keep all deprecated methods/functions.
 

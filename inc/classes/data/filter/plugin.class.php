@@ -225,6 +225,7 @@ class Plugin {
 			'og_tags'                      => 'checkbox',
 			'paged_noindex'                => 'checkbox',
 			'pint_verification'            => 'verification_code',
+			'post_author'                  => 'metadata_text',
 			'post_modify_time'             => 'checkbox',
 			'post_publish_time'            => 'checkbox',
 			'prev_next_archives'           => 'checkbox',

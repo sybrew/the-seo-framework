@@ -125,8 +125,8 @@ switch ( $instance ) :
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'author_tags',
-				'label'       => \__( 'Output author tags?', 'autodescription' ),
-				'description' => \__( 'These tags can help search engines and social media platforms understand who authored posts on this website.', 'autodescription' ),
+				'label'       => \__( 'Output authorial tags?', 'autodescription' ),
+				'description' => \__( 'These tags can help search engines and social media platforms understand who authored posts on this website. Authors can override global settings on their profile page when enabled.', 'autodescription' ),
 			] ),
 			true,
 		);
@@ -196,6 +196,32 @@ switch ( $instance ) :
 				?>
 			</p>
 		</div>
+
+		<hr>
+		<?php
+		HTML::header_title( \__( 'Author Settings', 'autodescription' ) );
+		HTML::description( \__( 'Specify a fallback author name when no specific author is set for social media and search engines.', 'autodescription' ) );
+
+		$post_author = Data\Plugin::get_option( 'post_author' );
+		$post_author_placeholder = \_x( 'Author Name', 'Example Author Name', 'autodescription' );
+		?>
+
+		<p>
+			<label for="<?php Input::field_id( 'post_author' ); ?>">
+				<strong><?php \esc_html_e( 'Author Name Fallback', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				HTML::make_info(
+					\__( 'This will output a tag with the specified author name, which can be used for LinkedIn post sharing.', 'autodescription' ),
+				);
+				?>
+			</label>
+		</p>
+		<p class="tsf-author-override-description"><span class=description><?php \esc_html_e( 'Authors can override this option on their profile page.', 'autodescription' ); ?></span></p>
+		<p>
+			<input type=text name="<?php Input::field_name( 'post_author' ); ?>" class=large-text id="<?php Input::field_id( 'post_author' ); ?>" placeholder="<?= \esc_attr( $post_author_placeholder ) ?>" value="<?= \esc_attr( $post_author ) ?>">
+		</p>
+
 		<hr>
 		<?php
 		HTML::header_title( \__( 'Theme Color Settings', 'autodescription' ) );
@@ -221,6 +247,26 @@ switch ( $instance ) :
 			] ),
 			true,
 		);
+		?>
+		<script>
+		document.addEventListener( 'DOMContentLoaded', function() {
+			const authorTagsToggle = document.getElementById( '<?php Input::field_id( 'author_tags' ); ?>' );
+			
+			function toggleAuthorOverrideMessages( event ) {
+				const authorTagsEnabled = event.target.checked;
+				document.querySelectorAll( '.tsf-author-override-description' ).forEach( function( el ) {
+					el.style.display = authorTagsEnabled ? '' : 'none';
+				} );
+			}
+			
+			if ( authorTagsToggle ) {
+				authorTagsToggle.addEventListener( 'change', toggleAuthorOverrideMessages );
+				// Trigger on load
+				toggleAuthorOverrideMessages( { target: authorTagsToggle } );
+			}
+		} );
+		</script>
+		<?php
 		break;
 
 	case 'facebook':
@@ -264,7 +310,7 @@ switch ( $instance ) :
 				?>
 			</label>
 		</p>
-		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
+		<p class="tsf-author-override-description"><span class=description><?php \esc_html_e( 'Authors can override this option on their profile page.', 'autodescription' ); ?></span></p>
 		<p>
 			<input type=url name="<?php Input::field_name( 'facebook_author' ); ?>" class=large-text id="<?php Input::field_id( 'facebook_author' ); ?>" placeholder="<?= \esc_attr( $fb_author_placeholder ) ?>" value="<?= \esc_attr( $fb_author ) ?>">
 		</p>
@@ -378,7 +424,7 @@ switch ( $instance ) :
 				?>
 			</label>
 		</p>
-		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
+		<p class="tsf-author-override-description"><span class=description><?php \esc_html_e( 'Authors can override this option on their profile page.', 'autodescription' ); ?></span></p>
 		<p>
 			<input type=text name="<?php Input::field_name( 'twitter_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_creator' ); ?>" placeholder="<?= \esc_attr( $tw_creator_placeholder ) ?>" value="<?= \esc_attr( $tw_creator ) ?>">
 		</p>

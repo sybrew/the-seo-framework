@@ -175,6 +175,25 @@ class Pool extends Legacy_API {
 	}
 
 	/**
+	 * Returns the Author API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 5.1.3
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Author
+	 */
+	public static function author() {
+		return static::$pool['author'] ??= new class extends Meta\Author {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->author()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
 	 * Returns the Breadcrumbs API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
