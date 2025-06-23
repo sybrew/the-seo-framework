@@ -267,7 +267,18 @@ TODO add sort by SEO Bar to list views?
 	-> This would mean we render ALL seo bar items in the list view for all pages, which is not ideal. But, we can store this as post meta as the SEO bar is shown (and the meta is missing).
 		-> i.e., slow lazy update
 
+TODO don't escape '\\_', just write '\_'.
+TODO add `@access private` to compat funcs (or files...)
+TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement this in the inc\classes\meta\schema and author classes.
+
 ### 5.1.3
+
+**For everyone:**
+
+* **Fixed:**
+	* Abbreviations at the start of sentences are now properly considered by the description generator.
+* **Removed:**
+	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
 **For developers:**
 
@@ -275,6 +286,8 @@ TODO add sort by SEO Bar to list views?
 	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
 * **Other:**
 	* We now properly capitalize the proper noun Boolean.
+	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
+		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
 
 **For translators:**
 

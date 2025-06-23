@@ -4,6 +4,10 @@ This repository is responsible for "The SEO Framework" plugin for WordPress. Thi
 
 Follow these rules:
 
+## General Guidelines
+
+- In autodescription.php, increment the "Version: "-header by "-dev-{number}" when making a PR. If there's no -dev-{number} in the "Version: "-header, add it as -dev-1.
+
 ## General Coding Standards
 
 - Use WordPress coding standards, except as noted below
@@ -16,12 +20,13 @@ Follow these rules:
 - Align consecutive variable assignments at equal signs
 - Place multiline operators at new line start, also for conditional checks
 - Put function args on a new line when >30 chars or for objects/arrays
-- Do not add braces in constructs followed by only a single-line
+- Do not add braces in constructs followed by only a single-line statement, unless there's an else-clause.
 - Write detailed docblocks for all functions, classes, and methods
+- Add a newline after a function opening brace, unless the function is a single line
 
 ## WordPress PHP
 
-- Avoid wp_sprintf() (except with %l lists) and wp_json_encode()
+- Avoid functions wp_sprintf (except with %l lists) and wp_json_encode
 - Never add hooks in class constructs
 - In add_filter/add_action, write each argument on a new line when implementing anonymous functions
 
@@ -38,6 +43,7 @@ Follow these rules:
 - Align array key/value separators with spaces before separator
 - Do not pad array access strings with spaces
 - Avoid output buffering
+- You may use functions str_starts_with, str_ends_with, and str_contains; WordPress provides these
 
 ## JS
 
@@ -59,3 +65,8 @@ Follow these rules:
 - Succinct
 - Concise
 - Matter of factly
+
+## Codebase
+
+- You can not rely on composer.json; it contains some links to repositories you cannot access
+- You may rely on phpcs.xml for coding standards
