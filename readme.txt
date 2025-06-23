@@ -267,6 +267,10 @@ TODO add sort by SEO Bar to list views?
 	-> This would mean we render ALL seo bar items in the list view for all pages, which is not ideal. But, we can store this as post meta as the SEO bar is shown (and the meta is missing).
 		-> i.e., slow lazy update
 
+TODO don't escape '\\_', just write '\_'.
+TODO add `@access private` to compat funcs (or files...)
+TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement this in the inc\classes\meta\schema and author classes.
+
 ### 5.1.3
 
 TODO we should probably make this v5.2 (major), and add all the author stuff.
@@ -287,6 +291,10 @@ TODO remove all deprecated filters, keep all deprecated methods/functions.
 		* Bonus: This allows you to quickly see who is an Author and who isn't.
 		* Non-authors get a medium dash symbol instead of the SEO Bar.
 	* TODO You can now sort by SEO Bar status. This revolutionary (wow, I'm marketing!) feature allows you to quickly find posts and terms that need your attention.
+* **Fixed:**
+	* Abbreviations at the start of sentences are now properly considered by the description generator.
+* **Removed:**
+	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
 **For translators:**
 
@@ -300,9 +308,13 @@ TODO remove all deprecated filters, keep all deprecated methods/functions.
 	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
 		* Added index `author_meta`. Default `1`, also for existing installations.
+* **Fixed:**
+	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
 * **Other:**
 	* We now properly capitalize the proper noun Boolean.
 	* We updated our coding standards, so the code is slightly altered.
+	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
+		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
 
 ### 5.1.2
 

@@ -760,7 +760,7 @@ class Loader {
 								'queryReplace' => $wp_rewrite->queryreplace,
 							],
 							// TEMP: We still have to figure out how to get the right parameters. home_url() is probably key in this.
-							'allowCanonicalURLNotationTool' => ! Compatibility::get_active_conflicting_plugin_types()['multilingual'],
+							'allowCanonicalURLNotationTracker' => ! Compatibility::get_active_conflicting_plugin_types()['multilingual'],
 						],
 					],
 				],
