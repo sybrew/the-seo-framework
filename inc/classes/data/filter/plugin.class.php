@@ -154,7 +154,7 @@ class Plugin {
 			'alter_archive_query_type'     => 'alter_query_type',
 			'alter_search_query_type'      => 'alter_query_type',
 			'alter_search_query'           => 'checkbox',
-			'author_meta'                  => 'checkbox',
+			'author_tags'                  => 'checkbox',
 			'author_noarchive'             => 'checkbox',
 			'author_nofollow'              => 'checkbox',
 			'author_noindex'               => 'checkbox',

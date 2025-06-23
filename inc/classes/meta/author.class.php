@@ -1,18 +1,14 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Front\Meta\Generator
+ * @package The_SEO_Framework\Classes\Meta
  * @subpackage The_SEO_Framework\Meta\Author
  */
 
-namespace The_SEO_Framework\Front\Meta\Generator;
+namespace The_SEO_Framework\Meta;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\{
-	Meta,
-	Data,
-	Helper\Query,
-};
+use The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
@@ -32,40 +28,25 @@ use The_SEO_Framework\{
  */
 
 /**
- * Holds Author generators for meta tag output.
+ * Holds getters for meta tag output.
  *
  * @since 5.1.3
- * @access private
+ * @access protected
+ *         Use tsf()->author() instead.
  */
-final class Author {
+class Author {
 
 	/**
 	 * @since 5.1.3
-	 * @var callable[] GENERATORS A list of autoloaded meta callbacks.
-	 */
-	public const GENERATORS = [
-		[ __CLASS__, 'generate_author' ],
-	];
-
-	/**
-	 * Generates the author meta tag.
 	 *
-	 * @since 5.0.0
-	 * @generator
+	 * @return string The author name.
 	 */
-	public static function generate_author() {
+	public static function get_author_name() {
 
-		// Only output on singular posts/pages where an author is available
-		if ( ! Query::is_singular() ) return;
+		// Only output on single posts where an author is available
+		if ( ! Query::is_single() ) return;
 
-		$author_name = Meta\Author::get_author_name();
-
-		if ( \strlen( $author_name ) )
-			yield 'author' => [
-				'attributes' => [
-					'name'    => 'author',
-					'content' => $author_name,
-				],
-			];
+		return Title::get_user_title( Query::get_post_author_id() )
+			?: Data\Plugin::get_option( 'post_author' );
 	}
 }

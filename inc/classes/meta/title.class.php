@@ -701,7 +701,7 @@ class Title {
 	 */
 	public static function get_user_title( $user_id = 0 ) {
 		return Sanitize::metadata_content(
-			\get_userdata( $user_id ?: Query::get_the_real_id() )->display_name ?? ''
+			Data\User::get_userdata( $user_id ?: Query::get_the_real_id(), 'display_name' ) ?? ''
 		);
 	}
 

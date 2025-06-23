@@ -269,12 +269,24 @@ TODO add sort by SEO Bar to list views?
 
 ### 5.1.3
 
-**For developers:**
+TODO we should probably make this v5.2 (major), and add all the author stuff.
+TODO remove all deprecated filters, keep all deprecated methods/functions.
 
-* **Fixed:**
-	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
-* **Other:**
-	* We now properly capitalize the proper noun Boolean.
+**For everyone:**
+
+* **Added:**
+	* We added a new toggle for author meta data in the site settings. It's enabled by default for everyone, for it extends existing plugin behavior.
+		* When enabled:
+			* A new "author" metatag is added for posts, it shows the "display name" for the author.
+				* When disabled the primary author can still be assigned.
+			* TODO IMPLEMENT: Authors have "Facebook profile page" and "X profile handle" links added to their profile pages.
+				* This is already implemented, but we should toggle the listeners for this.
+			* TODO IMPLEMENT "Authors can override this option on their profile page." must be hidden when toggled off.
+	* TODO Authors now have all SEO fields on their profile pages, like we have for terms.
+	* TODO Authors get the SEO Bar displayed on the author overview list pages.
+		* Bonus: This allows you to quickly see who is an Author and who isn't.
+		* Non-authors get a medium dash symbol instead of the SEO Bar.
+	* TODO You can now sort by SEO Bar status. This revolutionary (wow, I'm marketing!) feature allows you to quickly find posts and terms that need your attention.
 
 **For translators:**
 
@@ -284,7 +296,12 @@ TODO add sort by SEO Bar to list views?
 
 **For developers:**
 
+* **Option notes:**
+	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
+		* Added index `author_meta`. Default `1`, also for existing installations.
 * **Other:**
+	* We now properly capitalize the proper noun Boolean.
 	* We updated our coding standards, so the code is slightly altered.
 
 ### 5.1.2

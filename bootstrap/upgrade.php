@@ -969,15 +969,13 @@ function _do_upgrade_5100() {
 }
 
 /**
- * Registers new option 'author_meta'.
- * Default off for existing sites, on for new sites.
+ * Registers new option 'author_tags'.
  *
  * @since 5.1.3
  */
 function _do_upgrade_5130() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5130' ) {
-		// Default off for existing sites
-		Data\Plugin::update_option( 'author_meta', 0 );
+		Data\Plugin::update_option( 'author_tags', 1 );
 	}
 }

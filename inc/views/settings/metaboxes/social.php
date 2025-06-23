@@ -91,7 +91,6 @@ switch ( $instance ) :
 		<hr>
 		<?php
 
-		// Echo Open Graph Tags checkboxes.
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'og_tags',
@@ -103,7 +102,6 @@ switch ( $instance ) :
 		if ( $active_conflicting_plugins_types['open_graph'] )
 			HTML::attention_description( \__( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
-		// Echo Facebook Tags checkbox.
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'facebook_tags',
@@ -113,7 +111,6 @@ switch ( $instance ) :
 			true,
 		);
 
-		// Echo Twitter Tags checkboxes.
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'twitter_tags',
@@ -125,17 +122,15 @@ switch ( $instance ) :
 		if ( $active_conflicting_plugins_types['twitter_card'] )
 			HTML::attention_description( \__( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
-		// Echo Author Meta Tag checkbox.
 		HTML::wrap_fields(
 			Input::make_checkbox( [
-				'id'          => 'author_meta',
-				'label'       => \__( 'Output author meta tag?', 'autodescription' ),
-				'description' => \__( 'This will output a tag with the post author\'s display name, which can be used for LinkedIn post sharing. Low availability for other services.', 'autodescription' ),
+				'id'          => 'author_tags',
+				'label'       => \__( 'Output author tags?', 'autodescription' ),
+				'description' => \__( 'These tags can help search engines and social media platforms understand who authored posts on this website.', 'autodescription' ),
 			] ),
 			true,
 		);
 
-		// Echo oEmbed scripts checkboxes.
 		HTML::wrap_fields(
 			Input::make_checkbox( [
 				'id'          => 'oembed_scripts',

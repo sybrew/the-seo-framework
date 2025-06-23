@@ -172,9 +172,8 @@ final class Head {
 		}
 
 		// Remove Author generator if author meta is disabled
-		if ( ! Data\Plugin::get_option( 'author_meta' ) ) {
+		if ( ! Data\Plugin::get_option( 'author_tags' ) )
 			$remove_pools[] = 'Author';
-		}
 
 		/**
 		 * @since 5.0.0
