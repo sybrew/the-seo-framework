@@ -130,7 +130,7 @@ switch ( $instance ) :
 			Input::make_checkbox( [
 				'id'          => 'author_meta',
 				'label'       => \__( 'Output author meta tag?', 'autodescription' ),
-				'description' => \__( 'LinkedIn and some other services recommend using this meta tag for better post embeds.', 'autodescription' ),
+				'description' => \__( 'This will output a tag with the post author\'s display name, which can be used for LinkedIn post sharing. Low availability for other services.', 'autodescription' ),
 			] ),
 			true,
 		);

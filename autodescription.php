@@ -45,7 +45,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.3.5
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '5.1.2' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '5.1.3' );
 
 /**
  * The plugin Database version.
@@ -54,7 +54,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '5.1.2' );
  *
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '5100' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '5130' );
 
 /**
  * The plugin file, absolute unix path.
