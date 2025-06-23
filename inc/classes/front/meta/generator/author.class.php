@@ -82,6 +82,8 @@ final class Author {
 
 		$user_data = \get_userdata( $author_id );
 
+		if ( ! $user_data ) return '';
+
 		return $user_data->display_name ?? '';
 	}
 }
