@@ -753,7 +753,7 @@ class Loader {
 					'data' => [
 						'params' => [
 							'usingPermalinks' => $wp_rewrite->using_permalinks(),
-							'rootUrl'         => \home_url( '/' ),
+							'rootUrl'         => static::get_canonical_root_url(),
 							'rewrite'         => [
 								'code'         => $wp_rewrite->rewritecode,
 								'replace'      => $wp_rewrite->rewritereplace,
@@ -793,6 +793,32 @@ class Loader {
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
 			],
 		];
+	}
+
+	/**
+	 * Returns the root URL without subdirectory path for canonical URL construction.
+	 * 
+	 * This ensures that JavaScript URL construction doesn't duplicate subdirectory paths
+	 * when WordPress is installed in a subdirectory.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @return string The root URL without subdirectory path.
+	 */
+	private static function get_canonical_root_url() {
+		$home_url     = \home_url( '/' );
+		$parsed_url   = \parse_url( $home_url );
+		$canonical_root = $parsed_url['scheme'] . '://' . $parsed_url['host'];
+		
+		// Add port if present and not default
+		if ( ! empty( $parsed_url['port'] ) ) {
+			$default_ports = [ 'http' => 80, 'https' => 443 ];
+			if ( $parsed_url['port'] !== $default_ports[ $parsed_url['scheme'] ] ) {
+				$canonical_root .= ':' . $parsed_url['port'];
+			}
+		}
+		
+		return $canonical_root . '/';
 	}
 
 	/**
