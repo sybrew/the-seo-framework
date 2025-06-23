@@ -207,6 +207,12 @@ class Twitter {
 	 * @return string
 	 */
 	public static function get_creator() {
+
+		// Check if author tags are enabled
+		if ( ! Data\Plugin::get_option( 'author_tags' ) ) {
+			return Data\Plugin::get_option( 'twitter_creator' );
+		}
+
 		return Data\Plugin\User::get_current_post_author_meta_item( 'twitter_page' )
 			?: Data\Plugin::get_option( 'twitter_creator' );
 	}

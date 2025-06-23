@@ -45,6 +45,11 @@ class Facebook {
 
 		if ( 'article' !== Open_Graph::get_type() ) return;
 
+		// Check if author tags are enabled
+		if ( ! Data\Plugin::get_option( 'author_tags' ) ) {
+			return Data\Plugin::get_option( 'facebook_author' );
+		}
+
 		return Data\Plugin\User::get_current_post_author_meta_item( 'facebook_page' )
 			?: Data\Plugin::get_option( 'facebook_author' );
 	}

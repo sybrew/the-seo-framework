@@ -267,6 +267,9 @@ class Setup {
 				'post_publish_time' => 1, // Article Published Time.
 				'post_modify_time'  => 1, // Article Modified Time.
 
+				// Author.
+				'post_author' => '', // Author fallback name.
+
 				// Twitter.
 				'twitter_card'    => 'summary_large_image', // Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', radio
 				'twitter_site'    => '', // Twitter business @username.
@@ -281,6 +284,7 @@ class Setup {
 				'og_tags'        => 1, // Output of Open Graph meta tags.
 				'facebook_tags'  => 1, // Output the Facebook meta tags.
 				'twitter_tags'   => 1, // Output the Twitter meta tags.
+				'author_tags'    => 1, // Output author meta tags.
 				'oembed_scripts' => 1, // Enable WordPress's oEmbed scripts.
 
 				// Social title settings.

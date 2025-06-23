@@ -49,6 +49,8 @@ $fields = [
 	],
 ];
 
+// Only show authorial info if author_tags is enabled
+if ( Data\Plugin::get_option( 'author_tags' ) ) :
 ?>
 <h2><?php \esc_html_e( 'Authorial Info', 'autodescription' ); ?></h2>
 <table class=form-table>
@@ -75,3 +77,5 @@ foreach ( $fields as $field => $labels ) {
 ?>
 </table>
 <?php
+endif;
+?>
