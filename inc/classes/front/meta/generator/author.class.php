@@ -54,9 +54,6 @@ final class Author {
 	 */
 	public static function generate_author_meta() {
 
-		// Check if author meta tag is enabled
-		if ( ! Data\Plugin::get_option( 'author_meta' ) ) return;
-
 		// Only output on singular posts/pages where an author is available
 		if ( ! Query::is_singular() ) return;
 

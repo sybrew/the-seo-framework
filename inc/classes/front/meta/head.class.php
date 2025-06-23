@@ -171,6 +171,11 @@ final class Head {
 			$remove_pools[] = 'Twitter';
 		}
 
+		// Remove Author generator if author meta is disabled
+		if ( ! Data\Plugin::get_option( 'author_meta' ) ) {
+			$remove_pools[] = 'Author';
+		}
+
 		/**
 		 * @since 5.0.0
 		 * @param string[] $generator_pools A list of tag pools requested for the current query.

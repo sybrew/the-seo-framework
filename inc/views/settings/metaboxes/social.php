@@ -125,6 +125,16 @@ switch ( $instance ) :
 		if ( $active_conflicting_plugins_types['twitter_card'] )
 			HTML::attention_description( \__( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
+		// Echo Author Meta Tag checkbox.
+		HTML::wrap_fields(
+			Input::make_checkbox( [
+				'id'          => 'author_meta',
+				'label'       => \__( 'Output author meta tag?', 'autodescription' ),
+				'description' => \__( 'LinkedIn and some other services recommend using this meta tag for better post embeds.', 'autodescription' ),
+			] ),
+			true,
+		);
+
 		// Echo oEmbed scripts checkboxes.
 		HTML::wrap_fields(
 			Input::make_checkbox( [
