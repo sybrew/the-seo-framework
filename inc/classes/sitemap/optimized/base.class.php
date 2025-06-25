@@ -108,32 +108,37 @@ class Base extends Main {
 	 *
 	 * @since 4.1.2
 	 * @since 5.0.0 Can now generate cache on a $sitemap_id basis.
+	 * @since 5.1.3 Added $parameters argument for yearly/monthly filtering.
 	 * @abstract
 	 *
 	 * @param string $sitemap_id The sitemap ID. Expected either 'base' or 'index'--or otherwise overwritten via the API.
+	 * @param array  $parameters Optional. Array of parameters for filtering (year, month).
 	 * @return string The sitemap content.
 	 */
-	public function generate_sitemap( $sitemap_id = 'base' ) {
+	public function generate_sitemap( $sitemap_id = 'base', $parameters = [] ) {
 
 		$_caching_enabled = Sitemap\Cache::is_sitemap_cache_enabled();
 
+		// Generate cache key based on sitemap_id and parameters
+		$cache_key = $this->get_cache_key( $sitemap_id, $parameters );
+
 		$sitemap_content = $_caching_enabled
-			? Sitemap\Cache::get_cached_sitemap_content( $sitemap_id )
+			? Sitemap\Cache::get_cached_sitemap_content( $cache_key )
 			: false;
 
 		if ( false === $sitemap_content ) {
 
 			$this->prepare_generation();
-			$_caching_enabled && Sitemap\Lock::lock_sitemap( $sitemap_id );
+			$_caching_enabled && Sitemap\Lock::lock_sitemap( $cache_key );
 
-			$sitemap_content = $this->build_sitemap();
+			$sitemap_content = $this->build_sitemap( $parameters );
 
 			$this->shutdown_generation();
 			$this->base_is_regenerated = true;
 
 			if ( $_caching_enabled ) {
-				Sitemap\Cache::cache_sitemap_content( $sitemap_content, $sitemap_id );
-				Sitemap\Lock::unlock_sitemap( $sitemap_id );
+				Sitemap\Cache::cache_sitemap_content( $sitemap_content, $cache_key );
+				Sitemap\Lock::unlock_sitemap( $cache_key );
 			}
 		}
 
@@ -153,6 +158,7 @@ class Base extends Main {
 	 *              2. Improved performance by a factor of two+.
 	 *              3. Renamed method from "generate_sitemap" to abstract extension "build_sitemap".
 	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap\Base
+	 * @since 5.1.3 Added $parameters argument for yearly/monthly filtering.
 	 * @override
 	 * @slow The queried results are not stored in WP Post's cache, which would allow direct access
 	 *       to all values of the post (if requested). This is because we're using
@@ -160,9 +166,10 @@ class Base extends Main {
 	 *       linearly: at 1000 posts, we'd hit 28MB already, 10 000 would be ~280MB, exceeding max.
 	 * @link <https://w.org/support/topic/sitemap-and-memory-exhaustion/#post-13331896>
 	 *
+	 * @param array $parameters Optional. Array of parameters for filtering (year, month).
 	 * @return string The sitemap content.
 	 */
-	public function build_sitemap() {
+	public function build_sitemap( $parameters = [] ) {
 
 		/**
 		 * @since 4.2.7
@@ -235,22 +242,26 @@ class Base extends Main {
 			 * @since 4.0.0
 			 * @since 5.0.5 1. Now sets orderby to 'lastmod', from 'date'.
 			 *              2. Now sets order to 'DESC', from 'ASC'.
+			 * @since 5.1.3 Added date filtering for yearly/monthly sitemaps.
 			 * @param array $args The query arguments.
 			 * @link <https://w.org/support/topic/sitemap-and-memory-exhaustion/#post-13331896>
 			 */
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_hpt_query_args',
-				[
-					'posts_per_page' => $_hierarchical_posts_limit + \count( $_exclude_ids ),
-					'post_type'      => $hierarchical_post_types,
-					'orderby'        => 'lastmod',
-					'order'          => 'DESC',
-					'post_status'    => 'publish',
-					'has_password'   => false,
-					'fields'         => 'ids',
-					'cache_results'  => false,
-					'no_found_rows'  => true,
-				],
+				array_merge(
+					[
+						'posts_per_page' => $_hierarchical_posts_limit + \count( $_exclude_ids ),
+						'post_type'      => $hierarchical_post_types,
+						'orderby'        => 'lastmod',
+						'order'          => 'DESC',
+						'post_status'    => 'publish',
+						'has_password'   => false,
+						'fields'         => 'ids',
+						'cache_results'  => false,
+						'no_found_rows'  => true,
+					],
+					$this->get_date_query_args( $parameters )
+				),
 			);
 
 			if ( $_args['post_type'] ) {
@@ -269,22 +280,26 @@ class Base extends Main {
 		if ( $non_hierarchical_post_types ) {
 			/**
 			 * @since 4.0.0
+			 * @since 5.1.3 Added date filtering for yearly/monthly sitemaps.
 			 * @param array $args The query arguments.
 			 */
 			$_args = (array) \apply_filters(
 				'the_seo_framework_sitemap_nhpt_query_args',
-				[
-					// phpcs:ignore WordPress.WP.PostsPerPage -- This is a sitemap, it will be slow.
-					'posts_per_page' => Sitemap\Utils::get_sitemap_post_limit( 'nonhierarchical' ),
-					'post_type'      => $non_hierarchical_post_types,
-					'orderby'        => 'lastmod',
-					'order'          => 'DESC',
-					'post_status'    => 'publish',
-					'has_password'   => false,
-					'fields'         => 'ids',
-					'cache_results'  => false,
-					'no_found_rows'  => true,
-				],
+				array_merge(
+					[
+						// phpcs:ignore WordPress.WP.PostsPerPage -- This is a sitemap, it will be slow.
+						'posts_per_page' => Sitemap\Utils::get_sitemap_post_limit( 'nonhierarchical' ),
+						'post_type'      => $non_hierarchical_post_types,
+						'orderby'        => 'lastmod',
+						'order'          => 'DESC',
+						'post_status'    => 'publish',
+						'has_password'   => false,
+						'fields'         => 'ids',
+						'cache_results'  => false,
+						'no_found_rows'  => true,
+					],
+					$this->get_date_query_args( $parameters )
+				),
 			);
 
 			if ( $_args['post_type'] ) {
@@ -621,5 +636,176 @@ class Base extends Main {
 			++$this->url_count;
 			yield $_values;
 		}
+	}
+
+	/**
+	 * Generates a cache key based on sitemap ID and parameters.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @param string $sitemap_id The sitemap ID.
+	 * @param array  $parameters The parameters array.
+	 * @return string The cache key.
+	 */
+	private function get_cache_key( $sitemap_id, $parameters ) {
+		$key = $sitemap_id;
+		
+		if ( ! empty( $parameters['year'] ) ) {
+			$key .= '_' . $parameters['year'];
+			
+			if ( ! empty( $parameters['month'] ) ) {
+				$key .= '_' . sprintf( '%02d', $parameters['month'] );
+			}
+		}
+		
+		return $key;
+	}
+
+	/**
+	 * Generates the sitemap index content for yearly sitemaps.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @param string $sitemap_id The sitemap ID.
+	 * @return string The sitemap index content.
+	 */
+	public function generate_sitemap_index( $sitemap_id = 'base' ) {
+		
+		$monthly_sitemaps = Data\Plugin::get_option( 'sitemaps_monthly' );
+		$content          = '';
+		
+		// Get years that have published posts
+		$years = $this->get_sitemap_years();
+		
+		foreach ( $years as $year ) {
+			if ( $monthly_sitemaps ) {
+				// Generate monthly sitemaps for this year
+				$months = $this->get_sitemap_months( $year );
+				
+				foreach ( $months as $month ) {
+					$content .= $this->build_sitemap_index_entry( $year, $month );
+				}
+			} else {
+				// Generate yearly sitemap
+				$content .= $this->build_sitemap_index_entry( $year );
+			}
+		}
+		
+		return $content;
+	}
+
+	/**
+	 * Gets years that have published posts.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @return array Array of years.
+	 */
+	private function get_sitemap_years() {
+		global $wpdb;
+		
+		$post_types = array_diff( Post_Type::get_all_supported(), [ 'attachment' ] );
+		
+		if ( empty( $post_types ) ) return [];
+		
+		$post_types_in = "'" . implode( "', '", array_map( 'esc_sql', $post_types ) ) . "'";
+		
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $post_types_in is escaped above
+		$years = $wpdb->get_col( "
+			SELECT DISTINCT YEAR(post_date) as year 
+			FROM {$wpdb->posts} 
+			WHERE post_status = 'publish' 
+			AND post_type IN ($post_types_in)
+			AND post_password = ''
+			ORDER BY year DESC
+		" );
+		
+		return array_map( 'intval', $years );
+	}
+
+	/**
+	 * Gets months that have published posts for a given year.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @param int $year The year.
+	 * @return array Array of months.
+	 */
+	private function get_sitemap_months( $year ) {
+		global $wpdb;
+		
+		$post_types = array_diff( Post_Type::get_all_supported(), [ 'attachment' ] );
+		
+		if ( empty( $post_types ) ) return [];
+		
+		$post_types_in = "'" . implode( "', '", array_map( 'esc_sql', $post_types ) ) . "'";
+		
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $post_types_in is escaped above
+		$months = $wpdb->get_col( $wpdb->prepare( "
+			SELECT DISTINCT MONTH(post_date) as month 
+			FROM {$wpdb->posts} 
+			WHERE post_status = 'publish' 
+			AND post_type IN ($post_types_in)
+			AND post_password = ''
+			AND YEAR(post_date) = %d
+			ORDER BY month DESC
+		", $year ) );
+		
+		return array_map( 'intval', $months );
+	}
+
+	/**
+	 * Builds a sitemap index entry.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @param int      $year  The year.
+	 * @param int|null $month Optional. The month.
+	 * @return string The sitemap index entry.
+	 */
+	private function build_sitemap_index_entry( $year, $month = null ) {
+		$base_url = \esc_url( \home_url( '/' ) );
+		
+		if ( $month ) {
+			$url = \add_query_arg( [
+				'yyyy' => $year,
+				'm'    => $month,
+			], $base_url . 'sitemap.xml' );
+		} else {
+			$url = \add_query_arg( [
+				'yyyy' => $year,
+			], $base_url . 'sitemap.xml' );
+		}
+		
+		return sprintf(
+			"\t<sitemap>\n\t\t<loc>%s</loc>\n\t</sitemap>\n",
+			\esc_url( $url )
+		);
+	}
+
+	/**
+	 * Gets date query arguments for filtering posts by year/month.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @param array $parameters The parameters array.
+	 * @return array The date query arguments.
+	 */
+	private function get_date_query_args( $parameters ) {
+		$args = [];
+		
+		if ( ! empty( $parameters['year'] ) ) {
+			$date_query = [
+				'year' => $parameters['year'],
+			];
+			
+			if ( ! empty( $parameters['month'] ) ) {
+				$date_query['month'] = $parameters['month'];
+			}
+			
+			$args['date_query'] = [ $date_query ];
+		}
+		
+		return $args;
 	}
 }

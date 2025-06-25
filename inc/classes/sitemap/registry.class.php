@@ -445,6 +445,48 @@ class Registry {
 	}
 
 	/**
+	 * Returns the opening tag for the sitemap index.
+	 *
+	 * @since 5.1.3
+	 */
+	public static function output_sitemap_index_open_tag() {
+
+		$schemas = [
+			'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+			'xmlns'              => 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			'xsi:schemaLocation' => [
+				'http://www.sitemaps.org/schemas/sitemap/0.9',
+				'http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd',
+			],
+		];
+
+		/**
+		 * @since 5.1.3
+		 * @param array $schemas The schema list. URLs and indexes are expected to be escaped.
+		 */
+		$schemas = (array) \apply_filters( 'the_seo_framework_sitemap_index_schemas', $schemas );
+
+		array_walk(
+			$schemas,
+			function ( &$schema, $key ) {
+				$schema = \sprintf( '%s="%s"', $key, implode( ' ', (array) $schema ) );
+			}
+		);
+
+		// phpcs:ignore WordPress.Security.EscapeOutput -- Output is expected to be escaped.
+		printf( "<sitemapindex %s>\n", implode( ' ', $schemas ) );
+	}
+
+	/**
+	 * Outputs the closing tag for the sitemap index.
+	 *
+	 * @since 5.1.3
+	 */
+	public static function output_sitemap_index_close_tag() {
+		echo '</sitemapindex>';
+	}
+
+	/**
 	 * Returns the sitemap base path.
 	 * Useful when the path is non-standard, like notoriously in Polylang.
 	 *
@@ -592,5 +634,83 @@ class Registry {
 		\remove_all_shortcodes();
 
 		return memo( $memory - memory_get_usage() );
+	}
+
+	/**
+	 * Sanitizes and validates year parameter from $_GET.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @param string $year The year parameter to sanitize.
+	 * @return int|false The sanitized year or false if invalid.
+	 */
+	private static function sanitize_year_parameter( $year ) {
+		$year = trim( $year );
+		
+		// Validate year format: [1-2][9-0][0-9]{2} (1900-2099)
+		if ( ! preg_match( '/^[1-2][9-0][0-9]{2}$/', $year ) ) {
+			return false;
+		}
+		
+		$year = absint( $year );
+		
+		// Additional sanity check for reasonable year range
+		if ( $year < 1900 || $year > 2099 ) {
+			return false;
+		}
+		
+		return $year;
+	}
+
+	/**
+	 * Sanitizes and validates month parameter from $_GET.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @param string $month The month parameter to sanitize.
+	 * @return int|false The sanitized month or false if invalid.
+	 */
+	private static function sanitize_month_parameter( $month ) {
+		$month = trim( $month );
+		
+		// Validate month format: [0-9]?[0-2]? (1-12)
+		if ( ! preg_match( '/^[0-9]?[0-2]?$/', $month ) || empty( $month ) ) {
+			return false;
+		}
+		
+		$month = absint( $month );
+		
+		// Additional sanity check for valid month range
+		if ( $month < 1 || $month > 12 ) {
+			return false;
+		}
+		
+		return $month;
+	}
+
+	/**
+	 * Gets the sanitized sitemap parameters from $_GET.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @return array {
+	 *     The sanitized sitemap parameters.
+	 *     @type int|false $year  The year or false if not valid/present.
+	 *     @type int|false $month The month or false if not valid/present.
+	 * }
+	 */
+	public static function get_sitemap_parameters() {
+		$year  = false;
+		$month = false;
+		
+		if ( isset( $_GET['yyyy'] ) ) {
+			$year = static::sanitize_year_parameter( $_GET['yyyy'] );
+		}
+		
+		if ( isset( $_GET['m'] ) ) {
+			$month = static::sanitize_month_parameter( $_GET['m'] );
+		}
+		
+		return compact( 'year', 'month' );
 	}
 }
