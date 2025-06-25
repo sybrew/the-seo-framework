@@ -39,12 +39,13 @@ if ( THE_SEO_FRAMEWORK_DEBUG ) {
 	echo '<!-- System estimated peak usage prior to generation: ', number_format( memory_get_peak_usage( true ) / MB_IN_BYTES, 3 ), ' MB -->' . "\n";
 }
 
-// Check if yearly sitemaps are enabled
-$yearly_sitemaps = Data\Plugin::get_option( 'sitemaps_yearly' );
-$parameters      = Sitemap\Registry::get_sitemap_parameters();
+// Check if yearly sitemaps are enabled and optimized sitemaps are enabled
+$sitemaps_enabled = Data\Plugin::get_option( 'sitemaps_output' );
+$yearly_sitemaps  = Data\Plugin::get_option( 'sitemaps_yearly' );
+$parameters       = Sitemap\Registry::get_sitemap_parameters();
 
-// If yearly sitemaps are enabled and no parameters, show sitemap index
-if ( $yearly_sitemaps && ! $parameters['year'] ) {
+// If yearly sitemaps are enabled, optimized sitemaps are enabled, and no parameters, show sitemap index
+if ( $sitemaps_enabled && $yearly_sitemaps && ! $parameters['year'] ) {
 	// Output sitemap index
 	Sitemap\Registry::output_sitemap_index_open_tag();
 	

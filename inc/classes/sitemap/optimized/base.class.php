@@ -764,17 +764,17 @@ class Base extends Main {
 	 * @return string The sitemap index entry.
 	 */
 	private function build_sitemap_index_entry( $year, $month = null ) {
-		$base_url = \esc_url( \home_url( '/' ) );
+		$base_url = Sitemap\Registry::get_expected_sitemap_endpoint_url( 'base' );
 		
 		if ( $month ) {
 			$url = \add_query_arg( [
 				'yyyy' => $year,
 				'm'    => $month,
-			], $base_url . 'sitemap.xml' );
+			], $base_url );
 		} else {
 			$url = \add_query_arg( [
 				'yyyy' => $year,
-			], $base_url . 'sitemap.xml' );
+			], $base_url );
 		}
 		
 		return sprintf(

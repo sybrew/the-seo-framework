@@ -647,12 +647,12 @@ class Registry {
 	private static function sanitize_year_parameter( $year ) {
 		$year = trim( $year );
 		
-		// Validate year format: [1-2][9-0][0-9]{2} (1900-2099)
-		if ( ! preg_match( '/^[1-2][9-0][0-9]{2}$/', $year ) ) {
+		// Validate year format: 4 digits starting with 1 or 2 (1000-2999)
+		if ( ! preg_match( '/^[12][0-9]{3}$/', $year ) ) {
 			return false;
 		}
 		
-		$year = absint( $year );
+		$year = (int) $year;
 		
 		// Additional sanity check for reasonable year range
 		if ( $year < 1900 || $year > 2099 ) {
@@ -673,12 +673,12 @@ class Registry {
 	private static function sanitize_month_parameter( $month ) {
 		$month = trim( $month );
 		
-		// Validate month format: [0-9]?[0-2]? (1-12)
-		if ( ! preg_match( '/^[0-9]?[0-2]?$/', $month ) || empty( $month ) ) {
+		// Validate month format: 1-2 digits (1-12)
+		if ( ! preg_match( '/^[0-9]{1,2}$/', $month ) || empty( $month ) ) {
 			return false;
 		}
 		
-		$month = absint( $month );
+		$month = (int) $month;
 		
 		// Additional sanity check for valid month range
 		if ( $month < 1 || $month > 12 ) {
