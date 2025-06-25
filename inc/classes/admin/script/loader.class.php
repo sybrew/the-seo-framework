@@ -753,7 +753,7 @@ class Loader {
 					'data' => [
 						'params' => [
 							'usingPermalinks' => $wp_rewrite->using_permalinks(),
-							'rootUrl'         => \home_url( '/' ),
+							'rootUrl'         => \trailingslashit( \The_SEO_Framework\Meta\URI\Utils::set_preferred_url_scheme( \The_SEO_Framework\Meta\URI\Utils::get_site_host() ) ),
 							'rewrite'         => [
 								'code'         => $wp_rewrite->rewritecode,
 								'replace'      => $wp_rewrite->rewritereplace,
