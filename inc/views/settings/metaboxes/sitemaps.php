@@ -163,6 +163,43 @@ switch ( $instance ) :
 			}
 		}
 		?>
+
+		<div id=tsf-yearly-sitemap-settings>
+			<?php
+			HTML::wrap_fields(
+				Input::make_checkbox( [
+					'id'     => 'sitemaps_yearly',
+					'label'  => \esc_html__( 'Use yearly sitemaps?', 'autodescription' )
+						. ' ' . HTML::make_info(
+							\__( 'Organizes sitemap content by publication year for better crawl budget optimization on large sites.', 'autodescription' ),
+							'',
+							false,
+						),
+					'escape' => false,
+				] ),
+				true,
+			);
+			?>
+			<div id=tsf-monthly-sitemap-settings>
+				<?php
+				HTML::wrap_fields(
+					Input::make_checkbox( [
+						'id'          => 'sitemaps_monthly',
+						'label'       => \esc_html__( 'Use monthly sitemaps?', 'autodescription' )
+							. ' ' . HTML::make_info(
+								\__( 'Further organizes yearly sitemaps by month for even better optimization.', 'autodescription' ),
+								'',
+								false,
+							),
+						'description' => \esc_html__( 'When disabled, yearly sitemaps show all posts for the year within query limits.', 'autodescription' ),
+						'escape'      => false,
+					] ),
+					true,
+				);
+				?>
+			</div>
+		</div>
+
 		<hr>
 
 		<p>
