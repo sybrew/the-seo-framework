@@ -254,6 +254,8 @@ class Plugin {
 			'sitemaps_modified'            => 'checkbox',
 			'sitemaps_output'              => 'checkbox',
 			'sitemaps_robots'              => 'checkbox',
+			'sitemaps_yearly'              => 'checkbox',
+			'sitemaps_monthly'             => 'checkbox',
 			'social_image_fb_id'           => 'absolute_integer',
 			'social_image_fb_url'          => 'fully_qualified_url',
 			'social_title_rem_additions'   => 'checkbox',

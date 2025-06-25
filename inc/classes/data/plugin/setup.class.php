@@ -335,6 +335,8 @@ class Setup {
 				'sitemap_query_limit'     => 250, // Sitemap post limit.
 				'cache_sitemap'           => 1, // Sitemap transient cache.
 				'sitemap_cron_prerender'  => 0, // Sitemap cron-ping prerender.
+				'sitemaps_yearly'         => 0, // Use yearly sitemaps.
+				'sitemaps_monthly'        => 0, // Use monthly sitemaps (sub-option of yearly).
 
 				'sitemaps_modified' => 1, // Add sitemap modified time.
 

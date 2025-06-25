@@ -275,6 +275,8 @@ TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement thi
 
 **For everyone:**
 
+* **Added:**
+	* **Yearly and monthly sitemaps:** For large sites, you can now organize your sitemap content by publication year and month. This optimizes crawl budget by allowing search engines to focus on newer content while still indexing older content efficiently. This feature is especially beneficial for news sites and content-heavy websites.
 * **Fixed:**
 	* Abbreviations at the start of sentences are now properly considered by the description generator.
 * **Removed:**
@@ -282,6 +284,10 @@ TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement thi
 
 **For developers:**
 
+* **Added:**
+	* **New options:** `sitemaps_yearly` and `sitemaps_monthly` for controlling yearly and monthly sitemap features.
+	* **New public method:** `\The_SEO_Framework\Sitemap\Registry::get_sitemap_parameters()` - Gets sanitized year and month parameters from $_GET.
+	* **New filter:** `the_seo_framework_sitemap_index_schemas` - Filter sitemap index XML schemas.
 * **Fixed:**
 	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
 * **Other:**

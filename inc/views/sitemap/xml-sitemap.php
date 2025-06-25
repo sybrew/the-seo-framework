@@ -39,13 +39,31 @@ if ( THE_SEO_FRAMEWORK_DEBUG ) {
 	echo '<!-- System estimated peak usage prior to generation: ', number_format( memory_get_peak_usage( true ) / MB_IN_BYTES, 3 ), ' MB -->' . "\n";
 }
 
-Sitemap\Registry::output_sitemap_urlset_open_tag();
+// Check if yearly sitemaps are enabled and optimized sitemaps are enabled
+$sitemaps_enabled = Data\Plugin::get_option( 'sitemaps_output' );
+$yearly_sitemaps  = Data\Plugin::get_option( 'sitemaps_yearly' );
+$parameters       = Sitemap\Registry::get_sitemap_parameters();
 
-$sitemap_base = new Sitemap\Optimized\Base; // TODO make static? Why would this need to be instantiated anyway?
-// phpcs:ignore WordPress.Security.EscapeOutput
-echo $sitemap_base->generate_sitemap( $sitemap_id );
-
-Sitemap\Registry::output_sitemap_urlset_close_tag();
+// If yearly sitemaps are enabled, optimized sitemaps are enabled, and no parameters, show sitemap index
+if ( $sitemaps_enabled && $yearly_sitemaps && ! $parameters['year'] ) {
+	// Output sitemap index
+	Sitemap\Registry::output_sitemap_index_open_tag();
+	
+	$sitemap_base = new Sitemap\Optimized\Base;
+	// phpcs:ignore WordPress.Security.EscapeOutput
+	echo $sitemap_base->generate_sitemap_index( $sitemap_id );
+	
+	Sitemap\Registry::output_sitemap_index_close_tag();
+} else {
+	// Output regular sitemap (with filtering if parameters exist)
+	Sitemap\Registry::output_sitemap_urlset_open_tag();
+	
+	$sitemap_base = new Sitemap\Optimized\Base;
+	// phpcs:ignore WordPress.Security.EscapeOutput
+	echo $sitemap_base->generate_sitemap( $sitemap_id, $parameters );
+	
+	Sitemap\Registry::output_sitemap_urlset_close_tag();
+}
 
 if ( $sitemap_base->base_is_regenerated ) {
 	echo "\n<!-- ", \esc_html__( 'Sitemap is generated for this view', 'autodescription' ), ' -->';
