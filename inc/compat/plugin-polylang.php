@@ -89,8 +89,35 @@ function _polylang_register_sitemap_languages( $list ) {
 				)
 				as $language
 			) {
+				// Get the language-specific home URL to determine the correct sitemap path
+				$lang_home_url = \function_exists( 'pll_home_url' ) ? \pll_home_url( $language ) : '';
+				
+				if ( $lang_home_url ) {
+					// Parse the language-specific home URL to get the path
+					$lang_parsed = parse_url( $lang_home_url );
+					$lang_path   = $lang_parsed['path'] ?? '';
+					
+					// Remove the site's base path to get the language-specific part
+					$site_parsed = parse_url( \home_url() );
+					$site_path   = rtrim( $site_parsed['path'] ?? '', '/' );
+					
+					// Get the relative path for this language
+					if ( $site_path && str_starts_with( $lang_path, $site_path ) ) {
+						$relative_path = substr( $lang_path, \strlen( $site_path ) );
+					} else {
+						$relative_path = $lang_path;
+					}
+					$relative_path = trim( $relative_path, '/' );
+					
+					// Build the endpoint with the correct language path
+					$endpoint = $relative_path ? "$relative_path/{$list['base']['endpoint']}" : $list['base']['endpoint'];
+				} else {
+					// Fallback to the original method if pll_home_url is not available
+					$endpoint = "$language/{$list['base']['endpoint']}";
+				}
+				
 				$list[ "_base_polylang_$language" ] = [
-					'endpoint' => "$language/{$list['base']['endpoint']}",
+					'endpoint' => $endpoint,
 				] + $list['base'];
 			}
 	}
