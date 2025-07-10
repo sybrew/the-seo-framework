@@ -227,26 +227,17 @@ final class ListEdit extends Admin\Lists\Table {
 			],
 		];
 
-		// Add primary category data for hierarchical taxonomies
+		// Add primary term data for hierarchical taxonomies  
 		static $memo_post_type, $memo_taxonomies;
 		$memo_post_type ??= Query::get_admin_post_type();
 		$memo_taxonomies ??= $memo_post_type ? Taxonomy::get_hierarchical( 'names', $memo_post_type ) : [];
 
 		foreach ( $memo_taxonomies as $taxonomy ) {
-			$terms = \get_the_terms( $post_id, $taxonomy );
 			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $post_id, $taxonomy );
-			$options = [ 0 => \__( 'Select a primary term...', 'autodescription' ) ];
-
-			if ( $terms && ! \is_wp_error( $terms ) ) {
-				foreach ( $terms as $term ) {
-					$options[ $term->term_id ] = $term->name;
-				}
-			}
 
 			$data[ "primary_term_{$taxonomy}" ] = [
 				'value'    => $primary_term_id,
 				'isSelect' => true,
-				'options'  => $options,
 				'taxonomy' => $taxonomy,
 			];
 		}

@@ -159,7 +159,7 @@ $robots_settings = [
 		</div>
 	</fieldset>
 	<?php
-	// Add primary category selection for hierarchical taxonomies
+	// Add primary term selection for hierarchical taxonomies
 	$hierarchical_taxonomies = $post_type ? \The_SEO_Framework\Helper\Taxonomy::get_hierarchical( 'names', $post_type ) : [];
 	
 	if ( $hierarchical_taxonomies ) :

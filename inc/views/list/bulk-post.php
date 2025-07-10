@@ -100,7 +100,7 @@ $robots_settings = [
 		</div>
 	</fieldset>
 	<?php
-	// Add primary category selection for hierarchical taxonomies
+	// Add primary term selection for hierarchical taxonomies
 	$hierarchical_taxonomies = $post_type ? \The_SEO_Framework\Helper\Taxonomy::get_hierarchical( 'names', $post_type ) : [];
 	
 	if ( $hierarchical_taxonomies ) :
@@ -113,13 +113,6 @@ $robots_settings = [
 				foreach ( $hierarchical_taxonomies as $taxonomy_name ) {
 					$taxonomy = \get_taxonomy( $taxonomy_name );
 					if ( ! $taxonomy ) continue;
-					
-					// Get all terms for this taxonomy
-					$terms = \get_terms( [
-						'taxonomy'   => $taxonomy_name,
-						'hide_empty' => false,
-						'number'     => 500, // Limit to prevent performance issues
-					] );
 					
 					echo '<label class=clear>';
 						printf( '<span class=title>%s</span>', \esc_html( $taxonomy->labels->singular_name ) );
@@ -137,16 +130,8 @@ $robots_settings = [
 							\esc_html( sprintf( \__( 'None (Clear primary %s)', 'autodescription' ), strtolower( $taxonomy->labels->singular_name ) ) )
 						);
 						
-						// Add all terms
-						if ( $terms && ! \is_wp_error( $terms ) ) {
-							foreach ( $terms as $term ) {
-								printf(
-									'<option value="%d">%s</option>',
-									\esc_attr( $term->term_id ),
-									\esc_html( $term->name )
-								);
-							}
-						}
+						// Note: Additional options will be populated via JavaScript
+						// based on WordPress existing term data to avoid expensive queries
 						
 						echo '</select>';
 					echo '</label>';
