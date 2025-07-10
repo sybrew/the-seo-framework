@@ -100,6 +100,64 @@ $robots_settings = [
 		</div>
 	</fieldset>
 	<?php
+	// Add primary category selection for hierarchical taxonomies
+	$hierarchical_taxonomies = $post_type ? \The_SEO_Framework\Helper\Taxonomy::get_hierarchical( 'names', $post_type ) : [];
+	
+	if ( $hierarchical_taxonomies ) :
+	?>
+	<fieldset class=inline-edit-col-left>
+		<legend class=inline-edit-legend><?php \esc_html_e( 'Primary Term Settings', 'autodescription' ); ?></legend>
+		<div class=inline-edit-col>
+			<div class="inline-edit-group wp-clearfix">
+				<?php
+				foreach ( $hierarchical_taxonomies as $taxonomy_name ) {
+					$taxonomy = \get_taxonomy( $taxonomy_name );
+					if ( ! $taxonomy ) continue;
+					
+					// Get all terms for this taxonomy
+					$terms = \get_terms( [
+						'taxonomy'   => $taxonomy_name,
+						'hide_empty' => false,
+						'number'     => 500, // Limit to prevent performance issues
+					] );
+					
+					echo '<label class=clear>';
+						printf( '<span class=title>%s</span>', \esc_html( $taxonomy->labels->singular_name ) );
+						printf(
+							'<select id=autodescription-bulk[primary_term_%s] name=autodescription-bulk[primary_term_%s]>',
+							\esc_attr( $taxonomy_name ),
+							\esc_attr( $taxonomy_name )
+						);
+						printf(
+							'<option value="nochange">%s</option>',
+							\esc_html( \__( '&mdash; No Change &mdash;', 'default' ) )
+						);
+						printf(
+							'<option value="0">%s</option>',
+							\esc_html( sprintf( \__( 'None (Clear primary %s)', 'autodescription' ), strtolower( $taxonomy->labels->singular_name ) ) )
+						);
+						
+						// Add all terms
+						if ( $terms && ! \is_wp_error( $terms ) ) {
+							foreach ( $terms as $term ) {
+								printf(
+									'<option value="%d">%s</option>',
+									\esc_attr( $term->term_id ),
+									\esc_html( $term->name )
+								);
+							}
+						}
+						
+						echo '</select>';
+					echo '</label>';
+				}
+				?>
+			</div>
+		</div>
+	</fieldset>
+	<?php
+	endif;
+	
 	/**
 	 * @since 4.0.5
 	 * @param string $post_type The current post type.

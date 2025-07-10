@@ -221,6 +221,25 @@ class Post {
 
 				case 'canonical':
 					$new_data['_genesis_canonical_uri'] = $value;
+					break;
+
+				default:
+					// Handle primary term updates
+					if ( str_starts_with( $key, 'primary_term_' ) ) {
+						$taxonomy = substr( $key, 13 ); // Remove 'primary_term_' prefix
+						$term_id = \absint( $value );
+						
+						if ( $term_id > 0 ) {
+							// Verify the term exists and is assigned to this post
+							$terms = \get_the_terms( $post_id, $taxonomy );
+							if ( $terms && ! \is_wp_error( $terms ) ) {
+								$valid_term_ids = array_column( $terms, 'term_id' );
+								if ( \in_array( $term_id, $valid_term_ids, true ) ) {
+									Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, $term_id );
+								}
+							}
+						}
+					}
 			}
 		}
 
@@ -275,7 +294,51 @@ class Post {
 						if ( 'nochange' === $value )
 							break;
 						$new_data[ "_genesis_$key" ] = $value;
+						break;
+
+					default:
+						// Handle primary term updates
+						if ( str_starts_with( $key, 'primary_term_' ) ) {
+							$taxonomy = substr( $key, 13 ); // Remove 'primary_term_' prefix
+							
+							if ( 'nochange' !== $value ) {
+								$term_id = \absint( $value );
+								
+								if ( $term_id > 0 ) {
+									// Store for processing each post individually
+									$new_data[ $key ] = $term_id;
+								} else {
+									// Clear primary term (set to 0)
+									$new_data[ $key ] = 0;
+								}
+							}
+						}
 				}
+			}
+		}
+
+		// Process primary term updates separately since they need per-post validation
+		foreach ( $new_data as $key => $value ) {
+			if ( str_starts_with( $key, 'primary_term_' ) ) {
+				$taxonomy = substr( $key, 13 ); // Remove 'primary_term_' prefix
+				$term_id = \absint( $value );
+				
+				if ( $term_id > 0 ) {
+					// Verify the term exists and is assigned to this post
+					$terms = \get_the_terms( $post_id, $taxonomy );
+					if ( $terms && ! \is_wp_error( $terms ) ) {
+						$valid_term_ids = array_column( $terms, 'term_id' );
+						if ( \in_array( $term_id, $valid_term_ids, true ) ) {
+							Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, $term_id );
+						}
+					}
+				} else {
+					// Clear primary term - this is always valid
+					Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, 0 );
+				}
+				
+				// Remove from new_data to avoid processing in regular meta save
+				unset( $new_data[ $key ] );
 			}
 		}
 
