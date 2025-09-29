@@ -137,7 +137,7 @@ abstract class Table {
 			|| empty( $_POST['post_type'] )
 			|| ! \current_user_can(
 				'page' === $_POST['post_type'] ? 'edit_page' : 'edit_post',
-				(int) $_POST['post_ID']
+				(int) $_POST['post_ID'],
 			)
 		) return;
 

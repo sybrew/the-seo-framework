@@ -270,6 +270,23 @@ TODO add sort by SEO Bar to list views?
 TODO don't escape '\\_', just write '\_'.
 TODO add `@access private` to compat funcs (or files...)
 TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement this in the inc\classes\meta\schema and author classes.
+TODO create memo function that's switch_to_blog()-safe.
+	-> We could do this by simply using the current blog ID as a cache key modifier
+TODO when saving a root URL as a canonical or redirect URL, we should append a trailing slash (slash_front_page_url is not the right function for this, for it uses user_trailingslashit).
+TODO the og:title is not correct on the homepage under certain conditions?
+	-> It shows the correct version when editing the homepage (as a page), but not when viewing the homepage.
+
+TODO make pixel and character counters grey (#8c8f94) when when empty. This will then fully align with the SEO Bar status colors.
+	-> Explain update to the KB article.
+TODO make pixel counter warning more description (not just "might get truncated in search", but "might get truncated or ignored in search").
+
+TODO make description meta settings more explanatory: "The meta description suggests text to be used under the title on search engine results pages."
+	-> Add: "The suggested descritpion can be ignored by search engines if they find it unsuitable." "The description does not contribute to ranking, but a good description does help improve click-through rates."
+	-> "Focus can help you generate a better description that's less likely to be ignored" -> Only show that if no page builder is present?
+
+TODO make the description and title placeholder editable.
+
+For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
 
 ### 5.1.3
 

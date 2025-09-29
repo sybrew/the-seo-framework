@@ -331,10 +331,10 @@ class Setup {
 				'knowledge_tumblr'     => '', // Tumblr Account.
 
 				// Sitemaps.
-				'sitemaps_output'         => 1,    // Output of sitemap.
+				'sitemaps_output'         => 1,   // Output of sitemap.
 				'sitemap_query_limit'     => 250, // Sitemap post limit.
-				'cache_sitemap'           => 1, // Sitemap transient cache.
-				'sitemap_cron_prerender'  => 0, // Sitemap cron-ping prerender.
+				'cache_sitemap'           => 1,   // Sitemap transient cache.
+				'sitemap_cron_prerender'  => 0,   // Sitemap cron-ping prerender.
 
 				'sitemaps_modified' => 1, // Add sitemap modified time.
 

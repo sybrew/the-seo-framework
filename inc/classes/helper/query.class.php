@@ -575,9 +575,11 @@ class Query {
 		return Query\Cache::memo()
 			?? Query\Cache::memo(
 				\is_front_page()
-					?: static::is_blog()
+					?: (
+						   static::is_blog()
 						&& 0 === static::get_the_real_id()
 						&& 'post' !== \get_option( 'show_on_front' ) // 'page' is tested via `is_front_page()`
+					),
 			);
 	}
 

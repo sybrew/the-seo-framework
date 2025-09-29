@@ -322,9 +322,11 @@ class Compatibility {
 			 */
 			(bool) \apply_filters(
 				'the_seo_framework_shortcode_based_page_builder_active',
-				\defined( 'ET_BUILDER_VERSION' )
-				|| \defined( 'WPB_VC_VERSION' )
-				|| \defined( 'BRICKS_VERSION' ),
+				(
+					   \defined( 'ET_BUILDER_VERSION' )
+					|| \defined( 'WPB_VC_VERSION' )
+					|| \defined( 'BRICKS_VERSION' )
+				),
 			)
 		);
 	}

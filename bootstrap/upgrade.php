@@ -944,7 +944,6 @@ function _do_upgrade_5001() {
  * @since 5.0.5
  */
 function _do_upgrade_5050() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5050' ) {
 		Data\Plugin::update_option(
 			'sitemap_cron_prerender',
@@ -959,7 +958,6 @@ function _do_upgrade_5050() {
  * @since 5.1.0
  */
 function _do_upgrade_5100() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5100' ) {
 		Data\Plugin::update_option( 'robotstxt_block_ai', 0 );
 		Data\Plugin::update_option( 'robotstxt_block_seo', 0 );

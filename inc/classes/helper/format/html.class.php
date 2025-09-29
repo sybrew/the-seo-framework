@@ -82,7 +82,7 @@ class HTML {
 	 * It essentially strips all tags, and replaces block-type tags' endings with spaces.
 	 * When done, it performs a sanity-cleanup via `strip_tags()`.
 	 *
-	 * Tip: You might want to use method `s_dupe_space()` to clear up the duplicated/repeated spaces afterward.
+	 * Tip: You might want to use method `remove_repeated_spacing()` to clear up the duplicated/repeated spaces afterward.
 	 *
 	 * @since 3.2.4
 	 * @since 4.0.0 Now allows emptying the indexes `space` and `clear`.
@@ -226,7 +226,7 @@ class HTML {
 							 */
 							\sprintf(
 								'/<(?!\/)(?:%s)\b(?:[^=>\/]*=(?:(?:([\'"])[^$]*?\g{-1})|[\s\/]*))*+[^>]*>/i',
-								implode( '|', $elements )
+								implode( '|', $elements ),
 							),
 							'phrase' === $flow_type ? '' : ' ', // Add space if block, otherwise clear.
 							$input
