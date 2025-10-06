@@ -292,19 +292,43 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 
 **For everyone:**
 
+* **Added:** Comprehensive author meta tag support with global fallback option for improved LinkedIn and social media post sharing.
+* **Added:** Author Name Fallback setting in Social Meta Tags > Author Settings for specifying a default author name.
+* **Added:** Authorial tags toggle now controls visibility of author profile settings and fallback behavior.
+* **Enhanced:** Facebook and Twitter author meta generation now respects the authorial tags setting with proper fallback to global settings.
+* **Enhanced:** Profile settings for authorial information are now conditionally displayed based on authorial tags setting.
+* **Fixed:** Author meta tags implementation follows WordPress coding standards and TSF architecture patterns.
+
+**For developers:**
+
+* **Added:** `tsf()->author()` method for accessing author meta functionality via the pool pattern.
+* **Added:** `post_author` option with proper sanitization and validation.
+* **Enhanced:** JavaScript toggle functionality for hiding author override messages when authorial tags are disabled.
+
+This release augments issues #515, #595, #654, and #690 by providing comprehensive author meta tag functionality with global fallback support.
+
+TODO we should probably make this v5.2 (major), and add all the author stuff.
+TODO remove all deprecated filters, keep all deprecated methods/functions.
+
+**For everyone:**
+
+* **Added:**
+	* We added a new toggle for author meta data in the site settings. It's enabled by default for everyone, for it extends existing plugin behavior.
+		* When enabled:
+			* A new "author" metatag is added for posts, it shows the "display name" for the author.
+				* When disabled the primary author can still be assigned.
+			* TODO IMPLEMENT: Authors have "Facebook profile page" and "X profile handle" links added to their profile pages.
+				* This is already implemented, but we should toggle the listeners for this.
+			* TODO IMPLEMENT "Authors can override this option on their profile page." must be hidden when toggled off.
+	* TODO Authors now have all SEO fields on their profile pages, like we have for terms.
+	* TODO Authors get the SEO Bar displayed on the author overview list pages.
+		* Bonus: This allows you to quickly see who is an Author and who isn't.
+		* Non-authors get a medium dash symbol instead of the SEO Bar.
+	* TODO You can now sort by SEO Bar status. This revolutionary (wow, I'm marketing!) feature allows you to quickly find posts and terms that need your attention.
 * **Fixed:**
 	* Abbreviations at the start of sentences are now properly considered by the description generator.
 * **Removed:**
 	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
-
-**For developers:**
-
-* **Fixed:**
-	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
-* **Other:**
-	* We now properly capitalize the proper noun Boolean.
-	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
-		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
 
 **For translators:**
 
@@ -314,8 +338,17 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 
 **For developers:**
 
+* **Option notes:**
+	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
+		* Added index `author_meta`. Default `1`, also for existing installations.
+* **Fixed:**
+	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
 * **Other:**
+	* We now properly capitalize the proper noun Boolean.
 	* We updated our coding standards, so the code is slightly altered.
+	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
+		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
 
 ### 5.1.2
 

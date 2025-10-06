@@ -214,7 +214,7 @@ function _upgrade( $previous_version ) {
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5100',
+		'5001', '5050', '5100', '5130',
 	];
 	// phpcs:enable, WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
@@ -963,5 +963,17 @@ function _do_upgrade_5100() {
 		Data\Plugin::update_option( 'robotstxt_block_seo', 0 );
 		Data\Plugin::update_option( 'homepage_canonical', '' );
 		Data\Plugin::update_option( 'homepage_redirect', '' );
+	}
+}
+
+/**
+ * Registers new option 'author_tags'.
+ *
+ * @since 5.1.3
+ */
+function _do_upgrade_5130() {
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5130' ) {
+		Data\Plugin::update_option( 'author_tags', 1 );
 	}
 }

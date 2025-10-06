@@ -118,6 +118,7 @@ final class Head {
 					'Robots',
 					'URI',
 					'Description',
+					'Author',
 					'Theme_Color',
 					'Open_Graph',
 					'Facebook',
@@ -169,6 +170,10 @@ final class Head {
 		) ) {
 			$remove_pools[] = 'Twitter';
 		}
+
+		// Remove Author generator if author meta is disabled
+		if ( ! Data\Plugin::get_option( 'author_tags' ) )
+			$remove_pools[] = 'Author';
 
 		/**
 		 * @since 5.0.0
