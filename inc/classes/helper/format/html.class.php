@@ -106,6 +106,10 @@ class HTML {
 	 *              8. Added preparation memoization using cache delimiters `$args['space']` and `$args['clear']`.
 	 * @since 4.2.8 Elements with that start with exactly the same text as others won't be preemptively closed.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.1.3 1. Added 'body' and 'style' to the phrase elements.
+	 *              2. Added conditional "NO_JIT" modifier for huge inputs to prevent abortion due to suspected memory issues.
+	 *              3. Improved regex pattern to ignore bitwise operators (<<) encountered in scripts. Also prevents recursive
+	 *                 lookup loops when encountering these operators in elements.
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_categories
 	 * @link https://html.spec.whatwg.org/multipage/syntax.html#void-elements
@@ -180,7 +184,7 @@ class HTML {
 			// Blocks: address, area, article, aside, audio, blockquote, br, button, canvas, dd, details, dialog, div, dl, dt, fieldset, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, li, ol, pre, table, td, template, textarea, th, tr, ul, video.
 			// Some block elements can be interpreted as phrasing elements, like audio, canvas, button, and video; hence, they're also listed in $phrase.
 			// 'br' is a phrase element, but also a struct whitespace -- let's omit it so we can substitute it with a space as block.
-			$phrase = [ 'a', 'area', 'abbr', 'audio', 'b', 'bdo', 'bdi', 'button', 'canvas', 'cite', 'code', 'data', 'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img', 'input', 'ins', 'link', 'kbd', 'label', 'map', 'mark', 'meta', 'math', 'meter', 'noscript', 'object', 'output', 'picture', 'progress', 'q', 'ruby', 's', 'samp', 'script', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'svg', 'textarea', 'time', 'u', 'var', 'video', 'wbr' ];
+			$phrase = [ 'a', 'area', 'abbr', 'audio', 'b', 'bdo', 'bdi', 'body', 'button', 'canvas', 'cite', 'code', 'data', 'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img', 'input', 'ins', 'link', 'kbd', 'label', 'map', 'mark', 'meta', 'math', 'meter', 'noscript', 'object', 'output', 'picture', 'progress', 'q', 'ruby', 's', 'samp', 'script', 'select', 'small', 'span', 'strong', 'style', 'sub', 'sup', 'svg', 'textarea', 'time', 'u', 'var', 'video', 'wbr' ];
 
 			$marked_for_parsing = array_merge( $args['space'], $args['clear'] );
 
@@ -211,10 +215,15 @@ class HTML {
 			);
 		}
 
+		// If the input is too large, we disable JIT compilation to prevent memory issues.
+		// This can add a millisecond or two, but I doubt anyone with such large inputs can even notice.
+		$nojit = \strlen( $input ) > 1e6 ? '(*NO_JIT)' : '';
+
 		foreach ( $parse as $query_type => $handles ) {
 			foreach ( $handles as $flow_type => $elements ) {
+				if ( ! $elements ) continue;
 				// Test $input again as it's overwritten in loop.
-				if ( ! str_contains( $input, '<' ) || ! $elements ) break 2;
+				if ( ! str_contains( $input, '<' ) ) break 2;
 
 				switch ( $query_type ) {
 					case 'void_query':
@@ -241,13 +250,14 @@ class HTML {
 						$passes      ??= 1;
 						$replacement ??= 'phrase' === $flow_type ? '' : ' ';
 
-						// Akin to https://regex101.com/r/LR8iem/6. (This might be outdated, copy work!)
+						// Akin to https://regex101.com/r/LR8iem/8. (This might be outdated, copy work!)
 						// Ref https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html (specifically end-tags)
 						$regex = \sprintf(
-							'/<(?!\/)(%s)\b([^=>\/]*=(?:(?:([\'"])[^$]*?\g{-1})|[\s\/]*))*+(?:(?2)++|[^>]*>)((?:[^<]*+(?:<(?!\/?\1\b.*?>)[^<]+)*|(?R))*?)<\/\1\s*>/i', // good enough
-							implode( '|', $elements )
+							"/{$nojit}<(?!\/)(%s)(?!\s*<)\b([^=>\/]*=(?:(?:(['\"])[^$]*?\g{-1})|[\s\/]*))*+(?:(?2)++|[^>]*>)((?:[^<]*+(?:<*+(?!\/?\\1\b.*?>)[^<]+)*|(?R))*?)<\/\\1\s*>/i", // quite perfect
+							/* "/{$nojit}<(?!\/)(%s)(?!\s*<)\b([^=>\/]*=(?:(?:([\'\"])[^$]*?\g{-1})|[\s\/]*))*+(?:(?2)++|[^>]*>)((?:[^<]*+(?:<*+(?!\/?\\1\b.*?>)[^<]+)*|(?R))*?)(?><\/\\1\s*>|\Z)/i", // adds \Z modifier to prevent a loop when encountering an unclosed element -- Though, I'd much rather prefer it would "SKIP" when \Z is encountered -- replacing the \Z with (*SKIP) will cause other issues. This also increases processing time by ~15% for properly formatted content */
+							implode( '|', $elements ),
 						);
-						// Work in progress: /(<(?(R)\/?|(?!\/))(%s)\b)([^=>\/]*=(?:(?:([\'"])[^$]*?\g{-1})|[\s\/]*))*+(?:(?-2)*+|(?:.*?))>([^<]*+|(?R)|<\/\2\b\s*>)/i
+						// Work in progress (should be faster): /(<(?(R)\/?|(?!\/))(%s)\b)([^=>\/]*=(?:(?:([\'"])[^$]*?\g{-1})|[\s\/]*))*+(?:(?-2)*+|(?:.*?))>([^<]*+|(?R)|<\/\2\b\s*>)/i
 
 						$i = 0;
 						// To be most accurate, we should parse 'space' $type at least twice, up to 6 times. This is a performance hog.

@@ -307,33 +307,35 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 * **Removed:**
 	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
+**For translators:**
+
+* **Updated:**
+	* TODO POT translation file.
+	* Various sentences have been updated for clarity.
+
 **For developers:**
 
-* **PHP Notes:**
+* **PHP API notes:**
 	* **Changed:**
 		* `The_SEO_Framework\Data\Term::get_term_parents()` (`tsf()->data()->term()->get_term_parents()`) no longer uses memoization to cache results.
 			* This is now in line with `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`), which never used memoization.
 			* We probably added this because of this [unresolved caching issue](https://core.trac.wordpress.org/ticket/50568), but we never invoked the memoization anyway.
 	* **Fixed:**
+		* `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`) now filters out deleted posts (broken ancestors). Next to the user-facing breadcrumb issue, this resolves some PHP warnings that could occur when fetching deleted parent posts for canonical URL generation.
+		* `The_SEO_Framework\Helper\Format\HTML::strip_tags_cs()` (`tsf()->format()->html()->strip_tags_cs()`):
+			1. Added 'body' and 'style' to the phrase elements.
+			2. Added conditional "NO_JIT" modifier for huge inputs to prevent abortion due to suspected memory issues.
+			3. Improved regex pattern to ignore bitwise operators (<<) encountered in scripts. Also prevents recursive lookup loops when encountering these operators in elements.
 		* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
-* **Other:**
-	* We now properly capitalize the proper noun Boolean.
+* **JS API notes:**
 	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
 		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
-
-**For translators:**
-
-* **Updated:**
-	* POT translation file.
-	* Various sentences have been updated for clarity.
-
-**For developers:**
-
-* **PHP Notes:**
+* **Filter notes:**
 	* **Fixed:**
-		* `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`) now filters out deleted posts (broken ancestors). Next to the user-facing breadcrumb issue, this resolves some PHP warnings that could occur when fetching deleted parent posts for canonical URL generation.
+		* For `the_seo_framework_extract_content_strip_args`, when adjusting the `space` or `clear` indexes in such a manner that empty void, clear, or space queries are created, the resulting Context-Sensitive tag stripper (`The_SEO_Framework\Helper\Format\strip_tags_cs()`) now correctly ignores those empty queries instead of halting the context-sensitive stripping process.
 * **Other:**
 	* We updated our coding standards, so the code is slightly altered.
+	* We now properly capitalize the proper noun Boolean.
 
 ### 5.1.2
 
