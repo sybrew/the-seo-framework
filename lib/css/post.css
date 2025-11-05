@@ -218,6 +218,18 @@ body.js .tsf-flex-tab-content.tsf-flex-tab-content-active {
 	line-height: 1em;
 }
 
+/* Fix tooltip overflow blocking in the main tooltip area */
+.edit-post-meta-boxes-main,
+.edit-post-meta-boxes-main .edit-post-meta-boxes-main__liner {
+	overflow: unset;
+	isolation: unset;
+}
+
+/* Fix tooltip overflow blocking in the sidebar */
+.interface-complementary-area .components-panel {
+	position: unset;
+}
+
 /**
  * Start override
  */
