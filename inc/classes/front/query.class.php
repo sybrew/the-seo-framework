@@ -71,9 +71,10 @@ final class Query {
 			$post__not_in = $wp_query->get( 'post__not_in' );
 
 			if ( ! empty( $post__not_in ) ) {
-				$excluded = array_unique(
-					array_merge( (array) $post__not_in, $excluded ),
-				);
+				$excluded = array_unique( array_merge(
+					(array) $post__not_in,
+					$excluded,
+				) );
 			}
 
 			$wp_query->set( 'post__not_in', $excluded );
@@ -86,6 +87,7 @@ final class Query {
 	 * @since 2.9.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `alter_search_query_post`.
+	 * @since 5.1.3 Now verifies that the search query is actually set.
 	 * @access private
 	 *
 	 * @param array     $posts    The array of retrieved posts.
@@ -95,6 +97,10 @@ final class Query {
 	public static function alter_search_query_post( $posts, $wp_query ) {
 
 		if ( $wp_query->is_search ) {
+			// Only interact with an actual Search Query.
+			if ( ! isset( $wp_query->query['s'] ) )
+				return;
+
 			if ( static::is_query_adjustment_blocked( $wp_query ) )
 				return $posts;
 
@@ -136,9 +142,10 @@ final class Query {
 			$post__not_in = $wp_query->get( 'post__not_in' );
 
 			if ( ! empty( $post__not_in ) ) {
-				$excluded = array_unique(
-					array_merge( (array) $post__not_in, $excluded ),
-				);
+				$excluded = array_unique( array_merge(
+					(array) $post__not_in,
+					$excluded,
+				) );
 			}
 
 			$wp_query->set( 'post__not_in', $excluded );

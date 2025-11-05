@@ -8,7 +8,6 @@ Follow these rules:
 
 - Use PHP 7.4+
 - In autodescription.php, increment the "Version: "-header by "-dev-{number}" when making a PR. If there's no -dev-{number} in the "Version: "-header, add it as -dev-1
-- Never use wp.data.subscribe
 
 ## General Guidelines
 
@@ -18,6 +17,9 @@ Follow these rules:
 - Never add phpcs comments
 - Before making broad assumptions, ask for clarification
 - Use plain punctuation, no fancy quotes
+- Interpolate variables in strings when possible
+- Do not use CLI to make changes; use built-in tools instead
+- When fixing bugs, fix the cause, not the symptom
 
 ## General Coding Standards
 
@@ -25,26 +27,35 @@ Follow these rules:
 - Use lowercase unit types, except write "Boolean" not "boolean"
 - Use single quotes for strings unless interpolating
 - Interpolate variables in strings when possible
-- Align array key/value separators with spaces AFTER the separator
-- Add trailing commas in multiline arrays/function args
+- Align object/array key/value separators with spaces AFTER the separator
+- When creating an object/array with a single property, put that property on a single line
+- When creating an object/array with a single property whose value contains an operator, put that property on a new line
+- Place multiline operators at new line start, also for conditional checks
+- Put function args on a new line when they're over 30 characters in total
+- Put multiple function args on a new line when any is an anonymous function, array, or object
+- Add trailing commas at the end of multiline object/array properties and function args if the language supports it
 - Pad brackets/braces with spaces around arguments
 - Align consecutive variable assignments at equal signs
-- Place multiline operators at new line start, also for conditional checks
-- Put function args on a new line when >30 chars or for objects/arrays
 - Unless there's a conditional follow-up construct, do not add braces in constructs (if/do/for etc.) followed by only a single-line statement
 - Do not write inline comments that state the obvious
 - Do not add comments about your executions
 - Write detailed docblocks for all functions, classes, and methods
 - Add a newline after a function opening brace, unless its body is a single line
-- A tab is 4 spaces
+- A tab is 4 characters wide
 - Use tabs for indentation, not spaces
 - When there's an operator in an argument, split all arguments into separate lines
+
+## Corrupted Files
+- Do not try to fix file encoding issues, just notify about them after your changes
+- If you believe the file is corrupted, stop immediately and wait for a new instruction
+- If you find a whitespace issue, it's probably because you forgot to add a newline at the end
 
 ## WordPress PHP
 
 - Avoid functions wp_sprintf (except with %l lists), wp_json_encode, and status_header
 - Never add hooks in class constructs
 - In add_filter/add_action, write each argument on a new line when implementing anonymous functions
+- Do not create validate_callbacks for REST routes, but validate and sanitize parameters directly in the route callback
 
 ## PHP
 
@@ -74,10 +85,10 @@ Follow these rules:
 - No constant functions
 - No JSX
 - Apply PHP's spacing standards, including vertical alignment
+- Ignore long __-prefixed properties for spacing/alignment purposes
 - Use const instead of import
 - Do not add parentheses to lone parameters in arrow functions
-- Put each argument on a new line when any is an anonymous function, array, or object
-- When creating an object with a single property, make it a single line
+- Put each chained method call on a new line
 
 ## Avoid
 

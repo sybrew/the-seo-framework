@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4.0
 Stable tag: 5.1.2
 License: GPLv3
@@ -243,7 +243,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO Add a parent to a page/product, then delete that parent from WordPress (or database, so WordPress cannot rectify) -- then, see if we can get an "Untitled" page/product in the breadcrumb like that.
 TODO this messes up the breadcrumbs of TSF: https://woocommerce.com/products/brands/.
 TODO set_time_limit() appears to be blocked by many hosts. This might prevent them from using TSF at all?
 TODO move user settings to personal_options?
@@ -286,6 +285,15 @@ TODO make description meta settings more explanatory: "The meta description sugg
 
 TODO make the description and title placeholder editable.
 
+TODO Breadcrumbs are now in Gutenberg: https://github.com/WordPress/gutenberg/pull/71793.
+	-> Should we add this to our documentation?
+
+TODO remove placeholders in Webmaster settings? These go against our accessibility guidelines.
+TODO disable and hide Hello Elementor's SEO settings
+	-> hello_elementor_add_description_meta_tag
+
+TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
+
 For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
 
 ### 5.1.3
@@ -294,13 +302,20 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 
 * **Fixed:**
 	* Abbreviations at the start of sentences are now properly considered by the description generator.
+	* When a parent post is deleted and not correctly purged from the child post's `post_parent` field, the breadcrumb generator now skips the broken ancestor. We could not reproduce an issue with this because WordPress simply derps out and sends a 404 response for such broken posts. So, this is only a theoretical fix; we did our part.
+	* When a breadcrumb has a term as an ancestor, and that term is deleted, the breadcrumb generator now skips the broken ancestor instead of adding an "Archives" link that points to the current post.
 * **Removed:**
 	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
 **For developers:**
 
-* **Fixed:**
-	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+* **PHP Notes:**
+	* **Changed:**
+		* `The_SEO_Framework\Data\Term::get_term_parents()` (`tsf()->data()->term()->get_term_parents()`) no longer uses memoization to cache results.
+			* This is now in line with `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`), which never used memoization.
+			* We probably added this because of this [unresolved caching issue](https://core.trac.wordpress.org/ticket/50568), but we never invoked the memoization anyway.
+	* **Fixed:**
+		* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
 * **Other:**
 	* We now properly capitalize the proper noun Boolean.
 	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
@@ -314,6 +329,9 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 
 **For developers:**
 
+* **PHP Notes:**
+	* **Fixed:**
+		* `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`) now filters out deleted posts (broken ancestors). Next to the user-facing breadcrumb issue, this resolves some PHP warnings that could occur when fetching deleted parent posts for canonical URL generation.
 * **Other:**
 	* We updated our coding standards, so the code is slightly altered.
 
