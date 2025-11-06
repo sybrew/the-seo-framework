@@ -279,19 +279,17 @@ class Compatibility {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_theme`.
 	 * @since 5.1.0 Added memoization.
+	 * @since 5.1.3 Removed memoization; now uses `Data\Blog::get_active_themes()`.
 	 *
 	 * @param string|string[] $themes The theme names to test.
 	 * @return bool Any of the themes are active.
 	 */
 	public static function is_theme_active( $themes = '' ) {
 
-		$active_theme = memo() ?? memo( array_unique( [
-			strtolower( \get_option( 'stylesheet' ) ), // Parent.
-			strtolower( \get_option( 'template' ) ),   // Child.
-		] ) );
+		$active_themes = Data\Blog::get_active_themes();
 
 		foreach ( (array) $themes as $theme )
-			if ( \in_array( strtolower( $theme ), $active_theme, true ) )
+			if ( \in_array( strtolower( $theme ), $active_themes, true ) )
 				return true;
 
 		return false;
