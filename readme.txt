@@ -303,7 +303,9 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 **For everyone:**
 
 * **Compatibility:**
-	* **Elementor:**
+	* **Theme: Adava:**
+    	* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
+	* **Plugin: Elementor:**
 		* We now again output The SEO Framework's metadata on Elementor's "Landing Pages" post type (`e-landing-page`) and "Templates" `elementor_library`.
 		* With that, we now force the "noindex" directive on these post types.
 			* This is something that they should've done a long time ago, and it's negatively impacting millions of websites' ranking, including yours -- unless you use TSF.
