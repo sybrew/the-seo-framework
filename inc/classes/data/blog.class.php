@@ -56,7 +56,7 @@ class Blog {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				Data\Plugin::get_option( 'site_title' ) ?: static::get_filtered_blog_name()
+				Data\Plugin::get_option( 'site_title' ) ?: static::get_filtered_blog_name(),
 			);
 	}
 
@@ -193,7 +193,7 @@ class Blog {
 			// whereas active_plugins stores them in the values. array_keys() resolves the disparity.
 			$active_plugins = array_merge(
 				$active_plugins,
-				array_keys( \get_site_option( 'active_sitewide_plugins', [] ) )
+				array_keys( \get_site_option( 'active_sitewide_plugins', [] ) ),
 			);
 
 			// $plugins is already sorted at `activate_plugin`.

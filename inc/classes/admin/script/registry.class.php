@@ -104,7 +104,8 @@ class Registry {
 			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
 			|| Data\Plugin::get_site_cache( 'persistent_notices' )
 			|| (
-				! is_headless( 'meta' ) && (
+				   ! is_headless( 'meta' )
+				&& (
 					   ( Query::is_archive_admin() && Taxonomy::is_supported() )
 					|| ( Query::is_singular_admin() && Post_Type::is_supported() )
 				)

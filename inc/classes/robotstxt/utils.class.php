@@ -147,7 +147,7 @@ class Utils {
 		/**
 		 * @since 5.1.0
 		 * @param array $agents The user-agent list for $type.
-		 * @param arrary $type  The agent type requested by the method caller.
+		 * @param array $type   The agent type requested by the method caller.
 		 */
 		return (array) \apply_filters(
 			'the_seo_framework_robots_blocked_user_agents',
