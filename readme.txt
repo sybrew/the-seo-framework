@@ -294,12 +294,22 @@ TODO disable and hide Hello Elementor's SEO settings
 
 TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
 
+TODO we should namespace all compatibility files, e.g.: The_SEO_Framework\Compat\Plugin\Elementor::_function_name()
+
 For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
 
 ### 5.1.3
 
 **For everyone:**
 
+* **Compatibility:**
+	* **Elementor:**
+		* We now again output The SEO Framework's metadata on Elementor's "Landing Pages" post type (`e-landing-page`) and "Templates" `elementor_library`.
+		* With that, we now force the "noindex" directive on these post types.
+			* This is something that they should've done a long time ago, and it's negatively impacting millions of websites' ranking, including yours -- unless you use TSF.
+		* We added Elementor's "Floating Buttons" post type (`e-floating-buttons`) to a bespoke "Elementor's dumb post type" list.
+			* This means that The SEO Framework will also hide its interface and force the "noindex" directive on this post type.
+		* **Note:** We considered adding a dynamic "headless" mode for Elementor's dumb post types, so that TSF's custom post meta fields could be ignored from these, but this adds needless complexity for a corner case that should never have existed in the first place.
 * **Fixed:**
 	* Abbreviations at the start of sentences are now properly considered by the description generator.
 	* When a parent post is deleted and not correctly purged from the child post's `post_parent` field, the breadcrumb generator now skips the broken ancestor. We could not reproduce an issue with this because WordPress simply derps out and sends a 404 response for such broken posts. So, this is only a theoretical fix; we did our part.
