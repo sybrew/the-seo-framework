@@ -31,17 +31,17 @@ use The_SEO_Framework\Helper\Query;
  */
 function _elementor_fix_dumb_post_types( $post_types ) {
 
-	if ( ! \is_admin() && ! Query::is_sitemap() )
-		return $post_types;
+	if ( \is_admin() || Query::is_sitemap() )
+		return array_diff( $post_types, [ 'e-landing-page', 'elementor_library' ] );
 
-	return array_diff( $post_types, [ 'e-landing-page', 'elementor_library' ] );
+	return $post_types;
 }
 
 /**
  * Forces noindex on Elementor's post types.
  *
- * Elementor incorrectly made these post types publicly queryable, which
- * should not be the case. This filter ensures they are not indexed.
+ * Elementor incorrectly made these post types publicly queryable.
+ * This filter ensures they are not indexed.
  *
  * @hook the_seo_framework_robots_meta_array 10
  * @since 5.1.3
@@ -64,9 +64,7 @@ function _elementor_force_noindex( $meta ) {
 	if ( 'noindex' === $meta['noindex'] )
 		return $meta;
 
-	$post_type = Query::get_post_type_real_id();
-
-	if ( \in_array( $post_type, [ 'e-landing-page', 'elementor_library' ], true ) )
+	if ( \in_array( Query::get_post_type_real_id(), [ 'e-landing-page', 'elementor_library' ], true ) )
 		$meta['noindex'] = 'noindex';
 
 	return $meta;
