@@ -10,6 +10,12 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Helper\Query;
 
+const ELEMENTOR_DUMB_POST_TYPES = [ // TODO remove "ELEMENTOR_" prefix when we namespace this file properly
+	'e-landing-page',
+	'elementor_library',
+	'e-floating-buttons',
+];
+
 \add_filter( 'the_seo_framework_public_post_types', __NAMESPACE__ . '\\_elementor_fix_dumb_post_types' );
 \add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_elementor_force_noindex' );
 
@@ -32,7 +38,7 @@ use The_SEO_Framework\Helper\Query;
 function _elementor_fix_dumb_post_types( $post_types ) {
 
 	if ( \is_admin() || Query::is_sitemap() )
-		return array_diff( $post_types, [ 'e-landing-page', 'elementor_library' ] );
+		return array_diff( $post_types, ELEMENTOR_DUMB_POST_TYPES );
 
 	return $post_types;
 }
@@ -64,7 +70,7 @@ function _elementor_force_noindex( $meta ) {
 	if ( 'noindex' === $meta['noindex'] )
 		return $meta;
 
-	if ( \in_array( Query::get_post_type_real_id(), [ 'e-landing-page', 'elementor_library' ], true ) )
+	if ( \in_array( Query::get_post_type_real_id(), ELEMENTOR_DUMB_POST_TYPES, true ) )
 		$meta['noindex'] = 'noindex';
 
 	return $meta;
