@@ -284,6 +284,12 @@ TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement thi
 
 * **Fixed:**
 	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+* **Changed:**
+	* JS: `tsfMediaL10n.warning.warnedTypes` and `tsfMediaL10n.warning.forbiddenTypes` are now context-aware objects instead of flat arrays.
+		* `warnedTypes` now has a `social` property containing image types that trigger warnings for social images (e.g., webp, heic).
+		* `forbiddenTypes` now has an `all` property containing universally forbidden image types (e.g., apng, bmp, svg).
+		* This is a semi-breaking change for the JS API. We highly doubt anyone used these properties externally, as they were introduced in v5.1.0.
+		* The image warning system now checks for context-specific warnings first, then falls back to universal warnings, making it more extensible for future image contexts.
 * **Other:**
 	* We now properly capitalize the proper noun Boolean.
 	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
