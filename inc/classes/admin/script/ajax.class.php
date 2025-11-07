@@ -472,13 +472,13 @@ final class AJAX {
 		if ( ! $author_id )
 			\wp_send_json_error( 'invalid_object_id' );
 
-		$author_slugs   = [];
-		$author_slugs[] = [
-			'id'   => $author_id,
-			'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
-		];
-
-		\wp_send_json_success( $author_slugs );
+		// Send a sequential array of "slugs" for consistency with other slug fetchers.
+		\wp_send_json_success( [
+			[
+				'id'   => $author_id,
+				'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
+			],
+		] );
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }

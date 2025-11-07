@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Meta;
 
 use function The_SEO_Framework\{
 	coalesce_strlen,
+	get_query_type_from_args,
 	memo,
 	normalize_generation_args,
 };
@@ -174,21 +175,27 @@ class Open_Graph {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$title = Data\Plugin\Term::get_meta_item( 'og_title', $args['id'] );
-		} elseif ( $args['pta'] ) {
-			$title = Data\Plugin\PTA::get_meta_item( 'og_title', $args['pta'] );
-		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-			if ( $args['id'] ) {
-				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
-					  ?? Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
-			} else {
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
+						  ?? Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
+				} else {
+					$title = Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
+				}
+				break;
+			case 'term':
+				$title = Data\Plugin\Term::get_meta_item( 'og_title', $args['id'] );
+				break;
+			case 'homeblog':
 				$title = Data\Plugin::get_option( 'homepage_og_title' );
-			}
-		} elseif ( $args['id'] ) {
-			$title = Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
+				break;
+			case 'pta':
+				$title = Data\Plugin\PTA::get_meta_item( 'og_title', $args['pta'] );
+				break;
 		}
 
+		// Do not check empty(). See strlen below.
 		if ( ! isset( $title ) ) return '';
 
 		if ( \strlen( $title ) )
@@ -289,21 +296,27 @@ class Open_Graph {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$desc = Data\Plugin\Term::get_meta_item( 'og_description', $args['id'] );
-		} elseif ( $args['pta'] ) {
-			$desc = Data\Plugin\PTA::get_meta_item( 'og_description', $args['pta'] );
-		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-			if ( $args['id'] ) {
-				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
-					 ?? Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
-			} else {
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
+						 ?? Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
+				} else {
+					$desc = Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
+				}
+				break;
+			case 'term':
+				$desc = Data\Plugin\Term::get_meta_item( 'og_description', $args['id'] );
+				break;
+			case 'homeblog':
 				$desc = Data\Plugin::get_option( 'homepage_og_description' );
-			}
-		} elseif ( $args['id'] ) {
-			$desc = Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
+				break;
+			case 'pta':
+				$desc = Data\Plugin\PTA::get_meta_item( 'og_description', $args['pta'] );
+				break;
 		}
 
+		// Do not check empty(). See strlen below.
 		if ( ! isset( $desc ) ) return '';
 
 		if ( \strlen( $desc ) )

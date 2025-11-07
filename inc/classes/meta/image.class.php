@@ -451,8 +451,6 @@ class Image {
 	 */
 	public static function generate_custom_image_details_from_args( $args, $context = 'social' ) {
 
-		normalize_generation_args( $args );
-
 		if ( 'organization' === $context ) {
 			$details = [
 				'url' => Data\Plugin::get_option( 'knowledge_logo_url' ),
@@ -461,33 +459,44 @@ class Image {
 		} else {
 			normalize_generation_args( $args );
 
-			if ( $args['tax'] ) {
-				$details = [
-					'url' => Data\Plugin\Term::get_meta_item( 'social_image_url', $args['id'] ),
-					'id'  => Data\Plugin\Term::get_meta_item( 'social_image_id', $args['id'] ),
-				];
-			} elseif ( $args['pta'] ) {
-				$details = [
-					'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['pta'] ),
-					'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['pta'] ),
-				];
-			} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-				$details = [
-					'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
-					'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
-				];
+			switch ( get_query_type_from_args( $args ) ) {
+				case 'single':
+					if ( Query::is_static_front_page( $args['id'] ) ) {
+						$details = [
+							'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
+							'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
+						];
 
-				if ( $args['id'] && ! $details['url'] ) {
+						if ( empty( $details['url'] ) ) {
+							$details = [
+								'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
+								'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
+							];
+						}
+					} else {
+						$details = [
+							'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
+							'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
+						];
+					}
+					break;
+				case 'term':
 					$details = [
-						'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
-						'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
+						'url' => Data\Plugin\Term::get_meta_item( 'social_image_url', $args['id'] ),
+						'id'  => Data\Plugin\Term::get_meta_item( 'social_image_id', $args['id'] ),
 					];
-				}
-			} elseif ( $args['id'] ) {
-				$details = [
-					'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
-					'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
-				];
+					break;
+				case 'homeblog':
+					$details = [
+						'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
+						'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
+					];
+					break;
+				case 'pta':
+					$details = [
+						'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['pta'] ),
+						'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['pta'] ),
+					];
 			}
 		}
 

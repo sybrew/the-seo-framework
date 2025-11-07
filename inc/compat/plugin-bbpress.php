@@ -8,9 +8,13 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function The_SEO_Framework\normalize_generation_args;
+use function The_SEO_Framework\{
+	get_query_type_from_args,
+	normalize_generation_args,
+};
 
 use The_SEO_Framework\{
+	Data,
 	Data\Filter\Sanitize,
 	Helper\Query,
 };
@@ -57,144 +61,92 @@ function _bbpress_filter_title( $title, $args ) {
 		|| ! \is_bbpress()
 	) return $title;
 
-	// phpcs:disable, Squiz.Commenting.BlockComment, Generic.WhiteSpace.ScopeIndent, WordPress.WP.I18n, Generic.Formatting.MultipleStatementAlignment -- Not my code.
-
-	// Title array
+	// phpcs:disable, WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.TextDomainMismatch -- Not my code.
 	$new_title = [];
 
-	/** Archives **************************************************************/
-
-	// Forum Archive
 	if ( \bbp_is_forum_archive() ) {
 		$new_title['text'] = \bbp_get_forum_archive_title();
-
-	// Topic Archive
 	} elseif ( \bbp_is_topic_archive() ) {
 		$new_title['text'] = \bbp_get_topic_archive_title();
-
-	/** Edit ******************************************************************/
-
-	// Forum edit page
 	} elseif ( \bbp_is_forum_edit() ) {
 		$new_title['text']   = \bbp_get_forum_title();
 		$new_title['format'] = \esc_attr__( 'Forum Edit: %s', 'bbpress' );
-
-	// Topic edit page
 	} elseif ( \bbp_is_topic_edit() ) {
 		$new_title['text']   = \bbp_get_topic_title();
 		$new_title['format'] = \esc_attr__( 'Topic Edit: %s', 'bbpress' );
-
-	// Reply edit page
 	} elseif ( \bbp_is_reply_edit() ) {
 		$new_title['text']   = \bbp_get_reply_title();
 		$new_title['format'] = \esc_attr__( 'Reply Edit: %s', 'bbpress' );
-
-	// Topic tag edit page
 	} elseif ( \bbp_is_topic_tag_edit() ) {
 		$new_title['text']   = \bbp_get_topic_tag_name();
 		$new_title['format'] = \esc_attr__( 'Topic Tag Edit: %s', 'bbpress' );
-
-	/** Singles ***************************************************************/
-
-	// Forum page
 	} elseif ( \bbp_is_single_forum() ) {
 		$new_title['text']   = \bbp_get_forum_title();
 		$new_title['format'] = \esc_attr__( 'Forum: %s', 'bbpress' );
-
-	// Topic page
 	} elseif ( \bbp_is_single_topic() ) {
 		$new_title['text']   = \bbp_get_topic_title();
 		$new_title['format'] = \esc_attr__( 'Topic: %s', 'bbpress' );
-
-	// Replies
 	} elseif ( \bbp_is_single_reply() ) {
-		$new_title['text']   = \bbp_get_reply_title();
-
-	// Topic tag page
+		$new_title['text'] = \bbp_get_reply_title();
 	} elseif ( \bbp_is_topic_tag() || \get_query_var( 'bbp_topic_tag' ) ) {
 		$new_title['text']   = \bbp_get_topic_tag_name();
 		$new_title['format'] = \esc_attr__( 'Topic Tag: %s', 'bbpress' );
-
-	/** Users *****************************************************************/
-
-	// Profile page
 	} elseif ( \bbp_is_single_user() ) {
 
 		// Is user viewing their own profile?
 		$is_user_home = \bbp_is_user_home();
 
-		// User topics created
 		if ( \bbp_is_single_user_topics() ) {
 			if ( true === $is_user_home ) {
 				$new_title['text'] = \esc_attr__( 'Your Topics', 'bbpress' );
 			} else {
-				$new_title['text'] = \get_userdata( \bbp_get_user_id() )->display_name;
+				$new_title['text'] = Data\User::get_userdata( \bbp_get_user_id(), 'display_name' );
 				/* translators: user's display name */
 				$new_title['format'] = \esc_attr__( "%s's Topics", 'bbpress' );
 			}
-
-		// User replies created
 		} elseif ( \bbp_is_single_user_replies() ) {
 			if ( true === $is_user_home ) {
 				$new_title['text'] = \esc_attr__( 'Your Replies', 'bbpress' );
 			} else {
-				$new_title['text'] = \get_userdata( \bbp_get_user_id() )->display_name;
+				$new_title['text'] = Data\User::get_userdata( \bbp_get_user_id(), 'display_name' );
 				/* translators: user's display name */
 				$new_title['format'] = \esc_attr__( "%s's Replies", 'bbpress' );
 			}
-
-		// User favorites
 		} elseif ( \bbp_is_favorites() ) {
 			if ( true === $is_user_home ) {
 				$new_title['text'] = \esc_attr__( 'Your Favorites', 'bbpress' );
 			} else {
-				$new_title['text'] = \get_userdata( \bbp_get_user_id() )->display_name;
+				$new_title['text'] = Data\User::get_userdata( \bbp_get_user_id(), 'display_name' );
 				/* translators: user's display name */
 				$new_title['format'] = \esc_attr__( "%s's Favorites", 'bbpress' );
 			}
-
-		// User subscriptions
 		} elseif ( \bbp_is_subscriptions() ) {
 			if ( true === $is_user_home ) {
 				$new_title['text'] = \esc_attr__( 'Your Subscriptions', 'bbpress' );
 			} else {
-				$new_title['text'] = \get_userdata( \bbp_get_user_id() )->display_name;
+				$new_title['text'] = Data\User::get_userdata( \bbp_get_user_id(), 'display_name' );
 				/* translators: user's display name */
 				$new_title['format'] = \esc_attr__( "%s's Subscriptions", 'bbpress' );
 			}
-
-		// User "home"
 		} elseif ( true === $is_user_home ) {
 			$new_title['text'] = \esc_attr__( 'Your Profile', 'bbpress' );
 		} else {
-			$new_title['text'] = \get_userdata( \bbp_get_user_id() )->display_name;
+			$new_title['text'] = Data\User::get_userdata( \bbp_get_user_id(), 'display_name' );
 			/* translators: user's display name */
 			$new_title['format'] = \esc_attr__( "%s's Profile", 'bbpress' );
 		}
-
-	// Profile edit page
 	} elseif ( \bbp_is_single_user_edit() ) {
-
-		// Current user
 		if ( \bbp_is_user_home_edit() ) {
-			$new_title['text']   = \esc_attr__( 'Edit Your Profile', 'bbpress' );
-
-		// Other user
+			// Current user
+			$new_title['text'] = \esc_attr__( 'Edit Your Profile', 'bbpress' );
 		} else {
-			$new_title['text']   = \get_userdata( \bbp_get_user_id() )->display_name;
+			// Other user
+			$new_title['text']   = Data\User::get_userdata( \bbp_get_user_id(), 'display_name' );
 			$new_title['format'] = \esc_attr__( "Edit %s's Profile", 'bbpress' );
 		}
-
-	/** Views *****************************************************************/
-
-	// Views
 	} elseif ( \bbp_is_single_view() ) {
 		$new_title['text']   = \bbp_get_view_title();
 		$new_title['format'] = \esc_attr__( 'View: %s', 'bbpress' );
-
-	/** Search ****************************************************************/
-
-	// Search
 	} elseif ( \bbp_is_search() ) {
 		$new_title['text'] = \bbp_get_search_title();
 	}
@@ -215,15 +167,24 @@ function _bbpress_filter_title( $title, $args ) {
 	// Get the formatted raw title
 	$new_title = \sprintf( $new_title['format'], $new_title['text'] );
 
-	// Filter the raw title.
-	$new_title = \apply_filters( 'bbp_raw_title', $new_title, $sep = '&raquo;', $seplocation = '' ); // phpcs:ignore,VariableAnalysis -- readability.
+	/**
+	 * @since bbPress 2.0.0
+	 * @param string $new_title   The raw title.
+	 * @param string $title       The original title.
+	 * @param string $sep         The title separator.
+	 * @param string $seplocation The title separator location.
+	 */
+	$new_title = \apply_filters(
+		'bbp_raw_title',
+		$new_title,
+		'&raquo;',
+		'',
+	);
 
-	// Compare new title with original title
-	if ( $new_title === $title ) {
+	if ( $new_title === $title )
 		return $title;
-	}
 
-	// phpcs:enable, Squiz.Commenting.BlockComment, Generic.WhiteSpace.ScopeIndent, WordPress.WP.I18n, Generic.Formatting.MultipleStatementAlignment -- Not my code.
+	// phpcs:enable, WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.TextDomainMismatch -- Not my code.
 
 	return $new_title;
 }
@@ -311,8 +272,7 @@ function _bbpress_filter_robots( $meta, $args ) {
 
 		normalize_generation_args( $args );
 
-		// Custom query, back-end or sitemap.
-		if ( empty( $args['pta'] ) && empty( $args['tax'] ) && empty( $args['uid'] ) ) {
+		if ( 'single' === get_query_type_from_args( $args ) ) {
 			switch ( \get_post_type( $args['id'] ) ) {
 				case \bbp_get_forum_post_type():
 					$forum_id = $args['id'];

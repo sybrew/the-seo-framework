@@ -268,7 +268,6 @@ TODO add sort by SEO Bar to list views?
 
 TODO don't escape '\\_', just write '\_'.
 TODO add `@access private` to compat funcs (or files...)
-TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement this in the inc\classes\meta\schema and author classes.
 TODO create memo function that's switch_to_blog()-safe.
 	-> We could do this by simply using the current blog ID as a cache key modifier
 TODO when saving a root URL as a canonical or redirect URL, we should append a trailing slash (slash_front_page_url is not the right function for this, for it uses user_trailingslashit).
@@ -298,6 +297,10 @@ TODO we should namespace all compatibility files, e.g.: The_SEO_Framework\Compat
 TODO remove tsf() from xsl filters. We should've done this with 5.1.0.
 
 For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
+
+TODO before launch:
+	- Retest excerpts, images, open graph, titles, title conditions, twitter, bbPress user profiles in the admin area.
+		-> We now use get_query_type_from_args() instead of checking if ( $args[...]) directly.
 
 ### 5.1.3
 
@@ -346,6 +349,8 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 			2. Added conditional "NO_JIT" modifier for huge inputs to prevent abortion due to suspected memory issues.
 			3. Improved regex pattern to ignore bitwise operators (<<) encountered in scripts. Also prevents recursive lookup loops when encountering these operators in elements.
 		* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+	* **Other:**
+		* We now use `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`) instead of the expensive `get_userdata()` directly to fetch user data. This improves output performance at the expense of a slight memory overhead.
 * **JS API notes:**
 	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
 		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.

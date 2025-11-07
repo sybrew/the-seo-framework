@@ -9,8 +9,8 @@ namespace The_SEO_Framework\Meta;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function The_SEO_Framework\{
-	memo,
 	get_query_type_from_args,
+	memo,
 	normalize_generation_args,
 };
 

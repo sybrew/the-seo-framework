@@ -245,8 +245,7 @@ class User {
 	public static function update_single_meta_item( $user_id, $item, $value ) {
 
 		// Make sure the user exists before we go through another hoop of fetching all data.
-		$user    = \get_userdata( $user_id );
-		$user_id = $user->ID ?? null;
+		$user_id = \get_userdata( $user_id )->ID ?? null;
 
 		if ( empty( $user_id ) ) return;
 
@@ -269,8 +268,7 @@ class User {
 	 */
 	public static function save_meta( $user_id, $data ) {
 
-		$user    = \get_userdata( $user_id );
-		$user_id = $user->ID ?? null;
+		$user_id = \get_userdata( $user_id )->ID ?? null;
 
 		if ( empty( $user_id ) ) return;
 
@@ -286,7 +284,7 @@ class User {
 				static::get_default_meta( $user_id ),
 				$data,
 			),
-			$user->ID,
+			$user_id,
 		);
 
 		unset( static::$meta_memo[ $user_id ] );

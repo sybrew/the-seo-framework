@@ -116,7 +116,10 @@ final class Args extends Factory {
 						yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );
 
 					if ( $args['id'] )
-						yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+						yield 'globals_post_type' => Robots::is_post_type_robots_set(
+							$type,
+							\get_post_type( $args['id'] ),
+						);
 					break;
 				case 'term':
 					$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
@@ -125,10 +128,11 @@ final class Args extends Factory {
 
 					// Store values from each post type bound to the taxonomy.
 					foreach ( Taxonomy::get_post_types( $args['tax'] ) as $post_type )
-						$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
+						$_is_pt_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
 
-					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
-					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+					// Only enable if _all_ post types have been marked with 'no*'.
+					// Do not optimize: Return false if no post types are found (corner case).
+					yield 'globals_post_type_all' => isset( $_is_pt_robots_set ) && ! \in_array( false, $_is_pt_robots_set, true );
 					break;
 				case 'pta':
 					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );

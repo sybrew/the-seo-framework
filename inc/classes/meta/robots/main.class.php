@@ -173,12 +173,16 @@ final class Main {
 	 * @return The_SEO_Framework\Builders\Robots\<Args|Front>
 	 */
 	private function get_factory() {
-		return umemo( __METHOD__, null, isset( $this->args ) )
-			?? umemo(
-				__METHOD__,
-				isset( $this->args ) ? new Args : new Front,
-				isset( $this->args )
-			);
+		return umemo(
+			__METHOD__,
+			null,
+			isset( $this->args ),
+		)
+		?? umemo(
+			__METHOD__,
+			isset( $this->args ) ? new Args : new Front,
+			isset( $this->args ),
+		);
 	}
 
 	/**

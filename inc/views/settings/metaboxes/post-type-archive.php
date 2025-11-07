@@ -270,8 +270,15 @@ switch ( $instance ) :
 		</p>
 		<?php
 		// Output these unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
-		Form::output_pixel_counter_wrap( Input::get_field_id( $args['options']['description'] ), 'description', (bool) Data\Plugin::get_option( 'display_pixel_counter' ) );
+		Form::output_character_counter_wrap(
+			Input::get_field_id( $args['options']['description'] ),
+			(bool) Data\Plugin::get_option( 'display_character_counter' ),
+		);
+		Form::output_pixel_counter_wrap(
+			Input::get_field_id( $args['options']['description'] ),
+			'description',
+			(bool) Data\Plugin::get_option( 'display_pixel_counter' ),
+		);
 		?>
 		<p>
 			<textarea name="<?php Input::field_name( $args['options']['description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['description'] ); ?>" rows=3 cols=70><?= \esc_attr( Data\Plugin\PTA::get_meta_item( 'description', $args['post_type'] ) ) ?></textarea>
@@ -324,7 +331,10 @@ switch ( $instance ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['og_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap(
+			Input::get_field_id( $args['options']['og_title'] ),
+			(bool) Data\Plugin::get_option( 'display_character_counter' ),
+		);
 		?>
 		<p>
 			<input type=text name="<?php Input::field_name( $args['options']['og_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'og_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogTitle>
@@ -337,7 +347,10 @@ switch ( $instance ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['og_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap(
+			Input::get_field_id( $args['options']['og_description'] ),
+			(bool) Data\Plugin::get_option( 'display_character_counter' ),
+		);
 		?>
 		<p>
 			<textarea name="<?php Input::field_name( $args['options']['og_description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['og_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=ogDesc><?= \esc_attr( Data\Plugin\PTA::get_meta_item( 'og_description', $args['post_type'] ) ) ?></textarea>
@@ -352,7 +365,10 @@ switch ( $instance ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['tw_title'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap(
+			Input::get_field_id( $args['options']['tw_title'] ),
+			(bool) Data\Plugin::get_option( 'display_character_counter' ),
+		);
 		?>
 		<p>
 			<input type=text name="<?php Input::field_name( $args['options']['tw_title'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_title'] ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin\PTA::get_meta_item( 'tw_title', $args['post_type'] ) ) ) ?>" autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twTitle>
@@ -365,7 +381,10 @@ switch ( $instance ) :
 		</p>
 		<?php
 		// Output this unconditionally, with inline CSS attached to allow reacting on settings.
-		Form::output_character_counter_wrap( Input::get_field_id( $args['options']['tw_description'] ), (bool) Data\Plugin::get_option( 'display_character_counter' ) );
+		Form::output_character_counter_wrap(
+			Input::get_field_id( $args['options']['tw_description'] ),
+			(bool) Data\Plugin::get_option( 'display_character_counter' ),
+		);
 		?>
 		<p>
 			<textarea name="<?php Input::field_name( $args['options']['tw_description'] ); ?>" class=large-text id="<?php Input::field_id( $args['options']['tw_description'] ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=<?= \esc_attr( "pta_social_settings_{$args['post_type']}" ) ?> data-tsf-social-type=twDesc><?= \esc_attr( Data\Plugin\PTA::get_meta_item( 'tw_description', $args['post_type'] ) ) ?></textarea>

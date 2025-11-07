@@ -104,7 +104,7 @@ final class Author extends Reference {
 
 		if ( empty( $author_id ) ) return null;
 
-		$user_data = \get_userdata( $author_id );
+		$user_data = Data\User::get_userdata( $author_id );
 		$user_meta = Data\Plugin\User::get_meta( $author_id );
 
 		$entity = [

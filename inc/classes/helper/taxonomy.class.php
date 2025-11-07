@@ -167,7 +167,7 @@ class Taxonomy {
 							array_values( \get_taxonomies( [
 								'public'   => true,
 								'_builtin' => false,
-							] ) )
+							] ) ),
 						) ),
 						'is_taxonomy_viewable',
 					)
