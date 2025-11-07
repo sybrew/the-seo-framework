@@ -48,9 +48,9 @@ use The_SEO_Framework\{
  */
 final class Args extends Factory {
 
-	// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
-	// phpcs:disable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
-	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
+	// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
+	// phpcs:disable PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
+	// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
 	/**
 	 * Generates robots assertions for no[index|archive|follow].
 	 *
@@ -147,7 +147,7 @@ final class Args extends Factory {
 	}
 	// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
 	// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
-	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact
+	// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 
 	/**
 	 * Generates robots assertions for noindex in passes.

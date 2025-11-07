@@ -46,9 +46,9 @@ use The_SEO_Framework\Helper\{
  */
 final class Front extends Factory {
 
-	// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
-	// phpcs:disable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
-	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
+	// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
+	// phpcs:disable PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
+	// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
 	/**
 	 * Generates robots assertions for no[index|archive|follow].
 	 *

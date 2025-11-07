@@ -61,7 +61,7 @@ function _bbpress_filter_title( $title, $args ) {
 		|| ! \is_bbpress()
 	) return $title;
 
-	// phpcs:disable, WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.TextDomainMismatch -- Not my code.
+	// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.TextDomainMismatch -- Not my code.
 	$new_title = [];
 
 	if ( \bbp_is_forum_archive() ) {

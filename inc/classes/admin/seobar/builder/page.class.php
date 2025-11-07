@@ -67,7 +67,7 @@ final class Page extends Main {
 	 * @abstract
 	 */
 	protected function prime_cache() {
-		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
+		// phpcs:disable PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 		static::get_cache( 'general/i18n/textsizeguidelines' )
 			or static::set_cache(
 				'general/i18n/textsizeguidelines',

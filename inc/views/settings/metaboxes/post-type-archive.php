@@ -19,7 +19,7 @@ use The_SEO_Framework\{
 	Helper\Post_Type,
 };
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -403,7 +403,7 @@ switch ( $instance ) :
 		</p>
 		<p>
 			<?php
-			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+			// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 			echo Form::make_single_select_form( [
 				'id'       => Input::get_field_id( $args['options']['tw_card_type'] ),
 				'class'    => 'tsf-select-block',
@@ -441,7 +441,7 @@ switch ( $instance ) :
 		</p>
 		<p class=hide-if-no-tsf-js>
 			<?php
-			// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
+			// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 			echo Form::get_image_uploader_form( [ 'id' => "tsf_pta_socialimage_{$args['post_type']}" ] );
 			// phpcs:enable, WordPress.Security.EscapeOutput
 			?>
@@ -544,7 +544,7 @@ switch ( $instance ) :
 				),
 				true,
 			);
-			// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+			// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 			echo Form::make_single_select_form( [
 				'id'       => Input::get_field_id( $args['options'][ $_r_type ] ),
 				'class'    => 'tsf-select-block',

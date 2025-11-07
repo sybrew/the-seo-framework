@@ -13,7 +13,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 	Input,
 };
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 ?>
 <script type=text/html id=tmpl-tsf-disabled-post-type-help>

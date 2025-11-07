@@ -134,7 +134,7 @@ class Setup {
 
 		$titleloc = \is_rtl() ? 'left' : 'right';
 
-		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- precision alignment OK.
+		// phpcs:disable WordPress.Arrays.MultipleStatementAlignment -- precision alignment OK.
 		/**
 		 * @since 2.2.7
 		 * @param array $options The default site options.

@@ -67,7 +67,7 @@ class Post {
 	 * @param int $post_id The post ID.
 	 */
 	public static function update_meta( $post_id ) {
-		// phpcs:disable, WordPress.Security.NonceVerification
+		// phpcs:disable WordPress.Security.NonceVerification
 
 		if ( ! empty( $_POST['autodescription-quick'] ) ) {
 			static::update_via_quick_edit( $post_id );

@@ -83,7 +83,7 @@ class Utils {
 				true,
 			) ) exit;
 
-			// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
+			// phpcs:disable WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
 			printf(
 				'<p><strong>%s</strong></p>',
 				Markdown::convert(

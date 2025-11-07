@@ -68,7 +68,7 @@ class Guidelines {
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $locale ) ) return $memo;
 
-		// phpcs:disable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+		// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 		$character_adjustments = [
 			'as'    => 148 / 160, // Assamese (অসমীয়া)
 			'de_AT' => 158 / 160, // Austrian German (Österreichisch Deutsch)
@@ -100,7 +100,7 @@ class Guidelines {
 		// Default to 1 (910/910 = no adjustment).
 		$p_adjust = $pixel_adjustments[ $locale ] ?? 1;
 
-		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
+		// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		/**
 		 * @since 3.1.0
 		 * @since 4.2.7 Added two more parameters (`$c_adjust` and `$locale`)

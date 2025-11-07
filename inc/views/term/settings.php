@@ -15,7 +15,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 };
 use The_SEO_Framework\Data\Filter\Sanitize;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -319,7 +319,7 @@ Input::output_js_social_data(
 			</th>
 			<td>
 				<?php
-				// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+				// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 				echo Form::make_single_select_form( [
 					'id'       => 'autodescription-meta[tw_card_type]',
 					'class'    => 'tsf-term-select-wrap',
@@ -353,7 +353,7 @@ Input::output_js_social_data(
 				<input type=hidden name="autodescription-meta[social_image_id]" id=autodescription_meta_socialimage-id value="<?= \absint( $meta['social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js>
 				<div class="hide-if-no-tsf-js tsf-term-button-wrap">
 					<?php
-					// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
+					// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_meta_socialimage' ] );
 					// phpcs:enable, WordPress.Security.EscapeOutput
 					?>
@@ -431,7 +431,7 @@ Input::output_js_social_data(
 			<td>
 				<?php
 				foreach ( $robots_settings as $_s ) {
-					// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+					// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 					echo Form::make_single_select_form( [
 						'id'       => $_s['id'],
 						'class'    => 'tsf-term-select-wrap',

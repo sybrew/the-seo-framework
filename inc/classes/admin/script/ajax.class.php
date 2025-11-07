@@ -98,7 +98,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		/**
@@ -150,7 +150,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer does this.
 		Utils::check_ajax_capability_referer( 'upload_files' );
 
 		if ( ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
@@ -269,7 +269,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		$post_id = \absint( $_POST['post_id'] ?? 0 );
 
 		Utils::check_ajax_capability_referer( 'edit_post', $post_id );
@@ -368,7 +368,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['term_id'], $_POST['taxonomy'] ) )
@@ -411,7 +411,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['post_id'] ) )
@@ -461,7 +461,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['author_id'] ) )
