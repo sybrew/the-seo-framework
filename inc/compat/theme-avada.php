@@ -25,20 +25,30 @@ namespace The_SEO_Framework;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+\add_filter( 'avada_setting_get_status_opengraph', __NAMESPACE__ . '\\_avada_disable_switch_option' );
+\add_filter( 'avada_setting_get_disable_rich_snippet_title', __NAMESPACE__ . '\\_avada_disable_switch_option' );
+\add_filter( 'avada_setting_get_disable_rich_snippet_author', __NAMESPACE__ . '\\_avada_disable_switch_option' );
+\add_filter( 'avada_setting_get_disable_rich_snippet_date', __NAMESPACE__ . '\\_avada_disable_switch_option' );
 \add_filter( 'avada_options_sections', __NAMESPACE__ . '\\_avada_remove_settings_sections', 10, 1 );
 \add_filter( 'fusion_pagetype_data', __NAMESPACE__ . '\\_avada_unset_meta_box_seo_tab', 10, 2 );
 
 /**
- * Disables conflicting Avada SEO settings when TSF is active.
+ * Disables conflicting Avada SEO settings.
  *
+ * In Avada, disable '1' means enable, disable '0' means disable. Fun!
+ *
+ * @hook avada_setting_get_status_opengraph 10
+ * @hook avada_setting_get_disable_rich_snippet_title 10
+ * @hook avada_setting_get_disable_rich_snippet_author 10
+ * @hook avada_setting_get_disable_rich_snippet_date 10
  * @since 5.1.3
+ * @access private
+ *
+ * @return string '0' to disable the option.
  */
-\add_filter( 'avada_setting_get_status_opengraph', '__return_false' );
-\add_filter( 'avada_setting_get_disable_date_rich_snippet_pages', '__return_false' );
-\add_filter( 'avada_setting_get_disable_rich_snippet_title', '__return_false' );
-\add_filter( 'avada_setting_get_disable_rich_snippet_author', '__return_false' );
-\add_filter( 'avada_setting_get_disable_rich_snippet_date', '__return_false' );
-\add_filter( 'avada_setting_get_disable_rich_snippet_faq', '__return_false' );
+function _avada_disable_switch_option() {
+	return '0';
+}
 
 /**
  * Removes Avada's SEO-related settings from the Advanced section.
@@ -60,11 +70,9 @@ function _avada_remove_settings_sections( $sections ) {
 		unset(
 			$advanced_features['status_opengraph'],
 			$advanced_features['meta_tags_separator'],
-			$advanced_features['disable_date_rich_snippet_pages'],
 			$advanced_features['disable_rich_snippet_title'],
 			$advanced_features['disable_rich_snippet_author'],
 			$advanced_features['disable_rich_snippet_date'],
-			$advanced_features['disable_rich_snippet_faq'],
 		);
 	}
 

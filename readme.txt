@@ -304,7 +304,12 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 
 * **Compatibility:**
 	* **Theme: Adava:**
-    	* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
+		* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
+			1. We now hide Avada SEO settings from their post edit meta box.
+			2. We now hide most Avada's SEO settings from their theme options.
+				- Except for "Rich Snippets FAQ" (used by their fusion_faq shortcode), for which "Rich Snippets" should also be allowed.
+			3. We now disable all hidden Avada SEO settings on the front-end to prevent conflicts.
+				- This includes Open Graph and structured data for Title, Author, and Date output.
 	* **Plugin: Elementor:**
 		* We now again output The SEO Framework's metadata on Elementor's "Landing Pages" post type (`e-landing-page`) and "Templates" `elementor_library`.
 		* With that, we now force the "noindex" directive on these post types.
