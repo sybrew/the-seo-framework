@@ -169,7 +169,7 @@ class Post {
 			|| ! \wp_verify_nonce( $_POST[ static::$nonce_name ], static::$nonce_action )
 		) return;
 
-		// Perform nonce check and save fields.
+		// Trim, sanitize, and save the metadata.
 		Data\Plugin\Post::save_meta(
 			$post_id,
 			(array) \wp_unslash( $_POST['autodescription'] ),

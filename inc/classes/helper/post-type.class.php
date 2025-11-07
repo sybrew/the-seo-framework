@@ -122,9 +122,11 @@ class Post_Type {
 		 */
 		return (bool) \apply_filters(
 			'the_seo_framework_supported_post_type_archive',
-			$post_type
+			(
+				   $post_type
 				&& static::is_supported( $post_type )
-				&& \in_array( $post_type, static::get_public_pta(), true ),
+				&& \in_array( $post_type, static::get_public_pta(), true )
+			),
 			$post_type,
 		);
 	}

@@ -6,10 +6,12 @@
  * Version: 5.1.3-dev-14
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
+ * Troy: https://repo.theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
  * Requires at least: 6.0
+ * Tested up to: 6.9
  * Requires PHP: 7.4.0
  *
  * @package   The_SEO_Framework\Bootstrap
@@ -45,7 +47,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 2.3.5
  */
-define( 'THE_SEO_FRAMEWORK_VERSION', '5.1.2' );
+define( 'THE_SEO_FRAMEWORK_VERSION', '5.1.3' );
 
 /**
  * The plugin Database version.
