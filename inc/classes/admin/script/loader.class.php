@@ -621,24 +621,28 @@ class Loader {
 						],
 						'warning' => [
 							'warnedTypes'    => [
-								// This is only a short list of increasingly common types.
-								'webp' => 'image/webp',
-								'heic' => 'image/heic',
+								'social' => [
+									// This is only a short list of increasingly common types.
+									'webp' => 'image/webp',
+									'heic' => 'image/heic',
+								],
 							],
 							'forbiddenTypes' => [
-								// See The_SEO_Framework\Data\Filter\Sanitize::image_details().
-								'apng' => 'image/apng',
-								'bmp'  => 'image/bmp',
-								'ico'  => 'image/x-icon',
-								'cur'  => 'image/x-icon',
-								'svg'  => 'image/svg+xml',
-								'tif'  => 'image/tiff',
-								'tiff' => 'image/tiff',
+								'all' => [
+									// See The_SEO_Framework\Data\Filter\Sanitize::image_details().
+									'apng' => 'image/apng',
+									'bmp'  => 'image/bmp',
+									'ico'  => 'image/x-icon',
+									'cur'  => 'image/x-icon',
+									'svg'  => 'image/svg+xml',
+									'tif'  => 'image/tiff',
+									'tiff' => 'image/tiff',
+								],
 							],
 							'i18n'           => [
 								'notLoaded'    => \esc_attr__( 'The image file could not be loaded.', 'autodescription' ),
 								/* translators: %s is the file extension. */
-								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, preventing your image from being displayed.', 'autodescription' ),
+								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, which could prevent this image from being displayed.', 'autodescription' ),
 								/* translators: %s is the file extension. */
 								'extForbidden' => \esc_attr__( 'The file extension "%s" is not supported. Choose a different file.', 'autodescription' ),
 							],

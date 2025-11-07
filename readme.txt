@@ -295,6 +295,7 @@ TODO disable and hide Hello Elementor's SEO settings
 TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
 
 TODO we should namespace all compatibility files, e.g.: The_SEO_Framework\Compat\Plugin\Elementor::_function_name()
+TODO remove tsf() from xsl filters. We should've done this with 5.1.0.
 
 For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
 
@@ -318,9 +319,10 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 			* This means that The SEO Framework will also hide its interface and force the "noindex" directive on this post type.
 		* **Note:** We considered adding a dynamic "headless" mode for Elementor's dumb post types, so that TSF's custom post meta fields could be ignored from these, but this adds needless complexity for a corner case that should never have existed in the first place.
 * **Fixed:**
-	* Abbreviations at the start of sentences are now properly considered by the description generator.
-	* When a parent post is deleted and not correctly purged from the child post's `post_parent` field, the breadcrumb generator now skips the broken ancestor. We could not reproduce an issue with this because WordPress simply derps out and sends a 404 response for such broken posts. So, this is only a theoretical fix; we did our part.
-	* When a breadcrumb has a term as an ancestor, and that term is deleted, the breadcrumb generator now skips the broken ancestor instead of adding an "Archives" link that points to the current post.
+	* Resolved an issue where abbreviations at the start of sentences weren't considered by the description generator.
+	* Resolved an issue where the breadcrumb generator would include a broken ancestor if a parent post is deleted without purging the child post's `post_parent` field. Now skips the broken ancestor (theoretical fix; WordPress returns 404 for such posts anyway).
+	* Resolved an issue where the breadcrumb generator would add an "Archives" link pointing to the current post if a term ancestor is deleted. Now skips the broken ancestor.
+  * Resolved an issue where image type warnings that were meant for social sharing were also shown for other contexts, such as logos and structured data.
 * **Removed:**
 	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
@@ -347,6 +349,11 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 * **JS API notes:**
 	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
 		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
+	* `tsfMediaL10n.warning.warnedTypes` and `tsfMediaL10n.warning.forbiddenTypes` are now context-aware objects instead of flat arrays.
+		* `warnedTypes` now has a `social` property containing image types that trigger warnings for social images (e.g., webp, heic).
+		* `forbiddenTypes` now has an `all` property containing universally forbidden image types (e.g., apng, bmp, svg).
+		* This is a semi-breaking change for the JS API. We highly doubt anyone used these properties externally, as they were introduced in v5.1.0.
+		* The image warning system now checks for context-specific warnings first, then falls back to universal warnings, making it more extensible for future image contexts.
 * **Filter notes:**
 	* **Fixed:**
 		* For `the_seo_framework_extract_content_strip_args`, when adjusting the `space` or `clear` indexes in such a manner that empty void, clear, or space queries are created, the resulting Context-Sensitive tag stripper (`The_SEO_Framework\Helper\Format\strip_tags_cs()`) now correctly ignores those empty queries instead of halting the context-sensitive stripping process.
