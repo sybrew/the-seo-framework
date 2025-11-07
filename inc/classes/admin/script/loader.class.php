@@ -642,7 +642,7 @@ class Loader {
 							'i18n'           => [
 								'notLoaded'    => \esc_attr__( 'The image file could not be loaded.', 'autodescription' ),
 								/* translators: %s is the file extension. */
-								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, preventing your image from being displayed.', 'autodescription' ),
+								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, which could prevent this image from being displayed.', 'autodescription' ),
 								/* translators: %s is the file extension. */
 								'extForbidden' => \esc_attr__( 'The file extension "%s" is not supported. Choose a different file.', 'autodescription' ),
 							],

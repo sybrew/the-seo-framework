@@ -295,6 +295,7 @@ TODO disable and hide Hello Elementor's SEO settings
 TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
 
 TODO we should namespace all compatibility files, e.g.: The_SEO_Framework\Compat\Plugin\Elementor::_function_name()
+TODO remove tsf() from xsl filters. We should've done this with 5.1.0.
 
 For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
 
