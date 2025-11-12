@@ -42,6 +42,7 @@ final class Query {
 	/**
 	 * Alters search results after database query.
 	 *
+	 * @hook the_posts 10
 	 * @since 2.9.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `alter_search_query_post`.
@@ -71,6 +72,7 @@ final class Query {
 	/**
 	 * Alters archive query.
 	 *
+	 * @hook pre_get_posts 9999
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
@@ -107,6 +109,7 @@ final class Query {
 	/**
 	 * Alters archive results after database query.
 	 *
+	 * @hook the_posts 10
 	 * @since 2.9.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_archive_query_post`.
@@ -136,6 +139,7 @@ final class Query {
 	/**
 	 * Alters search query.
 	 *
+	 * @hook pre_get_posts 9999
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.

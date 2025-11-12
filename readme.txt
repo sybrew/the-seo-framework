@@ -267,6 +267,10 @@ TODO add sort by SEO Bar to list views?
 	-> This would mean we render ALL seo bar items in the list view for all pages, which is not ideal. But, we can store this as post meta as the SEO bar is shown (and the meta is missing).
 		-> i.e., slow lazy update
 
+TODO now we're working more with branches, we should add a script on GitHub that minifies JS/CSS files on commit.
+	-> Our minifier is bespoke. IDK if we can carry that over to GitHub Actions easily.
+TODO Reminify all JS/CSS files to ensure we haven't merged an older branches' code.
+
 ### 5.1.3
 
 **For developers:**

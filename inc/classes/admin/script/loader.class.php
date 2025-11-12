@@ -739,6 +739,8 @@ class Loader {
 	public static function get_canonical_scripts() {
 		global $wp_rewrite;
 
+		$parsed_home_url = Meta\URI\Utils::get_parsed_front_page_url();
+
 		return [
 			[
 				'id'       => 'tsf-canonical',
@@ -753,13 +755,19 @@ class Loader {
 					'data' => [
 						'params' => [
 							'usingPermalinks' => $wp_rewrite->using_permalinks(),
-							'rootUrl'         => \trailingslashit( \The_SEO_Framework\Meta\URI\Utils::set_preferred_url_scheme( \The_SEO_Framework\Meta\URI\Utils::get_site_host() ) ),
+							'rootUrl'         => [
+								// We require separate parts for sanitized URL building.
+								'scheme' => $parsed_home_url['scheme'] ?? 'http', // placeholder for completeness; we use preferredScheme.
+								'host'   => $parsed_home_url['host'] ?? '',
+								'port'   => $parsed_home_url['port'] ?? '',
+								'path'   => $parsed_home_url['path'] ?? '/',
+							],
 							'rewrite'         => [
 								'code'         => $wp_rewrite->rewritecode,
 								'replace'      => $wp_rewrite->rewritereplace,
 								'queryReplace' => $wp_rewrite->queryreplace,
 							],
-							// TEMP: We still have to figure out how to get the right parameters. home_url() is probably key in this.
+							// TEMP: We still have to figure out how to get the right parameters.
 							'allowCanonicalURLNotationTool' => ! Compatibility::get_active_conflicting_plugin_types()['multilingual'],
 						],
 					],

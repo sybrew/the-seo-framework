@@ -461,7 +461,7 @@ class Registry {
 		return \apply_filters(
 			'the_seo_framework_sitemap_base_path',
 			rtrim(
-				Meta\URI\Utils::get_parsed_front_page_url()['path'] ?? '',
+				Meta\URI\Utils::get_site_path(),
 				'/',
 			),
 		);
