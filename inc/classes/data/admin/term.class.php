@@ -59,7 +59,7 @@ class Term {
 	 * @param string $taxonomy Taxonomy slug.
 	 */
 	public static function update_meta( $term_id, $tt_id, $taxonomy ) {
-		// phpcs:disable, WordPress.Security.NonceVerification -- deferred.
+		// phpcs:disable WordPress.Security.NonceVerification -- deferred.
 		if ( ! empty( $_POST['autodescription-quick'] ) ) {
 			static::update_via_quick_edit( $term_id, $taxonomy );
 		} elseif ( ! empty( $_POST['autodescription-meta'] ) ) {

@@ -21,7 +21,7 @@ use The_SEO_Framework\Helper\{
 	Template,
 };
 
-// phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
+// phpcs:disable WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
 
 /**
  * The SEO Framework plugin
@@ -398,7 +398,7 @@ final class Debug {
 		// Start timer.
 		$_t = hrtime( true );
 
-		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		$page_id                        = Query::get_the_real_id();
 		$is_query_exploited             = Query\Utils::is_query_exploited();
 		$query_supports_seo             = Query\Utils::query_supports_seo();

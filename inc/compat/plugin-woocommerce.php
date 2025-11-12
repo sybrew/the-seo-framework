@@ -371,9 +371,9 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
 			array_filter(
 				explode(
 					',',
-					\get_post_meta( $post_id, '_product_image_gallery', true )
-				)
-			)
+					\get_post_meta( $post_id, '_product_image_gallery', true ),
+				),
+			),
 		);
 	}
 

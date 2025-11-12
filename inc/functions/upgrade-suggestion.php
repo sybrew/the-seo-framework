@@ -13,7 +13,7 @@ use The_SEO_Framework\{
 	Helper\Format\Markdown,
 };
 
-// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 
 /**
  * The SEO Framework plugin

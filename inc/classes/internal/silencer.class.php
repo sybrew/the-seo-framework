@@ -8,7 +8,7 @@ namespace The_SEO_Framework\Internal;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-// phpcs:disable, Generic.CodeAnalysis.UnusedFunctionParameter -- That's the whole premise of this file.
+// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter -- That's the whole premise of this file.
 
 /**
  * The SEO Framework plugin

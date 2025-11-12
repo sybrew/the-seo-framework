@@ -116,7 +116,7 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 
 	if ( $interpreter::$query['tax'] ) return;
 
-	$meta_enabled  = _wpforo_seo_meta_enabled();   // phpcs:ignore TSF.Performance.Opcodes -- is local.
+	$meta_enabled  = _wpforo_seo_meta_enabled();  // phpcs:ignore TSF.Performance.Opcodes -- is local.
 	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore TSF.Performance.Opcodes -- is local.
 
 	if ( ! $meta_enabled && ! $title_enabled ) return;
@@ -167,7 +167,7 @@ function _wpforo_seo_meta_enabled() {
 	return memo() ?? memo(
 		// Unreliable in WPForo 2.0.0~2.1.6 (latest version at time of recording). Therefore, assume "true" if null.
 		// See https://wordpress.org/support/topic/wpforo_setting-seo-doesnt-work/.
-		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_meta' ) ?? true )
+		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_meta' ) ?? true ),
 	);
 }
 
@@ -183,6 +183,6 @@ function _wpforo_seo_title_enabled() {
 	return memo() ?? memo(
 		// Unreliable in WPForo 2.0.0~2.1.6 (latest version at time of recording). Therefore, assume "true" if null.
 		// See https://wordpress.org/support/topic/wpforo_setting-seo-doesnt-work/.
-		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_title' ) ?? true )
+		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_title' ) ?? true ),
 	);
 }

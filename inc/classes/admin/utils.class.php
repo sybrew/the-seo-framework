@@ -80,10 +80,10 @@ class Utils {
 			if ( \in_array(
 				'Location: ' . \wp_sanitize_redirect( $target ),
 				headers_list(),
-				true
+				true,
 			) ) exit;
 
-			// phpcs:disable, WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
+			// phpcs:disable WordPress.Security.EscapeOutput -- convert_markdown escapes. Added esc_url() for sanity.
 			printf(
 				'<p><strong>%s</strong></p>',
 				Markdown::convert(

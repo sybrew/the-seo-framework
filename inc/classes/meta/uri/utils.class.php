@@ -9,10 +9,10 @@ namespace The_SEO_Framework\Meta\URI;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function The_SEO_Framework\{
-	memo,
-	umemo,
 	get_query_type_from_args,
+	memo,
 	normalize_generation_args,
+	umemo,
 };
 
 use The_SEO_Framework\{

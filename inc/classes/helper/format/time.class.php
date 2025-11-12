@@ -77,7 +77,7 @@ class Time {
 			?? umemo(
 				__METHOD__,
 				static::get_format(
-					(bool) Data\Plugin::get_option( 'timestamps_format' )
+					(bool) Data\Plugin::get_option( 'timestamps_format' ),
 				),
 			);
 	}

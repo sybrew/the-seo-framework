@@ -7,7 +7,7 @@ namespace The_SEO_Framework\Bootstrap;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-// phpcs:disable, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- Too many scoped funcs. Test me once in a while.
+// phpcs:disable TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- Too many scoped funcs. Test me once in a while.
 
 use The_SEO_Framework\{
 	Admin,
@@ -204,7 +204,7 @@ function _upgrade( $previous_version ) {
 
 	$current_version = $previous_version;
 
-	// phpcs:disable, WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine -- readability.
+	// phpcs:disable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine -- readability.
 	// NOTE: From update 3103 henceforth, the upgrade procedures should be backward compatible.
 	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
 	// We must manually delete settings that are no longer used; we merge them otherwise.
@@ -944,7 +944,6 @@ function _do_upgrade_5001() {
  * @since 5.0.5
  */
 function _do_upgrade_5050() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5050' ) {
 		Data\Plugin::update_option(
 			'sitemap_cron_prerender',
@@ -959,7 +958,6 @@ function _do_upgrade_5050() {
  * @since 5.1.0
  */
 function _do_upgrade_5100() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5100' ) {
 		Data\Plugin::update_option( 'robotstxt_block_ai', 0 );
 		Data\Plugin::update_option( 'robotstxt_block_seo', 0 );

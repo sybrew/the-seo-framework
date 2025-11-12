@@ -105,7 +105,7 @@ namespace {
 		$atts = shortcode_atts(
 			[
 				'sep'   => '\203A',
-				'home'  => __( 'Home', 'default' ), /* defined in wp_page_menu() */
+				'home'  => __( 'Home', 'default' ), // defined in wp_page_menu()
 				'class' => 'tsf-breadcrumb',
 			],
 			$atts,
@@ -166,7 +166,7 @@ namespace {
 					'list-style:none',
 					'margin-inline-start:0',
 				],
-				"nav.$class ol li"                         => [ // We could combine it the above; but this is easier for other devs.
+				"nav.$class ol li"                         => [ // We could combine with above; but this is easier for other devs.
 					'display:inline',
 				],
 				"nav.$class ol li:not(:last-child)::after" => [
@@ -239,7 +239,7 @@ namespace The_SEO_Framework {
 				\is_array( \THE_SEO_FRAMEWORK_HEADLESS )
 					and $is_headless = array_map(
 						'wp_validate_boolean',
-						array_merge( $is_headless, \THE_SEO_FRAMEWORK_HEADLESS )
+						array_merge( $is_headless, \THE_SEO_FRAMEWORK_HEADLESS ),
 					);
 			} else {
 				$is_headless = [

@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 use const The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin

@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4.0
 Stable tag: 5.1.2
 License: GPLv3
@@ -243,7 +243,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO Add a parent to a page/product, then delete that parent from WordPress (or database, so WordPress cannot rectify) -- then, see if we can get an "Untitled" page/product in the breadcrumb like that.
 TODO this messes up the breadcrumbs of TSF: https://woocommerce.com/products/brands/.
 TODO set_time_limit() appears to be blocked by many hosts. This might prevent them from using TSF at all?
 TODO move user settings to personal_options?
@@ -272,24 +271,105 @@ TODO now we're working more with branches, we should add a script on GitHub that
 TODO Reminify all JS/CSS files to ensure we haven't merged an older branches' code.
 
 ### 5.1.3
+TODO don't escape '\\_', just write '\_'.
+TODO add `@access private` to compat funcs (or files...)
+TODO create memo function that's switch_to_blog()-safe.
+	-> We could do this by simply using the current blog ID as a cache key modifier
+TODO when saving a root URL as a canonical or redirect URL, we should append a trailing slash (slash_front_page_url is not the right function for this, for it uses user_trailingslashit).
+TODO the og:title is not correct on the homepage under certain conditions?
+	-> It shows the correct version when editing the homepage (as a page), but not when viewing the homepage.
 
-**For developers:**
+TODO make pixel and character counters grey (#8c8f94) when when empty. This will then fully align with the SEO Bar status colors.
+	-> Explain update to the KB article.
+TODO make pixel counter warning more description (not just "might get truncated in search", but "might get truncated or ignored in search").
 
+TODO make description meta settings more explanatory: "The meta description suggests text to be used under the title on search engine results pages."
+	-> Add: "The suggested descritpion can be ignored by search engines if they find it unsuitable." "The description does not contribute to ranking, but a good description does help improve click-through rates."
+	-> "Focus can help you generate a better description that's less likely to be ignored" -> Only show that if no page builder is present?
+
+TODO make the description and title placeholder editable.
+
+TODO Breadcrumbs are now in Gutenberg: https://github.com/WordPress/gutenberg/pull/71793.
+	-> Should we add this to our documentation?
+
+TODO remove placeholders in Webmaster settings? These go against our accessibility guidelines.
+TODO disable and hide Hello Elementor's SEO settings
+	-> hello_elementor_add_description_meta_tag
+
+TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
+
+TODO we should namespace all compatibility files, e.g.: The_SEO_Framework\Compat\Plugin\Elementor::_function_name()
+TODO remove tsf() from xsl filters. We should've done this with 5.1.0.
+
+For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
+
+TODO before launch:
+	- Retest excerpts, images, open graph, titles, title conditions, twitter, bbPress user profiles in the admin area.
+		-> We now use get_query_type_from_args() instead of checking if ( $args[...]) directly.
+
+### 5.1.3
+
+**For everyone:**
+
+* **Compatibility:**
+	* **Theme: Adava:**
+		* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
+			1. We now hide Avada SEO settings from their post edit meta box.
+			2. We now hide most Avada's SEO settings from their theme options.
+				- Except for "Rich Snippets FAQ" (used by their fusion_faq shortcode), for which "Rich Snippets" should also be allowed.
+			3. We now disable all hidden Avada SEO settings on the front-end to prevent conflicts.
+				- This includes Open Graph and structured data for Title, Author, and Date output.
+	* **Plugin: Elementor:**
+		* We now again output The SEO Framework's metadata on Elementor's "Landing Pages" post type (`e-landing-page`) and "Templates" `elementor_library`.
+		* With that, we now force the "noindex" directive on these post types.
+			* This is something that they should've done a long time ago, and it's negatively impacting millions of websites' ranking, including yours -- unless you use TSF.
+		* We added Elementor's "Floating Buttons" post type (`e-floating-buttons`) to a bespoke "Elementor's dumb post type" list.
+			* This means that The SEO Framework will also hide its interface and force the "noindex" directive on this post type.
+		* **Note:** We considered adding a dynamic "headless" mode for Elementor's dumb post types, so that TSF's custom post meta fields could be ignored from these, but this adds needless complexity for a corner case that should never have existed in the first place.
 * **Fixed:**
-	* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
-* **Other:**
-	* We now properly capitalize the proper noun Boolean.
+	* Resolved an issue where abbreviations at the start of sentences weren't considered by the description generator.
+	* Resolved an issue where the breadcrumb generator would include a broken ancestor if a parent post is deleted without purging the child post's `post_parent` field. Now skips the broken ancestor (theoretical fix; WordPress returns 404 for such posts anyway).
+	* Resolved an issue where the breadcrumb generator would add an "Archives" link pointing to the current post if a term ancestor is deleted. Now skips the broken ancestor.
+  * Resolved an issue where image type warnings that were meant for social sharing were also shown for other contexts, such as logos and structured data.
+* **Removed:**
+	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
 **For translators:**
 
 * **Updated:**
-	* POT translation file.
+	* TODO POT translation file.
 	* Various sentences have been updated for clarity.
 
 **For developers:**
 
+* **PHP API notes:**
+	* **Changed:**
+		* `The_SEO_Framework\Data\Term::get_term_parents()` (`tsf()->data()->term()->get_term_parents()`) no longer uses memoization to cache results.
+			* This is now in line with `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`), which never used memoization.
+			* We probably added this because of this [unresolved caching issue](https://core.trac.wordpress.org/ticket/50568), but we never invoked the memoization anyway.
+	* **Fixed:**
+		* `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`) now filters out deleted posts (broken ancestors). Next to the user-facing breadcrumb issue, this resolves some PHP warnings that could occur when fetching deleted parent posts for canonical URL generation.
+		* `The_SEO_Framework\Helper\Format\HTML::strip_tags_cs()` (`tsf()->format()->html()->strip_tags_cs()`):
+			1. Added 'body' and 'style' to the phrase elements.
+			2. Added conditional "NO_JIT" modifier for huge inputs to prevent abortion due to suspected memory issues.
+			3. Improved regex pattern to ignore bitwise operators (<<) encountered in scripts. Also prevents recursive lookup loops when encountering these operators in elements.
+		* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+	* **Other:**
+		* We now use `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`) instead of the expensive `get_userdata()` directly to fetch user data. This improves output performance at the expense of a slight memory overhead.
+* **JS API notes:**
+	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
+		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
+	* `tsfMediaL10n.warning.warnedTypes` and `tsfMediaL10n.warning.forbiddenTypes` are now context-aware objects instead of flat arrays.
+		* `warnedTypes` now has a `social` property containing image types that trigger warnings for social images (e.g., webp, heic).
+		* `forbiddenTypes` now has an `all` property containing universally forbidden image types (e.g., apng, bmp, svg).
+		* This is a semi-breaking change for the JS API. We highly doubt anyone used these properties externally, as they were introduced in v5.1.0.
+		* The image warning system now checks for context-specific warnings first, then falls back to universal warnings, making it more extensible for future image contexts.
+* **Filter notes:**
+	* **Fixed:**
+		* For `the_seo_framework_extract_content_strip_args`, when adjusting the `space` or `clear` indexes in such a manner that empty void, clear, or space queries are created, the resulting Context-Sensitive tag stripper (`The_SEO_Framework\Helper\Format\strip_tags_cs()`) now correctly ignores those empty queries instead of halting the context-sensitive stripping process.
 * **Other:**
 	* We updated our coding standards, so the code is slightly altered.
+	* We now properly capitalize the proper noun Boolean.
 
 ### 5.1.2
 

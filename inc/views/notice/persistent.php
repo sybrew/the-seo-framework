@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Admin\Settings\Layout\HTML;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin

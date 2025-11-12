@@ -65,10 +65,10 @@ class Color {
 				// rgb[..] == rrggbb[..].
 				\strlen( $hex ) >= 6 ? $hex : "$hex[0]$hex[0]$hex[1]$hex[1]$hex[2]$hex[2]",
 				2,
-			)
+			),
 		);
 
-		$get_relative_luminance = static function ( $v ) {
+		$get_relative_luminance = function ( $v ) {
 			// Convert hex to 0~1 float.
 			$v /= 0xFF;
 

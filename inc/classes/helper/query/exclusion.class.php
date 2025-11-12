@@ -104,7 +104,7 @@ class Exclusion {
 		}
 
 		// Two separated equals queries are faster than a single IN with 'meta_key'.
-		// phpcs:disable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- We prepared our whole lives.
 		$cache = [
 			'archive' => $wpdb->get_results(
 				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_from_archive' $where",

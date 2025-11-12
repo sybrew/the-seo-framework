@@ -355,6 +355,7 @@ class Title {
 	 * Generates a title, based on expected query, without additions or prefixes.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.3 Now uses the memoized version of `get_userdata()`.
 	 *
 	 * @param array $args The query arguments. Required. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The generated title. Empty if query can't be replicated.
@@ -381,7 +382,7 @@ class Title {
 				$title = static::get_archive_title( \get_post_type_object( $args['pta'] ) );
 				break;
 			case 'user':
-				$title = static::get_archive_title( \get_userdata( $args['uid'] ) );
+				$title = static::get_archive_title( Data\User::get_userdata( $args['uid'] ) );
 		}
 
 		return $title ?? '';
@@ -695,13 +696,18 @@ class Title {
 	 * Fetches user title.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.3 Now uses the memoized version of `get_userdata()`.
 	 *
 	 * @param int $user_id The user ID.
 	 * @return string The generated post type archive title.
 	 */
 	public static function get_user_title( $user_id = 0 ) {
 		return Sanitize::metadata_content(
-			\get_userdata( $user_id ?: Query::get_the_real_id() )->display_name ?? ''
+			Data\User::get_userdata(
+				$user_id ?: Query::get_the_real_id(),
+				'display_name',
+			)
+			?? '',
 		);
 	}
 
@@ -786,7 +792,7 @@ class Title {
 			 */
 			(string) \apply_filters(
 				'the_seo_framework_404_title',
-				\__( 'Page not found', 'default' )
+				\__( 'Page not found', 'default' ),
 			)
 		);
 	}
@@ -864,8 +870,11 @@ class Title {
 		if ( $page >= 2 ) {
 			$sep = static::get_separator();
 
-			/* translators: %s: Page number. */
-			$paging = \sprintf( \__( 'Page %s', 'default' ), $page );
+			$paging = \sprintf(
+				/* translators: %s: Page number. */
+				\__( 'Page %s', 'default' ),
+				$page,
+			);
 
 			return \is_rtl() ? "$paging $sep $title" : "$title $sep $paging";
 		}
@@ -983,7 +992,7 @@ class Title {
 	public static function get_addition_for_front_page() {
 		return memo()
 			?? memo( Sanitize::metadata_content(
-				coalesce_strlen( Data\Plugin::get_option( 'homepage_title_tagline' ) )
+				   coalesce_strlen( Data\Plugin::get_option( 'homepage_title_tagline' ) )
 				?? Data\Blog::get_filtered_blog_description()
 			) );
 	}
@@ -1029,7 +1038,10 @@ class Title {
 		return memo() ?? memo(
 			(string) \apply_filters(
 				'the_seo_framework_title_separator',
-				Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ] ?? '&#x2d;',
+				(
+					   Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
+					?? '&#x2d;'
+				),
 			)
 		);
 	}

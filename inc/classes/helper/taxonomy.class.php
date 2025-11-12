@@ -112,9 +112,11 @@ class Taxonomy {
 		 */
 		return (bool) \apply_filters(
 			'the_seo_framework_supported_taxonomy',
-			$taxonomy
+			(
+				   $taxonomy
 				&& ! static::is_disabled( $taxonomy )
-				&& \in_array( $taxonomy, static::get_all_public(), true ),
+				&& \in_array( $taxonomy, static::get_all_public(), true )
+			),
 			$taxonomy,
 		);
 	}
@@ -165,7 +167,7 @@ class Taxonomy {
 							array_values( \get_taxonomies( [
 								'public'   => true,
 								'_builtin' => false,
-							] ) )
+							] ) ),
 						) ),
 						'is_taxonomy_viewable',
 					)

@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 ( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -48,7 +48,7 @@ if ( \The_SEO_Framework\Data\Plugin::get_option( 'sitemaps_modified' ) ) {
 	unset( $vars['lastmod'] );
 }
 
-// phpcs:disable, WordPress.Security.EscapeOutput, output is escaped.
+// phpcs:disable WordPress.Security.EscapeOutput, output is escaped.
 ?>
 <table>
 	<thead>

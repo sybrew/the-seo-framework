@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 ( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -58,7 +58,7 @@ if ( \count( $tabs ) > 1 ) {
 				if ( $label_name )
 					$label_name = \sprintf( '<span class="tsf-flex tsf-flex-nav-name">%s</span>', \esc_attr( $label_name ) );
 
-				// phpcs:disable, WordPress.Security.EscapeOutput.HeredocOutputNotEscaped -- All output below is escaped.
+				// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped -- All output below is escaped.
 				echo <<<HTML
 				<div class="tsf-flex tsf-flex-nav-tab tsf-flex $wrapper_active" id="$wrapper_id">
 					<input type=radio class="tsf-flex-nav-tab-radio tsf-input-not-saved" id="$input_id" name="$input_name" $input_checked>

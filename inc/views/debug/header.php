@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 ( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -45,7 +45,7 @@ $output = preg_replace( '/(&quot;.*?&quot;)(&nbps;|[\s:])/', '<span style=color:
 
 $title = \is_admin() ? 'Expected SEO Output' : 'Determined SEO Output';
 
-// phpcs:disable, WordPress.Security.EscapeOutput.HeredocOutputNotEscaped -- All output is escaped above.
+// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped -- All output is escaped above.
 echo <<<HTML
 <div style="font-family:unset;display:block;width:100%;background:#23282D;color:#ddd;border-bottom:1px solid #ccc">
 	<div style="display:inline-block;width:100%;padding:20px;margin:0 auto;border-bottom:1px solid #ccc;">
