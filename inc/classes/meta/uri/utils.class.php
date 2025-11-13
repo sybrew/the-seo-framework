@@ -62,13 +62,14 @@ class Utils {
 	 * @return string The detected URl scheme, lowercase.
 	 */
 	public static function detect_site_url_scheme() {
-		return strtolower( static::get_parsed_front_page_url()['scheme'] ?? (
-			Query::is_ssl() ? 'https' : 'http'
-		) );
+		return strtolower(
+			   static::get_parsed_front_page_url()['scheme']
+			?? ( Query::is_ssl() ? 'https' : 'http' ),
+		);
 	}
 
 	/**
-	 * Fetches home URL host. Like "wordpress.org".
+	 * Fetches home URL host. Like "theseoframework.com".
 	 * If this fails, you're going to have a bad time.
 	 *
 	 * @since 2.7.0
@@ -90,6 +91,20 @@ class Utils {
 			$host .= ":{$parsed_url['port']}";
 
 		return $host;
+	}
+
+	/**
+	 * Fetches home URL path. Like "/" or "/subdir/".
+	 *
+	 * The value should be equivalent to `$wp_rewrite->front`,
+	 * but then filtered via `get_home_url()`.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @return string The home URL path
+	 */
+	public static function get_site_path() {
+		return static::get_parsed_front_page_url()['path'] ?? '/';
 	}
 
 	/**
@@ -332,7 +347,7 @@ class Utils {
 			$path,
 			\trailingslashit(
 				$url ?: static::set_preferred_url_scheme( static::get_site_host() )
-			)
+			),
 		);
 	}
 
