@@ -76,4 +76,4 @@ printf(
 		)
 	)
 );
-// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
+// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

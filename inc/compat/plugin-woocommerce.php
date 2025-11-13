@@ -16,17 +16,17 @@ use The_SEO_Framework\{
 	Helper\Query,
 };
 
-\add_action( 'woocommerce_init', __NAMESPACE__ . '\\_init_wc_compat' );
-\add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\\_set_real_id_wc_shop' );
-\add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\\_set_shop_singular_archive', 10, 2 );
-\add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\\_set_wc_is_shop', 10, 2 );
-\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_wc_is_product', 10, 2 );
-\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_wc_is_product_admin' );
-\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_set_wc_noindex_defaults', 10, 3 );
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wc_noindex_defaults_seo_bar', 10, 2 );
-\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\\_adjust_wc_image_generation_params', 10, 2 );
-\add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\\_filter_public_wc_post_type_archives' );
-\add_filter( 'the_seo_framework_generated_archive_title_items', __NAMESPACE__ . '\\_filter_wc_shop_pta_title_items', 10, 2 );
+\add_action( 'woocommerce_init', __NAMESPACE__ . '\_init_wc_compat' );
+\add_filter( 'the_seo_framework_real_id', __NAMESPACE__ . '\_set_real_id_wc_shop' );
+\add_filter( 'the_seo_framework_is_singular_archive', __NAMESPACE__ . '\_set_shop_singular_archive', 10, 2 );
+\add_filter( 'the_seo_framework_is_shop', __NAMESPACE__ . '\_set_wc_is_shop', 10, 2 );
+\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\_set_wc_is_product', 10, 2 );
+\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\_set_wc_is_product_admin' );
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\_set_wc_noindex_defaults', 10, 3 );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\_assert_wc_noindex_defaults_seo_bar', 10, 2 );
+\add_filter( 'the_seo_framework_image_generation_params', __NAMESPACE__ . '\_adjust_wc_image_generation_params', 10, 2 );
+\add_filter( 'the_seo_framework_public_post_type_archives', __NAMESPACE__ . '\_filter_public_wc_post_type_archives' );
+\add_filter( 'the_seo_framework_generated_archive_title_items', __NAMESPACE__ . '\_filter_wc_shop_pta_title_items', 10, 2 );
 
 /**
  * Initializes (late) WooCommerce compatibility.
@@ -333,10 +333,10 @@ function _adjust_wc_image_generation_params( $params, $args ) {
 	}
 
 	if ( $is_product )
-		$params['cbs']['wc_gallery'] = __NAMESPACE__ . '\\_get_product_gallery_image_details';
+		$params['cbs']['wc_gallery'] = __NAMESPACE__ . '\_get_product_gallery_image_details';
 
 	if ( $is_product_category )
-		$params['cbs']['wc_thumbnail'] = __NAMESPACE__ . '\\_get_product_category_thumbnail_image_details';
+		$params['cbs']['wc_thumbnail'] = __NAMESPACE__ . '\_get_product_category_thumbnail_image_details';
 
 	return $params;
 }

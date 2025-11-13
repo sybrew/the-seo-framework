@@ -119,7 +119,7 @@ final class AJAX {
 		Data\Plugin\User::update_single_meta_item( Query::get_current_user_id(), 'counter_type', $value );
 
 		\wp_send_json_success();
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -252,7 +252,7 @@ final class AJAX {
 
 		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
 
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -349,7 +349,7 @@ final class AJAX {
 			'data'      => $data,
 			'processed' => $get,
 		] );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -390,7 +390,7 @@ final class AJAX {
 		}
 
 		\wp_send_json_success( $parent_term_slugs );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -443,7 +443,7 @@ final class AJAX {
 		}
 
 		\wp_send_json_success( $parent_post_slugs );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -479,6 +479,6 @@ final class AJAX {
 				'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
 			],
 		] );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 }

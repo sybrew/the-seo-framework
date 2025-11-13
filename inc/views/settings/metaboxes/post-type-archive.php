@@ -418,7 +418,7 @@ switch ( $instance ) :
 					'defaultI18n' => $_default_i18n,
 				],
 			] );
-			// phpcs:enable, WordPress.Security.EscapeOutput
+			// phpcs:enable WordPress.Security.EscapeOutput
 			?>
 		</p>
 
@@ -443,7 +443,7 @@ switch ( $instance ) :
 			<?php
 			// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 			echo Form::get_image_uploader_form( [ 'id' => "tsf_pta_socialimage_{$args['post_type']}" ] );
-			// phpcs:enable, WordPress.Security.EscapeOutput
+			// phpcs:enable WordPress.Security.EscapeOutput
 			?>
 		</p>
 		<?php
@@ -528,7 +528,7 @@ switch ( $instance ) :
 		$_default_unknown_i18n = \__( 'Default (unknown)', 'autodescription' );
 
 		foreach ( $robots_settings as $_r_type => $_rs ) {
-			// phpcs:enable, WordPress.Security.EscapeOutput
+			// phpcs:enable WordPress.Security.EscapeOutput
 			HTML::wrap_fields(
 				vsprintf(
 					'<p><label for="%1$s"><strong>%2$s</strong> %3$s</label></p>',

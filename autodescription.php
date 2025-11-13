@@ -140,4 +140,4 @@ require THE_SEO_FRAMEWORK_BOOTSTRAP_PATH . 'load.php';
 // 	add_action( 'admin_footer', function () { print( '<script>jQuery.migrateMute=true;</script>' ); } );
 // }
 // }},0);
-// phpcs:enable, Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode
+// phpcs:enable Squiz.Commenting.InlineComment, Squiz.PHP.CommentedOutCode

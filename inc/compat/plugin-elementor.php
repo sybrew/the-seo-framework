@@ -16,8 +16,8 @@ const ELEMENTOR_DUMB_POST_TYPES = [ // TODO remove "ELEMENTOR_" prefix when we n
 	'e-floating-buttons',
 ];
 
-\add_filter( 'the_seo_framework_public_post_types', __NAMESPACE__ . '\\_elementor_fix_dumb_post_types' );
-\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_elementor_force_noindex' );
+\add_filter( 'the_seo_framework_public_post_types', __NAMESPACE__ . '\_elementor_fix_dumb_post_types' );
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\_elementor_force_noindex' );
 
 /**
  * Does the job Elementor was sought to do by everyone back in 2016, by chiseling

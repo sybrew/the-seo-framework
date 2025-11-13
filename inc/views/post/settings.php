@@ -429,7 +429,7 @@ switch ( $instance ) :
 					),
 					'selected' => $meta['_tsf_twitter_card_type'],
 				] );
-				// phpcs:enable, WordPress.Security.EscapeOutput
+				// phpcs:enable WordPress.Security.EscapeOutput
 				?>
 			</div>
 		</div>
@@ -467,7 +467,7 @@ switch ( $instance ) :
 					<?php
 					// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_socialimage' ] );
-					// phpcs:enable, WordPress.Security.EscapeOutput
+					// phpcs:enable WordPress.Security.EscapeOutput
 					?>
 				</div>
 			</div>
@@ -685,7 +685,7 @@ switch ( $instance ) :
 									'defaultI18n'        => $_default_i18n,
 								],
 							] );
-							// phpcs:enable, WordPress.Security.EscapeOutput
+							// phpcs:enable WordPress.Security.EscapeOutput
 						?>
 						</div>
 					</div>

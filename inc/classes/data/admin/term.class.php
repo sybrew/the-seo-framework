@@ -65,7 +65,7 @@ class Term {
 		} elseif ( ! empty( $_POST['autodescription-meta'] ) ) {
 			static::update_via_term_edit( $term_id, $taxonomy );
 		}
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**

@@ -113,7 +113,7 @@ class Exclusion {
 				"SELECT post_id, meta_value FROM $wpdb->postmeta $join WHERE meta_key = 'exclude_local_search' $where",
 			),
 		];
-		// phpcs:enable, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		foreach ( [ 'archive', 'search' ] as $type ) {
 			array_walk(

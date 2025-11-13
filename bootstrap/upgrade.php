@@ -216,11 +216,11 @@ function _upgrade( $previous_version ) {
 		'4051', '4103', '4110', '4200', '4270',
 		'5001', '5050', '5100',
 	];
-	// phpcs:enable, WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
+	// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
 	foreach ( $versions as $_version ) {
 		if ( $current_version < $_version ) {
-			( __NAMESPACE__ . "\\_do_upgrade_{$_version}" )();
+			( __NAMESPACE__ . "\_do_upgrade_{$_version}" )();
 			$current_version = _set_version( $_version );
 		}
 	}

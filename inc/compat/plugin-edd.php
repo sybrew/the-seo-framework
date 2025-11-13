@@ -10,8 +10,8 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Helper\Query;
 
-\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_edd_is_product', 10, 2 );
-\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_edd_is_product_admin' );
+\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\_set_edd_is_product', 10, 2 );
+\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\_set_edd_is_product_admin' );
 
 /**
  * Sets the is_product query.

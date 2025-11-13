@@ -55,4 +55,4 @@ echo <<<HTML
 	<div style="display:inline-block;width:100%;padding:20px;font-family:Consolas,Monaco,monospace;font-size:14px;">$output</div>
 </div>
 HTML;
-// phpcs:enable, WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
+// phpcs:enable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped

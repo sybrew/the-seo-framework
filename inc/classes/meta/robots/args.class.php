@@ -145,8 +145,8 @@ final class Args extends Factory {
 
 		end:;
 	}
-	// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
-	// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
+	// phpcs:enable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+	// phpcs:enable PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
 	// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 
 	/**

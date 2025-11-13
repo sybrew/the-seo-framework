@@ -260,7 +260,7 @@ abstract class Table {
 			 */
 			\add_filter( "manage_edit-{$taxonomy}_columns", [ $this, 'add_column' ] );
 		}
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**

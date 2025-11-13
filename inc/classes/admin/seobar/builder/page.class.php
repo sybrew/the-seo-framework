@@ -92,7 +92,7 @@ final class Page extends Main {
 					],
 				],
 			);
-		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
+		// phpcs:enable PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 	}
 
 	/**

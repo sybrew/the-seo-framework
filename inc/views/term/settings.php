@@ -330,7 +330,7 @@ Input::output_js_social_data(
 					),
 					'selected' => $meta['tw_card_type'],
 				] );
-				// phpcs:enable, WordPress.Security.EscapeOutput
+				// phpcs:enable WordPress.Security.EscapeOutput
 				?>
 			</td>
 		</tr>
@@ -355,7 +355,7 @@ Input::output_js_social_data(
 					<?php
 					// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_meta_socialimage' ] );
-					// phpcs:enable, WordPress.Security.EscapeOutput
+					// phpcs:enable WordPress.Security.EscapeOutput
 					?>
 				</div>
 			</td>
@@ -449,7 +449,7 @@ Input::output_js_social_data(
 							'defaultI18n'        => $_default_i18n,
 						],
 					] );
-					// phpcs:enable, WordPress.Security.EscapeOutput
+					// phpcs:enable WordPress.Security.EscapeOutput
 				}
 				?>
 			</td>

@@ -10,8 +10,8 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Meta;
 
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wpforo_page_seo_bar' );
-\add_action( 'wpforo_before_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\_assert_wpforo_page_seo_bar' );
+\add_action( 'wpforo_before_init', __NAMESPACE__ . '\_wpforo_fix_page' );
 
 /**
  * Initializes wpForo page fixes.
@@ -29,7 +29,7 @@ function _wpforo_fix_page() {
 	if ( \is_admin() || ! \function_exists( 'is_wpforo_page' ) || ! \is_wpforo_page() ) return;
 
 	if ( _wpforo_seo_title_enabled() ) { // phpcs:ignore TSF.Performance.Opcodes -- is local.
-		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
+		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\_wpforo_filter_pre_title', 10, 2 );
 		\add_filter( 'the_seo_framework_use_title_branding', '__return_false' );
 	}
 
@@ -38,12 +38,12 @@ function _wpforo_fix_page() {
 		_wpforo_disable_tsf_html_output(); // phpcs:ignore TSF.Performance.Opcodes -- is local.
 
 		// This won't run on wpForo at the time of writing (2.1.6), because action the_seo_framework_after_init already happened.
-		\add_action( 'the_seo_framework_after_init', __NAMESPACE__ . '\\_wpforo_disable_tsf_html_output', 1 );
+		\add_action( 'the_seo_framework_after_init', __NAMESPACE__ . '\_wpforo_disable_tsf_html_output', 1 );
 	} else {
 		// Remove WPForo's SEO meta output.
 		\remove_action( 'wp_head', 'wpforo_add_meta_tags', 1 );
 		// Fix Canonical URL.
-		\add_filter( 'get_canonical_url', __NAMESPACE__ . '\\_wpforo_filter_canonical_url' );
+		\add_filter( 'get_canonical_url', __NAMESPACE__ . '\_wpforo_filter_canonical_url' );
 	}
 }
 

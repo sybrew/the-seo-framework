@@ -83,7 +83,7 @@ class Guidelines {
 			'zh_HK' =>  70 / 160, // Hong Kong (Chinese version) (香港中文版)
 			'zh_CN' =>  70 / 160, // Mandarin (Simplified Chinese) (简体中文)
 		];
-		// phpcs:enable, WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
+		// phpcs:enable WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 
 		// Default to 1 (160/160 = no adjustment).
 		$c_adjust = $character_adjustments[ $locale ] ?? 1;
@@ -188,7 +188,7 @@ class Guidelines {
 			),
 			$locale,
 		);
-		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
+		// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 	}
 
 	/**

@@ -157,9 +157,9 @@ final class Front extends Factory {
 
 		end:;
 	}
-	// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
-	// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
-	// phpcs:enable, Generic.WhiteSpace.ScopeIndent.IncorrectExact
+	// phpcs:enable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+	// phpcs:enable PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
+	// phpcs:enable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 
 	/**
 	 * Generates robots assertions for noindex in passes.

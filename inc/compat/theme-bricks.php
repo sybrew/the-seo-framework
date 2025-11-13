@@ -8,8 +8,8 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-\add_filter( 'the_seo_framework_public_post_types', __NAMESPACE__ . '\\_bricks_fix_public_post_types' );
-\add_filter( 'the_seo_framework_public_taxonomies', __NAMESPACE__ . '\\_bricks_fix_public_taxonomies' );
+\add_filter( 'the_seo_framework_public_post_types', __NAMESPACE__ . '\_bricks_fix_public_post_types' );
+\add_filter( 'the_seo_framework_public_taxonomies', __NAMESPACE__ . '\_bricks_fix_public_taxonomies' );
 
 /**
  * Removes support for Bricks' non-public post types conditionally.

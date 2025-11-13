@@ -488,7 +488,7 @@ switch ( $instance ) :
 					'defaultLocked' => (bool) $custom_tw_card,
 				],
 			] );
-			// phpcs:enable, WordPress.Security.EscapeOutput
+			// phpcs:enable WordPress.Security.EscapeOutput
 			?>
 		</p>
 		<?php
@@ -522,7 +522,7 @@ switch ( $instance ) :
 			<?php
 			// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 			echo Form::get_image_uploader_form( [ 'id' => 'tsf_homepage_socialimage' ] );
-			// phpcs:enable, WordPress.Security.EscapeOutput
+			// phpcs:enable WordPress.Security.EscapeOutput
 			?>
 		</p>
 		<?php

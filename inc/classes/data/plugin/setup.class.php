@@ -353,7 +353,7 @@ class Setup {
 				'index_the_feed'   => 0, // Add backlink to the end of the feed.
 			],
 		);
-		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment
+		// phpcs:enable WordPress.Arrays.MultipleStatementAlignment
 	}
 
 	/**

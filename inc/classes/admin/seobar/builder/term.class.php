@@ -98,7 +98,7 @@ final class Term extends Main {
 					],
 				],
 			);
-		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
+		// phpcs:enable PEAR.Functions.FunctionCallSignature.Indent
 	}
 
 	/**

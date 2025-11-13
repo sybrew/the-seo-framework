@@ -78,7 +78,7 @@ class Post {
 			static::update_via_post_edit( $post_id );
 		}
 
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**

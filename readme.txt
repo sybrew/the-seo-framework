@@ -244,7 +244,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 == Changelog ==
 
 TODO this messes up the breadcrumbs of TSF: https://woocommerce.com/products/brands/.
-TODO set_time_limit() appears to be blocked by many hosts. This might prevent them from using TSF at all?
 TODO move user settings to personal_options?
 TODO check compatibility with Web Stories.
 TODO introduce dark theme for sitemap. Inspired by https://rss.beauty/.
@@ -270,8 +269,6 @@ TODO now we're working more with branches, we should add a script on GitHub that
 	-> Our minifier is bespoke. IDK if we can carry that over to GitHub Actions easily.
 TODO Reminify all JS/CSS files to ensure we haven't merged an older branches' code.
 
-### 5.1.3
-TODO don't escape '\\_', just write '\_'.
 TODO add `@access private` to compat funcs (or files...)
 TODO create memo function that's switch_to_blog()-safe.
 	-> We could do this by simply using the current blog ID as a cache key modifier
@@ -343,6 +340,8 @@ TODO before launch:
 **For developers:**
 
 * **PHP API notes:**
+	* **Added:**
+		* `The_SEO_Framework\Meta\URI\Utils::get_site_path()` (`tsf()->uri()->utils()->get_site_path()`) is now available. The value should be equivalent to `$wp_rewrite->front`, but then filtered via `get_home_url()`.
 	* **Changed:**
 		* `The_SEO_Framework\Data\Term::get_term_parents()` (`tsf()->data()->term()->get_term_parents()`) no longer uses memoization to cache results.
 			* This is now in line with `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`), which never used memoization.
@@ -357,13 +356,17 @@ TODO before launch:
 	* **Other:**
 		* We now use `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`) instead of the expensive `get_userdata()` directly to fetch user data. This improves output performance at the expense of a slight memory overhead.
 * **JS API notes:**
-	* `tsfCanonicalL10n.allowCanonicalURLNotationTool` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
-		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
-	* `tsfMediaL10n.warning.warnedTypes` and `tsfMediaL10n.warning.forbiddenTypes` are now context-aware objects instead of flat arrays.
-		* `warnedTypes` now has a `social` property containing image types that trigger warnings for social images (e.g., webp, heic).
-		* `forbiddenTypes` now has an `all` property containing universally forbidden image types (e.g., apng, bmp, svg).
-		* This is a semi-breaking change for the JS API. We highly doubt anyone used these properties externally, as they were introduced in v5.1.0.
-		* The image warning system now checks for context-specific warnings first, then falls back to universal warnings, making it more extensible for future image contexts.
+	* **Changed:**
+		* `tsfCanonical.rewrite` is no longer available. This was not meant to be publicly accessible.
+		* `tsfCanonical.rootUrl` is no longer available, without deprecation. This was not meant to be publicly accessible.
+		* `tsfCanonicalL10n.rootUrl` is now an array of `scheme`, `host`, `port`, and `path` properties, instead of just a plain string of the host.
+		* `tsfCanonicalL10n.allowCanonicalURLNotationTool` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
+			* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
+		* `tsfMediaL10n.warning.warnedTypes` and `tsfMediaL10n.warning.forbiddenTypes` are now context-aware objects instead of flat arrays.
+			* `warnedTypes` now has a `social` property containing image types that trigger warnings for social images (e.g., webp, heic).
+			* `forbiddenTypes` now has an `all` property containing universally forbidden image types (e.g., apng, bmp, svg).
+			* This is a semi-breaking change for the JS API. We highly doubt anyone used these properties externally, as they were introduced in v5.1.0.
+			* The image warning system now checks for context-specific warnings first, then falls back to universal warnings, making it more extensible for future image contexts.
 * **Filter notes:**
 	* **Fixed:**
 		* For `the_seo_framework_extract_content_strip_args`, when adjusting the `space` or `clear` indexes in such a manner that empty void, clear, or space queries are created, the resulting Context-Sensitive tag stripper (`The_SEO_Framework\Helper\Format\strip_tags_cs()`) now correctly ignores those empty queries instead of halting the context-sensitive stripping process.

@@ -138,7 +138,7 @@ $robots_settings = [
 							],
 							'selected' => 0,
 						] );
-						// phpcs:enable, WordPress.Security.EscapeOutput
+						// phpcs:enable WordPress.Security.EscapeOutput
 					echo '</label>';
 				}
 				?>

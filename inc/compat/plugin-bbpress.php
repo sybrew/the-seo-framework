@@ -26,11 +26,11 @@ use The_SEO_Framework\{
  */
 \add_filter( 'bbp_title', [ Front\Title::class, 'set_document_title' ], 99 );
 
-\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_bbpress_filter_title', 10, 2 );
-\add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\\_bbpress_filter_order_keys' );
-\add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\\_bbpress_filter_do_adjust_query', 10, 2 );
-\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\\_bbpress_filter_robots', 10, 2 );
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_bbpress_noindex_defaults_seo_bar', 10, 2 );
+\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\_bbpress_filter_title', 10, 2 );
+\add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\_bbpress_filter_order_keys' );
+\add_filter( 'the_seo_framework_do_adjust_archive_query', __NAMESPACE__ . '\_bbpress_filter_do_adjust_query', 10, 2 );
+\add_filter( 'the_seo_framework_robots_meta_array', __NAMESPACE__ . '\_bbpress_filter_robots', 10, 2 );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\_assert_bbpress_noindex_defaults_seo_bar', 10, 2 );
 
 /**
  * Override's The SEO Framework's auto-generated title with bbPress's on bbPress queries.
@@ -184,7 +184,7 @@ function _bbpress_filter_title( $title, $args ) {
 	if ( $new_title === $title )
 		return $title;
 
-	// phpcs:enable, WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.TextDomainMismatch -- Not my code.
+	// phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.TextDomainMismatch -- Not my code.
 
 	return $new_title;
 }

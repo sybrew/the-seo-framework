@@ -13,11 +13,11 @@ use The_SEO_Framework\{
 	Meta\URI,
 };
 
-\add_filter( 'the_seo_framework_sitemap_endpoint_list', __NAMESPACE__ . '\\_wpml_register_sitemap_languages', 20 );
-\add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\\_wpml_flush_sitemap', 10 );
-\add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\\_wpml_sitemap_filter_display_translatables' );
-\add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
-\add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\\_wpml_sitemap_filter_non_translatables' );
+\add_filter( 'the_seo_framework_sitemap_endpoint_list', __NAMESPACE__ . '\_wpml_register_sitemap_languages', 20 );
+\add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\_wpml_flush_sitemap', 10 );
+\add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\_wpml_sitemap_filter_display_translatables' );
+\add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
+\add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
 
 /**
  * Registeres more sitemaps for the robots.txt to parse.

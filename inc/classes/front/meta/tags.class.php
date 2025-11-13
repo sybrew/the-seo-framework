@@ -241,7 +241,7 @@ final class Tags {
 				$attr,
 			);
 		}
-		// phpcs:enable, WordPress.Security.EscapeOutput
+		// phpcs:enable WordPress.Security.EscapeOutput
 
 		echo "\n";
 	}

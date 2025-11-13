@@ -128,6 +128,6 @@ echo Minify::css( \apply_filters(
 	'the_seo_framework_sitemap_styles',
 	$styles,
 ) );
-// phpcs:enable, WordPress.Security.EscapeOutput
+// phpcs:enable WordPress.Security.EscapeOutput
 ?>
 </style>

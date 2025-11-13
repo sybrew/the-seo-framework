@@ -8,7 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-\add_filter( 'the_seo_framework_meta_generator_pools', __NAMESPACE__ . '\\_buddypress_filter_generator_pools' );
+\add_filter( 'the_seo_framework_meta_generator_pools', __NAMESPACE__ . '\_buddypress_filter_generator_pools' );
 
 /**
  * Changes the meta render data for BuddyPress profiles.

@@ -143,7 +143,7 @@ $robots_settings = [
 								'defaultI18n' => $_default_i18n,
 							],
 						] );
-						// phpcs:enable, WordPress.Security.EscapeOutput
+						// phpcs:enable WordPress.Security.EscapeOutput
 					echo '</label>';
 				}
 				?>

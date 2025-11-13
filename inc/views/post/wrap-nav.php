@@ -68,7 +68,7 @@ if ( \count( $tabs ) > 1 ) {
 					</label>
 				</div>
 				HTML;
-				// phpcs:enable, WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
+				// phpcs:enable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
 
 				++$tab_index;
 			}
