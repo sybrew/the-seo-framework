@@ -357,7 +357,7 @@ TODO before launch:
 	* **Other:**
 		* We now use `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`) instead of the expensive `get_userdata()` directly to fetch user data. This improves output performance at the expense of a slight memory overhead.
 * **JS API notes:**
-	* `tsfCanonicalL10n.allowCanonicalURLNotationTracker` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
+	* `tsfCanonicalL10n.allowCanonicalURLNotationTool` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
 		* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
 	* `tsfMediaL10n.warning.warnedTypes` and `tsfMediaL10n.warning.forbiddenTypes` are now context-aware objects instead of flat arrays.
 		* `warnedTypes` now has a `social` property containing image types that trigger warnings for social images (e.g., webp, heic).
