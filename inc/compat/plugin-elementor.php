@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\Elementor
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;

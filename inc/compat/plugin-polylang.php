@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\PolyLang
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -107,7 +108,6 @@ function _polylang_register_sitemap_languages( $list ) {
  *
  * @hook the_seo_framework_sitemap_header 10
  * @since 4.1.2
- * @access private
  */
 function _polylang_set_sitemap_language() {
 
@@ -156,7 +156,6 @@ function _polylang_set_sitemap_language() {
  *              in this case we can use term_id since we're specifying the taxonomy directly.
  *              WordPress 4.4.0 and later also rectifies term_id/term_taxonomy_id stratification, which is
  *              why we couldn't find an issue whilst introducing this filter.
- * @access private
  *
  * @param array $args The query arguments.
  * @return array The augmented query arguments.
@@ -205,7 +204,6 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * @hook the_seo_framework_generated_description 10
  * @hook the_seo_framework_custom_field_description 10
  * @since 3.1.0
- * @access private
  *
  * @param string $string The title or description
  * @return string
@@ -228,7 +226,6 @@ function pll__( $string ) {
  * @since 4.0.5
  * @since 5.0.0 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
- * @access private
  */
 function _polylang_flush_sitemap() {
 	global $wpdb;

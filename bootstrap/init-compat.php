@@ -25,9 +25,6 @@ namespace The_SEO_Framework;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Disable Headway theme SEO. We should remove this in 2025 or so; it's abandoned.
-\add_filter( 'headway_seo_disabled', '__return_true' );
-
 foreach (
 	array_intersect_key(
 		[

@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Theme\Avada
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -42,7 +43,6 @@ namespace The_SEO_Framework;
  * @hook avada_setting_get_disable_rich_snippet_author 10
  * @hook avada_setting_get_disable_rich_snippet_date 10
  * @since 5.1.3
- * @access private
  *
  * @return string '0' to disable the option.
  */
@@ -55,7 +55,6 @@ function _avada_disable_switch_option() {
  *
  * @hook avada_options_sections 10
  * @since 5.1.3
- * @access private
  *
  * @param array $sections The theme option sections.
  * @return array Modified sections with SEO settings removed.
@@ -84,7 +83,6 @@ function _avada_remove_settings_sections( $sections ) {
  *
  * @hook fusion_pagetype_data 10
  * @since 5.1.3
- * @access private
  *
  * @param array  $pagetype_data The pagetype data.
  * @param string $posttype      The current post type.

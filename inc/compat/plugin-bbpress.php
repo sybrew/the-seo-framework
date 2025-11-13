@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\bbPress
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -194,7 +195,6 @@ function _bbpress_filter_title( $title, $args ) {
  *
  * @hook the_seo_framework_seo_column_keys_order 10
  * @since 2.8.0
- * @access private
  *
  * @param array $current_keys The current column keys TSF looks for.
  * @return array Expanded keyset.
@@ -215,7 +215,6 @@ function _bbpress_filter_order_keys( $current_keys = [] ) {
  *
  * @hook the_seo_framework_do_adjust_archive_query 10
  * @since 3.0.3
- * @access private
  * @link <https://bbpress.trac.wordpress.org/ticket/2607> (regression)
  *
  * @param bool      $adjust   Whether to adjust the query.
@@ -243,7 +242,6 @@ function _bbpress_filter_do_adjust_query( $adjust, $wp_query ) {
  *
  * @hook the_seo_framework_robots_meta_array 10
  * @since 4.2.8
- * @access private
  *
  * @param array      $meta    {
  *     The parsed robots meta.
@@ -312,7 +310,6 @@ function _bbpress_filter_robots( $meta, $args ) {
  *
  * @hook the_seo_framework_seo_bar 10
  * @since 4.2.8
- * @access private
  *
  * @param string $interpreter The interpreter class name.
  * @param object $builder     The builder's class instance.

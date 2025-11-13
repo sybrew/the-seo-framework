@@ -269,7 +269,6 @@ TODO now we're working more with branches, we should add a script on GitHub that
 	-> Our minifier is bespoke. IDK if we can carry that over to GitHub Actions easily.
 TODO Reminify all JS/CSS files to ensure we haven't merged an older branches' code.
 
-TODO add `@access private` to compat funcs (or files...)
 TODO create memo function that's switch_to_blog()-safe.
 	-> We could do this by simply using the current blog ID as a cache key modifier
 TODO when saving a root URL as a canonical or redirect URL, we should append a trailing slash (slash_front_page_url is not the right function for this, for it uses user_trailingslashit).
@@ -329,7 +328,7 @@ TODO before launch:
 	* Resolved an issue where the breadcrumb generator would add an "Archives" link pointing to the current post if a term ancestor is deleted. Now skips the broken ancestor.
   * Resolved an issue where image type warnings that were meant for social sharing were also shown for other contexts, such as logos and structured data.
 * **Removed:**
-	* TODO Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
+	* Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
 **For translators:**
 
@@ -373,6 +372,7 @@ TODO before launch:
 * **Other:**
 	* We updated our coding standards, so the code is slightly altered.
 	* We now properly capitalize the proper noun Boolean.
+	* TODO We purged all deprecated methods, properties, and filters that were marked for removal in v5.0.0.
 
 ### 5.1.2
 

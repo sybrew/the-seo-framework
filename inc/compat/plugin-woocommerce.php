@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\WooCommerce
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -38,7 +39,6 @@ use The_SEO_Framework\{
  * @since 4.1.4 1. Now unbinds wc_page_noindex action.
  *              2. Now unbinds wc_page_no_robots filter.
  *              3. Now modifies the SEO Bar.
- * @access private
  */
 function _init_wc_compat() {
 	// Adjust the product link acknowledging the primary category.
@@ -57,7 +57,6 @@ function _init_wc_compat() {
  * Helper function for other methods to determine if there's a shop ID.
  *
  * @since 5.0.0
- * @access private
  *
  * @return int The shop page ID. 0 on failure.
  */
@@ -79,7 +78,6 @@ function _get_shop_page_id() {
  * Helper function for other methods to determine if we're dealing with a shop.
  *
  * @since 4.2.0
- * @access private
  *
  * @param int|WP_Post|null $post Post ID or post object.
  * @return bool
@@ -106,7 +104,6 @@ function _is_shop( $post = null ) {
  *
  * @hook the_seo_framework_real_id 10
  * @since 4.0.5
- * @access private
  *
  * @param int $id The current ID.
  * @return int
@@ -121,7 +118,6 @@ function _set_real_id_wc_shop( $id ) {
  *
  * @hook the_seo_framework_is_singular_archive 10
  * @since 4.0.5
- * @access private
  *
  * @param bool     $is_singular_archive Whether the post ID is a singular archive.
  * @param int|null $id                  The supplied post ID. Null when in the loop.
@@ -138,7 +134,6 @@ function _set_shop_singular_archive( $is_singular_archive, $id ) {
  * @hook the_seo_framework_is_shop 10
  * @since 4.0.5
  * @since 4.1.4 Now handles the assertion fully.
- * @access private
  * @TODO is this redundant for TSF? -> yes. lol. It's used nowhere, for now...
  *
  * @param bool             $is_shop Whether this is a shop page.
@@ -177,7 +172,6 @@ function _set_wc_is_product( $is_product, $post ) {
  * @hook the_seo_framework_is_product_admin 10
  * @since 4.0.5
  * @since 4.1.4 Now handles the assertion fully.
- * @access private
  * @TODO is this redundant for TSF? Yup. This very much is because we do not show an interface for OG types.
  *
  * @param bool $is_product_admin Whether this is a product admin query.
@@ -196,7 +190,6 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  * @hook the_seo_framework_robots_meta_array 10
  * @since 4.1.4
  * @since 4.2.8 Now uses `Query::is_singular()` instead of `is_singular()` (for debug support).
- * @access private
  *
  * @param array      $meta    {
  *     The parsed robots meta.
@@ -261,7 +254,6 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
  *
  * @hook the_seo_framework_seo_bar 10
  * @since 4.1.4
- * @access private
  *
  * @param string $interpreter The interpreter class name.
  * @param object $builder     The builder's class instance.
@@ -297,7 +289,6 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
  * @since 4.0.5 (introduced @ 4.0.0, renamed to prevent conflict).
  * @since 4.2.0 Now supports the `$args['pta']` index.
  * @since 4.2.8 Fixed the taxonomy query for the admin area.
- * @access private
  *
  * @param array      $params {
  *     The image generation parameters.
@@ -347,7 +338,6 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  * @hook the_seo_framework_public_post_type_archives 10
  * @since 4.0.0
  * @since 4.2.0 Now supports the `$args['pta']` index.
- * @access private
  * @generator
  *
  * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -396,7 +386,6 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  * Generates image URL and ID from the WooCommerce product category thumbnail entries.
  *
  * @since 4.0.0
- * @access private
  * @generator
  *
  * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -436,7 +425,6 @@ function _get_product_category_thumbnail_image_details( $args = null, $size = 'f
  *
  * @hook the_seo_framework_public_post_type_archives 10
  * @since 4.2.8
- * @access private
  *
  * @param string[] $post_types The public post type archive names.
  * @return string[] The filtered post type archive names.
@@ -455,7 +443,6 @@ function _filter_public_wc_post_type_archives( $post_types ) {
  *
  * @filter the_seo_framework_generated_archive_title_items 10
  * @since 5.0.0
- * @access private
  *
  * @param String[title,prefix,title_without_prefix] $items  The generated archive title items.
  * @param \WP_Term|\WP_User|\WP_Post_Type|null      $object The archive object.

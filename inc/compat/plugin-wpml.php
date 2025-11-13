@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\WPML
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -110,7 +111,6 @@ function _wpml_register_sitemap_languages( $list ) {
  * @since 3.1.0
  * @since 5.0.0 Removed clearing once-per-request restriction.
  * @global \wpdb $wpdb
- * @access private
  */
 function _wpml_flush_sitemap() {
 	global $wpdb;
@@ -136,7 +136,6 @@ function _wpml_flush_sitemap() {
  *
  * @hook the_seo_framework_sitemap_header 10
  * @since 4.1.4
- * @access private
  */
 function _wpml_sitemap_filter_display_translatables() {
 	// ez.
@@ -150,7 +149,6 @@ function _wpml_sitemap_filter_display_translatables() {
  * @hook the_seo_framework_sitemap_hpt_query_args 10
  * @hook the_seo_framework_sitemap_nhpt_query_args 10
  * @since 4.1.4
- * @access private
  * @global \SitePress $sitepress
  *
  * @param array $args The query arguments.

@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\UltimateMember
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -17,7 +18,6 @@ namespace The_SEO_Framework;
  *
  * @hook template_redirect 100000
  * @since 4.2.0
- * @access private
  */
 function _um_reinstate_title_support() {
 
@@ -41,7 +41,6 @@ function _um_reinstate_title_support() {
  *
  * @hook the_seo_framework_query_supports_seo 10
  * @since 4.2.0
- * @access private
  *
  * @param bool $supported Whether the query supports SEO.
  * @return bool Whether the query is supported.

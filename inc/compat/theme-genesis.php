@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Theme\Genesis
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -16,7 +17,6 @@ namespace The_SEO_Framework;
  *
  * @hook genesis_detect_seo_plugins 10
  * @since 2.8.0
- * @access private
  *
  * @return array
  */

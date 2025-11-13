@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\BuddyPress
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -15,7 +16,6 @@ namespace The_SEO_Framework;
  *
  * @hook the_seo_framework_meta_generator_pools 10
  * @since 5.0.0
- * @access private
  *
  * @param string[] $generator_pools A list of tag pools requested for the current query.
  *                                  The tag pool names correspond directly to the classes'.

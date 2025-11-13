@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\wpForo
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -53,7 +54,6 @@ function _wpforo_fix_page() {
  * @hook the_seo_framework_after_init 1
  * @since 3.1.2 Introduced as Lambda.
  * @since 4.0.5 Introduced as function.
- * @access private
  */
 function _wpforo_disable_tsf_html_output() {
 	\remove_action( 'wp_head', [ Front\Meta\Head::class, 'print_wrap_and_tags' ], 1 );
@@ -65,7 +65,6 @@ function _wpforo_disable_tsf_html_output() {
  * @hook get_canonical_url 10
  * @since 2.9.2 Introduced as Lambda.
  * @since 4.0.5 Introduced as function.
- * @access private
  *
  * @param string $canonical_url The post's canonical URL.
  * @return string
@@ -82,7 +81,6 @@ function _wpforo_filter_canonical_url( $canonical_url ) {
  * @since 3.1.0 1. No longer emits an error when no wpForo title is presented.
  *              2. Updated to support new title generation.
  * @since 4.0.0 No longer overrules external queries.
- * @access private
  * @todo this may cause issues when the forum is on the homepage... Tell users to set the "additions".
  *
  * @param string     $title The filter title.
@@ -108,7 +106,6 @@ function _wpforo_filter_pre_title( $title, $args ) {
  *
  * @hook the_seo_framework_seo_bar 10
  * @since 4.2.8
- * @access private
  *
  * @param string $interpreter The interpreter class name.
  */
@@ -159,7 +156,6 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
  * Tests whether wpForo SEO Meta is enabled.
  *
  * @since 4.2.8
- * @access private
  *
  * @return bool
  */
@@ -175,7 +171,6 @@ function _wpforo_seo_meta_enabled() {
  * Tests whether wpForo SEO Title is enabled.
  *
  * @since 4.2.8
- * @access private
  *
  * @return bool
  */
