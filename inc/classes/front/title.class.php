@@ -60,24 +60,9 @@ final class Title {
 
 		\add_filter( 'pre_get_document_title', [ static::class, 'set_document_title' ], 10 );
 
-		/**
-		 * @since 2.4.1
-		 * @since 5.0.0 Deprecated.
-		 * @deprecated
-		 * @param bool $overwrite_titles Whether to enable legacy title overwriting.
-		 * TODO remove this code? -- it's been 8 years...
-		 * <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
-		 */
-		if ( \apply_filters_deprecated(
-			'the_seo_framework_manipulate_title',
-			[ true ],
-			'5.0.0 of The SEO Framework',
-			'the_seo_framework_overwrite_titles',
-		) ) {
-			\remove_all_filters( 'wp_title', false );
-
-			\add_filter( 'wp_title', [ static::class, 'set_document_title' ], 9 );
-		}
+		// TODO remove these? It's been 10 years... <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
+		\remove_all_filters( 'wp_title', false );
+		\add_filter( 'wp_title', [ static::class, 'set_document_title' ], 9 );
 	}
 
 	/**

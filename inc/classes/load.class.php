@@ -92,23 +92,12 @@ final class Load extends Pool {
 	 * @since 2.8.0
 	 * @since 3.2.2 This method no longer allows to overwrite protected or private variables.
 	 * @since 5.0.0 Now protects against fatal errors on PHP 8.2 or later.
+	 * @since 5.1.3 Removed all deprecations from 5.0.0 (~24 months later).
 	 *
 	 * @param string $name  The property name.
 	 * @param mixed  $value The property value.
 	 */
 	public function __set( $name, $value ) {
-
-		switch ( $name ) {
-			case 'the_seo_framework_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; set constant THE_SEO_FRAMEWORK_DEBUG' );
-				return false;
-			case 'script_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; set constant SCRIPT_DEBUG' );
-				return false;
-			case 'seo_settings_page_slug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; set constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' );
-				return false;
-		}
 
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
 
@@ -126,45 +115,12 @@ final class Load extends Pool {
 	 * @since 3.1.0 Removed known deprecations.
 	 * @since 3.2.2 This method no longer invokes PHP errors, nor returns protected values.
 	 * @since 5.0.0 Removed 'load_option' deprecation.
+	 * @since 5.1.3 Removed all deprecations from 5.0.0 (~24 months later).
 	 *
 	 * @param string $name The property name.
 	 * @return mixed
 	 */
 	public function __get( $name ) {
-
-		switch ( $name ) {
-			case 'inpost_nonce_field':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; you should make your own.' );
-				return Data\Admin\Post::$nonce_action;
-			case 'inpost_nonce_name':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; you should make your own.' );
-				return Data\Admin\Post::$nonce_name;
-			case 'is_headless':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use function \The_SEO_Framework\is_headless()' );
-				return is_headless();
-			case 'loaded':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; you may drop the loaded check.' );
-				return true;
-			case 'pretty_permalinks':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use tsf()->query()->utils()->using_pretty_permalinks()' );
-				return $this->query()->utils()->using_pretty_permalinks();
-			case 'script_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use constant SCRIPT_DEBUG' );
-				return \SCRIPT_DEBUG;
-			case 'seo_settings_page_slug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use constant THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG or tsf()->admin()->menu()->get_top_menu_args()' );
-				return \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG;
-			case 'seo_settings_page_hook':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use `tsf()->admin()->menu()->get_page_hook_name()` instead.' );
-				return Admin\Menu::get_page_hook_name();
-			case 'the_seo_framework_debug':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; use constant THE_SEO_FRAMEWORK_DEBUG' );
-				return \THE_SEO_FRAMEWORK_DEBUG;
-			case 'the_seo_framework_use_transients':
-				$this->_inaccessible_p_or_m( "tsf()->$name", 'since 5.0.0; with no alternative available' );
-				return true;
-		}
-
 		$this->_inaccessible_p_or_m( "tsf()->$name", 'unknown' );
 	}
 

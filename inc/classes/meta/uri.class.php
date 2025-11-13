@@ -71,27 +71,6 @@ class URI {
 		if ( $custom_url )
 			return $custom_url;
 
-		if ( \has_filter( 'the_seo_framework_rel_canonical_output' ) ) {
-			/**
-			 * @since 2.6.5
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $url The canonical URL. Must be escaped.
-			 * @param int    $id  The current page or term ID.
-			 */
-			$url = (string) \apply_filters_deprecated(
-				'the_seo_framework_rel_canonical_output',
-				[
-					'',
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-
-			if ( $url ) return $url;
-		}
-
 		if ( str_contains( Robots::get_meta(), 'noindex' ) )
 			return '';
 

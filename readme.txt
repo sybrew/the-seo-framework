@@ -372,7 +372,9 @@ TODO before launch:
 * **Other:**
 	* We updated our coding standards, so the code is slightly altered.
 	* We now properly capitalize the proper noun Boolean.
-	* TODO We purged all deprecated methods, properties, and filters that were marked for removal in v5.0.0.
+	* We purged all deprecated methods, properties, classes, files, folders, and filters that were marked for removal in v5.0.0.
+		* We removed about 7 classes, 388 methods, 13 properties, and 35 filters.
+		* For a full list, please refer to the [v5.0.0 detailed changelog](https://theseoframework.com/?p=4135#detailed).
 
 ### 5.1.2
 

@@ -138,29 +138,7 @@ class Description {
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $args, $type ) ) return $memo;
 
-		/**
-		 * @since 2.9.0
-		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
-		 * @since 4.0.0 1. Deprecated second parameter.
-		 *              2. Added third parameter: $args.
-		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 * @since 5.0.0 Deprecated.
-		 * @deprecated
-		 * @param string     $excerpt The excerpt to use.
-		 * @param int        $page_id Deprecated.
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                         Is null when the query is auto-determined.
-		 */
-		$excerpt = (string) \apply_filters_deprecated(
-			'the_seo_framework_fetched_description_excerpt',
-			[
-				Description\Excerpt::get_excerpt( $args ),
-				0,
-				$args,
-			],
-			'5.0.0 of The SEO Framework',
-			'the_seo_framework_description_excerpt',
-		);
+		$excerpt = Description\Excerpt::get_excerpt( $args );
 
 		/**
 		 * @since 5.0.0

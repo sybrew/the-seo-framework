@@ -11,8 +11,6 @@
  *          | - builder
  *      | - settings
  *          | - layout
- *   - bridges (deprecated)
- *   - builders (deprecated)
  *      | - sitemap
  *   - data
  *      | - admin
@@ -25,7 +23,6 @@
  *      | - format
  *      | - query
  *   - internal
- *   - interpreters (deprecated)
  *   - meta
  *      | - description
  *      | - facebook

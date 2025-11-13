@@ -440,34 +440,6 @@ class Title {
 		}
 
 		/**
-		 * Filters the archive title.
-		 * This is a sibling of WordPress's `get_the_archive_title`,
-		 * but then without the HTML.
-		 *
-		 * @since 3.0.4
-		 * @since 4.2.0 Added the `$prefix` and `$origintitle_without_prefixal_title` parameters.
-		 * @since 5.0.0 Deprecated
-		 * @deprecated
-		 *
-		 * @param string                               $title                Archive title to be displayed.
-		 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object               The archive object.
-		 *                                                                   Is null when query is autodetermined.
-		 * @param string                               $title_without_prefix Archive title without prefix.
-		 * @param string                               $prefix               Archive title prefix.
-		 */
-		$title = (string) \apply_filters_deprecated(
-			'the_seo_framework_generated_archive_title',
-			[
-				$title,
-				$object,
-				$title_without_prefix,
-				$prefix,
-			],
-			'5.0.0 of The SEO Framework',
-			'the_seo_framework_generated_archive_title_items'
-		);
-
-		/**
 		 * @since 5.0.0
 		 * @param String[title,prefix,title_without_prefix] $items                The generated archive title items.
 		 * @param \WP_Term|\WP_User|\WP_Post_Type|null      $object               The archive object.

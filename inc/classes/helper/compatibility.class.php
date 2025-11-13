@@ -144,33 +144,7 @@ class Compatibility {
 		 *     @type string[] $multilingual The conflicting multilingual plugins base files, indexed by plugin name.
 		 * }
 		 */
-		$conflicting_plugins = (array) \apply_filters(
-			'the_seo_framework_conflicting_plugins',
-			$conflicting_plugins,
-		);
-
-		if ( \has_filter( 'the_seo_framework_conflicting_plugins_type' ) ) {
-			foreach ( $conflicting_plugins as $type => &$plugins ) {
-				/**
-				 * @since 2.6.1
-				 * @since 5.0.0 Deprecated. Use `the_seo_framework_conflicting_plugins` instead.
-				 * @deprecated
-				 * @param array  $conflicting_plugins Conflicting plugins
-				 * @param string $type                The type of plugins to get.
-				*/
-				$plugins = (array) \apply_filters_deprecated(
-					'the_seo_framework_conflicting_plugins_type',
-					[
-						$plugins,
-						$type,
-					],
-					'5.0.0 of The SEO Framework',
-					'the_seo_framework_conflicting_plugins',
-				);
-			}
-		}
-
-		return $conflicting_plugins;
+		return (array) \apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
 	}
 
 	/**

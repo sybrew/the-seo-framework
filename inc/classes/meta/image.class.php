@@ -109,43 +109,8 @@ class Image {
 	 * }
 	 */
 	public static function get_image_details( $args = null, $single = false, $context = 'social' ) {
-		/**
-		 * @since 4.0.5
-		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 * @since 5.0.0 Deprecated.
-		 * @deprecated
-		 * @param array      $details {
-		 *     The image details array, sequential.
-		 *
-		 *     @type string $url      The image URL.
-		 *     @type int    $id       The image ID.
-		 *     @type int    $width    The image width in pixels.
-		 *     @type int    $height   The image height in pixels.
-		 *     @type string $alt      The image alt tag.
-		 *     @type string $caption  The image caption.
-		 *     @type int    $filesize The image filesize in bytes.
-		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-		 *                            Is null when the query is auto-determined.
-		 * @param bool       $single  Whether to fetch one image, or multiple.
-		 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-		 * @param bool       $clean   Deprecated. We always clean now.
-		 */
-		return \apply_filters_deprecated(
-			'the_seo_framework_image_details',
-			[
-				(
-					   static::get_custom_image_details( $args, $single, $context )
-					?: static::get_generated_image_details( $args, $single, $context )
-				),
-				$args,
-				$single,
-				$context,
-				true,
-			],
-			'5.0.0 of The SEO Framework',
-			'the_seo_framework_custom_image_details or the_seo_framework_generated_image_details',
-		);
+		return static::get_custom_image_details( $args, $single, $context )
+			?: static::get_generated_image_details( $args, $single, $context );
 	}
 
 	/**

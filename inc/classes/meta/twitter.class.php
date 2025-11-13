@@ -72,25 +72,6 @@ class Twitter {
 		$card = static::get_custom_card_type( $args )
 			 ?: static::get_generated_card_type( $args );
 
-		if ( \has_filter( 'the_seo_framework_twittercard_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $card The generated Twitter card type.
-			 * @param int    $id   The current page or term ID.
-			 */
-			$card = (string) \apply_filters_deprecated(
-				'the_seo_framework_twittercard_output',
-				[
-					$card,
-					Query::get_the_real_id(),
-				],
-				'5.0.0',
-			);
-		}
-
 		return $card;
 	}
 

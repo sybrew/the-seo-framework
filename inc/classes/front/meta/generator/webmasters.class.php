@@ -55,25 +55,6 @@ final class Webmasters {
 
 		$code = Data\Plugin::get_option( 'google_verification' );
 
-		if ( \has_filter( 'the_seo_framework_googlesite_output' ) ) {
-			/**
-			 * @since 2.6.0
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $code The Google verification code.
-			 * @param int    $id   The current post or term ID.
-			 */
-			$code = (string) \apply_filters_deprecated(
-				'the_seo_framework_googlesite_output',
-				[
-					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( $code )
 			yield 'google-site-verification' => [
 				'attributes' => [
@@ -90,25 +71,6 @@ final class Webmasters {
 	public static function generate_bing_verification() {
 
 		$code = Data\Plugin::get_option( 'bing_verification' );
-
-		if ( \has_filter( 'the_seo_framework_bingsite_output' ) ) {
-			/**
-			 * @since 2.6.0
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $code The Bing verification code.
-			 * @param int    $id   The current post or term ID.
-			 */
-			$code = (string) \apply_filters_deprecated(
-				'the_seo_framework_bingsite_output',
-				[
-					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		if ( $code )
 			yield 'msvalidate.01' => [
@@ -127,25 +89,6 @@ final class Webmasters {
 
 		$code = Data\Plugin::get_option( 'yandex_verification' );
 
-		if ( \has_filter( 'the_seo_framework_yandexsite_output' ) ) {
-			/**
-			 * @since 2.6.0
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $code The Yandex verification code.
-			 * @param int    $id   The current post or term ID.
-			 */
-			$code = (string) \apply_filters_deprecated(
-				'the_seo_framework_yandexsite_output',
-				[
-					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( $code )
 			yield 'yandex-verification' => [
 				'attributes' => [
@@ -163,25 +106,6 @@ final class Webmasters {
 
 		$code = Data\Plugin::get_option( 'baidu_verification' );
 
-		if ( \has_filter( 'the_seo_framework_baidusite_output' ) ) {
-			/**
-			 * @since 4.0.5
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $code The Baidu verification code.
-			 * @param int    $id   The current post or term ID.
-			 */
-			$code = (string) \apply_filters_deprecated(
-				'the_seo_framework_baidusite_output',
-				[
-					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( $code )
 			yield 'baidu-site-verification' => [
 				'attributes' => [
@@ -198,25 +122,6 @@ final class Webmasters {
 	public static function generate_pinterest_verification() {
 
 		$code = Data\Plugin::get_option( 'pint_verification' );
-
-		if ( \has_filter( 'the_seo_framework_pintsite_output' ) ) {
-			/**
-			 * @since 2.6.0
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $code The Pinterest verification code.
-			 * @param int    $id   The current post or term ID.
-			 */
-			$code = (string) \apply_filters_deprecated(
-				'the_seo_framework_pintsite_output',
-				[
-					$code,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		if ( $code )
 			yield 'p:domain_verify' => [
