@@ -861,6 +861,10 @@ class Loader {
 			$deps = [ 'tsf', 'tsf-ays', 'wp-util' ];
 		}
 
+		$tmpl_file = Query::is_wp_lists_edit()
+			? Template::get_view_location( 'templates/inpost/primary-term-selector-le' )
+			: Template::get_view_location( 'templates/inpost/primary-term-selector' );
+
 		return [
 			[
 				'id'       => 'tsf-pt',
@@ -886,7 +890,7 @@ class Loader {
 					],
 				],
 				'tmpl'     => [
-					'file' => Template::get_view_location( 'templates/inpost/primary-term-selector' ),
+					'file' => $tmpl_file,
 				],
 			],
 		];
