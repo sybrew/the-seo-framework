@@ -302,6 +302,7 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 TODO before launch:
 	- Retest excerpts, images, open graph, titles, title conditions, twitter, bbPress user profiles in the admin area.
 		-> We now use get_query_type_from_args() instead of checking if ( $args[...]) directly.
+TODO trailing comma's are missing in pt.js showSelectorWrap -- find the pattern and fix them all.
 
 ### 5.1.3
 
