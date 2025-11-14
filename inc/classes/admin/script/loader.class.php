@@ -97,6 +97,7 @@ class Loader {
 				$scripts[] = static::get_counter_scripts();
 		} elseif ( Query::is_wp_lists_edit() ) {
 			$scripts[] = static::get_list_edit_scripts();
+			$scripts[] = static::get_primaryterm_list_edit_scripts();
 			$scripts[] = static::get_title_scripts();
 			$scripts[] = static::get_description_scripts();
 			$scripts[] = static::get_canonical_scripts();
@@ -880,6 +881,52 @@ class Loader {
 				],
 				'tmpl'     => [
 					'file' => Template::get_view_location( 'templates/inpost/primary-term-selector' ),
+				],
+			],
+		];
+	}
+
+	/**
+	 * Returns the primary term script params for list edit pages.
+	 *
+	 * @since 5.1.3
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_primaryterm_list_edit_scripts() {
+
+		$post_type   = Query::get_admin_post_type();
+		$_taxonomies = $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
+		$taxonomies  = [];
+
+		foreach ( $_taxonomies as $tax ) {
+			if ( ! Taxonomy::is_supported( $tax ) ) continue;
+
+			$singular_name = Taxonomy::get_label( $tax );
+
+			$taxonomies[ $tax ] = [
+				'name' => $tax,
+				'i18n' => [
+					/* translators: %s = term name */
+					'selectPrimary' => \sprintf( \esc_html__( 'Select primary %s', 'autodescription' ), $singular_name ),
+				],
+			];
+		}
+
+		return [
+			[
+				'id'       => 'tsf-pt-le',
+				'type'     => 'js',
+				'deps'     => [ 'tsf', 'wp-util' ],
+				'autoload' => true,
+				'name'     => 'pt-le',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfPTL10n',
+					'data' => [
+						'taxonomies' => $taxonomies,
+					],
 				],
 			],
 		];
