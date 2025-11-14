@@ -144,33 +144,7 @@ class Compatibility {
 		 *     @type string[] $multilingual The conflicting multilingual plugins base files, indexed by plugin name.
 		 * }
 		 */
-		$conflicting_plugins = (array) \apply_filters(
-			'the_seo_framework_conflicting_plugins',
-			$conflicting_plugins,
-		);
-
-		if ( \has_filter( 'the_seo_framework_conflicting_plugins_type' ) ) {
-			foreach ( $conflicting_plugins as $type => &$plugins ) {
-				/**
-				 * @since 2.6.1
-				 * @since 5.0.0 Deprecated. Use `the_seo_framework_conflicting_plugins` instead.
-				 * @deprecated
-				 * @param array  $conflicting_plugins Conflicting plugins
-				 * @param string $type                The type of plugins to get.
-				*/
-				$plugins = (array) \apply_filters_deprecated(
-					'the_seo_framework_conflicting_plugins_type',
-					[
-						$plugins,
-						$type,
-					],
-					'5.0.0 of The SEO Framework',
-					'the_seo_framework_conflicting_plugins',
-				);
-			}
-		}
-
-		return $conflicting_plugins;
+		return (array) \apply_filters( 'the_seo_framework_conflicting_plugins', $conflicting_plugins );
 	}
 
 	/**
@@ -279,19 +253,17 @@ class Compatibility {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_theme`.
 	 * @since 5.1.0 Added memoization.
+	 * @since 5.1.3 Removed memoization; now uses `Data\Blog::get_active_themes()`.
 	 *
 	 * @param string|string[] $themes The theme names to test.
 	 * @return bool Any of the themes are active.
 	 */
 	public static function is_theme_active( $themes = '' ) {
 
-		$active_theme = memo() ?? memo( array_unique( [
-			strtolower( \get_option( 'stylesheet' ) ), // Parent.
-			strtolower( \get_option( 'template' ) ),   // Child.
-		] ) );
+		$active_themes = Data\Blog::get_active_themes();
 
 		foreach ( (array) $themes as $theme )
-			if ( \in_array( strtolower( $theme ), $active_theme, true ) )
+			if ( \in_array( strtolower( $theme ), $active_themes, true ) )
 				return true;
 
 		return false;
@@ -322,9 +294,11 @@ class Compatibility {
 			 */
 			(bool) \apply_filters(
 				'the_seo_framework_shortcode_based_page_builder_active',
-				\defined( 'ET_BUILDER_VERSION' )
-				|| \defined( 'WPB_VC_VERSION' )
-				|| \defined( 'BRICKS_VERSION' ),
+				(
+					   \defined( 'ET_BUILDER_VERSION' )
+					|| \defined( 'WPB_VC_VERSION' )
+					|| \defined( 'BRICKS_VERSION' )
+				),
 			)
 		);
 	}

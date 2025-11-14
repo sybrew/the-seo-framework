@@ -52,26 +52,6 @@ final class Facebook {
 
 		$author = Meta\Facebook::get_author();
 
-		if ( \has_filter( 'the_seo_framework_facebookauthor_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $facebook_author The generated Facebook author page URL.
-			 * @param int    $id              The current page or term ID.
-			 */
-			$author = (string) \apply_filters_deprecated(
-				'the_seo_framework_facebookauthor_output',
-				[
-					$author,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( $author )
 			yield 'article:author' => [
 				'attributes' => [
@@ -88,26 +68,6 @@ final class Facebook {
 	public static function generate_article_publisher() {
 
 		$publisher = Meta\Facebook::get_publisher();
-
-		if ( \has_filter( 'the_seo_framework_facebookpublisher_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $publisher The Facebook publisher page URL.
-			 * @param int    $id        The current page or term ID.
-			 */
-			$publisher = (string) \apply_filters_deprecated(
-				'the_seo_framework_facebookpublisher_output',
-				[
-					$publisher,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		if ( $publisher )
 			yield 'article:publisher' => [

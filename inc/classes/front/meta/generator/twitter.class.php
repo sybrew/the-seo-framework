@@ -73,26 +73,6 @@ final class Twitter {
 
 		$site = Meta\Twitter::get_site();
 
-		if ( \has_filter( 'the_seo_framework_twittersite_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $site The Twitter site owner tag.
-			 * @param int    $id   The current page or term ID.
-			 */
-			$site = (string) \apply_filters_deprecated(
-				'the_seo_framework_twittersite_output',
-				[
-					$site,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( $site )
 			yield 'twitter:site' => [
 				'attributes' => [
@@ -109,26 +89,6 @@ final class Twitter {
 	public static function generate_twitter_creator() {
 
 		$creator = Meta\Twitter::get_creator();
-
-		if ( \has_filter( 'the_seo_framework_twittercreator_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $creator The Twitter page creator.
-			 * @param int    $id      The current page or term ID.
-			 */
-			$creator = (string) \apply_filters_deprecated(
-				'the_seo_framework_twittercreator_output',
-				[
-					$creator,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		if ( $creator )
 			yield 'twitter:creator' => [
@@ -147,26 +107,6 @@ final class Twitter {
 
 		$title = Meta\Twitter::get_title();
 
-		if ( \has_filter( 'the_seo_framework_twittertitle_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $title The generated Twitter title.
-			 * @param int    $id    The current page or term ID.
-			 */
-			$title = (string) \apply_filters_deprecated(
-				'the_seo_framework_twittertitle_output',
-				[
-					$title,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( \strlen( $title ) )
 			yield 'twitter:title' => [
 				'attributes' => [
@@ -183,26 +123,6 @@ final class Twitter {
 	public static function generate_twitter_description() {
 
 		$description = Meta\Twitter::get_description();
-
-		if ( \has_filter( 'the_seo_framework_twitterdescription_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $description The generated Twitter description.
-			 * @param int    $id          The current page or term ID.
-			 */
-			$description = (string) \apply_filters_deprecated(
-				'the_seo_framework_twitterdescription_output',
-				[
-					$description,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		if ( \strlen( $description ) )
 			yield 'twitter:description' => [

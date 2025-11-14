@@ -621,24 +621,28 @@ class Loader {
 						],
 						'warning' => [
 							'warnedTypes'    => [
-								// This is only a short list of increasingly common types.
-								'webp' => 'image/webp',
-								'heic' => 'image/heic',
+								'social' => [
+									// This is only a short list of increasingly common types.
+									'webp' => 'image/webp',
+									'heic' => 'image/heic',
+								],
 							],
 							'forbiddenTypes' => [
-								// See The_SEO_Framework\Data\Filter\Sanitize::image_details().
-								'apng' => 'image/apng',
-								'bmp'  => 'image/bmp',
-								'ico'  => 'image/x-icon',
-								'cur'  => 'image/x-icon',
-								'svg'  => 'image/svg+xml',
-								'tif'  => 'image/tiff',
-								'tiff' => 'image/tiff',
+								'all' => [
+									// See The_SEO_Framework\Data\Filter\Sanitize::image_details().
+									'apng' => 'image/apng',
+									'bmp'  => 'image/bmp',
+									'ico'  => 'image/x-icon',
+									'cur'  => 'image/x-icon',
+									'svg'  => 'image/svg+xml',
+									'tif'  => 'image/tiff',
+									'tiff' => 'image/tiff',
+								],
 							],
 							'i18n'           => [
 								'notLoaded'    => \esc_attr__( 'The image file could not be loaded.', 'autodescription' ),
 								/* translators: %s is the file extension. */
-								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, preventing your image from being displayed.', 'autodescription' ),
+								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, which could prevent this image from being displayed.', 'autodescription' ),
 								/* translators: %s is the file extension. */
 								'extForbidden' => \esc_attr__( 'The file extension "%s" is not supported. Choose a different file.', 'autodescription' ),
 							],
@@ -739,6 +743,8 @@ class Loader {
 	public static function get_canonical_scripts() {
 		global $wp_rewrite;
 
+		$parsed_home_url = Meta\URI\Utils::get_parsed_front_page_url();
+
 		return [
 			[
 				'id'       => 'tsf-canonical',
@@ -753,13 +759,19 @@ class Loader {
 					'data' => [
 						'params' => [
 							'usingPermalinks' => $wp_rewrite->using_permalinks(),
-							'rootUrl'         => \home_url( '/' ),
+							'rootUrl'         => [
+								// We require separate parts for sanitized URL building.
+								'scheme' => $parsed_home_url['scheme'] ?? 'http', // placeholder for completeness; we use preferredScheme.
+								'host'   => $parsed_home_url['host'] ?? '',
+								'port'   => $parsed_home_url['port'] ?? '',
+								'path'   => $parsed_home_url['path'] ?? '/',
+							],
 							'rewrite'         => [
 								'code'         => $wp_rewrite->rewritecode,
 								'replace'      => $wp_rewrite->rewritereplace,
 								'queryReplace' => $wp_rewrite->queryreplace,
 							],
-							// TEMP: We still have to figure out how to get the right parameters. home_url() is probably key in this.
+							// TEMP: We still have to figure out how to get the right parameters.
 							'allowCanonicalURLNotationTracker' => ! Compatibility::get_active_conflicting_plugin_types()['multilingual'],
 						],
 					],

@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\wpForo
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -10,8 +11,8 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Meta;
 
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\\_assert_wpforo_page_seo_bar' );
-\add_action( 'wpforo_before_init', __NAMESPACE__ . '\\_wpforo_fix_page' );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\_assert_wpforo_page_seo_bar' );
+\add_action( 'wpforo_before_init', __NAMESPACE__ . '\_wpforo_fix_page' );
 
 /**
  * Initializes wpForo page fixes.
@@ -29,7 +30,7 @@ function _wpforo_fix_page() {
 	if ( \is_admin() || ! \function_exists( 'is_wpforo_page' ) || ! \is_wpforo_page() ) return;
 
 	if ( _wpforo_seo_title_enabled() ) { // phpcs:ignore TSF.Performance.Opcodes -- is local.
-		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\\_wpforo_filter_pre_title', 10, 2 );
+		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\_wpforo_filter_pre_title', 10, 2 );
 		\add_filter( 'the_seo_framework_use_title_branding', '__return_false' );
 	}
 
@@ -38,12 +39,12 @@ function _wpforo_fix_page() {
 		_wpforo_disable_tsf_html_output(); // phpcs:ignore TSF.Performance.Opcodes -- is local.
 
 		// This won't run on wpForo at the time of writing (2.1.6), because action the_seo_framework_after_init already happened.
-		\add_action( 'the_seo_framework_after_init', __NAMESPACE__ . '\\_wpforo_disable_tsf_html_output', 1 );
+		\add_action( 'the_seo_framework_after_init', __NAMESPACE__ . '\_wpforo_disable_tsf_html_output', 1 );
 	} else {
 		// Remove WPForo's SEO meta output.
 		\remove_action( 'wp_head', 'wpforo_add_meta_tags', 1 );
 		// Fix Canonical URL.
-		\add_filter( 'get_canonical_url', __NAMESPACE__ . '\\_wpforo_filter_canonical_url' );
+		\add_filter( 'get_canonical_url', __NAMESPACE__ . '\_wpforo_filter_canonical_url' );
 	}
 }
 
@@ -53,7 +54,6 @@ function _wpforo_fix_page() {
  * @hook the_seo_framework_after_init 1
  * @since 3.1.2 Introduced as Lambda.
  * @since 4.0.5 Introduced as function.
- * @access private
  */
 function _wpforo_disable_tsf_html_output() {
 	\remove_action( 'wp_head', [ Front\Meta\Head::class, 'print_wrap_and_tags' ], 1 );
@@ -65,7 +65,6 @@ function _wpforo_disable_tsf_html_output() {
  * @hook get_canonical_url 10
  * @since 2.9.2 Introduced as Lambda.
  * @since 4.0.5 Introduced as function.
- * @access private
  *
  * @param string $canonical_url The post's canonical URL.
  * @return string
@@ -82,7 +81,6 @@ function _wpforo_filter_canonical_url( $canonical_url ) {
  * @since 3.1.0 1. No longer emits an error when no wpForo title is presented.
  *              2. Updated to support new title generation.
  * @since 4.0.0 No longer overrules external queries.
- * @access private
  * @todo this may cause issues when the forum is on the homepage... Tell users to set the "additions".
  *
  * @param string     $title The filter title.
@@ -108,7 +106,6 @@ function _wpforo_filter_pre_title( $title, $args ) {
  *
  * @hook the_seo_framework_seo_bar 10
  * @since 4.2.8
- * @access private
  *
  * @param string $interpreter The interpreter class name.
  */
@@ -116,7 +113,7 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 
 	if ( $interpreter::$query['tax'] ) return;
 
-	$meta_enabled  = _wpforo_seo_meta_enabled();   // phpcs:ignore TSF.Performance.Opcodes -- is local.
+	$meta_enabled  = _wpforo_seo_meta_enabled();  // phpcs:ignore TSF.Performance.Opcodes -- is local.
 	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore TSF.Performance.Opcodes -- is local.
 
 	if ( ! $meta_enabled && ! $title_enabled ) return;
@@ -159,7 +156,6 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
  * Tests whether wpForo SEO Meta is enabled.
  *
  * @since 4.2.8
- * @access private
  *
  * @return bool
  */
@@ -167,7 +163,7 @@ function _wpforo_seo_meta_enabled() {
 	return memo() ?? memo(
 		// Unreliable in WPForo 2.0.0~2.1.6 (latest version at time of recording). Therefore, assume "true" if null.
 		// See https://wordpress.org/support/topic/wpforo_setting-seo-doesnt-work/.
-		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_meta' ) ?? true )
+		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_meta' ) ?? true ),
 	);
 }
 
@@ -175,7 +171,6 @@ function _wpforo_seo_meta_enabled() {
  * Tests whether wpForo SEO Title is enabled.
  *
  * @since 4.2.8
- * @access private
  *
  * @return bool
  */
@@ -183,6 +178,6 @@ function _wpforo_seo_title_enabled() {
 	return memo() ?? memo(
 		// Unreliable in WPForo 2.0.0~2.1.6 (latest version at time of recording). Therefore, assume "true" if null.
 		// See https://wordpress.org/support/topic/wpforo_setting-seo-doesnt-work/.
-		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_title' ) ?? true )
+		\function_exists( 'wpforo_setting' ) && ( \wpforo_setting( 'seo', 'seo_title' ) ?? true ),
 	);
 }

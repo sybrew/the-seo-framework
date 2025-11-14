@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Meta;
 
 use function The_SEO_Framework\{
 	coalesce_strlen,
+	get_query_type_from_args,
 	normalize_generation_args,
 };
 
@@ -71,25 +72,6 @@ class Twitter {
 		$card = static::get_custom_card_type( $args )
 			 ?: static::get_generated_card_type( $args );
 
-		if ( \has_filter( 'the_seo_framework_twittercard_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $card The generated Twitter card type.
-			 * @param int    $id   The current page or term ID.
-			 */
-			$card = (string) \apply_filters_deprecated(
-				'the_seo_framework_twittercard_output',
-				[
-					$card,
-					Query::get_the_real_id(),
-				],
-				'5.0.0',
-			);
-		}
-
 		return $card;
 	}
 
@@ -107,19 +89,23 @@ class Twitter {
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
-			if ( $args['tax'] ) {
-				$card = Data\Plugin\Term::get_meta_item( 'tw_card_type', $args['id'] );
-			} elseif ( $args['pta'] ) {
-				$card = Data\Plugin\PTA::get_meta_item( 'tw_card_type', $args['pta'] );
-			} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-				if ( $args['id'] ) {
-					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
-						 ?: Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
-				} else {
+			switch ( get_query_type_from_args( $args ) ) {
+				case 'single':
+					if ( Query::is_static_front_page( $args['id'] ) ) {
+						$card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
+							?: Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
+					} else {
+						$card = Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
+					}
+					break;
+				case 'term':
+					$card = Data\Plugin\Term::get_meta_item( 'tw_card_type', $args['id'] );
+					break;
+				case 'homeblog':
 					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' );
-				}
-			} elseif ( $args['id'] ) {
-				$card = Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
+					break;
+				case 'pta':
+					$card = Data\Plugin\PTA::get_meta_item( 'tw_card_type', $args['pta'] );
 			}
 		} else {
 			if ( Query::is_real_front_page() ) {
@@ -291,19 +277,23 @@ class Twitter {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$title = Data\Plugin\Term::get_meta_item( 'tw_title', $args['id'] );
-		} elseif ( $args['pta'] ) {
-			$title = Data\Plugin\PTA::get_meta_item( 'tw_title', $args['pta'] );
-		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-			if ( $args['id'] ) {
-				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
-					  ?? Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
-			} else {
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
+						  ?? Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
+				} else {
+					$title = Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
+				}
+				break;
+			case 'term':
+				$title = Data\Plugin\Term::get_meta_item( 'tw_title', $args['id'] );
+				break;
+			case 'homeblog':
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
-			}
-		} elseif ( $args['id'] ) {
-			$title = Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
+				break;
+			case 'pta':
+				$title = Data\Plugin\PTA::get_meta_item( 'tw_title', $args['pta'] );
 		}
 
 		if ( ! isset( $title ) ) return '';
@@ -387,7 +377,9 @@ class Twitter {
 			$desc = Data\Plugin\PTA::get_meta_item( 'tw_description' );
 		}
 
+		// Do not check empty(). See strlen below.
 		if ( ! isset( $desc ) ) return '';
+
 		if ( \strlen( $desc ) )
 			return Sanitize::metadata_content( $desc );
 
@@ -410,22 +402,28 @@ class Twitter {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$desc = Data\Plugin\Term::get_meta_item( 'tw_description', $args['id'] );
-		} elseif ( $args['pta'] ) {
-			$desc = Data\Plugin\PTA::get_meta_item( 'tw_description', $args['pta'] );
-		} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-			if ( $args['id'] ) {
-				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
-					 ?? Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
-			} else {
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_static_front_page( $args['id'] ) ) {
+					$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
+						 ?? Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
+				} else {
+					$desc = Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
+				}
+				break;
+			case 'term':
+				$desc = Data\Plugin\Term::get_meta_item( 'tw_description', $args['id'] );
+				break;
+			case 'homeblog':
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
-			}
-		} elseif ( $args['id'] ) {
-			$desc = Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
+				break;
+			case 'pta':
+				$desc = Data\Plugin\PTA::get_meta_item( 'tw_description', $args['pta'] );
 		}
 
+		// Do not check empty(). See strlen below.
 		if ( ! isset( $desc ) ) return '';
+
 		if ( \strlen( $desc ) )
 			return Sanitize::metadata_content( $desc );
 

@@ -133,7 +133,9 @@ class Query {
 		);
 
 		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
-		return $use_cache ? umemo( __METHOD__, $id ) : $id;
+		return $use_cache
+			? umemo( __METHOD__, $id )
+			: $id;
 	}
 
 	/**
@@ -171,7 +173,9 @@ class Query {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				Query\Utils::has_page_on_front() ? (int) \get_option( 'page_on_front' ) : 0,
+				Query\Utils::has_page_on_front()
+					? (int) \get_option( 'page_on_front' )
+					: 0,
 			);
 	}
 
@@ -266,7 +270,10 @@ class Query {
 			return \is_attachment();
 
 		return Query\Cache::memo( null, $attachment )
-			?? Query\Cache::memo( \is_attachment( $attachment ), $attachment );
+			?? Query\Cache::memo(
+				\is_attachment( $attachment ),
+				$attachment,
+			);
 	}
 
 	/**
@@ -465,7 +472,10 @@ class Query {
 			return \is_author();
 
 		return Query\Cache::memo( null, $author )
-			?? Query\Cache::memo( \is_author( $author ), $author );
+			?? Query\Cache::memo(
+				\is_author( $author ),
+				$author,
+			);
 	}
 
 	/**
@@ -527,7 +537,10 @@ class Query {
 			return static::is_category_admin();
 
 		return Query\Cache::memo( null, $category )
-			?? Query\Cache::memo( \is_category( $category ), $category );
+			?? Query\Cache::memo(
+				\is_category( $category ),
+				$category,
+			);
 	}
 
 	/**
@@ -575,9 +588,11 @@ class Query {
 		return Query\Cache::memo()
 			?? Query\Cache::memo(
 				\is_front_page()
-					?: static::is_blog()
+					?: (
+						   static::is_blog()
 						&& 0 === static::get_the_real_id()
 						&& 'post' !== \get_option( 'show_on_front' ) // 'page' is tested via `is_front_page()`
+					),
 			);
 	}
 
@@ -624,7 +639,11 @@ class Query {
 		return Query\Cache::memo( null, $page )
 			?? Query\Cache::memo(
 				\is_int( $page ) || $page instanceof \WP_Post
-					? \in_array( \get_post_type( $page ), Post_Type::get_all_hierarchical(), true )
+					? \in_array(
+						\get_post_type( $page ),
+						Post_Type::get_all_hierarchical(),
+						true,
+					)
 					: \is_page( $page ),
 				$page,
 			);
@@ -708,7 +727,11 @@ class Query {
 		return Query\Cache::memo( null, $post )
 			?? Query\Cache::memo(
 				\is_int( $post ) || $post instanceof \WP_Post
-					? \in_array( \get_post_type( $post ), Post_Type::get_all_nonhierarchical(), true )
+					? \in_array(
+						\get_post_type( $post ),
+						Post_Type::get_all_nonhierarchical(),
+						true,
+					)
 					: \is_single( $post ),
 				$post,
 			);
@@ -797,7 +820,8 @@ class Query {
 					: false,
 			);
 
-		return false !== $front_id && ( $id ?: static::get_the_real_id() ) === $front_id;
+		return false !== $front_id
+			&& ( $id ?: static::get_the_real_id() ) === $front_id;
 	}
 
 	/**
@@ -816,7 +840,10 @@ class Query {
 			return static::is_tag_admin();
 
 		return Query\Cache::memo( null, $tag )
-			?? Query\Cache::memo( \is_tag( $tag ), $tag );
+			?? Query\Cache::memo(
+				\is_tag( $tag ),
+				$tag,
+			);
 	}
 
 	/**
@@ -846,7 +873,11 @@ class Query {
 	 */
 	public static function is_tax( $taxonomy = '', $term = '' ) {
 		return Query\Cache::memo( null, $taxonomy, $term )
-			?? Query\Cache::memo( \is_tax( $taxonomy, $term ), $taxonomy, $term );
+			?? Query\Cache::memo(
+				\is_tax( $taxonomy, $term ),
+				$taxonomy,
+				$term,
+			);
 	}
 
 	/**

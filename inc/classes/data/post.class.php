@@ -300,6 +300,7 @@ class Post {
 	 * Returns the post ancestors.
 	 *
 	 * @since 5.1.0
+	 * @since 5.1.3 Now filters out deleted posts (broken ancestors).
 	 *
 	 * @param ?int $id           The post ID. Leave null to autodetermine.
 	 * @param bool $include_self Whether to include the initial post itself.
@@ -307,15 +308,19 @@ class Post {
 	 */
 	public static function get_post_parents( $id = null, $include_self = false ) {
 
-		$post = \get_post( $id ?? Query::get_the_real_id() );
-		$pto  = \get_post_type_object( $post->post_type ?? '' );
-
-		$ancestors = $pto->hierarchical ? $post->ancestors : [];
+		$post      = \get_post( $id ?? Query::get_the_real_id() );
+		$ancestors = \get_post_type_object( $post->post_type ?? '' )->hierarchical
+			? $post->ancestors
+			: [];
 
 		$parents = [];
 
-		foreach ( array_reverse( $ancestors ) as $post_id )
-			$parents[ $post_id ] = \get_post( $post_id );
+		foreach ( array_reverse( $ancestors ) as $post_id ) {
+			$parent = \get_post( $post_id );
+
+			if ( $parent )
+				$parents[ $post_id ] = $parent;
+		}
 
 		if ( $include_self )
 			$parents[ $id ] = $post;

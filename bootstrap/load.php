@@ -45,7 +45,7 @@ spl_autoload_register( 'The_SEO_Framework\_autoload_classes', true, true );
 function _load_tsf() {
 	/**
 	 * @since 2.3.7
-	 * @param bool $load
+	 * @param bool $load Set to false to prevent loading TSF.
 	 */
 	if ( \apply_filters( 'the_seo_framework_load', true ) ) {
 		if ( THE_SEO_FRAMEWORK_DEBUG )
@@ -224,9 +224,6 @@ function _do_plugin_deactivation() {
  * @return int The accumulated time, roughly.
  */
 function _bootstrap_timer( $add = 0 ) {
-
-	static $time = 0;
-
-	$time += $add;
-	return $time;
+	static $time  = 0;
+	return $time += $add;
 }

@@ -14,30 +14,48 @@ Follow these rules:
 - No SOLID
 - KISS
 - Procedural code is the way
+- Never add phpcs comments
+- Before making broad assumptions, ask for clarification
+- Use plain punctuation, no fancy quotes
+- Interpolate variables in strings when possible
+- Do not use CLI to make changes; use built-in tools instead
+- When fixing bugs, fix the cause, not the symptom
 
 ## General Coding Standards
 
 - Use WordPress coding standards, except as noted below
-- Use lowercase unit types, but write "Boolean" not "boolean"
+- Use lowercase unit types, except write "Boolean" not "boolean"
 - Use single quotes for strings unless interpolating
 - Interpolate variables in strings when possible
-- Align array key/value separators with spaces AFTER the separator
-- Add trailing commas in multiline arrays/function args
+- Align object/array key/value separators with spaces AFTER the separator
+- When creating an object/array with a single property, put that property on a single line
+- When creating an object/array with a single property whose value contains an operator, put that property on a new line
+- Place multiline operators at new line start, also for conditional checks
+- Put function args on a new line when they're over 30 characters in total
+- Put multiple function args on a new line when any is an anonymous function, array, or object
+- Add trailing commas at the end of multiline object/array properties and function args if the language supports it
 - Pad brackets/braces with spaces around arguments
 - Align consecutive variable assignments at equal signs
-- Place multiline operators at new line start, also for conditional checks
-- Put function args on a new line when >30 chars or for objects/arrays
-- Do not add braces in constructs followed by only a single-line statement, unless there's an else-clause.
+- Unless there's a conditional follow-up construct, do not add braces in constructs (if/do/for etc.) followed by only a single-line statement
+- Do not write inline comments that state the obvious
+- Do not add comments about your executions
 - Write detailed docblocks for all functions, classes, and methods
-- Add a newline after a function opening brace, unless the function is a single line
-- A tab is 4 spaces
+- Add a newline after a function opening brace, unless its body is a single line
+- A tab is 4 characters wide
 - Use tabs for indentation, not spaces
+- When there's an operator in an argument, split all arguments into separate lines
+
+## Corrupted Files
+- Do not try to fix file encoding issues, just notify about them after your changes
+- If you believe the file is corrupted, stop immediately and wait for a new instruction
+- If you find a whitespace issue, it's probably because you forgot to add a newline at the end
 
 ## WordPress PHP
 
-- Avoid functions wp_sprintf (except with %l lists) and wp_json_encode
+- Avoid functions wp_sprintf (except with %l lists), wp_json_encode, and status_header
 - Never add hooks in class constructs
 - In add_filter/add_action, write each argument on a new line when implementing anonymous functions
+- Do not create validate_callbacks for REST routes, but validate and sanitize parameters directly in the route callback
 
 ## PHP
 
@@ -45,13 +63,14 @@ Follow these rules:
 - Never use strict typing unless required
 - When outside global namespace:
 	1. Namespace-escape these native PHP functions only when outside global space: strlen, is_null, is_bool, is_long, is_int, is_integer, is_float, is_double, is_string, is_array, is_object, is_resource, is_scalar, boolval, intval, floatval, doubleval, strval, defined, chr, ord, call_user_func_array, call_user_func, in_array, count, sizeof, get_class, get_called_class, gettype, func_num_args, func_get_args, array_slice, array_key_exists, sprintf, constant, function_exists, is_callable, extension_loaded, dirname, define
-	2. Do not namespace-escape any other native PHP functions
-	3. Import non-native PHP classes, functions, and constants in this order, and put the imports above the copyright header, below the direct access guard:
+	2. It's forbidden to namespace-escape any other native PHP functions
+	3. When importing non-native PHP symbols, put the imports above the copyright header, below the direct access guard, and put them in this order:
 		1. constants
 		2. functions
 		3. classes
 	3. Namespace-escape all non-native PHP function calls to outside the current namespace that are imported
 	4. Namespace-escape constants that aren't imported
+	4. When importing multiple symbols, use a single import statement with a comma-separated list, where each item is on a new line
 - Short Echo Tags, HereDoc, NowDoc are permitted
 - Use (s|v)printf for complex strings when variables still need to be escaped
 - Only for PHP, align array key/value separators with spaces BEFORE the separator
@@ -66,9 +85,10 @@ Follow these rules:
 - No constant functions
 - No JSX
 - Apply PHP's spacing standards, including vertical alignment
+- Ignore long __-prefixed properties for spacing/alignment purposes
 - Use const instead of import
 - Do not add parentheses to lone parameters in arrow functions
-- When creating a callback that contains an anonymous function, write each argument on a new line
+- Put each chained method call on a new line
 
 ## Avoid
 
@@ -78,6 +98,7 @@ Follow these rules:
 - Cruft
 - Compliments
 - Affirmations
+- Changing the meaning of existing comments unless it improves clarity
 
 ## Be
 
@@ -100,3 +121,4 @@ Follow these rules:
 	1. Recheck your changes against all instructions; if you find a code snippet that does not comply, fix it
 	2. Recheck your code to simplify it as much as possible without losing functionality
 	2. Make a checklist of all changes you made in accordance to the request; if you couldn't do something, mark it with X and explain the issue
+- After adding a new feature, review the code 20 lines above and below here you added it. Reevaluate your code with this context in mind: Is it still the best solution or should it be refactored?

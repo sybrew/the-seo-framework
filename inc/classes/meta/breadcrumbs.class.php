@@ -9,8 +9,8 @@ namespace The_SEO_Framework\Meta;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function The_SEO_Framework\{
-	memo,
 	get_query_type_from_args,
+	memo,
 	normalize_generation_args,
 };
 
@@ -230,36 +230,26 @@ class Breadcrumbs {
 
 		// If there's no ID, then there's no term assigned.
 		if ( $primary_term_id ) {
-			$ancestors = \get_ancestors(
+			foreach ( Data\Term::get_term_parents(
 				$primary_term_id,
 				$taxonomy,
-				'taxonomy',
-			);
-
-			foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
+				true, // Include self
+			) as $parent ) {
 				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
+					'url'  => Meta\URI::get_bare_term_url( $parent->term_id, $parent->taxonomy ),
 					'name' => Meta\Title::get_bare_title( [
-						'id'  => $ancestor_id,
-						'tax' => $taxonomy,
+						'id'  => $parent->term_id,
+						'tax' => $parent->taxonomy,
 					] ),
 				];
 			}
-
-			$crumbs[] = [
-				'url'  => Meta\URI::get_bare_term_url( $primary_term_id, $taxonomy ),
-				'name' => Meta\Title::get_bare_title( [
-					'id'  => $primary_term_id,
-					'tax' => $taxonomy,
-				] ),
-			];
 		}
 
-		// get_post_ancestors() has no filter. get_ancestors() isn't used for posts in WP.
-		foreach ( array_reverse( $post->ancestors ) as $ancestor_id ) {
+		// Exclude self, we add it below (current post is cached if $id is null).
+		foreach ( Data\Post::get_post_parents( $post->ID ) as $parent ) {
 			$crumbs[] = [
-				'url'  => Meta\URI::get_bare_singular_url( $ancestor_id ),
-				'name' => Meta\Title::get_bare_title( [ 'id' => $ancestor_id ] ),
+				'url'  => Meta\URI::get_bare_singular_url( $parent->ID ),
+				'name' => Meta\Title::get_bare_title( [ 'id' => $parent->ID ] ),
 			];
 		}
 
@@ -286,7 +276,7 @@ class Breadcrumbs {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int|null $term_id  The term ID.
+	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
 	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
 	 * @return array[] {
 	 *     The breadcrumb list items in order of appearance.
@@ -300,19 +290,27 @@ class Breadcrumbs {
 		$crumbs = [];
 
 		if ( isset( $term_id ) ) {
-			$taxonomy  = $taxonomy ?: \get_term( $term_id )->taxonomy ?? '';
-			$ancestors = \get_ancestors( $term_id, $taxonomy, 'taxonomy' );
+			$taxonomy = $taxonomy ?: ( \get_term( $term_id )->taxonomy ?? '' );
+		} else {
+			// Always override taxonomy when term_id is null
+			$taxonomy = Query::get_current_taxonomy();
+		}
 
-			foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
-				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
-					'name' => Meta\Title::get_bare_title( [
-						'id'  => $ancestor_id,
-						'tax' => $taxonomy,
-					] ),
-				];
-			}
+		foreach ( Data\Term::get_term_parents(
+			$term_id,
+			$taxonomy,
+			false, // Exclude self, we add it below (current term is cached if $term_id is null).
+		) as $parent ) {
+			$crumbs[] = [
+				'url'  => Meta\URI::get_bare_term_url( $parent->term_id, $parent->taxonomy ),
+				'name' => Meta\Title::get_bare_title( [
+					'id'  => $parent->term_id,
+					'tax' => $parent->taxonomy,
+				] ),
+			];
+		}
 
+		if ( isset( $term_id ) ) {
 			$crumbs[] = [
 				'url'  => Meta\URI::get_bare_term_url( $term_id, $taxonomy ),
 				'name' => Meta\Title::get_bare_title( [
@@ -321,19 +319,6 @@ class Breadcrumbs {
 				] ),
 			];
 		} else {
-			$taxonomy  = Query::get_current_taxonomy();
-			$ancestors = \get_ancestors( Query::get_the_real_id(), $taxonomy, 'taxonomy' );
-
-			foreach ( array_reverse( $ancestors ) as $ancestor_id ) {
-				$crumbs[] = [
-					'url'  => Meta\URI::get_bare_term_url( $ancestor_id, $taxonomy ),
-					'name' => Meta\Title::get_bare_title( [
-						'id'  => $ancestor_id,
-						'tax' => $taxonomy,
-					] ),
-				];
-			}
-
 			$crumbs[] = [
 				'url'  => Meta\URI::get_bare_term_url(),
 				'name' => Meta\Title::get_bare_title(),

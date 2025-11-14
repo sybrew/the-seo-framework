@@ -79,26 +79,6 @@ final class Open_Graph {
 
 		$locale = Meta\Open_Graph::get_locale();
 
-		if ( \has_filter( 'the_seo_framework_oglocale_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $locale The generated locale field.
-			 * @param int    $id     The page or term ID.
-			 */
-			$locale = (string) \apply_filters_deprecated(
-				'the_seo_framework_oglocale_output',
-				[
-					$locale,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( $locale )
 			yield 'og:locale' => [
 				'attributes' => [
@@ -115,26 +95,6 @@ final class Open_Graph {
 	public static function generate_open_graph_site_name() {
 
 		$sitename = Meta\Open_Graph::get_site_name();
-
-		if ( \has_filter( 'the_seo_framework_ogsitename_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $locale The generated Open Graph site name.
-			 * @param int    $id     The page or term ID.
-			 */
-			$sitename = (string) \apply_filters_deprecated(
-				'the_seo_framework_ogsitename_output',
-				[
-					$sitename,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		// A site called '0' does not make much sense.
 		if ( $sitename )
@@ -154,26 +114,6 @@ final class Open_Graph {
 
 		$title = Meta\Open_Graph::get_title();
 
-		if ( \has_filter( 'the_seo_framework_ogtitle_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $title The generated Open Graph title.
-			 * @param int    $id    The page or term ID.
-			 */
-			$title = (string) \apply_filters_deprecated(
-				'the_seo_framework_ogtitle_output',
-				[
-					$title,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( \strlen( $title ) )
 			yield 'og:title' => [
 				'attributes' => [
@@ -191,26 +131,6 @@ final class Open_Graph {
 
 		$description = Meta\Open_Graph::get_description();
 
-		if ( \has_filter( 'the_seo_framework_ogdescription_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $description The generated Open Graph description.
-			 * @param int    $id          The page or term ID.
-			 */
-			$description = (string) \apply_filters_deprecated(
-				'the_seo_framework_ogdescription_output',
-				[
-					$description,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( \strlen( $description ) )
 			yield 'og:description' => [
 				'attributes' => [
@@ -227,25 +147,6 @@ final class Open_Graph {
 	public static function generate_open_graph_url() {
 
 		$url = Meta\Open_Graph::get_url();
-
-		if ( \has_filter( 'the_seo_framework_ogurl_output' ) ) {
-			/**
-			 * @since 2.9.3
-			 * @since 5.0.0 Deprecated
-			 * @deprecated
-			 * @param string $url The canonical/Open Graph URL. Must be escaped.
-			 * @param int    $id  The page or term ID.
-			 */
-			$url = (string) \apply_filters_deprecated(
-				'the_seo_framework_ogurl_output',
-				[
-					$url,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		if ( $url )
 			yield 'og:url' => [
@@ -310,27 +211,6 @@ final class Open_Graph {
 
 		$time = Meta\Open_Graph::get_article_published_time();
 
-		if ( \has_filter( 'the_seo_framework_publishedtime_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 2.9.3
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $time The article published time.
-			 * @param int    $id   The current page or term ID.
-			 */
-			$time = (string) \apply_filters_deprecated(
-				'the_seo_framework_publishedtime_output',
-				[
-					$time,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
-
 		if ( $time )
 			yield 'article:published_time' => [
 				'attributes' => [
@@ -347,26 +227,6 @@ final class Open_Graph {
 	public static function generate_article_modified_time() {
 
 		$time = Meta\Open_Graph::get_article_modified_time();
-
-		if ( \has_filter( 'the_seo_framework_modifiedtime_output' ) ) {
-			/**
-			 * @since 2.3.0
-			 * @since 2.7.0 Added output within filter.
-			 * @since 5.0.0 Deprecated.
-			 * @deprecated
-			 * @param string $time The article modified time.
-			 * @param int    $id   The current page or term ID.
-			 */
-			$time = (string) \apply_filters_deprecated(
-				'the_seo_framework_modifiedtime_output',
-				[
-					$time,
-					\The_SEO_Framework\Helper\Query::get_the_real_id(),
-				],
-				'5.0.0 of The SEO Framework',
-				'the_seo_framework_meta_render_data',
-			);
-		}
 
 		if ( $time )
 			yield 'article:modified_time' => [

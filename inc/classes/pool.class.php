@@ -55,7 +55,7 @@ class Pool extends Legacy_API {
 	 */
 	private static $pool = [];
 
-	// phpcs:disable, Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
+	// phpcs:disable Squiz.Commenting.VariableComment.Missing -- see trait Static_Deprecator.
 
 	/**
 	 * Returns a pool of Admin classes as instantiated object with deprecation capabilities.

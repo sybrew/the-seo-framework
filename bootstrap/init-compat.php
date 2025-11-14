@@ -25,14 +25,19 @@ namespace The_SEO_Framework;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Disable Headway theme SEO. We should remove this in 2025 or so; it's abandoned.
-\add_filter( 'headway_seo_disabled', '__return_true' );
-
-if ( Helper\Compatibility::is_theme_active( 'genesis' ) )
-	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-genesis.php';
-
-if ( Helper\Compatibility::is_theme_active( 'bricks' ) )
-	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . 'theme-bricks.php';
+foreach (
+	array_intersect_key(
+		[
+			'genesis' => 'genesis',
+			'bricks'  => 'bricks',
+			'avada'   => 'avada',
+		],
+		array_flip( Data\Blog::get_active_themes() ),
+	)
+	as $_theme
+) {
+	require \THE_SEO_FRAMEWORK_DIR_PATH_COMPAT . "theme-$_theme.php";
+}
 
 foreach (
 	array_intersect_key(

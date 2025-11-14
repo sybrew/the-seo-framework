@@ -98,7 +98,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		/**
@@ -119,7 +119,7 @@ final class AJAX {
 		Data\Plugin\User::update_single_meta_item( Query::get_current_user_id(), 'counter_type', $value );
 
 		\wp_send_json_success();
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -150,7 +150,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer does this.
 		Utils::check_ajax_capability_referer( 'upload_files' );
 
 		if ( ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
@@ -252,7 +252,7 @@ final class AJAX {
 
 		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
 
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -269,7 +269,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		$post_id = \absint( $_POST['post_id'] ?? 0 );
 
 		Utils::check_ajax_capability_referer( 'edit_post', $post_id );
@@ -349,7 +349,7 @@ final class AJAX {
 			'data'      => $data,
 			'processed' => $get,
 		] );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -368,7 +368,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['term_id'], $_POST['taxonomy'] ) )
@@ -390,7 +390,7 @@ final class AJAX {
 		}
 
 		\wp_send_json_success( $parent_term_slugs );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -411,7 +411,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['post_id'] ) )
@@ -443,7 +443,7 @@ final class AJAX {
 		}
 
 		\wp_send_json_success( $parent_post_slugs );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -461,7 +461,7 @@ final class AJAX {
 
 		Helper\Headers::clean_response_header();
 
-		// phpcs:disable, WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
+		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
 
 		if ( ! isset( $_POST['author_id'] ) )
@@ -472,13 +472,13 @@ final class AJAX {
 		if ( ! $author_id )
 			\wp_send_json_error( 'invalid_object_id' );
 
-		$author_slugs   = [];
-		$author_slugs[] = [
-			'id'   => $author_id,
-			'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
-		];
-
-		\wp_send_json_success( $author_slugs );
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// Send a sequential array of "slugs" for consistency with other slug fetchers.
+		\wp_send_json_success( [
+			[
+				'id'   => $author_id,
+				'slug' => Data\User::get_userdata( $author_id, 'user_nicename' ),
+			],
+		] );
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 }

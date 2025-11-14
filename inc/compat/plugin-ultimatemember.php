@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\UltimateMember
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -9,15 +10,14 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 // At 9999 the user query should be registered (um\core\Rewrite::locate_user_profile). So, we use 9999+1 = 100000.
-\add_action( 'template_redirect', __NAMESPACE__ . '\\_um_reinstate_title_support', 100000 );
-\add_filter( 'the_seo_framework_query_supports_seo', __NAMESPACE__ . '\\_um_determine_support' );
+\add_action( 'template_redirect', __NAMESPACE__ . '\_um_reinstate_title_support', 100000 );
+\add_filter( 'the_seo_framework_query_supports_seo', __NAMESPACE__ . '\_um_determine_support' );
 
 /**
  * Reinstates title support if a UM-controlled profile page is detected.
  *
  * @hook template_redirect 100000
  * @since 4.2.0
- * @access private
  */
 function _um_reinstate_title_support() {
 
@@ -41,7 +41,6 @@ function _um_reinstate_title_support() {
  *
  * @hook the_seo_framework_query_supports_seo 10
  * @since 4.2.0
- * @access private
  *
  * @param bool $supported Whether the query supports SEO.
  * @return bool Whether the query is supported.

@@ -13,7 +13,7 @@ use The_SEO_Framework\{
 	Helper\Format,
 };
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -40,7 +40,7 @@ printf(
 
 $colors = Sitemap\Utils::get_sitemap_colors();
 
-// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Sanitize::rgb_hex() also escapes XML.
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- Sanitize::rgb_hex() also escapes XML.
 printf(
 	'<xsl:variable name="colorMain" select="\'%s\'"/>',
 	'#' . Sanitize::rgb_hex(
@@ -76,4 +76,4 @@ printf(
 		)
 	)
 );
-// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
+// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

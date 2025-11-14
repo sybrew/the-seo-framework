@@ -56,7 +56,8 @@ class Arrays {
 
 		// PHP 8.1+, use `!array_is_list()`?
 		// This is over 350x faster than a polyfill for `!array_is_list()`.
-		if ( empty( $array ) || array_values( $array ) !== $array ) return $array;
+		if ( empty( $array ) || array_values( $array ) !== $array )
+			return $array;
 
 		$ret = [];
 

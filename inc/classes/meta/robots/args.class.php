@@ -48,9 +48,9 @@ use The_SEO_Framework\{
  */
 final class Args extends Factory {
 
-	// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
-	// phpcs:disable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
-	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
+	// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- You don't love PHP7.
+	// phpcs:disable PSR2.ControlStructures.SwitchDeclaration.TerminatingComment -- You hate goto.
+	// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact -- You hate gotoo.
 	/**
 	 * Generates robots assertions for no[index|archive|follow].
 	 *
@@ -116,7 +116,10 @@ final class Args extends Factory {
 						yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );
 
 					if ( $args['id'] )
-						yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, \get_post_type( $args['id'] ) );
+						yield 'globals_post_type' => Robots::is_post_type_robots_set(
+							$type,
+							\get_post_type( $args['id'] ),
+						);
 					break;
 				case 'term':
 					$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
@@ -125,10 +128,11 @@ final class Args extends Factory {
 
 					// Store values from each post type bound to the taxonomy.
 					foreach ( Taxonomy::get_post_types( $args['tax'] ) as $post_type )
-						$_is_post_type_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
+						$_is_pt_robots_set[] = Robots::is_post_type_robots_set( $type, $post_type );
 
-					// Only enable if _all_ post types have been marked with 'no*'. Return false if no post types are found (corner case).
-					yield 'globals_post_type_all' => isset( $_is_post_type_robots_set ) && ! \in_array( false, $_is_post_type_robots_set, true );
+					// Only enable if _all_ post types have been marked with 'no*'.
+					// Do not optimize: Return false if no post types are found (corner case).
+					yield 'globals_post_type_all' => isset( $_is_pt_robots_set ) && ! \in_array( false, $_is_pt_robots_set, true );
 					break;
 				case 'pta':
 					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );
@@ -141,9 +145,9 @@ final class Args extends Factory {
 
 		end:;
 	}
-	// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
-	// phpcs:enable, PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
-	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact
+	// phpcs:enable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+	// phpcs:enable PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
+	// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 
 	/**
 	 * Generates robots assertions for noindex in passes.

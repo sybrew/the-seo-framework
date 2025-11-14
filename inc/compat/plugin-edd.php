@@ -2,6 +2,7 @@
 /**
  * @package The_SEO_Framework\Compat\Plugin\EDD
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
@@ -10,15 +11,14 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Helper\Query;
 
-\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\\_set_edd_is_product', 10, 2 );
-\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\\_set_edd_is_product_admin' );
+\add_filter( 'the_seo_framework_is_product', __NAMESPACE__ . '\_set_edd_is_product', 10, 2 );
+\add_filter( 'the_seo_framework_is_product_admin', __NAMESPACE__ . '\_set_edd_is_product_admin' );
 
 /**
  * Sets the is_product query.
  *
  * @hook the_seo_framework_is_product 10
  * @since 4.0.5
- * @access private
  *
  * @param bool             $is_product Whether this is a product page.
  * @param int|WP_Post|null $post       Post ID or post object.
@@ -40,7 +40,6 @@ function _set_edd_is_product( $is_product, $post ) {
  *
  * @hook the_seo_framework_is_product_admin 10
  * @since 4.0.5
- * @access private
  * @TODO is this redundant for TSF?
  *
  * @param bool $is_product_admin Whether this is a product admin query.

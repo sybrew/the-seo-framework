@@ -216,7 +216,7 @@ final class Tags {
 			);
 		}
 
-		// phpcs:disable, WordPress.Security.EscapeOutput -- already escaped.
+		// phpcs:disable WordPress.Security.EscapeOutput -- already escaped.
 		if ( isset( $content ) ) {
 			vprintf(
 				'<%1$s%2$s>%3$s</%1$s>',
@@ -241,7 +241,7 @@ final class Tags {
 				$attr,
 			);
 		}
-		// phpcs:enable, WordPress.Security.EscapeOutput
+		// phpcs:enable WordPress.Security.EscapeOutput
 
 		echo "\n";
 	}

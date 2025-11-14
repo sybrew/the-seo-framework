@@ -134,7 +134,7 @@ class Setup {
 
 		$titleloc = \is_rtl() ? 'left' : 'right';
 
-		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- precision alignment OK.
+		// phpcs:disable WordPress.Arrays.MultipleStatementAlignment -- precision alignment OK.
 		/**
 		 * @since 2.2.7
 		 * @param array $options The default site options.
@@ -331,10 +331,10 @@ class Setup {
 				'knowledge_tumblr'     => '', // Tumblr Account.
 
 				// Sitemaps.
-				'sitemaps_output'         => 1,    // Output of sitemap.
+				'sitemaps_output'         => 1,   // Output of sitemap.
 				'sitemap_query_limit'     => 250, // Sitemap post limit.
-				'cache_sitemap'           => 1, // Sitemap transient cache.
-				'sitemap_cron_prerender'  => 0, // Sitemap cron-ping prerender.
+				'cache_sitemap'           => 1,   // Sitemap transient cache.
+				'sitemap_cron_prerender'  => 0,   // Sitemap cron-ping prerender.
 
 				'sitemaps_modified' => 1, // Add sitemap modified time.
 
@@ -353,7 +353,7 @@ class Setup {
 				'index_the_feed'   => 0, // Add backlink to the end of the feed.
 			],
 		);
-		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment
+		// phpcs:enable WordPress.Arrays.MultipleStatementAlignment
 	}
 
 	/**

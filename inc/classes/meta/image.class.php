@@ -109,43 +109,8 @@ class Image {
 	 * }
 	 */
 	public static function get_image_details( $args = null, $single = false, $context = 'social' ) {
-		/**
-		 * @since 4.0.5
-		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 * @since 5.0.0 Deprecated.
-		 * @deprecated
-		 * @param array      $details {
-		 *     The image details array, sequential.
-		 *
-		 *     @type string $url      The image URL.
-		 *     @type int    $id       The image ID.
-		 *     @type int    $width    The image width in pixels.
-		 *     @type int    $height   The image height in pixels.
-		 *     @type string $alt      The image alt tag.
-		 *     @type string $caption  The image caption.
-		 *     @type int    $filesize The image filesize in bytes.
-		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-		 *                            Is null when the query is auto-determined.
-		 * @param bool       $single  Whether to fetch one image, or multiple.
-		 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-		 * @param bool       $clean   Deprecated. We always clean now.
-		 */
-		return \apply_filters_deprecated(
-			'the_seo_framework_image_details',
-			[
-				(
-					   static::get_custom_image_details( $args, $single, $context )
-					?: static::get_generated_image_details( $args, $single, $context )
-				),
-				$args,
-				$single,
-				$context,
-				true,
-			],
-			'5.0.0 of The SEO Framework',
-			'the_seo_framework_custom_image_details or the_seo_framework_generated_image_details',
-		);
+		return static::get_custom_image_details( $args, $single, $context )
+			?: static::get_generated_image_details( $args, $single, $context );
 	}
 
 	/**
@@ -451,8 +416,6 @@ class Image {
 	 */
 	public static function generate_custom_image_details_from_args( $args, $context = 'social' ) {
 
-		normalize_generation_args( $args );
-
 		if ( 'organization' === $context ) {
 			$details = [
 				'url' => Data\Plugin::get_option( 'knowledge_logo_url' ),
@@ -461,33 +424,44 @@ class Image {
 		} else {
 			normalize_generation_args( $args );
 
-			if ( $args['tax'] ) {
-				$details = [
-					'url' => Data\Plugin\Term::get_meta_item( 'social_image_url', $args['id'] ),
-					'id'  => Data\Plugin\Term::get_meta_item( 'social_image_id', $args['id'] ),
-				];
-			} elseif ( $args['pta'] ) {
-				$details = [
-					'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['pta'] ),
-					'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['pta'] ),
-				];
-			} elseif ( empty( $args['uid'] ) && Query::is_real_front_page_by_id( $args['id'] ) ) {
-				$details = [
-					'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
-					'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
-				];
+			switch ( get_query_type_from_args( $args ) ) {
+				case 'single':
+					if ( Query::is_static_front_page( $args['id'] ) ) {
+						$details = [
+							'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
+							'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
+						];
 
-				if ( $args['id'] && ! $details['url'] ) {
+						if ( empty( $details['url'] ) ) {
+							$details = [
+								'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
+								'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
+							];
+						}
+					} else {
+						$details = [
+							'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
+							'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
+						];
+					}
+					break;
+				case 'term':
 					$details = [
-						'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
-						'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
+						'url' => Data\Plugin\Term::get_meta_item( 'social_image_url', $args['id'] ),
+						'id'  => Data\Plugin\Term::get_meta_item( 'social_image_id', $args['id'] ),
 					];
-				}
-			} elseif ( $args['id'] ) {
-				$details = [
-					'url' => Data\Plugin\Post::get_meta_item( '_social_image_url', $args['id'] ),
-					'id'  => Data\Plugin\Post::get_meta_item( '_social_image_id', $args['id'] ),
-				];
+					break;
+				case 'homeblog':
+					$details = [
+						'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
+						'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
+					];
+					break;
+				case 'pta':
+					$details = [
+						'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['pta'] ),
+						'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['pta'] ),
+					];
 			}
 		}
 

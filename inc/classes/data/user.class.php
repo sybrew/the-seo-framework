@@ -89,6 +89,7 @@ class User {
 	 * Gets user data by key.
 	 *
 	 * This is an alias of WP Core's `\get_userdata()`, but with proper memoization.
+	 * Due to the memoization, it should not be used in contexts where user data changes.
 	 *
 	 * @since 5.1.0
 	 * @since 5.1.1 1. The second parameter is now nullable and null by default.

@@ -68,7 +68,7 @@ final class Term extends Main {
 	 * @abstract
 	 */
 	protected function prime_cache() {
-		// phpcs:disable, PEAR.Functions.FunctionCallSignature.Indent -- False negative.
+		// phpcs:disable PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 		static::get_cache( 'general/i18n/textsizeguidelines' )
 			or static::set_cache(
 				'general/i18n/textsizeguidelines',
@@ -98,7 +98,7 @@ final class Term extends Main {
 					],
 				],
 			);
-		// phpcs:enable, PEAR.Functions.FunctionCallSignature.Indent
+		// phpcs:enable PEAR.Functions.FunctionCallSignature.Indent
 	}
 
 	/**

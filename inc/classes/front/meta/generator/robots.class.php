@@ -51,29 +51,6 @@ final class Robots {
 
 		$meta = Meta\Robots::get_meta();
 
-		if ( \has_filter( 'the_seo_framework_robots_meta' ) ) {
-			/**
-			 * @since 2.6.0
-			 * @since 5.0.0 1. Deprecated.
-			 *              2. No longer used internally.
-			 * @deprecated
-			 * @param array $meta The robots meta.
-			 * @param int   $id   The current post or term ID.
-			 */
-			$meta = implode(
-				',',
-				(array) \apply_filters_deprecated(
-					'the_seo_framework_robots_meta',
-					[
-						explode( ',', $meta ),
-						\The_SEO_Framework\Helper\Query::get_the_real_id(),
-					],
-					'5.0.0 of The SEO Framework',
-					'the_seo_framework_robots_meta_array',
-				)
-			);
-		}
-
 		if ( $meta )
 			yield 'robots' => [
 				'attributes' => [

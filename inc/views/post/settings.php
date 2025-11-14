@@ -27,7 +27,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 	Input,
 };
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -49,7 +49,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 // See meta_box et al.
 [ $instance ] = $view_args;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 // Setup default vars.
 $post_id = Query::get_the_real_id(); // We also have access to object $post at the main call...
@@ -417,7 +417,7 @@ switch ( $instance ) :
 				$_default_i18n     = \__( 'Default (%s)', 'autodescription' );
 				$tw_suported_cards = Meta\Twitter::get_supported_cards();
 
-				// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+				// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 				echo Form::make_single_select_form( [
 					'id'       => 'autodescription_twitter_card_type',
 					'class'    => 'tsf-select-block',
@@ -429,7 +429,7 @@ switch ( $instance ) :
 					),
 					'selected' => $meta['_tsf_twitter_card_type'],
 				] );
-				// phpcs:enable, WordPress.Security.EscapeOutput
+				// phpcs:enable WordPress.Security.EscapeOutput
 				?>
 			</div>
 		</div>
@@ -465,9 +465,9 @@ switch ( $instance ) :
 				<input type=hidden name="autodescription[_social_image_id]" id=autodescription_socialimage-id value="<?= \absint( $meta['_social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js>
 				<div class="hide-if-no-tsf-js tsf-social-image-buttons">
 					<?php
-					// phpcs:disable, WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
+					// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 					echo Form::get_image_uploader_form( [ 'id' => 'autodescription_socialimage' ] );
-					// phpcs:enable, WordPress.Security.EscapeOutput
+					// phpcs:enable WordPress.Security.EscapeOutput
 					?>
 				</div>
 			</div>
@@ -668,7 +668,7 @@ switch ( $instance ) :
 							/* translators: %s = default option value */
 							$_default_i18n = \__( 'Default (%s)', 'autodescription' );
 
-							// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+							// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 							echo Form::make_single_select_form( [
 								'id'       => $_s['id'],
 								'class'    => 'tsf-select-block',
@@ -685,7 +685,7 @@ switch ( $instance ) :
 									'defaultI18n'        => $_default_i18n,
 								],
 							] );
-							// phpcs:enable, WordPress.Security.EscapeOutput
+							// phpcs:enable WordPress.Security.EscapeOutput
 						?>
 						</div>
 					</div>

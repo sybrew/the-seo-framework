@@ -9,6 +9,7 @@ namespace The_SEO_Framework\Meta\Description;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function The_SEO_Framework\{
+	get_query_type_from_args,
 	memo,
 	normalize_generation_args,
 };
@@ -98,9 +99,7 @@ class Excerpt {
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		if ( Query::is_static_front_page() ) {
-			$excerpt = static::get_singular_excerpt();
-		} elseif ( Query::is_blog_as_page() ) {
+		if ( Query::is_blog_as_page() ) {
 			$excerpt = static::get_blog_page_excerpt();
 		} elseif ( Query::is_singular() ) {
 			$excerpt = static::get_singular_excerpt();
@@ -123,16 +122,25 @@ class Excerpt {
 
 		normalize_generation_args( $args );
 
-		if ( $args['tax'] ) {
-			$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );
-		} elseif ( $args['pta'] ) {
-			$excerpt = static::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
-		} elseif ( $args['uid'] ) {
-			$excerpt = static::get_archive_excerpt( \get_userdata( $args['uid'] ) );
-		} elseif ( Query::is_blog_as_page( $args['id'] ) ) {
-			$excerpt = static::get_blog_page_excerpt();
-		} elseif ( $args['id'] ) {
-			$excerpt = static::get_singular_excerpt( $args['id'] );
+		switch ( get_query_type_from_args( $args ) ) {
+			case 'single':
+				if ( Query::is_blog_as_page( $args['id'] ) ) {
+					$excerpt = static::get_blog_page_excerpt();
+				} else {
+					$excerpt = static::get_singular_excerpt( $args['id'] );
+				}
+				break;
+			case 'term':
+				$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );
+				break;
+			case 'homeblog':
+				$excerpt = static::get_blog_page_excerpt();
+				break;
+			case 'pta':
+				$excerpt = static::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
+				break;
+			case 'user':
+				$excerpt = static::get_archive_excerpt( Data\User::get_userdata( $args['uid'] ) );
 		}
 
 		return $excerpt ?? '';

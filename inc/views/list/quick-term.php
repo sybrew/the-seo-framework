@@ -15,7 +15,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 	Input,
 };
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -126,7 +126,7 @@ $robots_settings = [
 					// This is bad accessibility, but it's exactly as bad as WP is, and we don't want to stray away from their standards.
 					echo '<label class=clear>';
 						printf( '<span class=title>%s</span>', \esc_html( $_setting['label'] ) );
-						// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
+						// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 						echo Form::make_single_select_form( [
 							'id'       => $_setting['id'],
 							'name'     => $_setting['name'],
@@ -138,7 +138,7 @@ $robots_settings = [
 							],
 							'selected' => 0,
 						] );
-						// phpcs:enable, WordPress.Security.EscapeOutput
+						// phpcs:enable WordPress.Security.EscapeOutput
 					echo '</label>';
 				}
 				?>

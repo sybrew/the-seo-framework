@@ -2,21 +2,21 @@
 /**
  * @package The_SEO_Framework\Compat\Theme\Genesis
  * @subpackage The_SEO_Framework\Compatibility
+ * @access private
  */
 
 namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-\add_filter( 'genesis_detect_seo_plugins', __NAMESPACE__ . '\\_disable_genesis_seo', 10, 1 );
-\add_filter( 'the_seo_framework_term_meta_defaults', __NAMESPACE__ . '\\_genesis_get_term_meta', 10, 2 );
+\add_filter( 'genesis_detect_seo_plugins', __NAMESPACE__ . '\_disable_genesis_seo', 10, 1 );
+\add_filter( 'the_seo_framework_term_meta_defaults', __NAMESPACE__ . '\_genesis_get_term_meta', 10, 2 );
 
 /**
  * Removes the Genesis SEO meta boxes on the SEO Settings page
  *
  * @hook genesis_detect_seo_plugins 10
  * @since 2.8.0
- * @access private
  *
  * @return array
  */

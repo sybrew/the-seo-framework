@@ -271,14 +271,14 @@ class Plugin {
 			'twitter_tags'                 => 'checkbox',
 			'yandex_verification'          => 'verification_code',
 
-			// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.LongIndexSpaceBeforeDoubleArrow -- it fine.
+			// phpcs:disable WordPress.Arrays.MultipleStatementAlignment.LongIndexSpaceBeforeDoubleArrow -- it fine.
 			Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noarchive' ) => 'checkbox_array',
 			Data\Plugin\Helper::get_robots_option_index( 'post_type', 'nofollow' )  => 'checkbox_array',
 			Data\Plugin\Helper::get_robots_option_index( 'post_type', 'noindex' )   => 'checkbox_array',
 			Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'noarchive' )  => 'checkbox_array',
 			Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'nofollow' )   => 'checkbox_array',
 			Data\Plugin\Helper::get_robots_option_index( 'taxonomy', 'noindex' )    => 'checkbox_array',
-			// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.LongIndexSpaceBeforeDoubleArrow
+			// phpcs:enable WordPress.Arrays.MultipleStatementAlignment.LongIndexSpaceBeforeDoubleArrow
 		];
 
 		// Remit FETCH_CLASS_NAME opcode, which performs a function call to check if it's valid.

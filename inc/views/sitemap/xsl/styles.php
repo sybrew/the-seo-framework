@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Helper\Format\Minify;
 
-// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
  * The SEO Framework plugin
@@ -119,12 +119,15 @@ CSS;
 ?>
 <style style="text/css">
 <?php
-// phpcs:disable, WordPress.Security.EscapeOutput
+// phpcs:disable WordPress.Security.EscapeOutput
 /**
  * @since 3.1.0
  * @param string $styles The sitemap XHTML styles. Must be escaped.
  */
-echo Minify::css( \apply_filters( 'the_seo_framework_sitemap_styles', $styles ) );
-// phpcs:enable, WordPress.Security.EscapeOutput
+echo Minify::css( \apply_filters(
+	'the_seo_framework_sitemap_styles',
+	$styles,
+) );
+// phpcs:enable WordPress.Security.EscapeOutput
 ?>
 </style>

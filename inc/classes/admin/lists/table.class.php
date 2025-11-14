@@ -137,7 +137,7 @@ abstract class Table {
 			|| empty( $_POST['post_type'] )
 			|| ! \current_user_can(
 				'page' === $_POST['post_type'] ? 'edit_page' : 'edit_post',
-				(int) $_POST['post_ID']
+				(int) $_POST['post_ID'],
 			)
 		) return;
 
@@ -214,7 +214,7 @@ abstract class Table {
 	 *    `_prepare_columns_wp_ajax_inline_save_tax()`
 	 */
 	private function init_columns_ajax() {
-		// phpcs:disable, WordPress.Security.NonceVerification -- _prepare_columns_wp_ajax_* verifies this.
+		// phpcs:disable WordPress.Security.NonceVerification -- _prepare_columns_wp_ajax_* verifies this.
 
 		$taxonomy  = isset( $_POST['taxonomy'] ) ? stripslashes( $_POST['taxonomy'] ) : '';
 		$post_type = isset( $_POST['post_type'] ) ? stripslashes( $_POST['post_type'] ) : '';
@@ -260,7 +260,7 @@ abstract class Table {
 			 */
 			\add_filter( "manage_edit-{$taxonomy}_columns", [ $this, 'add_column' ] );
 		}
-		// phpcs:enable, WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**

@@ -21,7 +21,7 @@ use The_SEO_Framework\Helper\{
 	Template,
 };
 
-// phpcs:disable, WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
+// phpcs:disable WordPress.PHP.DevelopmentFunctions -- This whole class is meant for development.
 
 /**
  * The SEO Framework plugin
@@ -398,7 +398,7 @@ final class Debug {
 		// Start timer.
 		$_t = hrtime( true );
 
-		// phpcs:disable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- Not this file's issue.
 		$page_id                        = Query::get_the_real_id();
 		$is_query_exploited             = Query\Utils::is_query_exploited();
 		$query_supports_seo             = Query\Utils::query_supports_seo();
@@ -455,7 +455,7 @@ final class Debug {
 		$wp_doing_ajax                  = \wp_doing_ajax();
 		$wp_doing_cron                  = \wp_doing_cron();
 		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && \REST_REQUEST; // TODO WP 6.5+ wp_is_serving_rest_request()
-		// phpcs:enable, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 
 		$timer = ( hrtime( true ) - $_t ) / 1e9;
 
