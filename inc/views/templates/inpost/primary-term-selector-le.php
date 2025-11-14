@@ -22,7 +22,6 @@ namespace The_SEO_Framework;
 		<label for="{{data.selectId}}">{{data.i18n.selectPrimary}}</label>
 		<select id="{{data.selectId}}" name="{{data.selectName}}">
 			<option value="nochange">— No Change —</option>
-			<option value="0">None (Clear primary {{data.taxonomyName}})</option>
 		</select>
 	</div>
 </script>
