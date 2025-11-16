@@ -12,13 +12,13 @@ namespace The_SEO_Framework;
 
 ?>
 <script type=text/html id=tmpl-tsf-primary-term-selector-le>
-	<div class="tsf-primary-term-selector-wrap">
+	<div id="{{data.wrapId}}" class="tsf-primary-term-selector-wrap">
 		<label for="{{data.selectId}}">{{data.i18n.selectPrimary}}</label>
 		<select id="{{data.selectId}}" name="{{data.selectName}}"></select>
 	</div>
 </script>
 <script type=text/html id=tmpl-tsf-primary-term-selector-le-bulk>
-	<div class="tsf-primary-term-selector-wrap">
+	<div id="{{data.wrapId}}" class="tsf-primary-term-selector-wrap">
 		<label for="{{data.selectId}}">{{data.i18n.selectPrimary}}</label>
 		<select id="{{data.selectId}}" name="{{data.selectName}}">
 			<option value="nochange">— No Change —</option>

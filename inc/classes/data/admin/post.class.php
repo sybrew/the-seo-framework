@@ -90,15 +90,12 @@ class Post {
 	 *              2. Now allows updating during `WP_AJAX`.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_save_inpost_primary_term`.
+	 * @since 5.1.3 Now supports quick-edit and bulk-edit.
 	 *
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
 	public static function update_primary_term( $post_id ) {
-
-		// The 'autodescription' index should only be used when using the editor.
-		// Quick and bulk-edit should be halted here.
-		if ( empty( $_POST['autodescription'] ) ) return;
 
 		$post_id = \get_post( $post_id )->ID ?? null;
 
@@ -113,25 +110,70 @@ class Post {
 		 */
 		if ( \wp_is_post_autosave( $post_id ) || \wp_is_post_revision( $post_id ) ) return;
 
-		// Check that the user is allowed to edit the post. Nonce checks are done in bulk later.
 		if ( ! \current_user_can( 'edit_post', $post_id ) ) return;
 
-		$post_type = \get_post_type( $post_id ) ?: false;
+		$post_type = \get_post_type( $post_id );
 		// Can this even fail?
 		if ( empty( $post_type ) ) return;
 
-		foreach ( Taxonomy::get_hierarchical( 'names', $post_type ) as $taxonomy ) {
-			// Redundant. Fortified.
-			if ( ! \wp_verify_nonce(
-				$_POST[ static::$nonce_name . "_pt_{$taxonomy}" ] ?? '', // If empty, wp_verify_nonce will return false.
-				static::$nonce_action . '_pt',
-			) ) continue;
+		// Determine edit type: post-edit, quick-edit, or bulk-edit
+		if ( ! empty( $_POST['autodescription'] ) ) {
+			// Post-edit
+			foreach ( Taxonomy::get_hierarchical( 'names', $post_type ) as $taxonomy ) {
+				if ( ! \wp_verify_nonce(
+					$_POST[ static::$nonce_name . "_pt_{$taxonomy}" ] ?? '',
+					static::$nonce_action . '_pt',
+				) ) continue;
 
-			Data\Plugin\Post::update_primary_term_id(
-				$post_id,
-				$taxonomy,
-				\absint( $_POST['autodescription'][ "_primary_term_{$taxonomy}" ] ?? 0 ),
-			);
+				Data\Plugin\Post::update_primary_term_id(
+					$post_id,
+					$taxonomy,
+					\absint( $_POST['autodescription'][ "_primary_term_{$taxonomy}" ] ?? 0 ),
+				);
+			}
+		} elseif ( ! empty( $_POST['autodescription-quick'] ) ) {
+			// Quick-edit
+			if ( ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false ) ) return;
+
+			foreach ( Taxonomy::get_hierarchical( 'names', $post_type ) as $taxonomy ) {
+				if ( ! isset( $_POST['autodescription-quick'][ "primary_term_{$taxonomy}" ] ) ) continue;
+
+				$term_id = \absint( \wp_unslash( $_POST['autodescription-quick'][ "primary_term_{$taxonomy}" ] ) );
+
+				if ( $term_id > 0 )
+					Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, $term_id );
+			}
+		} elseif ( ! empty( $_REQUEST['autodescription-bulk'] ) ) {
+			// Bulk-edit
+			static $verified_bulk_referer = false;
+
+			if ( ! $verified_bulk_referer ) {
+				\check_admin_referer( 'bulk-posts' );
+				$verified_bulk_referer = true;
+			}
+
+			foreach ( Taxonomy::get_hierarchical( 'names', $post_type ) as $taxonomy ) {
+				if ( ! isset( $_REQUEST['autodescription-bulk'][ "primary_term_{$taxonomy}" ] ) ) continue;
+
+				$value = $_REQUEST['autodescription-bulk'][ "primary_term_{$taxonomy}" ];
+
+				if ( 'nochange' === $value ) continue;
+
+				$term_id = \absint( $value );
+
+				if ( $term_id > 0 ) {
+					$terms = \get_the_terms( $post_id, $taxonomy );
+
+					if ( $terms && ! \is_wp_error( $terms ) ) {
+						$valid_term_ids = \array_column( $terms, 'term_id' );
+
+						if ( \in_array( $term_id, $valid_term_ids, true ) )
+							Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, $term_id );
+					}
+				} else {
+					Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, 0 );
+				}
+			}
 		}
 	}
 
@@ -222,15 +264,6 @@ class Post {
 				case 'canonical':
 					$new_data['_genesis_canonical_uri'] = $value;
 					break;
-
-				default:
-					if ( \str_starts_with( $key, 'primary_term_' ) ) {
-						$taxonomy = \substr( $key, 13 );
-						$term_id  = \absint( $value );
-
-						if ( $term_id > 0 )
-							Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, $term_id );
-					}
 			}
 		}
 
@@ -285,38 +318,7 @@ class Post {
 						if ( 'nochange' === $value )
 							break;
 						$new_data[ "_genesis_$key" ] = $value;
-						break;
-
-					default:
-						if ( \str_starts_with( $key, 'primary_term_' ) && 'nochange' !== $value ) {
-							$taxonomy = \substr( $key, 13 );
-							$new_data[ $key ] = \absint( $value );
-						}
 				}
-			}
-		}
-
-		// Process primary term updates separately since they need per-post validation.
-		foreach ( $new_data as $key => $value ) {
-			if ( \str_starts_with( $key, 'primary_term_' ) ) {
-				$taxonomy = \substr( $key, 13 );
-				$term_id  = \absint( $value );
-
-				if ( $term_id > 0 ) {
-					// Verify the term exists and is assigned to this post.
-					$terms = \get_the_terms( $post_id, $taxonomy );
-
-					if ( $terms && ! \is_wp_error( $terms ) ) {
-						$valid_term_ids = \array_column( $terms, 'term_id' );
-
-						if ( \in_array( $term_id, $valid_term_ids, true ) )
-							Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, $term_id );
-					}
-				} else {
-					Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, 0 );
-				}
-
-				unset( $new_data[ $key ] );
 			}
 		}
 

@@ -159,38 +159,6 @@ $robots_settings = [
 		</div>
 	</fieldset>
 	<?php
-	// Add primary term selection for hierarchical taxonomies
-	$hierarchical_taxonomies = $post_type ? \The_SEO_Framework\Helper\Taxonomy::get_hierarchical( 'names', $post_type ) : [];
-	
-	if ( $hierarchical_taxonomies ) :
-	?>
-	<fieldset class=tsf-inline-edit-col-normal>
-		<legend class=inline-edit-legend><?php \esc_html_e( 'Primary Term Settings', 'autodescription' ); ?></legend>
-		<div class=inline-edit-col>
-			<?php
-			foreach ( $hierarchical_taxonomies as $taxonomy_name ) {
-				$taxonomy = \get_taxonomy( $taxonomy_name );
-				if ( ! $taxonomy ) continue;
-				
-				printf(
-					'<label class=clear>' .
-						'<span class=title>%s</span>' .
-						'<select id=autodescription-quick[primary_term_%s] name=autodescription-quick[primary_term_%s]>' .
-							'<option value="">%s</option>' .
-						'</select>' .
-					'</label>',
-					\esc_html( $taxonomy->labels->singular_name ),
-					\esc_attr( $taxonomy_name ),
-					\esc_attr( $taxonomy_name ),
-					\esc_html( sprintf( \__( 'Select a primary %s...', 'autodescription' ), strtolower( $taxonomy->labels->singular_name ) ) )
-				);
-			}
-			?>
-		</div>
-	</fieldset>
-	<?php
-	endif;
-	
 	/**
 	 * @since 4.0.5
 	 * @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
