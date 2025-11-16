@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Templates\Inpost
- * @subpackage The_SEO_Framework\Admin\Edit\Inpost
+ * @package The_SEO_Framework\Templates\List
+ * @subpackage The_SEO_Framework\Admin\Edit\List
  */
 
 namespace The_SEO_Framework;
@@ -11,13 +11,13 @@ namespace The_SEO_Framework;
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 ?>
-<script type=text/html id=tmpl-tsf-primary-term-selector-le>
+<script type=text/html id=tmpl-tsf-primary-term-selector>
 	<div id="{{data.wrapId}}" class="tsf-primary-term-selector-wrap">
 		<label for="{{data.selectId}}">{{data.i18n.selectPrimary}}</label>
 		<select id="{{data.selectId}}" name="{{data.selectName}}"></select>
 	</div>
 </script>
-<script type=text/html id=tmpl-tsf-primary-term-selector-le-bulk>
+<script type=text/html id=tmpl-tsf-primary-term-selector-bulk>
 	<div id="{{data.wrapId}}" class="tsf-primary-term-selector-wrap">
 		<label for="{{data.selectId}}">{{data.i18n.selectPrimary}}</label>
 		<select id="{{data.selectId}}" name="{{data.selectName}}">

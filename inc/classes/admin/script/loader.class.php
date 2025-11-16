@@ -868,7 +868,7 @@ class Loader {
 		}
 
 		$tmpl_file = $is_list_edit
-			? Template::get_view_location( 'templates/inpost/primary-term-selector-le' )
+			? Template::get_view_location( 'templates/list/primary-term-selector' )
 			: Template::get_view_location( 'templates/inpost/primary-term-selector' );
 
 		return [
