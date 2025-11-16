@@ -395,7 +395,8 @@ final class ListEdit extends Admin\Lists\Table {
 			// phpcs:disable WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'lePostData' => [
-					'isFront' => Query::is_static_front_page( $generator_args['id'] ),
+					'isFront'      => Query::is_static_front_page( $generator_args['id'] ),
+					'primaryTerms' => $primary_terms,
 				],
 			] ),
 			// phpcs:enable WordPress.Security.EscapeOutput
@@ -450,17 +451,6 @@ final class ListEdit extends Admin\Lists\Table {
 				],
 			] ),
 			// phpcs:enable WordPress.Security.EscapeOutput
-		);
-
-		printf(
-			'<span class=hidden id=%s %s></span>',
-			\sprintf( 'tsfTermData[%s]', (int) $post_id ),
-			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			HTML::make_data_attributes( [
-				'leTerm' => [
-					'primaryTerms' => $primary_terms,
-				],
-			] ),
 		);
 
 		if ( $this->doing_ajax )
