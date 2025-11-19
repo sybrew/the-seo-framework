@@ -59,6 +59,9 @@ a.tsf-tooltip-item {
 			display: none;
 		}
 		& > .components-popover__arrow {
+			width: 16px;
+			height: 16px;
+
 			&:before {
 				/* Hide Gutenberg’s arrow’s before pseudo because it’s only used to whiteout their
 				   popover’s border where the arrow sits. */
