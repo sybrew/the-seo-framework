@@ -539,10 +539,19 @@ class Loader {
 			[
 				'id'       => 'tsf-gbc',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf', 'tsf-utils', 'wp-editor', 'wp-data', 'react' ],
+				'deps'     => [ 'jquery', 'tsf', 'tsf-utils', 'wp-editor', 'wp-data', 'react', 'wp-element', 'wp-components' ],
 				'autoload' => true,
 				'name'     => 'gbc',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-gbc',
+				'type'     => 'css',
+				'deps'     => [ 'wp-components' ],
+				'autoload' => true,
+				'name'     => 'gbc',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
 			],
 		];

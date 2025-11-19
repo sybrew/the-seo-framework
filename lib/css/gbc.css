@@ -1,0 +1,68 @@
+:root {
+	/* Prevents a shift from the scrollbar gutter being added (although visually imperceptible)
+	   that happens when the popover containing the tooltip causes overflow. The shift causes the
+	   wrap element’s rectangle to be read at the shifted position but by the next aniation frame
+	   it’s different since the popover has repositioned itself to not overflow. This seems safe
+	   to add and although ideally Gutenberg might add this itself. */
+	overflow-x: hidden;
+}
+
+.tsf-gbc-tooltip-root {
+	.tsf-gbc-tooltip-popover {
+		pointer-events: none;
+		filter: drop-shadow(0 0 1px rgba( 0, 0, 0, .6 ) );
+
+		& > .components-popover__content {
+			/* Unset the Gutenberg popover’s min-content width that would otherwise require
+			   setting width or min-width on either the tooltip or its content. */
+			width: unset;
+			display: flex;
+		}
+		.tsf-tooltip-arrow {
+			/* Hide our arrow in Gutenberg (to use theirs instead). */
+			display: none;
+		}
+		& > .components-popover__arrow {
+			width: 16px;
+			height: 16px;
+
+			&:before {
+				/* Hide Gutenberg’s arrow’s before pseudo because it’s only used to whiteout their
+				   popover’s border where the arrow sits. */
+				display: none;
+			}
+			.components-popover__triangle-bg {
+				fill: var(--wp-admin-theme-color);
+			}
+			.components-popover__triangle-border {
+				/* Hide the arrow stroke/border */
+				display: none;
+			}
+		}
+	}
+	.tsf-tooltip {
+		/* The popover component needs this to not be absolutely positioned so that the parent
+		   element has size. */
+		position: unset;
+
+		&.tsf-is-tt-type-image {
+			&,
+			.tsf-tooltip-text-wrap {
+				max-height: 100%;
+				display: grid;
+				grid-template: minmax(auto, 100%) / minmax(auto, 100%);
+				justify-items: center;
+			}
+			.tsf-tooltip-text {
+				margin-inline: auto;
+				aspect-ratio: 1;
+			}
+		}
+	}
+	.tsf-tooltip-text-wrap {
+		background: var(--wp-admin-theme-color);
+		flex-shrink: 1;
+		max-width: 23em;
+		box-shadow: none;
+	}
+}
