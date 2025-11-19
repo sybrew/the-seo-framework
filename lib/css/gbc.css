@@ -16,7 +16,6 @@
 			/* Unset the Gutenberg popover’s min-content width that would otherwise require
 			   setting width or min-width on either the tooltip or its content. */
 			width: unset;
-			display: flex;
 		}
 		.tsf-tooltip-arrow {
 			/* Hide our arrow in Gutenberg (to use theirs instead). */
@@ -44,20 +43,6 @@
 		/* The popover component needs this to not be absolutely positioned so that the parent
 		   element has size. */
 		position: unset;
-
-		&.tsf-is-tt-type-image {
-			&,
-			.tsf-tooltip-text-wrap {
-				max-height: 100%;
-				display: grid;
-				grid-template: minmax(auto, 100%) / minmax(auto, 100%);
-				justify-items: center;
-			}
-			.tsf-tooltip-text {
-				margin-inline: auto;
-				aspect-ratio: 1;
-			}
-		}
 	}
 	.tsf-tooltip-text-wrap {
 		background: var(--wp-admin-theme-color);
