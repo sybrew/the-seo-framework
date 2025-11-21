@@ -256,6 +256,8 @@ final class ListEdit extends Admin\Lists\Table {
 			HTML::make_data_attributes( [ 'le' => $data ] )
 		);
 
+		$primary_terms = [];
+
 		if ( $is_homepage ) {
 			// When the homepage title is set, we can safely get the custom field.
 			$_has_home_title     = (bool) \strlen( Data\Plugin::get_option( 'homepage_title' ) );
@@ -281,6 +283,8 @@ final class ListEdit extends Admin\Lists\Table {
 
 			$permastruct               = Meta\URI\Utils::get_url_permastruct( $generator_args );
 			$is_post_type_hierarchical = false; // Homepage cannot have a parent page.
+
+			$primary_terms = []; // Homepage cannot have terms -- at least... why would anyone.
 		} else {
 			static $memo = [];
 
@@ -298,7 +302,7 @@ final class ListEdit extends Admin\Lists\Table {
 			$is_canonical_ref_locked = false;
 			$default_canonical       = Meta\URI::get_generated_url( $generator_args );
 
-			$memo['post_type']                 ??= Query::get_admin_post_type();
+			$memo['post_type']                 ??= Query::get_post_type_real_id( $post_id );
 			$memo['permastruct']               ??= Meta\URI\Utils::get_url_permastruct( $generator_args );
 			$memo['is_post_type_hierarchical'] ??= \is_post_type_hierarchical( $memo['post_type'] );
 
@@ -321,25 +325,30 @@ final class ListEdit extends Admin\Lists\Table {
 			}
 
 			// Only hierarchical taxonomies can be used in the URL.
-			// TODO filter post_tag here.
-			$memo['taxonomies'] ??= $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
+			$memo['taxonomies'] ??= array_diff(
+				$post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [],
+				// post_tag isn't hierarchical by default, but it can be filtered to be.
+				// It's broken in Core when used in the permastruct. Nobody should be using %post_tag%.
+				[ 'post_tag' ],
+			);
 
 			$taxonomies               = $memo['taxonomies'];
 			$parent_term_slugs_by_tax = [];
+			$primary_term_ids         = [];
+
+			// Store primary term IDs for later use.
+			foreach ( $taxonomies as $taxonomy )
+				$primary_term_ids[ $taxonomy ] = Data\Plugin\Post::get_primary_term_id( $post_id, $taxonomy );
 
 			// Yes, on its surface, this is a very expensive procedure.
 			// However, WordPress needs to walk all the terms already to create the post links.
 			// Hence, it ought to net to zero impact.
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( str_contains( $permastruct, "%$taxonomy%" ) ) {
-					// Broken in Core. Skip writing cache. We may reach this line 200 times, but nobody should be using %post_tag% anyway.
-					if ( 'post_tag' === $taxonomy ) continue;
-
-					$parent_term_slugs_by_tax[ $taxonomy ] = [];
 					// There's no need to test for hierarchy, because we want the full structure anyway (third parameter).
 					foreach (
 						Data\Term::get_term_parents(
-							Data\Plugin\Post::get_primary_term_id( $post_id, $taxonomy ),
+							$primary_term_ids[ $taxonomy ],
 							$taxonomy,
 							true,
 						)
@@ -367,6 +376,14 @@ final class ListEdit extends Admin\Lists\Table {
 					];
 				}
 			}
+
+			foreach ( $taxonomies as $taxonomy ) {
+				$primary_terms[ "primary_term_{$taxonomy}" ] = [
+					'value'    => $primary_term_ids[ $taxonomy ] ?? 0,
+					'isSelect' => true,
+					'taxonomy' => $taxonomy,
+				];
+			}
 		}
 
 		printf(
@@ -376,7 +393,8 @@ final class ListEdit extends Admin\Lists\Table {
 			// phpcs:disable WordPress.Security.EscapeOutput -- make_data_attributes escapes.
 			HTML::make_data_attributes( [
 				'lePostData' => [
-					'isFront' => Query::is_static_front_page( $generator_args['id'] ),
+					'isFront'      => Query::is_static_front_page( $generator_args['id'] ),
+					'primaryTerms' => $primary_terms,
 				],
 			] ),
 			// phpcs:enable WordPress.Security.EscapeOutput

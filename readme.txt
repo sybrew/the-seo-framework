@@ -302,11 +302,17 @@ For all the root URL issues, also check the TODO in function get_robots_txt_url.
 TODO before launch:
 	- Retest excerpts, images, open graph, titles, title conditions, twitter, bbPress user profiles in the admin area.
 		-> We now use get_query_type_from_args() instead of checking if ( $args[...]) directly.
+TODO trailing comma's are missing in pt.js showSelectorWrap -- find the pattern and fix them all.
+
+TODO Rename "Site Title Removal" to "Site Name Removal"?
+	-> This has no effect on the option, which is still title_rem_additions.
 
 ### 5.1.3
 
 **For everyone:**
 
+* **Added:**
+	* You can now select the primary term in the quick edit and bulk edit interfaces on post overview pages.
 * **Compatibility:**
 	* **Theme: Adava:**
 		* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.

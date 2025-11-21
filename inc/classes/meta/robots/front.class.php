@@ -98,7 +98,7 @@ final class Front extends Factory {
 			}
 		}
 
-		globals:
+		globals: {
 			yield 'globals_site' => (bool) Data\Plugin::get_option( "site_$type" );
 
 			if ( Query::is_real_front_page() ) {
@@ -134,6 +134,7 @@ final class Front extends Factory {
 			} elseif ( Query::is_singular() ) {
 				yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, Query::get_current_post_type() );
 			}
+		}
 
 		// We assert options here for a jump to index_protection might be unaware.
 		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
@@ -170,6 +171,7 @@ final class Front extends Factory {
 	 * @param string $pass The passage to assert.
 	 */
 	private static function assert_noindex_query_pass( $pass ) {
+
 		switch ( $pass ) {
 			case 'paged_home':
 				yield 'paged_home' =>

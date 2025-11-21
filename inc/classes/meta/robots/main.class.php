@@ -141,7 +141,7 @@ final class Main {
 		$start     = $factory::START;
 		$generator = $factory->set(
 			$this->args,
-			$options
+			$options,
 		)::generator();
 
 		$results = [];

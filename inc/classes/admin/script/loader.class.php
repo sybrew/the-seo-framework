@@ -101,6 +101,9 @@ class Loader {
 			$scripts[] = static::get_description_scripts();
 			$scripts[] = static::get_canonical_scripts();
 
+			if ( Query::is_singular_admin() )
+				$scripts[] = static::get_primaryterm_scripts();
+
 			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
 				$scripts[] = static::get_counter_scripts();
 		} elseif ( Query::is_seo_settings_page() ) {
@@ -331,7 +334,7 @@ class Loader {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ],
+				'deps'     => [ 'tsf-pt-le', 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ],
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -813,12 +816,13 @@ class Loader {
 	 * @since 4.0.0
 	 * @since 4.1.0 Now filters out unsupported taxonomies.
 	 * @since 5.1.0 Changed the dependencies for pt, because we now use a select field.
+	 * @since 5.1.3 Added list edit support.
 	 *
 	 * @return array The script params.
 	 */
 	public static function get_primaryterm_scripts() {
 
-		$post_id = Query::get_the_real_admin_id();
+		$is_list_edit = Query::is_wp_lists_edit();
 
 		$post_type   = Query::get_admin_post_type();
 		$_taxonomies = $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
@@ -828,7 +832,7 @@ class Loader {
 			if ( ! Taxonomy::is_supported( $tax ) ) continue;
 
 			$singular_name   = Taxonomy::get_label( $tax );
-			$primary_term_id = Data\Plugin\Post::get_primary_term_id( $post_id, $tax );
+			$primary_term_id = Data\Plugin\Post::get_primary_term_id( Query::get_the_real_admin_id(), $tax );
 
 			$taxonomies[ $tax ] = [
 				'name'    => $tax,
@@ -840,19 +844,32 @@ class Loader {
 			];
 		}
 
-		if ( Query::is_block_editor() ) {
+		if ( $is_list_edit ) {
 			$vars = [
-				'id'   => 'tsf-pt-gb',
-				'name' => 'pt-gb',
+				'id'   => 'tsf-pt-le',
+				'name' => 'pt-le',
 			];
-			$deps = [ 'tsf', 'tsf-ays', 'wp-hooks', 'wp-element', 'wp-components', 'wp-data', 'wp-util' ];
+			$deps = [ 'tsf', 'wp-util' ];
 		} else {
-			$vars = [
-				'id'   => 'tsf-pt',
-				'name' => 'pt',
-			];
-			$deps = [ 'tsf', 'tsf-ays', 'wp-util' ];
+			// If not list edit, we're in the post editor.
+			if ( Query::is_block_editor() ) {
+				$vars = [
+					'id'   => 'tsf-pt-gb',
+					'name' => 'pt-gb',
+				];
+				$deps = [ 'tsf', 'tsf-ays', 'wp-hooks', 'wp-element', 'wp-components', 'wp-data', 'wp-util' ];
+			} else {
+				$vars = [
+					'id'   => 'tsf-pt',
+					'name' => 'pt',
+				];
+				$deps = [ 'tsf', 'tsf-ays', 'wp-util' ];
+			}
 		}
+
+		$tmpl_file = $is_list_edit
+			? Template::get_view_location( 'templates/list/primary-term-selector' )
+			: Template::get_view_location( 'templates/inpost/primary-term-selector' );
 
 		return [
 			[
@@ -879,7 +896,7 @@ class Loader {
 					],
 				],
 				'tmpl'     => [
-					'file' => Template::get_view_location( 'templates/inpost/primary-term-selector' ),
+					'file' => $tmpl_file,
 				],
 			],
 		];

@@ -561,15 +561,16 @@ switch ( $instance ) :
 				}
 
 				// Only hierarchical taxonomies can be used in the URL.
-				// TODO filter post_tag here.
-				$taxonomies               = $post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [];
+				$taxonomies = array_diff(
+					$post_type ? Taxonomy::get_hierarchical( 'names', $post_type ) : [],
+					// post_tag isn't hierarchical by default, but it can be filtered to be.
+					// It's broken in Core when used in the permastruct. Nobody should be using %post_tag%.
+					[ 'post_tag' ],
+				);
 				$parent_term_slugs_by_tax = [];
 
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( str_contains( $permastruct, "%$taxonomy%" ) ) {
-						// Broken in Core. Skip.
-						if ( 'post_tag' === $taxonomy ) continue;
-
 						// There's no need to test for hierarchy, because we want the full structure anyway (third parameter).
 						foreach (
 							Data\Term::get_term_parents(

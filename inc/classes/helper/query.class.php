@@ -419,6 +419,7 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @todo should be renamed to is_list_edit()
 	 * @global \WP_Screen $current_screen
 	 *
 	 * @return bool We're on the edit screen.
