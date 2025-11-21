@@ -311,6 +311,8 @@ TODO Rename "Site Title Removal" to "Site Name Removal"?
 
 **For everyone:**
 
+* **Added:**
+	* You can now select the primary term in the quick edit and bulk edit interfaces on post overview pages.
 * **Compatibility:**
 	* **Theme: Adava:**
 		* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
