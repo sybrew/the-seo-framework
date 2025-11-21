@@ -345,8 +345,6 @@ final class ListEdit extends Admin\Lists\Table {
 			// Hence, it ought to net to zero impact.
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( str_contains( $permastruct, "%$taxonomy%" ) ) {
-
-					$parent_term_slugs_by_tax[ $taxonomy ] = [];
 					// There's no need to test for hierarchy, because we want the full structure anyway (third parameter).
 					foreach (
 						Data\Term::get_term_parents(

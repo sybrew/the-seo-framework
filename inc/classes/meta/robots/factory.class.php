@@ -73,8 +73,10 @@ class Factory {
 	 * @return Factory $this
 	 */
 	public function set( $args = null, $options = 0 ) {
+
 		static::$args    = $args;
 		static::$options = $options;
+
 		return $this;
 	}
 
@@ -86,6 +88,7 @@ class Factory {
 	 * @generator
 	 */
 	public static function generator() {
+
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK.
 		while ( true ) switch ( $sender = yield static::START ) {
 			case 'noindex':

@@ -304,6 +304,9 @@ TODO before launch:
 		-> We now use get_query_type_from_args() instead of checking if ( $args[...]) directly.
 TODO trailing comma's are missing in pt.js showSelectorWrap -- find the pattern and fix them all.
 
+TODO Rename "Site Title Removal" to "Site Name Removal"?
+	-> This has no effect on the option, which is still title_rem_additions.
+
 ### 5.1.3
 
 **For everyone:**

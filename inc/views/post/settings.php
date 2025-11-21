@@ -567,10 +567,10 @@ switch ( $instance ) :
 					// It's broken in Core when used in the permastruct. Nobody should be using %post_tag%.
 					[ 'post_tag' ],
 				);
+				$parent_term_slugs_by_tax = [];
 
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( str_contains( $permastruct, "%$taxonomy%" ) ) {
-
 						// There's no need to test for hierarchy, because we want the full structure anyway (third parameter).
 						foreach (
 							Data\Term::get_term_parents(

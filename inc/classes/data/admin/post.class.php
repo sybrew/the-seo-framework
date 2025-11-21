@@ -97,6 +97,7 @@ class Post {
 	 */
 	public static function update_primary_term( $post_id ) {
 
+		// This resolves a quirk, since wp_insert_post() has no proper guard.
 		$post_id = \get_post( $post_id )->ID ?? null;
 
 		if ( empty( $post_id ) ) return;

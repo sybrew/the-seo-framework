@@ -11,7 +11,7 @@ namespace The_SEO_Framework;
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 ?>
-<script type=text/html id=tmpl-tsf-primary-term-selector>
+<script type=text/html id=tmpl-tsf-primary-term-selector-quick>
 	<div id="{{data.wrapId}}" class="tsf-primary-term-selector-wrap">
 		<label for="{{data.selectId}}">{{data.i18n.selectPrimary}}</label>
 		<select id="{{data.selectId}}" name="{{data.selectName}}"></select>
