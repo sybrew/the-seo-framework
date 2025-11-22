@@ -46,8 +46,8 @@ a.tsf-tooltip-item {
 	font-weight: 400;
 	line-height: 1.625em;
 	border-radius: 3px;
-	background: #424242;
-	color: #fbf7fd;
+	background-color: var( --tsf-user-colors-bg-accent );
+	color: var( --tsf-user-colors-fg-accent );
 	box-shadow: 0px 0px 2px rgba( 0, 0, 0, .6 );
 	text-shadow: none;
 	word-wrap: break-word;
@@ -61,7 +61,7 @@ a.tsf-tooltip-item {
 }
 
 .tsf-tooltip-text-wrap * {
-	color: #fbf7fd;
+	color: var( --tsf-user-colors-fg-accent );
 }
 
 .tsf-tooltip-text span {
@@ -122,7 +122,7 @@ a.tsf-tooltip-item {
 	content: "";
 	border-left: 8px solid transparent;
 	border-right: 8px solid transparent;
-	border-top: 8px solid #424242;
+	border-top: 8px solid var( --tsf-user-colors-bg-accent );
 	position: absolute;
 	bottom: 1px;
 	left: 1px;
@@ -139,5 +139,5 @@ a.tsf-tooltip-item {
 	bottom: auto;
 	top: 1px;
 	border-top: 0;
-	border-bottom: 8px solid #424242;
+	border-bottom: 8px solid var( --tsf-user-colors-bg-accent );
 }

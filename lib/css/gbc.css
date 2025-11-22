@@ -35,7 +35,7 @@
 }
 
 .tsf-gbc-tooltip-popover .components-popover__triangle-bg {
-	fill: var(--wp-admin-theme-color);
+	fill: var(--tsf-user-colors-bg-accent);
 }
 
 .tsf-gbc-tooltip-popover .components-popover__triangle-border {
@@ -50,7 +50,6 @@
 }
 
 .tsf-tooltip-text-wrap {
-	background: var(--wp-admin-theme-color);
 	flex-shrink: 1;
 	max-width: 23em;
 	box-shadow: none;
