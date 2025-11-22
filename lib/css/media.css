@@ -3,7 +3,7 @@
 	vertical-align: bottom;
 
 	> .tsf-tooltip-wrap {
-		/* In gutenberg, this ensures the wrap has the size of its contents, not sure why it’s
+		/* In Gutenberg, this ensures the wrap has the size of its contents, not sure why it’s
 		   not required in the classic editor. */
 		display: inline-block;
 	}
