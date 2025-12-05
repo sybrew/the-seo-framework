@@ -207,7 +207,7 @@ class Post {
 
 		// Check that the user is allowed to edit the post. This is redundant and may need to be removed for full Gutenberg support.
 		if (
-			   ! \current_user_can( 'edit_post', $post_id ) // TODO can this interfere with custom post types?
+			   ! \current_user_can( 'edit_post', $post_id )
 			|| ! isset( $_POST[ static::$nonce_name ] )
 			|| ! \wp_verify_nonce( $_POST[ static::$nonce_name ], static::$nonce_action )
 		) return;

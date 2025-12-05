@@ -48,38 +48,41 @@ class Image {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.1.3 The first argument is null by default now.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return string The first valid image URL found, if any.
 	 */
-	public static function get_first_image_url( $args, $context = 'social' ) {
+	public static function get_first_image_url( $args = null, $context = 'social' ) {
 		return static::get_first_custom_image_url( $args, $context )
 			?: static::get_first_generated_image_url( $args, $context );
 	}
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.1.3 The first argument is null by default now.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return string The first valid image URL found, if any.
 	 */
-	public static function get_first_custom_image_url( $args, $context = 'social' ) {
+	public static function get_first_custom_image_url( $args = null, $context = 'social' ) {
 		return current( static::get_custom_image_details( $args, null, $context ) )['url'] ?? '';
 	}
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.1.3 The first argument is null by default now.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
 	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return string The first valid image URL found, if any.
 	 */
-	public static function get_first_generated_image_url( $args, $context = 'social' ) {
+	public static function get_first_generated_image_url( $args = null, $context = 'social' ) {
 		return current( static::get_generated_image_details( $args, null, $context ) )['url'] ?? '';
 	}
 

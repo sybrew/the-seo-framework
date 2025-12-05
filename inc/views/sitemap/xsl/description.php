@@ -78,7 +78,7 @@ printf(
 		Sanitize::metadata_content(
 			Data\Blog::get_public_blog_name() . ' &mdash; ' . \__( 'XML Sitemap', 'autodescription' )
 		)
-	)
+	),
 );
 ?>
 

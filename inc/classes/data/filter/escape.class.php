@@ -64,7 +64,7 @@ class Escape {
 	public static function json_encode_script( $value, $options = 0 ) {
 		return json_encode(
 			$value,
-			\JSON_UNESCAPED_SLASHES
+			  \JSON_UNESCAPED_SLASHES
 			| \JSON_HEX_TAG
 			| \JSON_UNESCAPED_UNICODE
 			| \JSON_INVALID_UTF8_IGNORE
@@ -86,7 +86,7 @@ class Escape {
 	public static function json_encode_html( $value, $options = 0 ) {
 		return json_encode(
 			$value,
-			\JSON_UNESCAPED_SLASHES
+			  \JSON_UNESCAPED_SLASHES
 			| \JSON_HEX_TAG
 			| \JSON_HEX_APOS
 			| \JSON_HEX_QUOT
@@ -120,7 +120,7 @@ class Escape {
 		return htmlspecialchars(
 			json_encode(
 				$value,
-				\JSON_UNESCAPED_SLASHES
+				  \JSON_UNESCAPED_SLASHES
 				| \JSON_HEX_TAG
 				| \JSON_HEX_APOS
 				| \JSON_HEX_QUOT

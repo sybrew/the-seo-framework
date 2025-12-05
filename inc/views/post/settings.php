@@ -49,8 +49,6 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 // See meta_box et al.
 [ $instance ] = $view_args;
 
-// phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
-
 // Setup default vars.
 $post_id = Query::get_the_real_id(); // We also have access to object $post at the main call...
 $meta    = Data\Plugin\Post::get_meta( $post_id );

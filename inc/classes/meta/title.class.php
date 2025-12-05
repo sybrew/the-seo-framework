@@ -90,6 +90,7 @@ class Title {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Removed the second `$escape` parameter.
 	 *              3. Moved the third parameter to the second.
+	 * @since 5.1.3 Now runs the title through `Sanitize::metadata_content()`.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
@@ -112,7 +113,7 @@ class Title {
 		if ( Title\Conditions::use_branding( $args, $social ) )
 			$title = static::add_branding( $title, $args );
 
-		return $title;
+		return Sanitize::metadata_content( $title );
 	}
 
 	/**
@@ -127,6 +128,7 @@ class Title {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Removed the second `$escape` parameter.
 	 *              3. Moved the third parameter to the second.
+	 * @since 5.1.3 Now runs the title through `Sanitize::metadata_content()`.
 	 *
 	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
@@ -147,7 +149,7 @@ class Title {
 		if ( Title\Conditions::use_branding( $args, $social ) )
 			$title = static::add_branding( $title, $args );
 
-		return $title;
+		return Sanitize::metadata_content( $title );
 	}
 
 	/**
@@ -859,7 +861,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param string     $title The title. Passed by reference.
+	 * @param string     $title The title.
 	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                          Leave null to autodetermine query.
 	 * @return string The title with possible protection status.
@@ -1003,18 +1005,18 @@ class Title {
 	 * @return string The Separator.
 	 */
 	public static function get_separator() {
-		/**
-		 * @since 2.3.9
-		 * @param string $eparator The title separator
-		 */
 		return memo() ?? memo(
+			/**
+			 * @since 2.3.9
+			 * @param string $eparator The title separator
+			 */
 			(string) \apply_filters(
 				'the_seo_framework_title_separator',
 				(
-					   Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
+					Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
 					?? '&#x2d;'
 				),
-			)
+			),
 		);
 	}
 }

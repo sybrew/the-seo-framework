@@ -68,11 +68,8 @@ class Twitter {
 	 * @return string The Twitter Card type.
 	 */
 	public static function get_card_type( $args = null ) {
-
-		$card = static::get_custom_card_type( $args )
-			 ?: static::get_generated_card_type( $args );
-
-		return $card;
+		return static::get_custom_card_type( $args )
+			?: static::get_generated_card_type( $args );
 	}
 
 	/**

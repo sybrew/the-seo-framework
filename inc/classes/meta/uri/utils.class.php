@@ -125,6 +125,8 @@ class Utils {
 	 *
 	 * @since 5.0.0
 	 * @todo shouldn't this have been "contextual_trailingslashit"?
+	 * @todo PHP 8.5+ support: Use `empty($path) ? new Uri\Rfc3986\Uri( $url )->withPath('/')->toString()`.
+	 *       Note that this may interfere with translation plugins that do not accurately parse the query.
 	 *
 	 * @param string $url The root URL.
 	 * @return string The root URL plausibly with added slashes.

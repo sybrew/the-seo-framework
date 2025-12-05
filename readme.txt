@@ -292,8 +292,6 @@ TODO remove placeholders in Webmaster settings? These go against our accessibili
 TODO disable and hide Hello Elementor's SEO settings
 	-> hello_elementor_add_description_meta_tag
 
-TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
-
 TODO we should namespace all compatibility files, e.g.: The_SEO_Framework\Compat\Plugin\Elementor::_function_name()
 TODO remove tsf() from xsl filters. We should've done this with 5.1.0.
 
@@ -306,6 +304,28 @@ TODO trailing comma's are missing in pt.js showSelectorWrap -- find the pattern 
 
 TODO Rename "Site Title Removal" to "Site Name Removal"?
 	-> This has no effect on the option, which is still title_rem_additions.
+
+TODO we should clean up update_primary_term like we did update_meta
+	-> Also, move the following part up:
+		// This resolves a quirk, since wp_insert_post() has no proper guard.
+		$post_id = \get_post( $post_id )->ID ?? null;
+		if ( empty( $post_id ) ) return;
+
+TODO should we unschedule cron events on deactivation?
+	-> WordPress emits a warning when a scheduled event has no hooks.
+
+TODO convert all static:: calls to self:: in final classes.
+	This improves performance slightly by avoiding late static binding runtime resolution.
+	Although I found static to be more linguistically correct.
+		-> Only 28 files, regex:
+		-> final class[\w\W]*?static::
+
+		TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
+		var_dump() FIXME: When https://example.com/2025-11-13/ is accessed, TSF will assume a proper query?
+			-> Why doesn't AQP kick in here?
+			-> Does pagination kick in??
+				-> That means that we should add (more robust) pagination sanitizers.
+					-> Or, if they already are perfect, do AQP on pagination breakage?
 
 ### 5.1.3
 
@@ -348,6 +368,10 @@ TODO Rename "Site Title Removal" to "Site Name Removal"?
 	* **Added:**
 		* `The_SEO_Framework\Meta\URI\Utils::get_site_path()` (`tsf()->uri()->utils()->get_site_path()`) is now available. The value should be equivalent to `$wp_rewrite->front`, but then filtered via `get_home_url()`.
 	* **Changed:**
+		* `The_SEO_Framework\Data\Filter\Sanitize::metadata_content()` (`tsf()->sanitize()->metadata_content()`) now decodes HTML entities at the end of its process.
+		* `The_SEO_Framework\Meta\Title::get_custom_title()` and `get_generated_title()` (`tsf()->title()->get_custom_title()`, `tsf()->title()->get_generated_title()`) now run their output through `Sanitize::metadata_content()`.
+		* `The_SEO_Framework\Data\Filter\sanitize::metadata_content()` (`tsf()->sanitize()->metadata_content()`) now converts all non-breaking spaces to normal spaces.
+		* `The_SEO_Framework\Meta\Image::get_first_image_url()`, `get_first_custom_image_url()`, and `get_first_generated_image_url()` (`tsf()->image()->get_first_image_url()`, `tsf()->image()->get_first_custom_image_url()`, `tsf()->image()->get_first_generated_image_url()`) now have `null` as the default value for the first argument.
 		* `The_SEO_Framework\Data\Term::get_term_parents()` (`tsf()->data()->term()->get_term_parents()`) no longer uses memoization to cache results.
 			* This is now in line with `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`), which never used memoization.
 			* We probably added this because of this [unresolved caching issue](https://core.trac.wordpress.org/ticket/50568), but we never invoked the memoization anyway.

@@ -123,30 +123,41 @@ class Sanitize {
 
 	/**
 	 * Sanitizes metadata content.
+	 *
+	 * It doesn't escape HTML. In fact, it can introduce HTML.
+	 * You MUST escape the output if needed.
+	 * This class is called Sanitize, not Escape.
+	 *
 	 * Returns single-line, trimmed text without duplicated spaces, nbsp, or tabs.
-	 * Also converts back-solidi to their respective HTML entities for non-destructive handling.
+	 * Then converts lone hyphens and back-solidi to their respective HTML entities
+	 * for non-destructive handling in wptexturize().
 	 * Also adds a capital P, dangit.
-	 * Finally, it texturizes the content.
+	 * Then it texturizes the content via said wptexturize().
+	 * Finally, it converts the hyphen and backslash entities back to their literal characters.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.3 Now decodes HTML entities at the end of its process.
 	 *
 	 * @param string $text The text.
 	 * @return string One line sanitized text.
 	 */
 	public static function metadata_content( $text ) {
 
-		if ( ! \is_scalar( $text ) || ! \strlen( $text ) ) return '';
+		if ( ! \is_scalar( $text ) || ! \strlen( $text ) )
+			return '';
 
-		return \wptexturize(
-			\capital_P_dangit(
-				static::backward_solidus_to_entity(
-					static::lone_hyphen_to_entity(
-						static::remove_repeated_spacing(
-							trim(
-								static::tab_to_space(
-									static::newline_to_space(
-										static::nbsp_to_space(
-											(string) $text,
+		return html_entity_decode(
+			\wptexturize(
+				\capital_P_dangit(
+					static::backward_solidus_to_entity(
+						static::lone_hyphen_to_entity(
+							static::remove_repeated_spacing(
+								trim(
+									static::tab_to_space(
+										static::newline_to_space(
+											static::nbsp_to_space(
+												(string) $text,
+											),
 										),
 									),
 								),
@@ -155,6 +166,7 @@ class Sanitize {
 					),
 				),
 			),
+			\ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE,
 		);
 	}
 

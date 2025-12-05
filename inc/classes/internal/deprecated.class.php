@@ -57,4 +57,4 @@ use The_SEO_Framework\{
  * @since 5.1.3 Removed all methods deprecated in 5.0.0 (~24 months later)
  * @ignore
  */
-final class Deprecated { }
+final class Deprecated {}
