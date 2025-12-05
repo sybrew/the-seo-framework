@@ -8,6 +8,7 @@ Follow these rules:
 
 - Use PHP 7.4+
 - In autodescription.php, increment the "Version: "-header by "-dev-{number}" when making a PR. If there's no -dev-{number} in the "Version: "-header, add it as -dev-1
+- Never increment the version number itself; that is done during release
 - We use var_dump() in comments to indicate a blocking issue
 
 ## General Guidelines

@@ -317,10 +317,18 @@ class Loader {
 	 * @since 4.0.0
 	 * @since 4.1.0 Now depends on title and description scripts.
 	 * @since 4.2.0 No longer registers l10n (data).
+	 * @since 5.1.3 tsf-pt-le dependency is now conditional on singular admin pages.
 	 *
 	 * @return array The script params.
 	 */
 	public static function get_list_edit_scripts() {
+
+		$deps = [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ];
+
+		// tsf-pt-le is only registered on singular admin (post list) pages, not term list pages.
+		if ( Query::is_singular_admin() )
+			$deps[] = 'tsf-pt-le';
+
 		return [
 			[
 				'id'       => 'tsf-le',
@@ -334,7 +342,7 @@ class Loader {
 			[
 				'id'       => 'tsf-le',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-pt-le', 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ],
+				'deps'     => $deps,
 				'autoload' => true,
 				'name'     => 'le',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
