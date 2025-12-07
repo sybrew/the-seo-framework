@@ -64,6 +64,11 @@ $robots_settings = [
 ?>
 <div class=tsf-quick-edit-columns>
 	<?php
+	\wp_nonce_field(
+		Data\Admin\Term::SAVE_NONCES['quick-edit']['action'],
+		Data\Admin\Term::SAVE_NONCES['quick-edit']['name'],
+	);
+
 	/**
 	 * @since 4.0.5
 	 * @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.

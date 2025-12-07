@@ -62,7 +62,9 @@ use The_SEO_Framework\Helper\{
  * @return string The prior-to-upgrade TSF db version.
  */
 function _previous_db_version() {
+
 	static $memo;
+
 	return $memo ??= \get_option( 'the_seo_framework_upgraded_db_version', '0' );
 }
 
@@ -214,7 +216,7 @@ function _upgrade( $previous_version ) {
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5100',
+		'5001', '5050', '5100', '5130',
 	];
 	// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
@@ -251,6 +253,7 @@ function _get_lock_option() {
  * @return bool False if a lock couldn't be created or if the lock is still valid. True otherwise.
  */
 function _set_upgrade_lock( $release_timeout ) {
+
 	global $wpdb;
 
 	$lock_option = _get_lock_option();
@@ -567,6 +570,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
  * @return void Early when already enqueued
  */
 function _prepare_upgrade_suggestion( $previous_version, $current_version ) { // phpcs:ignore Generic.CodeAnalysis
+
 	// Don't invoke if the user didn't upgrade.
 	if ( ! $previous_version ) return;
 
@@ -587,6 +591,7 @@ function _prepare_upgrade_suggestion( $previous_version, $current_version ) { //
  * @param string $notice The upgrade notice. Doesn't need to be escaped.
  */
 function _add_upgrade_notice( $notice = '' ) {
+
 	Admin\Notice\Persistent::register_notice(
 		"SEO: $notice",
 		'upgrade-' . ( hash( 'md5', $notice ) ?: uniqid( '', true ) ), // if md5 is unregistered, it'll return false
@@ -637,6 +642,7 @@ function _do_upgrade_2701() {
  * @since 2.8.0
  */
 function _do_upgrade_2802() {
+
 	// Delete old values from database. Removes backwards compatibility. 2701 is intentional.
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2701' )
 		\delete_option( 'autodescription-term-meta' );
@@ -650,6 +656,7 @@ function _do_upgrade_2802() {
  * @since 4.1.1 No longer tests for default options.
  */
 function _do_upgrade_2900() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
 		$card_type = trim( Data\Plugin::get_option( 'twitter_card' ) );
 		if ( 'photo' === $card_type ) {
@@ -671,6 +678,7 @@ function _do_upgrade_2900() {
  * @since 4.1.1 No longer tests for default options.
  */
 function _do_upgrade_3001() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
 		// Only show notice if old option exists. Falls back to default upgrader otherwise.
 		$sitemap_timestamps = Data\Plugin::get_option( 'sitemap_timestamps' );
@@ -703,6 +711,7 @@ function _do_upgrade_3001() {
  * @since 5.0.0 Removed THE_SEO_FRAMEWORK_SITE_CACHE settings registration. (See 5001)
  */
 function _do_upgrade_3103() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
 		// Transport title separator (option name typo).
 		Data\Plugin::update_option(
@@ -746,6 +755,7 @@ function _do_upgrade_3103() {
  * @since 4.0.5 The upgrader now updates "dash" to "hyphen".
  */
 function _do_upgrade_3300() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3300' ) {
 		// Remove old rewrite rules.
 		unset(
@@ -783,6 +793,7 @@ function _do_upgrade_3300() {
  * @since 4.0.5
  */
 function _do_upgrade_4051() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' ) {
 		Data\Plugin::update_option( 'advanced_query_protection', 0 );
 		Data\Plugin::update_option( 'index_the_feed', 0 );
@@ -803,6 +814,7 @@ function _do_upgrade_4051() {
  * @since 4.1.0
  */
 function _do_upgrade_4103() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4103' ) {
 		Data\Plugin::update_option( 'disabled_taxonomies', [] );
 		Data\Plugin::update_option( 'sitemap_logo_url', '' );
@@ -842,6 +854,7 @@ function _do_upgrade_4103() {
  * @since 4.1.1
  */
 function _do_upgrade_4110() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
 		Data\Plugin::update_option( 'oembed_use_og_title', 0 );
 		Data\Plugin::update_option( 'oembed_use_social_image', 0 ); // Defaults to 1 for new sites!
@@ -854,6 +867,7 @@ function _do_upgrade_4110() {
  * @since 4.2.0
  */
 function _do_upgrade_4200() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4200' )
 		\delete_option( 'the_seo_framework_tested_upgrade_version' );
 }
@@ -864,6 +878,7 @@ function _do_upgrade_4200() {
  * @since 4.2.7
  */
 function _do_upgrade_4270() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4270' )
 		Data\Plugin::update_option( 'auto_description_html_method', 'fast' );
 }
@@ -944,6 +959,7 @@ function _do_upgrade_5001() {
  * @since 5.0.5
  */
 function _do_upgrade_5050() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5050' ) {
 		Data\Plugin::update_option(
 			'sitemap_cron_prerender',
@@ -958,10 +974,29 @@ function _do_upgrade_5050() {
  * @since 5.1.0
  */
 function _do_upgrade_5100() {
+
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5100' ) {
-		Data\Plugin::update_option( 'robotstxt_block_ai', 0 );
-		Data\Plugin::update_option( 'robotstxt_block_seo', 0 );
-		Data\Plugin::update_option( 'homepage_canonical', '' );
-		Data\Plugin::update_option( 'homepage_redirect', '' );
+		Data\Plugin::update_option( [
+			'robotstxt_block_ai'  => 0,
+			'robotstxt_block_seo' => 0,
+			'homepage_canonical'  => '',
+			'homepage_redirect'   => '',
+		] );
 	}
+}
+
+/**
+ * Registers new options 'display_list_edit_options', 'display_term_edit_options',
+ * and 'display_user_edit_options'.
+ *
+ * @since 5.1.3
+ */
+function _do_upgrade_5130() {
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5130' )
+		Data\Plugin::update_option( [
+			'display_list_edit_options' => 1,
+			'display_term_edit_options' => 1,
+			'display_user_edit_options' => 1,
+		] );
 }

@@ -260,6 +260,7 @@ class Markdown {
 	 * @since 4.2.8 1. No longer blocks text with either { or } from being parsed.
 	 *              2. No longer blocks URLs with either ( or ) from being parsed.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Interpreters\Markdown`.
+	 * @since 5.1.3 Now allows parentheses in URLs before the final closing parenthesis. They must be balanced, though.
 	 *
 	 * @param string $text     The input text.
 	 * @param bool   $internal Whether the link is internal (_self) or external (_blank).
@@ -268,7 +269,7 @@ class Markdown {
 	 */
 	private static function a( $text, $internal = true ) {
 
-		preg_match_all( '/\[([^[\]]+)]\(([^\s]+)\s*\)/', $text, $matches, \PREG_SET_ORDER );
+		preg_match_all( '/\[([^[\]]+)]\(((?:[^()\s]|\((?2)\))*)\)/', $text, $matches, \PREG_SET_ORDER );
 
 		// Keep this XHTML compatible!
 		$format = $internal ? '<a href="%s">%s</a>' : '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>';

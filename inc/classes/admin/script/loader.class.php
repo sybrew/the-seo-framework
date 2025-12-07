@@ -83,29 +83,33 @@ class Loader {
 			if ( Query::is_block_editor() )
 				$scripts[] = static::get_gutenberg_compat_scripts();
 		} elseif ( Query::is_term_edit() ) {
-			static::prepare_media_scripts();
+			if ( Data\Plugin::get_option( 'display_term_edit_options' ) ) {
+				static::prepare_media_scripts();
 
-			$scripts[] = static::get_term_edit_scripts();
-			$scripts[] = static::get_media_scripts();
-			$scripts[] = static::get_title_scripts();
-			$scripts[] = static::get_description_scripts();
-			$scripts[] = static::get_social_scripts();
-			$scripts[] = static::get_canonical_scripts();
-			$scripts[] = static::get_ays_scripts();
+				$scripts[] = static::get_term_edit_scripts();
+				$scripts[] = static::get_media_scripts();
+				$scripts[] = static::get_title_scripts();
+				$scripts[] = static::get_description_scripts();
+				$scripts[] = static::get_social_scripts();
+				$scripts[] = static::get_canonical_scripts();
+				$scripts[] = static::get_ays_scripts();
 
-			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
-				$scripts[] = static::get_counter_scripts();
+				if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
+					$scripts[] = static::get_counter_scripts();
+			}
 		} elseif ( Query::is_wp_lists_edit() ) {
-			$scripts[] = static::get_list_edit_scripts();
-			$scripts[] = static::get_title_scripts();
-			$scripts[] = static::get_description_scripts();
-			$scripts[] = static::get_canonical_scripts();
+			if ( Data\Plugin::get_option( 'display_list_edit_options' ) ) {
+				$scripts[] = static::get_list_edit_scripts();
+				$scripts[] = static::get_title_scripts();
+				$scripts[] = static::get_description_scripts();
+				$scripts[] = static::get_canonical_scripts();
 
-			if ( Query::is_singular_admin() )
-				$scripts[] = static::get_primaryterm_scripts();
+				if ( Query::is_singular_admin() )
+					$scripts[] = static::get_primaryterm_scripts();
 
-			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
-				$scripts[] = static::get_counter_scripts();
+				if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
+					$scripts[] = static::get_counter_scripts();
+			}
 		} elseif ( Query::is_seo_settings_page() ) {
 			static::prepare_media_scripts();
 			static::prepare_metabox_scripts();

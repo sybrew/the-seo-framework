@@ -98,11 +98,12 @@ function _prepare( $previous_version, $current_version ) {
  */
 function _suggest_temp_sale( $previous_version, $current_version ) {
 
-	if ( $previous_version < '5100' && $current_version < '5110' ) {
+	if ( $previous_version < '5110' && $current_version < '5130' ) {
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
 				\sprintf(
-					'<p>For The SEO Framework v5.1, we added over 150 improvements in the past 7 months.</p><p>To celebrate this update (and Black Friday), we are offering a [50%% lifetime discount on our extensions](%s).</p><p>This notification will vanish December 6th or when you dismiss it.</p>',
+					'<p>The SEO Framework v5.1.3 has finally shipped. Thank you for updating!</p><p>Since we are far behind schedule ([because of a new product launch](%s)), we’re extending our BFCM sale by 2 weeks: [50%% lifetime discount on our extensions](%s).</p><p>This notification will vanish December 16th or when you dismiss it.</p>',
+					'https://deploytroy.org/blog/official-release/',
 					'https://theseoframework.com/?p=3527',
 				),
 				[ 'a' ],
@@ -120,7 +121,7 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 				'capability'   => 'install_plugins',
 				'user'         => 0,
 				'count'        => 42,
-				'timeout'      => strtotime( 'December 6th, 2024, 23:00GMT+1' ) - time(),
+				'timeout'      => strtotime( 'December 16th, 2025, 23:00GMT+1' ) - time(),
 			],
 		);
 	}

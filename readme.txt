@@ -331,8 +331,11 @@ TODO convert all static:: calls to self:: in final classes.
 
 **For everyone:**
 
+* **Upgraded:** Now uses TSF database version 5130.
+	* Three new options will be registered to `THE_SEO_FRAMEWORK_SITE_OPTIONS` (`autodescription-site-settings`): `display_list_edit_options`, `display_term_edit_options`, and `display_user_edit_options`.
 * **Added:**
 	* You can now select the primary term in the quick edit and bulk edit interfaces on post overview pages.
+	* You can now hide TSF's quick-edit and bulk-edit interfaces via the "SEO Settings > General Settings > Layout."
 * **Compatibility:**
 	* **Theme: Adava:**
 		* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
@@ -376,6 +379,7 @@ TODO convert all static:: calls to self:: in final classes.
 			* This is now in line with `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`), which never used memoization.
 			* We probably added this because of this [unresolved caching issue](https://core.trac.wordpress.org/ticket/50568), but we never invoked the memoization anyway.
 	* **Fixed:**
+		* `The_SEO_Framework\Helper\Format\Markdown` (`tsf()->format()->markdown()->convert()`) no longer grabs closing parentheses as part of its link when two or more are followed. Parentheses in links are still supported, but they must be balanced with an opening parentheses.
 		* `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`) now filters out deleted posts (broken ancestors). Next to the user-facing breadcrumb issue, this resolves some PHP warnings that could occur when fetching deleted parent posts for canonical URL generation.
 		* `The_SEO_Framework\Helper\Format\HTML::strip_tags_cs()` (`tsf()->format()->html()->strip_tags_cs()`):
 			1. Added 'body' and 'style' to the phrase elements.
@@ -396,6 +400,11 @@ TODO convert all static:: calls to self:: in final classes.
 			* `forbiddenTypes` now has an `all` property containing universally forbidden image types (e.g., apng, bmp, svg).
 			* This is a semi-breaking change for the JS API. We highly doubt anyone used these properties externally, as they were introduced in v5.1.0.
 			* The image warning system now checks for context-specific warnings first, then falls back to universal warnings, making it more extensible for future image contexts.
+* **Option notes:**
+	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
+		* Added index `display_list_edit_options`. Default `1`.
+		* Added index `display_term_edit_options`. Default `1`.
+		* Added index `display_user_edit_options`. Default `1`.
 * **Filter notes:**
 	* **Fixed:**
 		* For `the_seo_framework_extract_content_strip_args`, when adjusting the `space` or `clear` indexes in such a manner that empty void, clear, or space queries are created, the resulting Context-Sensitive tag stripper (`The_SEO_Framework\Helper\Format\strip_tags_cs()`) now correctly ignores those empty queries instead of halting the context-sensitive stripping process.
@@ -457,6 +466,10 @@ But surely it is obvious to everyone that all the endeavor of the part by which 
 * **You can find the full changelog [here](https://theseoframework.com/?cat=2).**
 
 == Upgrade Notice ==
+
+= 5.1.3 =
+
+We removed all deprecated code from before TSF v5.0. You may experience issues if you added custom snippets from before 2 years ago without resolving the deprecations. We'll be happy to help you in our [support forums](https://wordpress.org/support/plugin/autodescription).
 
 = 5.0.0 =
 

@@ -77,13 +77,16 @@ if ( ! $headless['meta'] ) {
 	\add_action( 'add_meta_boxes', [ Admin\Settings\Post::class, 'prepare_meta_box' ] );
 
 	// Enqueue Term meta output. Terms don't have proper catch-all hooks, so this loads on every page:
-	\add_action( 'current_screen', [ Admin\Settings\Term::class, 'prepare_setting_fields' ] );
+	if ( Data\Plugin::get_option( 'display_term_edit_options' ) )
+		\add_action( 'current_screen', [ Admin\Settings\Term::class, 'prepare_setting_fields' ] );
 
 	// Adds post states to list view tables.
 	\add_filter( 'display_post_states', [ Admin\Lists\PostStates::class, 'add_post_state' ], 10, 2 );
 
-	// Initialize quick and bulk edit for posts and terms.
-	\add_action( 'admin_init', [ Admin\Settings\ListEdit::class, 'init_quick_and_bulk_edit' ] );
+	if ( Data\Plugin::get_option( 'display_list_edit_options' ) ) {
+		// Initialize quick and bulk edit for posts and terms.
+		\add_action( 'admin_init', [ Admin\Settings\ListEdit::class, 'init_quick_and_bulk_edit' ] );
+	}
 
 	if ( Data\Plugin::get_option( 'display_seo_bar_tables' ) ) {
 		// Initialize the SEO Bar for tables.
@@ -120,8 +123,10 @@ if ( ! $headless['settings'] ) {
 
 if ( ! $headless['user'] ) {
 	// Initialize user meta filters and actions.
-	\add_action( 'show_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
-	\add_action( 'edit_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
+	if ( Data\Plugin::get_option( 'display_user_edit_options' ) ) {
+		\add_action( 'show_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
+		\add_action( 'edit_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
+	}
 
 	\add_action( 'personal_options_update', [ Data\Admin\User::class, 'update_meta' ], 10, 1 );
 	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, 'update_meta' ], 10, 1 );

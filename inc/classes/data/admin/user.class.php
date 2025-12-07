@@ -36,6 +36,23 @@ use The_SEO_Framework\Data;
 class User {
 
 	/**
+	 * @since 5.1.3
+	 * @var array[] {
+	 *     The nonce data per save context.
+	 *     WordPress's native nonce doesn't suffice because these options are togglable.
+	 *
+	 *     @type string $name   The nonce field name.
+	 *     @type string $action The nonce action.
+	 * }
+	 */
+	public const SAVE_NONCES = [
+		'user-edit' => [
+			'name'   => 'tsf_user_nonce_name',
+			'action' => 'tsf_user_nonce_action',
+		],
+	];
+
+	/**
 	 * Saves user profile fields.
 	 *
 	 * @hook personal_options_update 10
@@ -55,8 +72,10 @@ class User {
 
 		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 
-		// Redundant. Before hooks fire, this is already checked.
-		\check_admin_referer( "update-user_{$user_id}" );
+		if (
+			   ! isset( $_POST[ static::SAVE_NONCES['user-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['user-edit']['name'] ], static::SAVE_NONCES['user-edit']['action'] )
+		) return;
 
 		if ( ! Data\User::user_has_author_info_cap_on_network( $user_id ) ) return;
 

@@ -61,6 +61,11 @@ $robots_settings = [
 ?>
 <div class=tsf-quick-edit-columns>
 	<?php
+	\wp_nonce_field(
+		Data\Admin\Post::SAVE_NONCES['bulk-edit']['action'],
+		Data\Admin\Post::SAVE_NONCES['bulk-edit']['name'],
+	);
+
 	/**
 	 * @since 4.0.5
 	 * @param string $post_type The current post type.

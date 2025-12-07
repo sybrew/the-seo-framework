@@ -150,10 +150,14 @@ class Setup {
 				'alter_search_query_type'  => 'in_query', // Search query type.
 
 				// General. Layout.
-				'display_seo_bar_tables'  => 1, // SEO Bar post-list tables.
-				'display_seo_bar_metabox' => 0, // SEO Bar post SEO Settings.
-				'seo_bar_low_contrast'    => 0, // SEO Bar contrast display settings.
-				'seo_bar_symbols'         => 0, // SEO Bar symbol display settings.
+				'display_seo_bar_tables'   => 1, // SEO Bar post-list tables.
+				'display_seo_bar_metabox'  => 0, // SEO Bar post SEO Settings.
+				'seo_bar_low_contrast'     => 0, // SEO Bar contrast display settings.
+				'seo_bar_symbols'          => 0, // SEO Bar symbol display settings.
+
+				'display_list_edit_options' => 1, // Quick/bulk edit fields in tables.
+				'display_term_edit_options' => 1, // Term edit fields.
+				'display_user_edit_options' => 1, // User edit fields.
 
 				'display_pixel_counter'     => 1, // Pixel counter.
 				'display_character_counter' => 1, // Character counter.

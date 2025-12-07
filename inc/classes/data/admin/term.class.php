@@ -36,6 +36,26 @@ use The_SEO_Framework\Data;
 class Term {
 
 	/**
+	 * @since 5.1.3
+	 * @var array[] {
+	 *     The nonce data per save context.
+	 *
+	 *     @type string $name   The nonce field name.
+	 *     @type string $action The nonce action.
+	 * }
+	 */
+	public const SAVE_NONCES = [
+		'term-edit'  => [
+			'name'   => 'tsf_term_nonce_name',
+			'action' => 'tsf_term_nonce_action',
+		],
+		'quick-edit' => [
+			'name'   => 'tsf_term_nonce_name',
+			'action' => 'tsf_term_nonce_action',
+		],
+	];
+
+	/**
 	 * Sanitizes and saves term meta data when a term is altered.
 	 *
 	 * @hook edit_term 10
@@ -92,6 +112,8 @@ class Term {
 			   empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
 			|| ! \current_user_can( 'edit_term', $term->term_id )
 			|| ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
+			|| ! isset( $_POST[ static::SAVE_NONCES['quick-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['quick-edit']['name'] ], static::SAVE_NONCES['quick-edit']['action'] )
 		) return;
 
 		// Unlike the term-edit saving, we don't reset the data, just overwrite what's given.
@@ -128,8 +150,8 @@ class Term {
 		if (
 			   empty( $term->term_id ) // We could test for is_wp_error( $term ), but this is more to the point.
 			|| ! \current_user_can( 'edit_term', $term->term_id )
-			|| ! isset( $_POST['_wpnonce'] )
-			|| ! \wp_verify_nonce( $_POST['_wpnonce'], "update-tag_{$term->term_id}" )
+			|| ! isset( $_POST[ static::SAVE_NONCES['term-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['term-edit']['name'] ], static::SAVE_NONCES['term-edit']['action'] )
 		) return;
 
 		// Trim, sanitize, and save the metadata.

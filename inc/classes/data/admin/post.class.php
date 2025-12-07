@@ -39,16 +39,28 @@ use The_SEO_Framework\{
 class Post {
 
 	/**
-	 * @since 5.0.0
-	 * @var string The nonce name.
+	 * @since 5.1.3
+	 * @var array[] {
+	 *     The nonce data per save context.
+	 *
+	 *     @type string $name   The nonce field name.
+	 *     @type string $action The nonce action.
+	 * }
 	 */
-	public static $nonce_name = 'tsf_singular_nonce_name';
-
-	/**
-	 * @since 5.0.0
-	 * @var string The nonce action.
-	 */
-	public static $nonce_action = 'tsf_singular_nonce_action';
+	public const SAVE_NONCES = [
+		'post-edit'  => [
+			'name'   => 'tsf_post_nonce_name',
+			'action' => 'tsf_post_nonce_action',
+		],
+		'quick-edit' => [
+			'name'   => 'tsf_post_nonce_name',
+			'action' => 'tsf_post_nonce_action',
+		],
+		'bulk-edit'  => [
+			'name'   => 'tsf_post_nonce_name',
+			'action' => 'tsf_post_nonce_action',
+		],
+	];
 
 	/**
 	 * Saves the Post SEO Meta settings on quick-edit, bulk-edit, or post-edit.
@@ -122,9 +134,10 @@ class Post {
 			// Post-edit
 			foreach ( Taxonomy::get_hierarchical( 'names', $post_type ) as $taxonomy ) {
 				if ( ! \wp_verify_nonce(
-					$_POST[ static::$nonce_name . "_pt_{$taxonomy}" ] ?? '',
-					static::$nonce_action . '_pt',
-				) ) continue;
+					$_POST[ static::SAVE_NONCES['post-edit']['name'] . "_pt_{$taxonomy}" ] ?? '',
+					static::SAVE_NONCES['post-edit']['action'] . '_pt',
+				) )
+					continue;
 
 				Data\Plugin\Post::update_primary_term_id(
 					$post_id,
@@ -208,8 +221,8 @@ class Post {
 		// Check that the user is allowed to edit the post. This is redundant and may need to be removed for full Gutenberg support.
 		if (
 			   ! \current_user_can( 'edit_post', $post_id )
-			|| ! isset( $_POST[ static::$nonce_name ] )
-			|| ! \wp_verify_nonce( $_POST[ static::$nonce_name ], static::$nonce_action )
+			|| ! isset( $_POST[ static::SAVE_NONCES['post-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['post-edit']['name'] ], static::SAVE_NONCES['post-edit']['action'] )
 		) return;
 
 		// Trim, sanitize, and save the metadata.
@@ -241,6 +254,8 @@ class Post {
 		if (
 			   ! \current_user_can( 'edit_post', $post_id )
 			|| ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false )
+			|| ! isset( $_POST[ static::SAVE_NONCES['quick-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['quick-edit']['name'] ], static::SAVE_NONCES['quick-edit']['action'] )
 		) return;
 
 		$new_data = [];
@@ -302,6 +317,12 @@ class Post {
 		// Memoize the referer check--if it passes (and doesn't exit/die PHP), we're good to execute subsequently.
 		if ( ! $verified_referer ) {
 			\check_admin_referer( 'bulk-posts' );
+
+			if (
+				   ! isset( $_REQUEST[ static::SAVE_NONCES['bulk-edit']['name'] ] )
+				|| ! \wp_verify_nonce( $_REQUEST[ static::SAVE_NONCES['bulk-edit']['name'] ], static::SAVE_NONCES['bulk-edit']['action'] )
+			) return;
+
 			$verified_referer = true;
 		}
 

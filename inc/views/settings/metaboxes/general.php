@@ -85,7 +85,7 @@ switch ( $instance ) :
 
 	case 'layout':
 		HTML::header_title( \__( 'Administrative Layout Settings', 'autodescription' ) );
-		HTML::description( \__( 'SEO hints can be visually displayed throughout the dashboard.', 'autodescription' ) );
+		HTML::description( \__( 'SEO hints and options are displayed throughout the dashboard.', 'autodescription' ) );
 
 		?>
 		<hr>
@@ -157,6 +157,34 @@ switch ( $instance ) :
 			],
 			true,
 		);
+
+		?>
+		<hr>
+		<?php
+		HTML::header_title( \__( 'Option fields', 'autodescription' ) );
+
+		HTML::wrap_fields(
+			[
+				Input::make_checkbox( [
+					'id'     => 'display_list_edit_options',
+					'label'  => \esc_html__( 'Display quick and bulk option fields?', 'autodescription' ),
+					'escape' => false,
+				] ),
+				Input::make_checkbox( [
+					'id'     => 'display_term_edit_options',
+					'label'  => \esc_html__( 'Display term option fields?', 'autodescription' ),
+					'escape' => false,
+				] ),
+				Input::make_checkbox( [
+					'id'     => 'display_user_edit_options',
+					'label'  => \esc_html__( 'Display user option fields?', 'autodescription' ),
+					'escape' => false,
+				] ),
+			],
+			true,
+		);
+
+		HTML::description( \__( 'Note: Hiding option fields does not remove the data once stored in them.', 'autodescription' ) );
 		break;
 
 	case 'performance':

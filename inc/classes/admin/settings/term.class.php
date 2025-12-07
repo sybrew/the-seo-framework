@@ -8,10 +8,11 @@ namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\Helper\{
-	Query,
-	Taxonomy,
-	Template,
+use The_SEO_Framework\{
+	Data,
+	Helper\Query,
+	Helper\Taxonomy,
+	Helper\Template,
 };
 
 /**
@@ -77,11 +78,19 @@ final class Term {
 	 * @param string   $taxonomy Current taxonomy slug.
 	 */
 	public static function output_setting_fields( $term, $taxonomy ) {
+
+		\wp_nonce_field(
+			Data\Admin\Term::SAVE_NONCES['term-edit']['action'],
+			Data\Admin\Term::SAVE_NONCES['term-edit']['name'],
+		);
+
 		/**
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_tt_inpost_box' );
+
 		Template::output_view( 'term/settings', $term, $taxonomy );
+
 		/**
 		 * @since 2.9.0
 		 */

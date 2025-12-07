@@ -77,7 +77,7 @@ final class Post {
 
 		$box_id = 'tsf-inpost-box';
 
-		// TODO 5.1.0 add the_seo_framework_post_metabox_args, and deprecate filters below?
+		// TODO 5.1.0 add the_seo_framework_post_metabox_args, and deprecate filters below? whoops, missed: TODO 5.2.0
 		// -> Even if we'll concede to using Gutenberg, one day, dismissing this, this is still useful for Classic Editor.
 		\add_meta_box(
 			$box_id,
@@ -143,7 +143,10 @@ final class Post {
 	 */
 	public static function meta_box() {
 
-		\wp_nonce_field( Data\Admin\Post::$nonce_action, Data\Admin\Post::$nonce_name );
+		\wp_nonce_field(
+			Data\Admin\Post::SAVE_NONCES['post-edit']['action'],
+			Data\Admin\Post::SAVE_NONCES['post-edit']['name'],
+		);
 
 		/**
 		 * @since 2.9.0

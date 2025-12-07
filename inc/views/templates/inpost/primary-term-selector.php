@@ -17,8 +17,8 @@ use The_SEO_Framework\Admin\Settings\Layout\HTML;
 	<input type=hidden id="autodescription[_primary_term_{{data.taxonomy.name}}]" name="autodescription[_primary_term_{{data.taxonomy.name}}]" value="{{data.taxonomy.primary}}">
 	<?php
 	\wp_nonce_field(
-		Data\Admin\Post::$nonce_action . '_pt',
-		Data\Admin\Post::$nonce_name . '_pt_{{data.taxonomy.name}}',
+		Data\Admin\Post::SAVE_NONCES['post-edit']['action'] . '_pt',
+		Data\Admin\Post::SAVE_NONCES['post-edit']['name'] . '_pt_{{data.taxonomy.name}}',
 	);
 	?>
 </script>

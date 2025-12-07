@@ -67,11 +67,19 @@ final class User {
 	 * @param \WP_User $user WP_User object.
 	 */
 	private static function output_setting_fields( $user ) {
+
+		\wp_nonce_field(
+			Data\Admin\User::SAVE_NONCES['user-edit']['action'],
+			Data\Admin\User::SAVE_NONCES['user-edit']['name'],
+		);
+
 		/**
 		 * @since 4.1.4
 		 */
 		\do_action( 'the_seo_framework_before_author_fields' );
+
 		Template::output_view( 'profile/settings', $user );
+
 		/**
 		 * @since 4.1.4
 		 */
