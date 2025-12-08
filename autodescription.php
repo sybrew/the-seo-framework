@@ -1,31 +1,37 @@
 <?php
 /**
+ * The SEO Framework
+ *
+ * @package   The_SEO_Framework\Bootstrap
+ * @author    Sybre Waaijer
+ * @copyright 2015 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * @license   GPL-3.0
+ * @link      https://theseoframework.com/
+ * @access    public
+ *
+ * @troy-repo
+ * Troy: repo.theseoframework.com
+ *
+ * @wordpress-plugin
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 5.1.3-dev-24
+ * Version: 5.1.3
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
- * Troy: https://repo.theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
  * Requires at least: 6.0
  * Tested up to: 6.9
  * Requires PHP: 7.4.0
- *
- * @package   The_SEO_Framework\Bootstrap
- * @author    Sybre Waaijer
- * @copyright 2015 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
- * @license   GPL-3.0
- * @link      https://theseoframework.com/
  */
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2015 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2015 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published

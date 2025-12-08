@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4.0
-Stable tag: 5.1.2
+Stable tag: 5.1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -243,84 +243,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-TODO this messes up the breadcrumbs of TSF: https://woocommerce.com/products/brands/.
-TODO move user settings to personal_options?
-TODO check compatibility with Web Stories.
-TODO introduce dark theme for sitemap. Inspired by https://rss.beauty/.
-TODO kevin from clearwater would like to beta test https://github.com/sybrew/the-seo-framework/issues/700?
-	-> But we also have WhatsApp.
-TODO allow invoking the sitemap loader via a filter/constant, so that the Google News Sitemap can be loaded regardless of the main sitemap settings.
-TODO update phpdoc for the_seo_framework_meta_render_data.
-TODO mention we renamed "Twitter meta tags" to "Twitter Card meta tags" -- Translation files need updating!
-TODO add a filter akin to the_seo_framework_supported_twitter_card_types for Open Graph types.
-
-TODO WooCommerce 9.6 changed how categories are recognized (from hierarchical to non-hierarchical?). This affects the breadcrumb output.
-
-TODO update residual trailing commas via: ' \)\n\t*\);
-
-TODO add sort by SEO Bar to list views?
-	-> This is feasible, e.g.:
-		Title/Description: red weight -3, yellow weight -2, grey weight -2, blue -1, green 0.
-		Indexing: Noindex red -5, yellow -4, grey -3, blue -2, green 0, etc.
-	-> This would mean we render ALL seo bar items in the list view for all pages, which is not ideal. But, we can store this as post meta as the SEO bar is shown (and the meta is missing).
-		-> i.e., slow lazy update
-
-TODO now we're working more with branches, we should add a script on GitHub that minifies JS/CSS files on commit.
-	-> Our minifier is bespoke. IDK if we can carry that over to GitHub Actions easily.
-TODO Reminify all JS/CSS files to ensure we haven't merged an older branches' code.
-
-TODO create memo function that's switch_to_blog()-safe.
-	-> We could do this by simply using the current blog ID as a cache key modifier
-TODO when saving a root URL as a canonical or redirect URL, we should append a trailing slash (slash_front_page_url is not the right function for this, for it uses user_trailingslashit).
-TODO the og:title is not correct on the homepage under certain conditions?
-	-> It shows the correct version when editing the homepage (as a page), but not when viewing the homepage.
-
-TODO make pixel and character counters grey (#8c8f94) when when empty. This will then fully align with the SEO Bar status colors.
-	-> Explain update to the KB article.
-TODO make pixel counter warning more description (not just "might get truncated in search", but "might get truncated or ignored in search").
-
-TODO make description meta settings more explanatory: "The meta description suggests text to be used under the title on search engine results pages."
-	-> Add: "The suggested descritpion can be ignored by search engines if they find it unsuitable." "The description does not contribute to ranking, but a good description does help improve click-through rates."
-	-> "Focus can help you generate a better description that's less likely to be ignored" -> Only show that if no page builder is present?
-
-TODO make the description and title placeholder editable.
-
-TODO Breadcrumbs are now in Gutenberg: https://github.com/WordPress/gutenberg/pull/71793.
-	-> Should we add this to our documentation?
-
-TODO remove placeholders in Webmaster settings? These go against our accessibility guidelines.
-TODO disable and hide Hello Elementor's SEO settings
-	-> hello_elementor_add_description_meta_tag
-
-TODO we should namespace all compatibility files, e.g.: The_SEO_Framework\Compat\Plugin\Elementor::_function_name()
-TODO remove tsf() from xsl filters. We should've done this with 5.1.0.
-
-For all the root URL issues, also check the TODO in function get_robots_txt_url. (issues 703 and 675)
-
-TODO before launch:
-	- Retest excerpts, images, open graph, titles, title conditions, twitter, bbPress user profiles in the admin area.
-		-> We now use get_query_type_from_args() instead of checking if ( $args[...]) directly.
-TODO trailing comma's are missing in pt.js showSelectorWrap -- find the pattern and fix them all.
-
-TODO Rename "Site Title Removal" to "Site Name Removal"?
-	-> This has no effect on the option, which is still title_rem_additions.
-
-TODO we should clean up update_primary_term like we did update_meta
-	-> Also, move the following part up:
-		// This resolves a quirk, since wp_insert_post() has no proper guard.
-		$post_id = \get_post( $post_id )->ID ?? null;
-		if ( empty( $post_id ) ) return;
-
-TODO should we unschedule cron events on deactivation?
-	-> WordPress emits a warning when a scheduled event has no hooks.
-
-		TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
-		var_dump() FIXME: When https://example.com/2025-11-13/ is accessed, TSF will assume a proper query?
-			-> Why doesn't AQP kick in here?
-			-> Does pagination kick in??
-				-> That means that we should add (more robust) pagination sanitizers.
-					-> Or, if they already are perfect, do AQP on pagination breakage?
-
 ### 5.1.3
 
 **For everyone:**
@@ -329,7 +251,7 @@ TODO should we unschedule cron events on deactivation?
 	* Three new options will be registered to `THE_SEO_FRAMEWORK_SITE_OPTIONS` (`autodescription-site-settings`): `display_list_edit_options`, `display_term_edit_options`, and `display_user_edit_options`.
 * **Added:**
 	* You can now select the primary term in the quick edit and bulk edit interfaces on post overview pages.
-	* You can now hide TSF's quick-edit and bulk-edit interfaces via the "SEO Settings > General Settings > Layout."
+	* You can now hide TSF's term, user, and quick/bulk-edit interfaces via the "SEO Settings > General Settings > Layout."
 * **Compatibility:**
 	* **Theme: Adava:**
 		* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
@@ -357,7 +279,7 @@ TODO should we unschedule cron events on deactivation?
 **For translators:**
 
 * **Updated:**
-	* TODO POT translation file.
+	* POT translation file.
 	* Various sentences have been updated for clarity.
 
 **For developers:**
