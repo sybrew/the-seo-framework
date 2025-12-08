@@ -144,7 +144,7 @@ class Post {
 		// This is here so we don't have to create another instance hereinafter.
 		$post = \get_post( $post );
 
-		return static::is_password_protected( $post ) || static::is_private( $post );
+		return self::is_password_protected( $post ) || self::is_private( $post );
 	}
 
 	/**

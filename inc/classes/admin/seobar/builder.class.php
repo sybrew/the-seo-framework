@@ -97,7 +97,7 @@ final class Builder {
 	public static function generate_bar( $query ) {
 
 		// Link the input query for action hooks.
-		static::$query = &$query;
+		self::$query = &$query;
 
 		$query += [
 			'id'        => 0,
@@ -128,9 +128,9 @@ final class Builder {
 		 * @param string                                       $interpreter The current class name.
 		 * @param \The_SEO_Framework\Admin\SEOBar\Builder\Main $builder     The builder object.
 		 */
-		\do_action( 'the_seo_framework_prepare_seo_bar', static::class, $builder );
+		\do_action( 'the_seo_framework_prepare_seo_bar', self::class, $builder );
 
-		$items = &static::collect_seo_bar_items();
+		$items = &self::collect_seo_bar_items();
 
 		foreach ( $builder->run_all_tests( $query ) as $key => $data )
 			$items[ $key ] = $data;
@@ -144,12 +144,12 @@ final class Builder {
 		 * @param string $interpreter The interpreter class name.
 		 * @param object $builder     The builder's class instance.
 		 */
-		\do_action( 'the_seo_framework_seo_bar', static::class, $builder );
+		\do_action( 'the_seo_framework_seo_bar', self::class, $builder );
 
-		$bar = static::create_seo_bar( static::$items );
+		$bar = self::create_seo_bar( self::$items );
 
 		// There's no need to leak memory.
-		static::$items = [];
+		self::$items = [];
 		$builder->clear_query_cache();
 
 		return $bar;
@@ -173,7 +173,7 @@ final class Builder {
 	 * }
 	 */
 	public static function &collect_seo_bar_items() {
-		return static::$items;
+		return self::$items;
 	}
 
 	/**
@@ -194,7 +194,7 @@ final class Builder {
 	 * }
 	 */
 	public static function register_seo_bar_item( $key, $item ) {
-		static::$items[ $key ] = $item;
+		self::$items[ $key ] = $item;
 	}
 
 	/**
@@ -215,8 +215,8 @@ final class Builder {
 		 */
 		static $_void = [];
 
-		if ( isset( static::$items[ $key ] ) ) { // Do not write to referenced var before this is tested!
-			$_item = &static::$items[ $key ];
+		if ( isset( self::$items[ $key ] ) ) { // Do not write to referenced var before this is tested!
+			$_item = &self::$items[ $key ];
 		} else {
 			$_void = [];
 			$_item = &$_void;
@@ -239,7 +239,7 @@ final class Builder {
 
 		$blocks = [];
 
-		foreach ( static::generate_seo_bar_blocks( $items ) as $block )
+		foreach ( self::generate_seo_bar_blocks( $items ) as $block )
 			$blocks[] = $block;
 
 		// Always return the wrap, may it be filled in via JS in the future.
@@ -283,35 +283,35 @@ final class Builder {
 		foreach ( $items as $item ) {
 
 			switch ( $item['status'] ) {
-				case static::STATE_GOOD:
+				case self::STATE_GOOD:
 					$status = 'good';
 					break;
-				case static::STATE_OKAY:
+				case self::STATE_OKAY:
 					$status = 'okay';
 					break;
-				case static::STATE_BAD:
+				case self::STATE_BAD:
 					$status = 'bad';
 					break;
-				case static::STATE_UNKNOWN:
+				case self::STATE_UNKNOWN:
 					$status = 'unknown';
 					break;
-				case static::STATE_UNDEFINED:
+				case self::STATE_UNDEFINED:
 				default:
 					$status = 'undefined';
 			}
 
-			if ( $use_symbols && $item['status'] ^ static::STATE_GOOD ) {
+			if ( $use_symbols && $item['status'] ^ self::STATE_GOOD ) {
 				switch ( $item['status'] ) {
-					case static::STATE_OKAY:
+					case self::STATE_OKAY:
 						$symbol = '!?';
 						break;
-					case static::STATE_BAD:
+					case self::STATE_BAD:
 						$symbol = '!!';
 						break;
-					case static::STATE_UNKNOWN:
+					case self::STATE_UNKNOWN:
 						$symbol = '??';
 						break;
-					case static::STATE_UNDEFINED:
+					case self::STATE_UNDEFINED:
 					default:
 						$symbol = '--';
 				}

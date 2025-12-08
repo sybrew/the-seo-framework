@@ -54,12 +54,12 @@ class Time {
 			return '';
 
 		if ( is_numeric( $time ) )
-			return gmdate( static::get_preferred_format(), (int) $time );
+			return gmdate( self::get_preferred_format(), (int) $time );
 
 		// Try to create from date; on success, format it. This way we won't produce errors.
 		$value = $time ? date_create_from_format( 'Y-m-d H:i:s', $time ) : '';
 
-		return $value ? date_format( $value, static::get_preferred_format() ) : '';
+		return $value ? date_format( $value, self::get_preferred_format() ) : '';
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Time {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				static::get_format(
+				self::get_format(
 					(bool) Data\Plugin::get_option( 'timestamps_format' ),
 				),
 			);

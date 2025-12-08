@@ -92,7 +92,7 @@ final class Main {
 	 * @return Main
 	 */
 	public static function instance() {
-		return static::$instance ??= new static;
+		return self::$instance ??= new self;
 	}
 
 	/**
@@ -125,8 +125,8 @@ final class Main {
 
 		// If this leads to 0 getters, so be it: The dev might've used a deprecated value, which is fine. Continue method.
 		$get = ( $get ?? false )
-			? array_intersect( static::GETTERS, $get )
-			: static::GETTERS;
+			? array_intersect( self::GETTERS, $get )
+			: self::GETTERS;
 
 		// Remit FETCH_OBJ_R opcode calls every time we'd otherwise use $this->options hereinafter.
 		$options = $this->options;

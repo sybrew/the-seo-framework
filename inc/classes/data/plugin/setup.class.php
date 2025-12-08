@@ -36,6 +36,8 @@ use The_SEO_Framework\{
  * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin()->setup() instead.
+ *
+ * @NOTE: All static:: calls within this class are intentional due to Property_Refresher trait.
  */
 class Setup {
 	use Property_Refresher;

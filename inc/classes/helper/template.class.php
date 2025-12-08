@@ -52,10 +52,10 @@ final class Template {
 	 */
 	public static function output_view( $file, ...$view_args ) { // phpcs:ignore Generic.CodeAnalysis -- includes.
 
-		$secret = static::$secret = uniqid( '', true );
+		$secret = self::$secret = uniqid( '', true );
 
 		// This will crash on PHP 8+ if the view isn't resolved. That's good.
-		require static::get_view_location( $file );
+		require self::get_view_location( $file );
 	}
 
 	/**
@@ -73,7 +73,7 @@ final class Template {
 	 */
 	public static function output_absolute_view( $file, ...$view_args ) { // phpcs:ignore Generic.CodeAnalysis -- includes.
 
-		$secret = static::$secret = uniqid( '', true );
+		$secret = self::$secret = uniqid( '', true );
 
 		require $file;
 	}
@@ -111,6 +111,6 @@ final class Template {
 	 * @return bool
 	 */
 	public static function verify_secret( $value ) {
-		return isset( $value ) && static::$secret === $value;
+		return isset( $value ) && self::$secret === $value;
 	}
 }

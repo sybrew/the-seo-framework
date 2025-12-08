@@ -97,8 +97,8 @@ trait Static_Deprecator {
 			\tsf()->_inaccessible_p_or_m( "$$name", 'unknown' );
 
 			// Invoke default behavior: Write variable if it's not protected.
-			if ( property_exists( self, $name ) )
-				self::$name = $value;
+			if ( property_exists( static::class, $name ) )
+				static::$$name = $value;
 		}
 	}
 

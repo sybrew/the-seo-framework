@@ -37,10 +37,12 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `SeoBar`.
- * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\SEOBar`.
+ * @since 5.0.0 Moved from `\\The_SEO_Framework\\Builders\\SEOBar`.
  *
  * @access private
- * @see \The_SEO_Framework\Admin\SEOBar\Builder
+ * @see \\The_SEO_Framework\\Admin\\SEOBar\\Builder
+ *
+ * @NOTE: All static:: calls within this class are intentional to allow overrides in subclasses.
  */
 abstract class Main {
 
@@ -99,7 +101,7 @@ abstract class Main {
 	 * @return static
 	 */
 	final public static function get_instance() {
-		return static::$instance ??= new static;
+		return static::$instance ??= new static; // static: allow overrides
 	}
 
 	/**
@@ -177,9 +179,9 @@ abstract class Main {
 	 */
 	final public function run_test( $tests, $query ) {
 
-		$tests = array_intersect( static::$tests, (array) $tests );
+		$tests = array_intersect( static::$tests, (array) $tests ); // static: allow overrides
 
-		static::$query = $query;
+		static::$query = $query; // static: allow overrides
 
 		$this->prime_query_cache();
 

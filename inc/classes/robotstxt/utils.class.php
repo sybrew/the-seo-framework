@@ -197,7 +197,7 @@ class Utils {
 		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! Data\Blog::is_subdirectory_installation() ) {
 			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() ) );
 			$path = "{$home}robots.txt";
-		} elseif ( static::has_root_robots_txt() ) {
+		} elseif ( self::has_root_robots_txt() ) {
 			// TODO: This URL is wrong on subdirectory installations? Use Meta\URI\Utils::get_site_host() instead?
 			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( \get_option( 'home' ) ) );
 			$path = "{$home}robots.txt";

@@ -31,7 +31,7 @@ namespace The_SEO_Framework\Data\Filter;
  * @since 5.0.0
  * @access private
  */
-class User {
+final class User {
 
 	/**
 	 * @hook "sanitize_usermeta_ . THE_SEO_FRAMEWORK_USER_OPTIONS" 10

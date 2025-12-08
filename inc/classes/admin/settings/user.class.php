@@ -56,7 +56,7 @@ final class User {
 		if ( ! Data\User::user_has_author_info_cap_on_network( $user ) )
 			return;
 
-		static::output_setting_fields( $user );
+		self::output_setting_fields( $user );
 	}
 
 	/**

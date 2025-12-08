@@ -30,6 +30,8 @@ namespace The_SEO_Framework;
  *
  * Holds various functions that relay to the new APIs.
  *
+ * @NOTE: All static:: calls within this class are intentional, to allow overrides in deprecators.
+ *
  * @since 5.0.0
  * You can access these methods via `tsf()` and `the_seo_framework()`.
  */

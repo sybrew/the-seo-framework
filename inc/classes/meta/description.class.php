@@ -62,8 +62,8 @@ class Description {
 	 * @return string The real description output.
 	 */
 	public static function get_description( $args = null ) {
-		return coalesce_strlen( static::get_custom_description( $args ) )
-			?? static::get_generated_description( $args );
+		return coalesce_strlen( self::get_custom_description( $args ) )
+			?? self::get_generated_description( $args );
 	}
 
 	/**
@@ -79,9 +79,9 @@ class Description {
 
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
-			$desc = static::get_custom_description_from_args( $args );
+			$desc = self::get_custom_description_from_args( $args );
 		} else {
-			$desc = static::get_custom_description_from_query();
+			$desc = self::get_custom_description_from_query();
 		}
 
 		/**
@@ -122,7 +122,7 @@ class Description {
 	 */
 	public static function get_generated_description( $args = null, $type = 'search' ) {
 
-		if ( ! static::may_generate( $args ) ) return '';
+		if ( ! self::may_generate( $args ) ) return '';
 
 		switch ( $type ) {
 			case 'opengraph':
@@ -191,7 +191,7 @@ class Description {
 	 * Gets a custom description, based on expected or current query, without escaping.
 	 *
 	 * @since 5.0.0
-	 * @see static::get_custom_description()
+	 * @see self::get_custom_description()
 	 *
 	 * @return string The custom description.
 	 */

@@ -66,8 +66,8 @@ class Excerpt {
 		return \apply_filters(
 			'the_seo_framework_get_excerpt',
 			isset( $args )
-				? static::get_excerpt_from_args( $args )
-				: static::get_excerpt_from_query(),
+				? self::get_excerpt_from_args( $args )
+				: self::get_excerpt_from_query(),
 			$args,
 		);
 	}
@@ -84,7 +84,7 @@ class Excerpt {
 	 * @return string
 	 */
 	public static function get_post_excerpt( $args = null ) {
-		return static::get_excerpt( $args );
+		return self::get_excerpt( $args );
 	}
 
 	/**
@@ -100,11 +100,11 @@ class Excerpt {
 		if ( null !== $memo = memo() ) return $memo;
 
 		if ( Query::is_blog_as_page() ) {
-			$excerpt = static::get_blog_page_excerpt();
+			$excerpt = self::get_blog_page_excerpt();
 		} elseif ( Query::is_singular() ) {
-			$excerpt = static::get_singular_excerpt();
+			$excerpt = self::get_singular_excerpt();
 		} elseif ( Query::is_archive() ) {
-			$excerpt = static::get_archive_excerpt();
+			$excerpt = self::get_archive_excerpt();
 		}
 
 		return memo( $excerpt ?? '' ?: '' );
@@ -125,22 +125,22 @@ class Excerpt {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_blog_as_page( $args['id'] ) ) {
-					$excerpt = static::get_blog_page_excerpt();
+					$excerpt = self::get_blog_page_excerpt();
 				} else {
-					$excerpt = static::get_singular_excerpt( $args['id'] );
+					$excerpt = self::get_singular_excerpt( $args['id'] );
 				}
 				break;
 			case 'term':
-				$excerpt = static::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );
+				$excerpt = self::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );
 				break;
 			case 'homeblog':
-				$excerpt = static::get_blog_page_excerpt();
+				$excerpt = self::get_blog_page_excerpt();
 				break;
 			case 'pta':
-				$excerpt = static::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
+				$excerpt = self::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
 				break;
 			case 'user':
-				$excerpt = static::get_archive_excerpt( Data\User::get_userdata( $args['uid'] ) );
+				$excerpt = self::get_archive_excerpt( Data\User::get_userdata( $args['uid'] ) );
 		}
 
 		return $excerpt ?? '';

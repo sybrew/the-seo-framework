@@ -56,7 +56,7 @@ class Cache {
 	public static function clear_sitemap_caches() {
 
 		foreach ( Registry::get_sitemap_endpoint_list() as $id => $data ) {
-			$transient = static::get_sitemap_cache_key( $id );
+			$transient = self::get_sitemap_cache_key( $id );
 
 			if ( $transient )
 				\delete_transient( $transient );
@@ -129,7 +129,7 @@ class Cache {
 
 		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
 
-		return static::build_sitemap_cache_key( static::get_transient_prefix() . $cache_key );
+		return self::build_sitemap_cache_key( self::get_transient_prefix() . $cache_key );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Cache {
 	 */
 	public static function cache_sitemap_content( $content, $sitemap_id = '', $expiration = \WEEK_IN_SECONDS ) {
 
-		$transient_key = static::get_sitemap_cache_key( $sitemap_id );
+		$transient_key = self::get_sitemap_cache_key( $sitemap_id );
 
 		if ( ! $transient_key ) return false;
 
@@ -161,7 +161,7 @@ class Cache {
 	 */
 	public static function get_cached_sitemap_content( $sitemap_id = '' ) {
 
-		$transient_key = static::get_sitemap_cache_key( $sitemap_id );
+		$transient_key = self::get_sitemap_cache_key( $sitemap_id );
 
 		if ( ! $transient_key ) return false;
 

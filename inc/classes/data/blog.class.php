@@ -56,7 +56,7 @@ class Blog {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				Data\Plugin::get_option( 'site_title' ) ?: static::get_filtered_blog_name(),
+				Data\Plugin::get_option( 'site_title' ) ?: self::get_filtered_blog_name(),
 			);
 	}
 

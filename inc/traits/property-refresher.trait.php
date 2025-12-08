@@ -34,6 +34,7 @@ namespace The_SEO_Framework\Traits;
  *
  * @since 5.0.0
  * @access public
+ * @NOTE: All static:: calls within this class are intentional due to being a trait.
  */
 trait Property_Refresher {
 

@@ -72,9 +72,9 @@ class Breadcrumbs {
 
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
-			$list = static::get_breadcrumb_list_from_args( $args );
+			$list = self::get_breadcrumb_list_from_args( $args );
 		} else {
-			$list = memo() ?? memo( static::get_breadcrumb_list_from_query() );
+			$list = memo() ?? memo( self::get_breadcrumb_list_from_query() );
 		}
 
 		/**
@@ -110,23 +110,23 @@ class Breadcrumbs {
 	private static function get_breadcrumb_list_from_query() {
 
 		if ( Query::is_real_front_page() ) {
-			$list = static::get_front_page_breadcrumb_list();
+			$list = self::get_front_page_breadcrumb_list();
 		} elseif ( Query::is_singular() ) {
-			$list = static::get_singular_breadcrumb_list();
+			$list = self::get_singular_breadcrumb_list();
 		} elseif ( Query::is_archive() ) {
 			if ( Query::is_editable_term() ) {
-				$list = static::get_term_breadcrumb_list();
+				$list = self::get_term_breadcrumb_list();
 			} elseif ( \is_post_type_archive() ) {
-				$list = static::get_pta_breadcrumb_list();
+				$list = self::get_pta_breadcrumb_list();
 			} elseif ( Query::is_author() ) {
-				$list = static::get_author_breadcrumb_list();
+				$list = self::get_author_breadcrumb_list();
 			} elseif ( \is_date() ) {
-				$list = static::get_date_breadcrumb_list();
+				$list = self::get_date_breadcrumb_list();
 			}
 		} elseif ( Query::is_search() ) {
-			$list = static::get_search_breadcrumb_list();
+			$list = self::get_search_breadcrumb_list();
 		} elseif ( \is_404() ) {
-			$list = static::get_404_breadcrumb_list();
+			$list = self::get_404_breadcrumb_list();
 		}
 
 		// The ?? operator is redundant here, but the query might be mangled.
@@ -151,22 +151,22 @@ class Breadcrumbs {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$list = static::get_front_page_breadcrumb_list();
+					$list = self::get_front_page_breadcrumb_list();
 				} else {
-					$list = static::get_singular_breadcrumb_list( $args['id'] );
+					$list = self::get_singular_breadcrumb_list( $args['id'] );
 				}
 				break;
 			case 'term':
-				$list = static::get_term_breadcrumb_list( $args['id'], $args['tax'] );
+				$list = self::get_term_breadcrumb_list( $args['id'], $args['tax'] );
 				break;
 			case 'homeblog':
-				$list = static::get_front_page_breadcrumb_list();
+				$list = self::get_front_page_breadcrumb_list();
 				break;
 			case 'pta':
-				$list = static::get_pta_breadcrumb_list( $args['pta'] );
+				$list = self::get_pta_breadcrumb_list( $args['pta'] );
 				break;
 			case 'user':
-				$list = static::get_author_breadcrumb_list( $args['uid'] );
+				$list = self::get_author_breadcrumb_list( $args['uid'] );
 		}
 
 		return $list;
@@ -185,7 +185,7 @@ class Breadcrumbs {
 	 * }
 	 */
 	private static function get_front_page_breadcrumb_list() {
-		return [ static::get_front_breadcrumb() ];
+		return [ self::get_front_breadcrumb() ];
 	}
 
 	/**
@@ -266,7 +266,7 @@ class Breadcrumbs {
 		}
 
 		return [
-			static::get_front_breadcrumb(),
+			self::get_front_breadcrumb(),
 			...$crumbs,
 		];
 	}
@@ -326,7 +326,7 @@ class Breadcrumbs {
 		}
 
 		return [
-			static::get_front_breadcrumb(),
+			self::get_front_breadcrumb(),
 			...$crumbs,
 		];
 	}
@@ -362,7 +362,7 @@ class Breadcrumbs {
 		}
 
 		return [
-			static::get_front_breadcrumb(),
+			self::get_front_breadcrumb(),
 			...$crumbs,
 		];
 	}
@@ -397,7 +397,7 @@ class Breadcrumbs {
 		}
 
 		return [
-			static::get_front_breadcrumb(),
+			self::get_front_breadcrumb(),
 			...$crumbs,
 		];
 	}
@@ -419,7 +419,7 @@ class Breadcrumbs {
 	 */
 	private static function get_date_breadcrumb_list() {
 		return [
-			static::get_front_breadcrumb(),
+			self::get_front_breadcrumb(),
 			[
 				'url'  => Meta\URI::get_bare_date_url(
 					\get_query_var( 'year' ),
@@ -445,7 +445,7 @@ class Breadcrumbs {
 	 */
 	private static function get_search_breadcrumb_list() {
 		return [
-			static::get_front_breadcrumb(),
+			self::get_front_breadcrumb(),
 			[
 				'url'  => Meta\URI::get_search_url(),
 				'name' => Meta\Title::get_search_query_title(), // discrepancy
@@ -467,7 +467,7 @@ class Breadcrumbs {
 	 */
 	private static function get_404_breadcrumb_list() {
 		return [
-			static::get_front_breadcrumb(),
+			self::get_front_breadcrumb(),
 			[
 				'url'  => '',
 				'name' => Meta\Title::get_404_title(), // discrepancy

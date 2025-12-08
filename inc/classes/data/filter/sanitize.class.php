@@ -149,13 +149,13 @@ class Sanitize {
 		return html_entity_decode(
 			\wptexturize(
 				\capital_P_dangit(
-					static::backward_solidus_to_entity(
-						static::lone_hyphen_to_entity(
-							static::remove_repeated_spacing(
+					self::backward_solidus_to_entity(
+						self::lone_hyphen_to_entity(
+							self::remove_repeated_spacing(
 								trim(
-									static::tab_to_space(
-										static::newline_to_space(
-											static::nbsp_to_space(
+									self::tab_to_space(
+										self::newline_to_space(
+											self::nbsp_to_space(
 												(string) $text,
 											),
 										),
@@ -182,7 +182,7 @@ class Sanitize {
 	public static function normalize_metadata_content_for_strcmp( $text ) {
 		// Why not blog_charset? Because blog_charset is there only to onboard non-UTF-8 to UTF-8.
 		return html_entity_decode(
-			static::metadata_content( $text ),
+			self::metadata_content( $text ),
 			\ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML5,
 			'UTF-8',
 		);
@@ -412,7 +412,7 @@ class Sanitize {
 		// This is over 350x faster than a polyfill for `array_is_list()`.
 		if ( isset( $details[0] ) && array_values( $details ) === $details ) {
 			foreach ( $details as $deets )
-				$sanitized_details[] = static::image_details( $deets );
+				$sanitized_details[] = self::image_details( $deets );
 
 			return $sanitized_details ?? [];
 		}

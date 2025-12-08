@@ -100,7 +100,8 @@ abstract class Main {
 	 * Creates XML entry from array input.
 	 * Input is expected to be escaped and XML-safe.
 	 *
-	 * Note: Not final, other classes may overwrite this.
+	 * @NOTE: Not final, other classes may overwrite this.
+	 * The self:: call in this method is intentional since it is used recursively.
 	 *
 	 * @since 4.1.1
 	 * @since 5.0.0 Is now static.
@@ -118,7 +119,7 @@ abstract class Main {
 			$tabs = str_repeat( "\t", $level );
 
 			if ( \is_array( $value ) )
-				$value = "\n" . static::create_xml_entry( $value, $level + 1 ) . $tabs;
+				$value = "\n" . self::create_xml_entry( $value, $level + 1 ) . $tabs;
 
 			$out .= "$tabs<$key>$value</$key>\n";
 		}

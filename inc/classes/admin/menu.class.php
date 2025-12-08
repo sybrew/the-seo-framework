@@ -53,7 +53,7 @@ class Menu {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		$menu = static::get_top_menu_args();
+		$menu = self::get_top_menu_args();
 
 		\add_menu_page(
 			$menu['page_title'],
@@ -84,7 +84,7 @@ class Menu {
 		 */
 		if ( \current_user_can( $menu['capability'] ) )
 			\add_action(
-				'load-' . static::get_page_hook_name(),
+				'load-' . self::get_page_hook_name(),
 				[ Settings\Plugin::class, 'register_seo_settings_meta_boxes' ],
 			);
 	}
@@ -99,7 +99,7 @@ class Menu {
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() ) return $memo;
 
-		$issue_count = static::get_top_menu_issue_count();
+		$issue_count = self::get_top_menu_issue_count();
 
 		/**
 		 * @since 4.2.8
@@ -110,7 +110,7 @@ class Menu {
 			[
 				'page_title' => \esc_html__( 'SEO Settings', 'autodescription' ),
 				'menu_title' => \esc_html__( 'SEO', 'autodescription' )
-					. ( $issue_count ? static::get_issue_badge( $issue_count ) : '' ),
+					. ( $issue_count ? self::get_issue_badge( $issue_count ) : '' ),
 				'capability' => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
 				'menu_slug'  => \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG,
 				'callback'   => [ Settings\Plugin::class, 'prepare_settings_wrap' ],
@@ -133,12 +133,12 @@ class Menu {
 		if ( $submenu ) {
 			return $names[ $submenu ] ??= \get_plugin_page_hookname(
 				$submenu,
-				static::get_top_menu_args()['menu_slug'],
+				self::get_top_menu_args()['menu_slug'],
 			);
 		}
 
 		return $names[''] ??= \get_plugin_page_hookname(
-			static::get_top_menu_args()['menu_slug'],
+			self::get_top_menu_args()['menu_slug'],
 			'',
 		);
 	}

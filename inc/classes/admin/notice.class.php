@@ -60,7 +60,7 @@ class Notice {
 	 */
 	public static function output_notice( $message, $args ) {
 		// phpcs:ignore WordPress.Security.EscapeOutput -- use $escape
-		echo static::generate_notice( $message, $args );
+		echo self::generate_notice( $message, $args );
 	}
 
 	/**

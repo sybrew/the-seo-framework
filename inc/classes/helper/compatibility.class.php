@@ -38,7 +38,7 @@ use The_SEO_Framework\{
  * @since 5.0.0
  * @access private
  */
-class Compatibility {
+final class Compatibility {
 
 	/**
 	 * Registers plugin cache checks on plugin activation.
@@ -49,7 +49,7 @@ class Compatibility {
 	public static function try_plugin_conflict_notification() {
 
 		// We refresh here because the list is loaded before a plugin is (de)activated.
-		if ( ! static::get_active_conflicting_plugin_types( true )['seo_tools'] ) return;
+		if ( ! self::get_active_conflicting_plugin_types( true )['seo_tools'] ) return;
 
 		Admin\Notice\Persistent::register_notice(
 			\__( 'Multiple SEO plugins have been detected. You should only use one.', 'autodescription' ),
@@ -179,7 +179,7 @@ class Compatibility {
 
 		$active_plugins = Data\Blog::get_active_plugins();
 
-		foreach ( static::get_conflicting_plugins() as $type => $plugins )
+		foreach ( self::get_conflicting_plugins() as $type => $plugins )
 			if ( array_intersect( $plugins, $active_plugins ) )
 				$conflicting_types[ $type ] = true;
 

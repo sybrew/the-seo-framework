@@ -33,7 +33,7 @@ use The_SEO_Framework\Meta;
  * @since 5.0.0
  * @access private
  */
-class Term {
+final class Term {
 
 	/**
 	 * @hook "sanitize_term_meta_ . THE_SEO_FRAMEWORK_TERM_OPTIONS" 10

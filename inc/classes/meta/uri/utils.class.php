@@ -63,7 +63,7 @@ class Utils {
 	 */
 	public static function detect_site_url_scheme() {
 		return strtolower(
-			   static::get_parsed_front_page_url()['scheme']
+			   self::get_parsed_front_page_url()['scheme']
 			?? ( Query::is_ssl() ? 'https' : 'http' ),
 		);
 	}
@@ -83,7 +83,7 @@ class Utils {
 	 */
 	public static function get_site_host() {
 
-		$parsed_url = static::get_parsed_front_page_url();
+		$parsed_url = self::get_parsed_front_page_url();
 
 		$host = $parsed_url['host'] ?? '';
 
@@ -104,7 +104,7 @@ class Utils {
 	 * @return string The home URL path
 	 */
 	public static function get_site_path() {
-		return static::get_parsed_front_page_url()['path'] ?? '/';
+		return self::get_parsed_front_page_url()['path'] ?? '/';
 	}
 
 	/**
@@ -172,7 +172,7 @@ class Utils {
 				break;
 			case 'automatic':
 			default:
-				$scheme = static::detect_site_url_scheme();
+				$scheme = self::detect_site_url_scheme();
 		}
 
 		/**
@@ -193,7 +193,7 @@ class Utils {
 	 * @return string The URL with the preferred scheme.
 	 */
 	public static function set_preferred_url_scheme( $url ) {
-		return static::set_url_scheme( $url, static::get_preferred_url_scheme() );
+		return self::set_url_scheme( $url, self::get_preferred_url_scheme() );
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Utils {
 	 */
 	public static function set_url_scheme( $url, $scheme = null ) {
 
-		$url = static::make_fully_qualified_url( $url );
+		$url = self::make_fully_qualified_url( $url );
 
 		switch ( $scheme ) {
 			case 'https':
@@ -248,11 +248,11 @@ class Utils {
 	 */
 	public static function make_absolute_current_scheme_url( $url ) {
 
-		if ( static::url_matches_blog_domain( $url ) )
-			return static::set_preferred_url_scheme( $url );
+		if ( self::url_matches_blog_domain( $url ) )
+			return self::set_preferred_url_scheme( $url );
 
 		// This also sets preferred URL scheme if path.
-		return static::convert_path_to_url( $url );
+		return self::convert_path_to_url( $url );
 	}
 
 	/**
@@ -265,8 +265,8 @@ class Utils {
 	 *
 	 * @since 2.6.5
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @see `static::set_url_scheme()` to set the correct scheme.
-	 * @see `static::convert_path_to_url()` to create URLs from paths.
+	 * @see `self::set_url_scheme()` to set the correct scheme.
+	 * @see `self::convert_path_to_url()` to create URLs from paths.
 	 *
 	 * @param string $url The current maybe not fully qualified URL. Required.
 	 * @return string $url
@@ -299,7 +299,7 @@ class Utils {
 			   umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				static::set_url_scheme( \sanitize_url(
+				self::set_url_scheme( \sanitize_url(
 					Data\Blog::get_front_page_url(),
 					[ 'https', 'http' ],
 				) ),
@@ -309,7 +309,7 @@ class Utils {
 		if ( 0 === stripos( $url, $home_domain ) )
 			return true;
 
-		$url = static::set_url_scheme( \sanitize_url(
+		$url = self::set_url_scheme( \sanitize_url(
 			$url,
 			[ 'https', 'http' ],
 		) );
@@ -348,7 +348,7 @@ class Utils {
 		return \WP_Http::make_absolute_url(
 			$path,
 			\trailingslashit(
-				$url ?: static::set_preferred_url_scheme( static::get_site_host() )
+				$url ?: self::set_preferred_url_scheme( self::get_site_host() )
 			),
 		);
 	}
@@ -397,7 +397,7 @@ class Utils {
 			}
 
 			if ( $_query )
-				$url = static::append_query_to_url( $url, $_query );
+				$url = self::append_query_to_url( $url, $_query );
 		} else {
 			if ( $use_base ) {
 				$url = \add_query_arg( 'paged', $page, $url );
@@ -465,7 +465,7 @@ class Utils {
 
 					// Add back the query.
 					if ( $_query )
-						$url = static::append_query_to_url( $url, $_query );
+						$url = self::append_query_to_url( $url, $_query );
 				}
 			}
 		} else {
@@ -541,7 +541,7 @@ class Utils {
 								$parent_post = $attachment->post_parent;
 
 								if ( $parent_post ) {
-									$parentslug = static::get_relative_part_from_url( \get_permalink( $parent_post ) );
+									$parentslug = self::get_relative_part_from_url( \get_permalink( $parent_post ) );
 
 									// This was probably a workaround for paginated parent links. See `get_attachment_link()`.
 									// We should also account for this on the Canonical URL Notation Tracker, but this is an extreme oddity.

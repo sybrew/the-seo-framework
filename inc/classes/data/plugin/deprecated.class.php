@@ -52,7 +52,7 @@ final class Deprecated {
 	 */
 	public static function get_deprecated_option( ...$key ) {
 
-		$map = static::$deprecation_map ??= static::get_deprecation_map();
+		$map = self::$deprecation_map ??= self::get_deprecation_map();
 
 		foreach ( $key as $k )
 			$map = $map[ $k ] ?? null;
@@ -78,6 +78,6 @@ final class Deprecated {
 	 * @return array A list of deprecated options and their replacement indexes.
 	 */
 	public static function get_deprecation_map() {
-		return static::$deprecation_map ??= [];
+		return self::$deprecation_map ??= [];
 	}
 }

@@ -48,7 +48,7 @@ class User {
 	public static function user_has_author_info_cap_on_network( $user ) {
 
 		if ( ! \is_object( $user ) )
-			$user = static::get_userdata( $user );
+			$user = self::get_userdata( $user );
 
 		// User is logged out, how did I get here? (nice song btw)
 		if ( ! $user )

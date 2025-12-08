@@ -66,7 +66,7 @@ final class Front extends Factory {
 		$asserting_noindex = 'noindex' === $type;
 
 		// We assert options here for a jump to meta_settings might be unaware.
-		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) {
+		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) { // static: allow overrides
 
 			$qubit = null;
 
@@ -104,7 +104,7 @@ final class Front extends Factory {
 			if ( Query::is_real_front_page() ) {
 				yield 'globals_homepage' => (bool) Data\Plugin::get_option( "homepage_$type" );
 			} else {
-				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' );
+				$asserting_noindex and yield from static::assert_noindex_query_pass( '404' ); // static: allow overrides
 
 				if ( Query::is_archive() ) {
 					if ( Query::is_author() ) {
@@ -137,17 +137,17 @@ final class Front extends Factory {
 		}
 
 		// We assert options here for a jump to index_protection might be unaware.
-		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
+		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) { // static: allow overrides
 			if ( Query::is_real_front_page() ) {
-				yield from static::assert_noindex_query_pass( 'paged_home' );
+				yield from static::assert_noindex_query_pass( 'paged_home' ); // static: allow overrides
 			} elseif ( Query::is_archive() || Query::is_singular_archive() ) {
-				yield from static::assert_noindex_query_pass( 'paged' );
+				yield from static::assert_noindex_query_pass( 'paged' ); // static: allow overrides
 			}
 			if ( Query::is_singular() ) {
-				yield from static::assert_noindex_query_pass( 'protected' );
+				yield from static::assert_noindex_query_pass( 'protected' ); // static: allow overrides
 
 				if ( Query::is_comment_paged() )
-					yield from static::assert_noindex_query_pass( 'cpage' );
+					yield from static::assert_noindex_query_pass( 'cpage' ); // static: allow overrides
 			}
 		}
 

@@ -66,8 +66,8 @@ class Cache {
 	public static function memo( $value_to_set = null, ...$args ) {
 
 		if (
-			   ! static::$can_cache_query
-			&& ! static::can_cache_query() // If not set, (re)determine.
+			   ! self::$can_cache_query
+			&& ! self::can_cache_query() // If not set, (re)determine.
 		) {
 			return $value_to_set;
 		}
@@ -80,9 +80,9 @@ class Cache {
 		$hash = "$caller/" . serialize( $args );
 
 		if ( isset( $value_to_set ) )
-			return static::$memo[ $hash ] = $value_to_set;
+			return self::$memo[ $hash ] = $value_to_set;
 
-		return static::$memo[ $hash ] ?? null;
+		return self::$memo[ $hash ] ?? null;
 	}
 
 	/**
@@ -104,17 +104,17 @@ class Cache {
 	 */
 	public static function can_cache_query() {
 
-		if ( isset( static::$can_cache_query ) )
-			return static::$can_cache_query;
+		if ( isset( self::$can_cache_query ) )
+			return self::$can_cache_query;
 
 		if ( \defined( 'WP_CLI' ) && \WP_CLI )
-			return static::$can_cache_query = false;
+			return self::$can_cache_query = false;
 
 		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
-			return static::$can_cache_query = true;
+			return self::$can_cache_query = true;
 
 		if ( \THE_SEO_FRAMEWORK_DEBUG )
-			static::do_query_error_notice();
+			self::do_query_error_notice();
 
 		// Don't set yet.
 		return false;

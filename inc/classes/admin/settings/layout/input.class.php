@@ -70,7 +70,7 @@ class Input {
 	 * @param string|string[] $id The field id, or a map of indexes therefor.
 	 */
 	public static function field_id( $id ) {
-		echo \esc_attr( static::get_field_id( $id ) );
+		echo \esc_attr( self::get_field_id( $id ) );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Input {
 	 * @return string Full field name
 	 */
 	public static function get_field_name( $name ) {
-		return static::get_field_id( $name );
+		return self::get_field_id( $name );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class Input {
 	 */
 	public static function field_name( $name ) {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- field_id escapes.
-		echo static::field_id( $name );
+		echo self::field_id( $name );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Input {
 			$args['label']       = \esc_html( $args['label'] );
 		}
 
-		$field_id = $field_name = static::get_field_id( $args['id'] );
+		$field_id = $field_name = self::get_field_id( $args['id'] );
 		$value    = $args['value'] ?? Data\Plugin::get_option( ...(array) $args['id'] );
 
 		$cb_classes = [];
@@ -155,7 +155,7 @@ class Input {
 		if ( $args['disabled'] ) {
 			$cb_classes[] = 'tsf-disabled';
 		} else {
-			array_push( $cb_classes, ...static::get_conditional_checked_classes( ...(array) $args['id'] ) );
+			array_push( $cb_classes, ...self::get_conditional_checked_classes( ...(array) $args['id'] ) );
 		}
 
 		return \sprintf(

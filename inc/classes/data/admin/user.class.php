@@ -33,7 +33,7 @@ use The_SEO_Framework\Data;
  * @since 5.0.0
  * @access private
  */
-class User {
+final class User {
 
 	/**
 	 * @since 5.1.3
@@ -73,8 +73,8 @@ class User {
 		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
 
 		if (
-			   ! isset( $_POST[ static::SAVE_NONCES['user-edit']['name'] ] )
-			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['user-edit']['name'] ], static::SAVE_NONCES['user-edit']['action'] )
+			   ! isset( $_POST[ self::SAVE_NONCES['user-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['user-edit']['name'] ], self::SAVE_NONCES['user-edit']['action'] )
 		) return;
 
 		if ( ! Data\User::user_has_author_info_cap_on_network( $user_id ) ) return;

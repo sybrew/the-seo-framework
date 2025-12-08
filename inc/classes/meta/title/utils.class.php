@@ -160,6 +160,6 @@ class Utils {
 	 * @internal Only to be used within Meta\Title::get_bare_unfiltered_generated_title()
 	 */
 	public static function reset_default_title_filters() {
-		static::remove_default_title_filters( true );
+		self::remove_default_title_filters( true );
 	}
 }

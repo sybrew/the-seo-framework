@@ -314,12 +314,6 @@ TODO we should clean up update_primary_term like we did update_meta
 TODO should we unschedule cron events on deactivation?
 	-> WordPress emits a warning when a scheduled event has no hooks.
 
-TODO convert all static:: calls to self:: in final classes.
-	This improves performance slightly by avoiding late static binding runtime resolution.
-	Although I found static to be more linguistically correct.
-		-> Only 28 files, regex:
-		-> final class[\w\W]*?static::
-
 		TODO TODO When the homepage is set to a static page, and the blog page isn't set, AQP cannot fire for WP->query_vars broken queries.
 		var_dump() FIXME: When https://example.com/2025-11-13/ is accessed, TSF will assume a proper query?
 			-> Why doesn't AQP kick in here?
@@ -386,8 +380,10 @@ TODO convert all static:: calls to self:: in final classes.
 			2. Added conditional "NO_JIT" modifier for huge inputs to prevent abortion due to suspected memory issues.
 			3. Improved regex pattern to ignore bitwise operators (<<) encountered in scripts. Also prevents recursive lookup loops when encountering these operators in elements.
 		* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
+		* Resolved an issue in `The_SEO_Framework\Traits\Internal\Static_Deprecator` trait where dynamic property access used incorrect syntax (`self` instead of `static::class` and `self::$name` instead of `static::$$name`).
 	* **Other:**
 		* We now use `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`) instead of the expensive `get_userdata()` directly to fetch user data. This improves output performance at the expense of a slight memory overhead.
+		* Converted all `static` calls to `self` in final classes. This improves performance marginally by avoiding late static binding runtime resolution. We measured less than 1% performance improvement in our test suite; that's likely because most of our code is procedural instead of object-oriented.
 * **JS API notes:**
 	* **Changed:**
 		* `tsfCanonical.rewrite` is no longer available. This was not meant to be publicly accessible.

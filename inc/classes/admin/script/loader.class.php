@@ -50,7 +50,7 @@ use The_SEO_Framework\Helper\{
  * @see \The_SEO_Framework\Admin\Script\Registry
  * @access private
  */
-class Loader {
+final class Loader {
 
 	/**
 	 * Initializes scripts based on admin query.
@@ -61,70 +61,70 @@ class Loader {
 	public static function init() {
 
 		$scripts = [
-			static::get_common_scripts(),
+			self::get_common_scripts(),
 		];
 
 		if ( Query::is_post_edit() ) {
-			static::prepare_media_scripts();
+			self::prepare_media_scripts();
 
-			$scripts[] = static::get_post_edit_scripts();
-			$scripts[] = static::get_tabs_scripts();
-			$scripts[] = static::get_media_scripts();
-			$scripts[] = static::get_title_scripts();
-			$scripts[] = static::get_description_scripts();
-			$scripts[] = static::get_social_scripts();
-			$scripts[] = static::get_canonical_scripts();
-			$scripts[] = static::get_primaryterm_scripts();
-			$scripts[] = static::get_ays_scripts();
+			$scripts[] = self::get_post_edit_scripts();
+			$scripts[] = self::get_tabs_scripts();
+			$scripts[] = self::get_media_scripts();
+			$scripts[] = self::get_title_scripts();
+			$scripts[] = self::get_description_scripts();
+			$scripts[] = self::get_social_scripts();
+			$scripts[] = self::get_canonical_scripts();
+			$scripts[] = self::get_primaryterm_scripts();
+			$scripts[] = self::get_ays_scripts();
 
 			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
-				$scripts[] = static::get_counter_scripts();
+				$scripts[] = self::get_counter_scripts();
 
 			if ( Query::is_block_editor() )
-				$scripts[] = static::get_gutenberg_compat_scripts();
+				$scripts[] = self::get_gutenberg_compat_scripts();
 		} elseif ( Query::is_term_edit() ) {
 			if ( Data\Plugin::get_option( 'display_term_edit_options' ) ) {
-				static::prepare_media_scripts();
+				self::prepare_media_scripts();
 
-				$scripts[] = static::get_term_edit_scripts();
-				$scripts[] = static::get_media_scripts();
-				$scripts[] = static::get_title_scripts();
-				$scripts[] = static::get_description_scripts();
-				$scripts[] = static::get_social_scripts();
-				$scripts[] = static::get_canonical_scripts();
-				$scripts[] = static::get_ays_scripts();
+				$scripts[] = self::get_term_edit_scripts();
+				$scripts[] = self::get_media_scripts();
+				$scripts[] = self::get_title_scripts();
+				$scripts[] = self::get_description_scripts();
+				$scripts[] = self::get_social_scripts();
+				$scripts[] = self::get_canonical_scripts();
+				$scripts[] = self::get_ays_scripts();
 
 				if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
-					$scripts[] = static::get_counter_scripts();
+					$scripts[] = self::get_counter_scripts();
 			}
 		} elseif ( Query::is_wp_lists_edit() ) {
 			if ( Data\Plugin::get_option( 'display_list_edit_options' ) ) {
-				$scripts[] = static::get_list_edit_scripts();
-				$scripts[] = static::get_title_scripts();
-				$scripts[] = static::get_description_scripts();
-				$scripts[] = static::get_canonical_scripts();
+				$scripts[] = self::get_list_edit_scripts();
+				$scripts[] = self::get_title_scripts();
+				$scripts[] = self::get_description_scripts();
+				$scripts[] = self::get_canonical_scripts();
 
 				if ( Query::is_singular_admin() )
-					$scripts[] = static::get_primaryterm_scripts();
+					$scripts[] = self::get_primaryterm_scripts();
 
 				if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
-					$scripts[] = static::get_counter_scripts();
+					$scripts[] = self::get_counter_scripts();
 			}
 		} elseif ( Query::is_seo_settings_page() ) {
-			static::prepare_media_scripts();
-			static::prepare_metabox_scripts();
+			self::prepare_media_scripts();
+			self::prepare_metabox_scripts();
 
-			$scripts[] = static::get_seo_settings_scripts();
-			$scripts[] = static::get_tabs_scripts();
-			$scripts[] = static::get_media_scripts();
-			$scripts[] = static::get_title_scripts();
-			$scripts[] = static::get_description_scripts();
-			$scripts[] = static::get_social_scripts();
-			$scripts[] = static::get_canonical_scripts();
-			$scripts[] = static::get_ays_scripts();
+			$scripts[] = self::get_seo_settings_scripts();
+			$scripts[] = self::get_tabs_scripts();
+			$scripts[] = self::get_media_scripts();
+			$scripts[] = self::get_title_scripts();
+			$scripts[] = self::get_description_scripts();
+			$scripts[] = self::get_social_scripts();
+			$scripts[] = self::get_canonical_scripts();
+			$scripts[] = self::get_ays_scripts();
 
 			// Always load unconditionally, options may enable the counters dynamically.
-			$scripts[] = static::get_counter_scripts();
+			$scripts[] = self::get_counter_scripts();
 		}
 
 		/**

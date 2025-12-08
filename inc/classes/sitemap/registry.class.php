@@ -77,7 +77,7 @@ class Registry {
 		if ( '/' === $raw_uri ) return;
 
 		// The path+query where sitemaps are served.
-		$path_info = static::get_sitemap_base_path_info();
+		$path_info = self::get_sitemap_base_path_info();
 
 		// A regex which detects $sitemap_path at the beginning of a string.
 		$path_regex = '/^' . preg_quote( rawurldecode( $path_info['path'] ), '/' ) . '/ui';
@@ -92,7 +92,7 @@ class Registry {
 
 		// Loop over the sitemap endpoints, and see if it matches the stripped uri.
 		if ( $path_info['use_query_var'] ) {
-			foreach ( static::get_sitemap_endpoint_list() as $_id => $_data ) {
+			foreach ( self::get_sitemap_endpoint_list() as $_id => $_data ) {
 				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
 				// Yes, we know. It's not really checking for standardized query-variables.
 				if ( preg_match( $_regex, $stripped_uri ) ) {
@@ -101,7 +101,7 @@ class Registry {
 				}
 			}
 		} else {
-			foreach ( static::get_sitemap_endpoint_list() as $_id => $_data ) {
+			foreach ( self::get_sitemap_endpoint_list() as $_id => $_data ) {
 				if ( preg_match( $_data['regex'], $stripped_uri ) ) {
 					$sitemap_id = $_id;
 					break;
@@ -114,21 +114,21 @@ class Registry {
 
 		// Register we're on a sitemap.
 		Query::is_sitemap( true );
-		\add_action( 'pre_get_posts', [ static::class, '_override_query_parameters' ] );
+		\add_action( 'pre_get_posts', [ self::class, '_override_query_parameters' ] );
 
 		/**
 		 * Set at least 2000 variables free.
 		 * Freeing 0.15MB on a clean WordPress installation on PHP 7.
 		 */
-		static::clean_up_globals();
+		self::clean_up_globals();
 
 		/**
 		 * @since 4.0.0
-		 * @param string $sitemap_id The sitemap ID. See `static::get_sitemap_endpoint_list()`.
+		 * @param string $sitemap_id The sitemap ID. See `self::get_sitemap_endpoint_list()`.
 		 */
 		\do_action( 'the_seo_framework_sitemap_header', $sitemap_id );
 
-		\call_user_func( static::get_sitemap_endpoint_list()[ $sitemap_id ]['callback'], $sitemap_id );
+		\call_user_func( self::get_sitemap_endpoint_list()[ $sitemap_id ]['callback'], $sitemap_id );
 	}
 
 	/**
@@ -166,12 +166,12 @@ class Registry {
 	 */
 	public static function get_expected_sitemap_endpoint_url( $id = 'base' ) {
 
-		$list = static::get_sitemap_endpoint_list();
+		$list = self::get_sitemap_endpoint_list();
 
 		if ( ! isset( $list[ $id ] ) ) return false;
 
 		$host      = Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() );
-		$path_info = static::get_sitemap_base_path_info();
+		$path_info = self::get_sitemap_base_path_info();
 
 		return \sanitize_url(
 			$path_info['use_query_var']
@@ -222,7 +222,7 @@ class Registry {
 						'cache_id' => 'base', // Example, real usage is with "index" using base.
 						'endpoint' => 'sitemap.xml',
 						'regex'    => '/^sitemap\.xml/i',
-						'callback' => [ static::class, 'output_base_sitemap' ],
+						'callback' => [ self::class, 'output_base_sitemap' ],
 						'robots'   => true,
 					],
 					'index'          => [
@@ -230,7 +230,7 @@ class Registry {
 						'cache_id' => 'base',
 						'endpoint' => 'sitemap_index.xml',
 						'regex'    => '/^sitemap_index\.xml/i',
-						'callback' => [ static::class, 'output_base_sitemap' ],
+						'callback' => [ self::class, 'output_base_sitemap' ],
 						'robots'   => false,
 					],
 					'xsl-stylesheet' => [
@@ -238,7 +238,7 @@ class Registry {
 						'cache_id' => false,
 						'endpoint' => 'sitemap.xsl',
 						'regex'    => '/^sitemap\.xsl/i',
-						'callback' => [ static::class, 'output_stylesheet' ],
+						'callback' => [ self::class, 'output_stylesheet' ],
 						'robots'   => false,
 					],
 				],
@@ -293,7 +293,7 @@ class Registry {
 		// Don't refresh sitemap on revision.
 		if ( ! $post_id || \wp_is_post_revision( $post_id ) ) return false;
 
-		return static::refresh_sitemaps();
+		return self::refresh_sitemaps();
 	}
 
 	/**
@@ -311,7 +311,7 @@ class Registry {
 			   ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) )
 			&& \check_admin_referer( 'update-permalink' )
 		) {
-			return static::refresh_sitemaps();
+			return self::refresh_sitemaps();
 		}
 
 		return false;
@@ -394,7 +394,7 @@ class Registry {
 			printf(
 				'<?xml-stylesheet type="text/xsl" href="%s"?>' . "\n",
 				// phpcs:ignore WordPress.Security.EscapeOutput
-				static::get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
+				self::get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
 			);
 		}
 	}
@@ -505,8 +505,8 @@ class Registry {
 	private static function get_sitemap_base_path_info() {
 		global $wp_rewrite;
 
-		$base_path = static::get_sitemap_base_path();
-		$prefix    = static::get_sitemap_path_prefix();
+		$base_path = self::get_sitemap_base_path();
+		$prefix    = self::get_sitemap_path_prefix();
 
 		$use_query_var = false;
 
@@ -536,7 +536,7 @@ class Registry {
 	 * @return int bytes freed.
 	 */
 	public static function get_freed_memory() {
-		return static::clean_up_globals( true );
+		return self::clean_up_globals( true );
 	}
 
 	/**

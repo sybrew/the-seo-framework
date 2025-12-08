@@ -64,7 +64,7 @@ class Arrays {
 		foreach ( $array as $value ) {
 			// We can later use `array_is_list()`.
 			if ( \is_array( $value ) && [] !== $value && array_values( $value ) === $value ) {
-				$ret = array_merge( $ret, static::flatten_list( $value ) );
+				$ret = array_merge( $ret, self::flatten_list( $value ) );
 			} else {
 				array_push( $ret, $value );
 			}
@@ -100,7 +100,7 @@ class Arrays {
 				if ( isset( $item[0] ) && 1 === \count( $item ) ) {
 					$item = reset( $item );
 				} else {
-					$item = static::scrub( $item );
+					$item = self::scrub( $item );
 				}
 			}
 		}
@@ -135,7 +135,7 @@ class Arrays {
 
 			foreach ( $arrays[ $i ] as $key => $value )
 				$arrays[ $p ][ $key ] = isset( $arrays[ $p ][ $key ] ) && \is_array( $value )
-					? static::array_merge_recursive_distinct( $arrays[ $p ][ $key ], $value )
+					? self::array_merge_recursive_distinct( $arrays[ $p ][ $key ], $value )
 					: $value;
 		}
 
@@ -175,7 +175,7 @@ class Arrays {
 
 					if (
 						   $value === $arrays[ $p ][ $key ]
-						|| ( \is_array( $value ) && ! static::array_diff_assoc_recursive( ...array_column( $arrays, $key ) ) )
+						|| ( \is_array( $value ) && ! self::array_diff_assoc_recursive( ...array_column( $arrays, $key ) ) )
 					) {
 						// If there's no diff with the previous array or no diff can be found recursively, remove it from all the next arrays.
 						foreach ( range( $p, $i ) as $_i )

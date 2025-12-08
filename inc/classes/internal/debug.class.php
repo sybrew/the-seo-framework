@@ -112,7 +112,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				static::combobulate_error_message( static::get_error(), $message, \E_USER_DEPRECATED ),
+				self::combobulate_error_message( self::get_error(), $message, \E_USER_DEPRECATED ),
 				\E_USER_DEPRECATED,
 			);
 		}
@@ -168,7 +168,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				static::combobulate_error_message( static::get_error(), $message, \E_USER_NOTICE ),
+				self::combobulate_error_message( self::get_error(), $message, \E_USER_NOTICE ),
 				\E_USER_NOTICE,
 			);
 		}
@@ -220,7 +220,7 @@ final class Debug {
 
 			trigger_error(
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- combobulate_error_message escapes.
-				static::combobulate_error_message( static::get_error(), $message, \E_USER_WARNING ),
+				self::combobulate_error_message( self::get_error(), $message, \E_USER_WARNING ),
 				\E_USER_WARNING,
 			);
 		}
@@ -346,7 +346,7 @@ final class Debug {
 	 */
 	public static function _output_debug_query() {
 		// phpcs:ignore WordPress.Security.EscapeOutput -- This escapes.
-		echo static::get_debug_query_output();
+		echo self::get_debug_query_output();
 	}
 
 	/**
@@ -357,7 +357,7 @@ final class Debug {
 	 */
 	public static function _output_debug_query_from_cache() {
 		// phpcs:ignore WordPress.Security.EscapeOutput -- This escapes.
-		echo static::get_debug_query_output_from_cache();
+		echo self::get_debug_query_output_from_cache();
 	}
 
 	/**
@@ -367,7 +367,7 @@ final class Debug {
 	 * @access private
 	 */
 	public static function _set_debug_query_output_cache() {
-		static::get_debug_query_output_from_cache();
+		self::get_debug_query_output_from_cache();
 	}
 
 	/**
@@ -380,7 +380,7 @@ final class Debug {
 	 * @return string Wrapped Query State debug output.
 	 */
 	private static function get_debug_query_output_from_cache() {
-		return memo() ?? memo( static::get_debug_query_output( 'yup' ) );
+		return memo() ?? memo( self::get_debug_query_output( 'yup' ) );
 	}
 
 	/**

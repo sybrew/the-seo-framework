@@ -31,7 +31,7 @@ namespace The_SEO_Framework\Admin\Script;
  * @since 5.0.0
  * @access private
  */
-class Utils {
+final class Utils {
 
 	/**
 	 * Decodes entities of a string, making it workable for different encoding in both JS and HTML.
@@ -60,10 +60,10 @@ class Utils {
 	public static function decode_all_entities( $values ) {
 
 		if ( \is_scalar( $values ) )
-			return static::decode_entities( $values );
+			return self::decode_entities( $values );
 
 		foreach ( $values as &$v )
-			$v = static::decode_entities( $v );
+			$v = self::decode_entities( $v );
 
 		return $values;
 	}

@@ -127,19 +127,19 @@ class Conditions {
 				switch ( get_query_type_from_args( $args ) ) {
 					case 'single':
 						if ( Query::is_static_front_page( $args['id'] ) ) {
-							$use = static::use_front_page_tagline();
+							$use = self::use_front_page_tagline();
 						} else {
-							$use = static::use_post_branding( $args['id'] );
+							$use = self::use_post_branding( $args['id'] );
 						}
 						break;
 					case 'term':
-						$use = static::use_term_branding( $args['id'] );
+						$use = self::use_term_branding( $args['id'] );
 						break;
 					case 'homeblog':
-						$use = static::use_front_page_tagline();
+						$use = self::use_front_page_tagline();
 						break;
 					case 'pta':
-						$use = static::use_pta_branding( $args['pta'] );
+						$use = self::use_pta_branding( $args['pta'] );
 						break;
 					case 'user':
 						// Option coming soon. https://github.com/sybrew/the-seo-framework/issues/515
@@ -147,13 +147,13 @@ class Conditions {
 				}
 			} else {
 				if ( Query::is_real_front_page() ) {
-					$use = static::use_front_page_tagline();
+					$use = self::use_front_page_tagline();
 				} elseif ( Query::is_singular() ) {
-					$use = static::use_post_branding();
+					$use = self::use_post_branding();
 				} elseif ( Query::is_editable_term() ) {
-					$use = static::use_term_branding();
+					$use = self::use_term_branding();
 				} elseif ( \is_post_type_archive() ) {
-					$use = static::use_pta_branding();
+					$use = self::use_pta_branding();
 				} else {
 					$use = ! Data\Plugin::get_option( 'title_rem_additions' );
 				}

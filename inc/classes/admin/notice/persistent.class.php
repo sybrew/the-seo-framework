@@ -134,7 +134,7 @@ class Persistent {
 		--$count;
 
 		if ( ! $count ) {
-			static::clear_notice( $key );
+			self::clear_notice( $key );
 		} else {
 
 			$notices = Data\Plugin::get_site_cache( 'persistent_notices' );
@@ -144,7 +144,7 @@ class Persistent {
 				Data\Plugin::update_site_cache( 'persistent_notices', $notices );
 			} else {
 				// Notice didn't conform. Remove it.
-				static::clear_notice( $key );
+				self::clear_notice( $key );
 			}
 		}
 	}
@@ -222,13 +222,13 @@ class Persistent {
 			) continue;
 
 			if ( -1 !== $cond['timeout'] && $cond['timeout'] < time() ) {
-				static::clear_notice( $key );
+				self::clear_notice( $key );
 				continue;
 			}
 
 			Template::output_view( 'notice/persistent', $notice['message'], $key, $notice['args'] );
 
-			static::count_down_notice( $key, $cond['count'] );
+			self::count_down_notice( $key, $cond['count'] );
 		}
 	}
 
@@ -254,11 +254,11 @@ class Persistent {
 		if (
 			   empty( $_POST['tsf_notice_nonce'] )
 			|| ! \current_user_can( $notices[ $key ]['conditions']['capability'] )
-			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'], static::_get_dismiss_nonce_action( $key ) )
+			|| ! \wp_verify_nonce( $_POST['tsf_notice_nonce'], self::_get_dismiss_nonce_action( $key ) )
 		) {
 			\wp_die( -1, 403 );
 		}
 
-		static::clear_notice( $key );
+		self::clear_notice( $key );
 	}
 }

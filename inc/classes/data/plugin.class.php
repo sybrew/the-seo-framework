@@ -35,6 +35,8 @@ use The_SEO_Framework\Traits\Property_Refresher;
  * @since 5.0.0
  * @access protected
  *         Use tsf()->data()->plugin() instead.
+ *
+ * @NOTE: All static:: calls within this class are intentional due to Property_Refresher trait.
  */
 class Plugin {
 	use Property_Refresher;
@@ -83,7 +85,7 @@ class Plugin {
 	 */
 	public static function get_option( ...$key ) {
 
-		$option = static::$options_memo ?? static::get_options();
+		$option = self::$options_memo ?? self::get_options();
 
 		foreach ( $key as $k )
 			$option = $option[ $k ] ?? null;
@@ -100,8 +102,8 @@ class Plugin {
 	 */
 	public static function get_options() {
 
-		if ( isset( static::$options_memo ) )
-			return static::$options_memo;
+		if ( isset( self::$options_memo ) )
+			return self::$options_memo;
 
 		static::register_automated_refresh( 'options_memo' );
 
@@ -116,7 +118,7 @@ class Plugin {
 		 * @param string $setting  The settings name.
 		 * @param bool   $headless Whether the options are headless.
 		 */
-		return static::$options_memo = \apply_filters(
+		return self::$options_memo = \apply_filters(
 			'the_seo_framework_get_options',
 			$is_headless
 				? Plugin\Setup::get_default_options()

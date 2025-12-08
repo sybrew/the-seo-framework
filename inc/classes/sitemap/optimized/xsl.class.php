@@ -47,16 +47,16 @@ final class XSL {
 		// Adds site icon tags to the sitemap stylesheet.
 		\add_action( 'the_seo_framework_xsl_head', 'wp_site_icon', 99 );
 
-		\add_action( 'the_seo_framework_xsl_head', [ static::class, '_print_xsl_global_variables' ], 0 );
-		\add_action( 'the_seo_framework_xsl_head', [ static::class, '_print_xsl_title' ] );
-		\add_action( 'the_seo_framework_xsl_head', [ static::class, '_print_xsl_styles' ] );
+		\add_action( 'the_seo_framework_xsl_head', [ self::class, '_print_xsl_global_variables' ], 0 );
+		\add_action( 'the_seo_framework_xsl_head', [ self::class, '_print_xsl_title' ] );
+		\add_action( 'the_seo_framework_xsl_head', [ self::class, '_print_xsl_styles' ] );
 
-		\add_action( 'the_seo_framework_xsl_description', [ static::class, '_print_xsl_description' ] );
+		\add_action( 'the_seo_framework_xsl_description', [ self::class, '_print_xsl_description' ] );
 
-		\add_action( 'the_seo_framework_xsl_content', [ static::class, '_print_xsl_content' ] );
+		\add_action( 'the_seo_framework_xsl_content', [ self::class, '_print_xsl_content' ] );
 
-		\add_action( 'the_seo_framework_xsl_footer', [ static::class, '_print_xsl_footer' ] );
-		\add_action( 'site_icon_meta_tags', [ static::class, '_convert_site_icon_meta_tags' ], PHP_INT_MAX );
+		\add_action( 'the_seo_framework_xsl_footer', [ self::class, '_print_xsl_footer' ] );
+		\add_action( 'site_icon_meta_tags', [ self::class, '_convert_site_icon_meta_tags' ], PHP_INT_MAX );
 	}
 
 	/**

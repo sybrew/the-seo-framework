@@ -123,12 +123,12 @@ class Schema {
 		);
 
 		// Fill the graph's references dynamically. Append extra graphs when given.
-		foreach ( static::$writer_queue as $writer )
+		foreach ( self::$writer_queue as $writer )
 			foreach ( \call_user_func( $writer ) as $extra_graph )
 				$graph[] = $extra_graph;
 
 		// Reset queue.
-		static::$writer_queue = [];
+		self::$writer_queue = [];
 
 		/**
 		 * For consistency, data should be filtered deep, such as (WordPress) title
@@ -162,6 +162,6 @@ class Schema {
 	 * @param callable $callback The callback to call to write graph.
 	 */
 	public static function register_entity_writer( $id, $callback ) {
-		static::$writer_queue[ $id ] = $callback;
+		self::$writer_queue[ $id ] = $callback;
 	}
 }

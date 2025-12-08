@@ -33,6 +33,8 @@ use The_SEO_Framework\Meta;
  * @since 5.0.0
  * @access private
  *
+ * @NOTE: All static:: calls within this class are intentional to allow overrides in subclasses.
+ *
  * @property string|string[] $type The Schema @type.
  * @property array[] $references
  */

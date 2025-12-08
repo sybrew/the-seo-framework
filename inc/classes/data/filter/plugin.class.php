@@ -40,7 +40,7 @@ use The_SEO_Framework\{
  * @since 5.0.0
  * @access private
  */
-class Plugin {
+final class Plugin {
 
 	/**
 	 * @since 5.0.0
@@ -68,7 +68,7 @@ class Plugin {
 		if ( empty( $value ) || ! \is_array( $value ) )
 			return $original_value;
 
-		static::register_sanitizers_jit();
+		self::register_sanitizers_jit();
 
 		// Use our filterable options as a fallback instead.
 		$original_value = array_merge(
@@ -86,7 +86,7 @@ class Plugin {
 		 */
 		$sanitizers = \apply_filters(
 			'the_seo_framework_settings_update_sanitizers',
-			static::$sanitizers,
+			self::$sanitizers,
 		);
 
 		$store = [];
@@ -124,8 +124,8 @@ class Plugin {
 	 */
 	public static function register_sanitizers( $filters ) {
 
-		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$filters hereinafter.
-		$_sanitizers = &static::$sanitizers;
+		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use self::$filters hereinafter.
+		$_sanitizers = &self::$sanitizers;
 
 		foreach ( $filters as $option => $callbacks ) {
 			if ( \is_array( $callbacks[0] ) ) {
@@ -285,7 +285,7 @@ class Plugin {
 		];
 
 		// Remit FETCH_CLASS_NAME opcode, which performs a function call to check if it's valid.
-		$sanitizer_class = static::class;
+		$sanitizer_class = self::class;
 
 		foreach ( $filters as &$callbacks ) {
 			if ( \is_array( $callbacks ) ) {
@@ -296,7 +296,7 @@ class Plugin {
 			}
 		}
 
-		static::register_sanitizers( $filters );
+		self::register_sanitizers( $filters );
 	}
 
 	/**

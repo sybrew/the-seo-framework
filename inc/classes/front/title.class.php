@@ -58,11 +58,11 @@ final class Title {
 		// Removes all pre_get_document_title filters.
 		\remove_all_filters( 'pre_get_document_title', false );
 
-		\add_filter( 'pre_get_document_title', [ static::class, 'set_document_title' ], 10 );
+		\add_filter( 'pre_get_document_title', [ self::class, 'set_document_title' ], 10 );
 
 		// TODO remove these? It's been 10 years... <https://make.wordpress.org/core/2015/10/20/document-title-in-4-4/>
 		\remove_all_filters( 'wp_title', false );
-		\add_filter( 'wp_title', [ static::class, 'set_document_title' ], 9 );
+		\add_filter( 'wp_title', [ self::class, 'set_document_title' ], 9 );
 	}
 
 	/**

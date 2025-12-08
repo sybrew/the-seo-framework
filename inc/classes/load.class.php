@@ -70,7 +70,7 @@ final class Load extends Pool {
 	 * @return null If called twice or more.
 	 */
 	public static function get_instance() {
-		return static::$instance ??= new self;
+		return static::$instance ??= new self; // static: allow overrides with self instance
 	}
 
 	/**

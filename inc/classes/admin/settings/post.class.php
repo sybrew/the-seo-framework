@@ -82,7 +82,7 @@ final class Post {
 		\add_meta_box(
 			$box_id,
 			\esc_html__( 'SEO Settings', 'autodescription' ),
-			[ static::class, 'meta_box' ],
+			[ self::class, 'meta_box' ],
 			null, // We used to forward hook $post_type, which redundantly forces WP to regenerate the current screen type.
 			/**
 			 * @since 2.9.0
@@ -99,10 +99,10 @@ final class Post {
 
 		$screen_id = \get_current_screen()->id;
 
-		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ static::class, 'add_postbox_class' ] );
+		\add_filter( "postbox_classes_{$screen_id}_{$box_id}", [ self::class, 'add_postbox_class' ] );
 
 		if ( ! is_headless( 'settings' ) && Query::is_static_front_page( Query::get_the_real_id() ) ) {
-			$output_homepage_warning = [ static::class, 'output_homepage_warning' ];
+			$output_homepage_warning = [ self::class, 'output_homepage_warning' ];
 			\add_action( 'the_seo_framework_pre_page_inpost_general_tab', $output_homepage_warning );
 			\add_action( 'the_seo_framework_pre_page_inpost_visibility_tab', $output_homepage_warning );
 			\add_action( 'the_seo_framework_pre_page_inpost_social_tab', $output_homepage_warning );

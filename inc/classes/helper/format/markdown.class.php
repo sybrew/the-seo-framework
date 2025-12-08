@@ -82,20 +82,20 @@ class Markdown {
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
 		if ( isset( $md_types['*'], $md_types['**'] ) )
-			$text = static::strong_em( $text );
+			$text = self::strong_em( $text );
 
 		foreach ( $md_types as $type ) {
 			switch ( $type ) {
 				case 'strong':
-					$text = static::strong( $text );
+					$text = self::strong( $text );
 					break;
 
 				case 'em':
-					$text = static::em( $text );
+					$text = self::em( $text );
 					break;
 
 				case 'code':
-					$text = static::code( $text );
+					$text = self::code( $text );
 					break;
 
 				case 'h6':
@@ -104,11 +104,11 @@ class Markdown {
 				case 'h3':
 				case 'h2':
 				case 'h1':
-					$text = static::h123456( $text, $type );
+					$text = self::h123456( $text, $type );
 					break;
 
 				case 'a':
-					$text = static::a( $text, $args['a_internal'] );
+					$text = self::a( $text, $args['a_internal'] );
 			}
 		}
 

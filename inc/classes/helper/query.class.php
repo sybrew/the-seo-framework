@@ -57,8 +57,8 @@ class Query {
 		if ( isset( $post ) )
 			return \get_post_type( $post );
 
-		if ( static::is_archive() ) {
-			if ( static::is_category() || static::is_tag() || static::is_tax() ) {
+		if ( self::is_archive() ) {
+			if ( self::is_category() || self::is_tag() || self::is_tax() ) {
 				$post_type = Taxonomy::get_post_types();
 				$post_type = \is_array( $post_type ) ? reset( $post_type ) : $post_type;
 			} elseif ( \is_post_type_archive() ) {
@@ -69,7 +69,7 @@ class Query {
 				$post_type = \get_post_type();
 			}
 		} else {
-			$post_type = \get_post_type( static::get_the_real_id() );
+			$post_type = \get_post_type( self::get_the_real_id() );
 		}
 
 		return $post_type;
@@ -104,7 +104,7 @@ class Query {
 	public static function get_the_real_id( $use_cache = true ) {
 
 		if ( \is_admin() )
-			return static::get_the_real_admin_id();
+			return self::get_the_real_admin_id();
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( $use_cache && ( null !== $memo = umemo( __METHOD__ ) ) ) return $memo;
@@ -156,8 +156,8 @@ class Query {
 			'the_seo_framework_current_admin_id',
 			// Get in the loop first, fall back to globals or get parameters.
 			   \get_the_id()
-			?: static::get_admin_post_id()
-			?: static::get_admin_term_id()
+			?: self::get_admin_post_id()
+			?: self::get_admin_term_id()
 		);
 	}
 
@@ -187,7 +187,7 @@ class Query {
 	 * @return int Post ID.
 	 */
 	public static function get_admin_post_id() {
-		return static::is_post_edit()
+		return self::is_post_edit()
 			// phpcs:ignore WordPress.Security.NonceVerification -- current_screen validated the 'post' object.
 			? \absint( $_GET['post'] ?? $_GET['post_id'] ?? 0 )
 			: 0;
@@ -206,7 +206,7 @@ class Query {
 	 * @return int Term ID.
 	 */
 	public static function get_admin_term_id() {
-		return static::is_archive_admin()
+		return self::is_archive_admin()
 			? \absint( $GLOBALS['tag_ID'] ?? 0 )
 			: 0;
 	}
@@ -246,8 +246,8 @@ class Query {
 		return Query\Cache::memo()
 			?? Query\Cache::memo(
 				\is_admin()
-					? static::get_admin_post_type()
-					: static::get_post_type_real_id()
+					? self::get_admin_post_type()
+					: self::get_post_type_real_id()
 			);
 	}
 
@@ -264,7 +264,7 @@ class Query {
 	public static function is_attachment( $attachment = '' ) {
 
 		if ( \is_admin() )
-			return static::is_attachment_admin();
+			return self::is_attachment_admin();
 
 		if ( ! $attachment )
 			return \is_attachment();
@@ -281,12 +281,12 @@ class Query {
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @see static::is_attachment()
+	 * @see self::is_attachment()
 	 *
 	 * @return bool
 	 */
 	public static function is_attachment_admin() {
-		return static::is_singular_admin() && 'attachment' === static::is_singular_admin();
+		return self::is_singular_admin() && 'attachment' === self::is_singular_admin();
 	}
 
 	/**
@@ -324,7 +324,7 @@ class Query {
 				 */
 				(bool) \apply_filters(
 					'the_seo_framework_is_singular_archive',
-					static::is_blog_as_page( $id ),
+					self::is_blog_as_page( $id ),
 					$id,
 				),
 				$id,
@@ -343,15 +343,15 @@ class Query {
 	public static function is_archive() {
 
 		if ( \is_admin() )
-			return static::is_archive_admin();
+			return self::is_archive_admin();
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = Query\Cache::memo() ) return $memo;
 
-		if ( \is_archive() && false === static::is_singular() )
+		if ( \is_archive() && false === self::is_singular() )
 			return Query\Cache::memo( true );
 
-		if ( isset( $GLOBALS['wp_query']->query ) && false === static::is_singular() ) {
+		if ( isset( $GLOBALS['wp_query']->query ) && false === self::is_singular() ) {
 			global $wp_query;
 
 			if (
@@ -520,7 +520,7 @@ class Query {
 	 */
 	public static function is_blog_as_page( $post = null ) {
 		// If front is a blog, the blog is never a page.
-		return Query\Utils::has_page_on_front() ? static::is_blog( $post ) : false;
+		return Query\Utils::has_page_on_front() ? self::is_blog( $post ) : false;
 	}
 
 	/**
@@ -535,7 +535,7 @@ class Query {
 	public static function is_category( $category = '' ) {
 
 		if ( \is_admin() )
-			return static::is_category_admin();
+			return self::is_category_admin();
 
 		return Query\Cache::memo( null, $category )
 			?? Query\Cache::memo(
@@ -555,7 +555,7 @@ class Query {
 	 * @return bool Post Type is category
 	 */
 	public static function is_category_admin() {
-		return static::is_archive_admin() && 'category' === static::get_current_taxonomy();
+		return self::is_archive_admin() && 'category' === self::get_current_taxonomy();
 	}
 
 	/**
@@ -590,8 +590,8 @@ class Query {
 			?? Query\Cache::memo(
 				\is_front_page()
 					?: (
-						   static::is_blog()
-						&& 0 === static::get_the_real_id()
+						   self::is_blog()
+						&& 0 === self::get_the_real_id()
 						&& 'post' !== \get_option( 'show_on_front' ) // 'page' is tested via `is_front_page()`
 					),
 			);
@@ -605,7 +605,7 @@ class Query {
 	 * WARNING: This will lead to **FALSE POSITIVES** for Date, CPTA, Search, and other archives.
 	 *
 	 * @see $this->is_real_front_page(), which solely uses query checking.
-	 * @see static::is_static_front_page(), which adds an "is homepage static" check.
+	 * @see self::is_static_front_page(), which adds an "is homepage static" check.
 	 *
 	 * @since 3.2.2
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
@@ -614,7 +614,7 @@ class Query {
 	 * @return bool
 	 */
 	public static function is_real_front_page_by_id( $id ) {
-		return static::get_the_front_page_id() === $id;
+		return self::get_the_front_page_id() === $id;
 	}
 
 	/**
@@ -632,7 +632,7 @@ class Query {
 	public static function is_page( $page = '' ) {
 
 		if ( \is_admin() )
-			return static::is_page_admin();
+			return self::is_page_admin();
 
 		if ( empty( $page ) )
 			return \is_page();
@@ -656,13 +656,13 @@ class Query {
 	 * @since 2.6.0
 	 * @since 4.0.0 Now tests for post type, although redundant.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @see static::is_page()
+	 * @see self::is_page()
 	 *
 	 * @return bool
 	 */
 	public static function is_page_admin() {
-		return static::is_singular_admin()
-			&& \in_array( static::is_singular_admin(), Post_Type::get_all_hierarchical(), true );
+		return self::is_singular_admin()
+			&& \in_array( self::is_singular_admin(), Post_Type::get_all_hierarchical(), true );
 	}
 
 	/**
@@ -723,7 +723,7 @@ class Query {
 	public static function is_single( $post = '' ) {
 
 		if ( \is_admin() )
-			return static::is_single_admin();
+			return self::is_single_admin();
 
 		return Query\Cache::memo( null, $post )
 			?? Query\Cache::memo(
@@ -750,8 +750,8 @@ class Query {
 	 */
 	public static function is_single_admin() {
 		// Checks for "is_singular_admin()" because the post type is non-hierarchical.
-		return static::is_singular_admin()
-			&& \in_array( static::is_singular_admin(), Post_Type::get_all_nonhierarchical(), true );
+		return self::is_singular_admin()
+			&& \in_array( self::is_singular_admin(), Post_Type::get_all_nonhierarchical(), true );
 	}
 
 	/**
@@ -771,13 +771,13 @@ class Query {
 
 		// WP_Query functions require loop, do alternative check.
 		if ( \is_admin() )
-			return static::is_singular_admin();
+			return self::is_singular_admin();
 
 		if ( $post_types )
 			return \is_singular( $post_types );
 
 		return Query\Cache::memo()
-			?? Query\Cache::memo( \is_singular() || static::is_singular_archive() );
+			?? Query\Cache::memo( \is_singular() || self::is_singular_archive() );
 	}
 
 	/**
@@ -822,7 +822,7 @@ class Query {
 			);
 
 		return false !== $front_id
-			&& ( $id ?: static::get_the_real_id() ) === $front_id;
+			&& ( $id ?: self::get_the_real_id() ) === $front_id;
 	}
 
 	/**
@@ -838,7 +838,7 @@ class Query {
 
 		// Admin requires another check.
 		if ( \is_admin() )
-			return static::is_tag_admin();
+			return self::is_tag_admin();
 
 		return Query\Cache::memo( null, $tag )
 			?? Query\Cache::memo(
@@ -858,7 +858,7 @@ class Query {
 	 * @return bool Post Type is tag.
 	 */
 	public static function is_tag_admin() {
-		return static::is_archive_admin() && 'post_tag' === static::get_current_taxonomy();
+		return self::is_archive_admin() && 'post_tag' === self::get_current_taxonomy();
 	}
 
 	/**
@@ -918,7 +918,7 @@ class Query {
 	public static function is_product( $post = null ) {
 
 		if ( \is_admin() )
-			return static::is_product_admin();
+			return self::is_product_admin();
 
 		return Query\Cache::memo( null, $post )
 			?? Query\Cache::memo(
@@ -976,7 +976,7 @@ class Query {
 	 * @since 2.7.0 Added secure parameter.
 	 * @since 2.9.0 If $secure is false, the cache is no longer used.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @see static::is_menu_page() for security notification.
+	 * @see self::is_menu_page() for security notification.
 	 *
 	 * @param bool $secure Whether to ignore the use of the second (insecure) parameter.
 	 * @return bool
@@ -987,10 +987,10 @@ class Query {
 			return false;
 
 		if ( ! $secure )
-			return static::is_menu_page( '', \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
+			return self::is_menu_page( '', \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG );
 
 		return Query\Cache::memo()
-			?? Query\Cache::memo( static::is_menu_page( Admin\Menu::get_page_hook_name() ) );
+			?? Query\Cache::memo( self::is_menu_page( Admin\Menu::get_page_hook_name() ) );
 	}
 
 	/**
@@ -1049,14 +1049,14 @@ class Query {
 		if ( null !== $memo = Query\Cache::memo() )
 			return $memo;
 
-		if ( static::is_multipage() ) {
+		if ( self::is_multipage() ) {
 			$page = ( (int) \get_query_var( 'page' ) ) ?: 1;
-			$max  = static::numpages();
+			$max  = self::numpages();
 
 			if ( $page > $max ) {
 				// On overflow, WP returns the first page.
 				// Exception: When we are on a paginated static frontpage, WP returns the last page...
-				if ( static::is_static_front_page() ) {
+				if ( self::is_static_front_page() ) {
 					$page = $max;
 				} else {
 					$page = 1;
@@ -1086,9 +1086,9 @@ class Query {
 		if ( null !== $memo = Query\Cache::memo() )
 			return $memo;
 
-		if ( static::is_multipage() ) {
+		if ( self::is_multipage() ) {
 			$paged = ( (int) \get_query_var( 'paged' ) ) ?: 1;
-			$max   = static::numpages();
+			$max   = self::numpages();
 
 			if ( $paged > $max ) {
 				// On overflow, WP returns the last page.
@@ -1127,8 +1127,8 @@ class Query {
 
 		global $wp_query;
 
-		if ( static::is_singular() && ! static::is_singular_archive() )
-			$post = \get_post( static::get_the_real_id() );
+		if ( self::is_singular() && ! self::is_singular_archive() )
+			$post = \get_post( self::get_the_real_id() );
 
 		if ( ( $post ?? null ) instanceof \WP_Post ) {
 			$content = Data\Post::get_content( $post );
@@ -1182,7 +1182,7 @@ class Query {
 	 * @return bool True if multipage.
 	 */
 	public static function is_multipage() {
-		return static::numpages() > 1;
+		return self::numpages() > 1;
 	}
 
 	/**
@@ -1231,7 +1231,7 @@ class Query {
 		 */
 		if ( $is_cpaged && \did_action( 'parse_comment_query' ) ) {
 			// core/comments only works on singular; this bug doesn't invoke otherwise anyway.
-			if ( ! static::is_singular() )
+			if ( ! self::is_singular() )
 				return Query\Cache::memo( false );
 
 			/**

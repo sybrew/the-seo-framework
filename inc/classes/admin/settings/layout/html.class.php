@@ -61,7 +61,7 @@ class HTML {
 	 */
 	public static function header_title( $title ) {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
-		echo static::get_header_title( \esc_html( $title ) );
+		echo self::get_header_title( \esc_html( $title ) );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class HTML {
 	 * @return string Content wrapped in code tags.
 	 */
 	public static function code_wrap( $content ) {
-		return static::code_wrap_noesc( \esc_html( $content ) );
+		return self::code_wrap_noesc( \esc_html( $content ) );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class HTML {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public static function description( $content, $block = true ) {
-		static::description_noesc( \esc_html( $content ), $block );
+		self::description_noesc( \esc_html( $content ), $block );
 	}
 
 	/**
@@ -129,7 +129,7 @@ class HTML {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public static function attention( $content, $block = true ) {
-		static::attention_noesc( \esc_html( $content ), $block );
+		self::attention_noesc( \esc_html( $content ), $block );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class HTML {
 	 * @param bool   $block Whether to wrap the content in <p> tags.
 	 */
 	public static function attention_description( $content, $block = true ) {
-		static::attention_description_noesc( \esc_html( $content ), $block );
+		self::attention_description_noesc( \esc_html( $content ), $block );
 	}
 
 	/**

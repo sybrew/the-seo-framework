@@ -56,8 +56,8 @@ class Image {
 	 * @return string The first valid image URL found, if any.
 	 */
 	public static function get_first_image_url( $args = null, $context = 'social' ) {
-		return static::get_first_custom_image_url( $args, $context )
-			?: static::get_first_generated_image_url( $args, $context );
+		return self::get_first_custom_image_url( $args, $context )
+			?: self::get_first_generated_image_url( $args, $context );
 	}
 
 	/**
@@ -70,7 +70,7 @@ class Image {
 	 * @return string The first valid image URL found, if any.
 	 */
 	public static function get_first_custom_image_url( $args = null, $context = 'social' ) {
-		return current( static::get_custom_image_details( $args, null, $context ) )['url'] ?? '';
+		return current( self::get_custom_image_details( $args, null, $context ) )['url'] ?? '';
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Image {
 	 * @return string The first valid image URL found, if any.
 	 */
 	public static function get_first_generated_image_url( $args = null, $context = 'social' ) {
-		return current( static::get_generated_image_details( $args, null, $context ) )['url'] ?? '';
+		return current( self::get_generated_image_details( $args, null, $context ) )['url'] ?? '';
 	}
 
 	/**
@@ -112,8 +112,8 @@ class Image {
 	 * }
 	 */
 	public static function get_image_details( $args = null, $single = false, $context = 'social' ) {
-		return static::get_custom_image_details( $args, $single, $context )
-			?: static::get_generated_image_details( $args, $single, $context );
+		return self::get_custom_image_details( $args, $single, $context )
+			?: self::get_generated_image_details( $args, $single, $context );
 	}
 
 	/**
@@ -162,8 +162,8 @@ class Image {
 		return \apply_filters(
 			'the_seo_framework_custom_image_details',
 			$single
-				? array_filter( [ static::generate_custom_image_details( $args, $context )->current() ] )
-				: [ ...static::generate_custom_image_details( $args, $context ) ],
+				? array_filter( [ self::generate_custom_image_details( $args, $context )->current() ] )
+				: [ ...self::generate_custom_image_details( $args, $context ) ],
 			$args,
 			$single,
 		);
@@ -214,8 +214,8 @@ class Image {
 		return \apply_filters(
 			'the_seo_framework_generated_image_details',
 			$single
-				? array_filter( [ static::generate_generated_image_details( $args, $context )->current() ] )
-				: [ ...static::generate_generated_image_details( $args, $context ) ],
+				? array_filter( [ self::generate_generated_image_details( $args, $context )->current() ] )
+				: [ ...self::generate_generated_image_details( $args, $context ) ],
 			$args,
 			$single,
 			$context,
@@ -245,13 +245,13 @@ class Image {
 	 */
 	public static function generate_image_details( $args = null, $context = 'social' ) {
 
-		foreach ( static::generate_custom_image_details( $args, $context ) as $details ) {
+		foreach ( self::generate_custom_image_details( $args, $context ) as $details ) {
 			yield $details;
 			$yielded_custom = true;
 		}
 
 		empty( $yielded_custom )
-			and yield from static::generate_generated_image_details( $args, $context );
+			and yield from self::generate_generated_image_details( $args, $context );
 	}
 
 	/**
@@ -279,9 +279,9 @@ class Image {
 	public static function generate_custom_image_details( $args = null, $context = 'social' ) {
 
 		if ( isset( $args ) ) {
-			yield from static::generate_custom_image_details_from_args( $args, $context );
+			yield from self::generate_custom_image_details_from_args( $args, $context );
 		} else {
-			yield from static::generate_custom_image_details_from_query( $context );
+			yield from self::generate_custom_image_details_from_query( $context );
 		}
 	}
 
@@ -311,10 +311,10 @@ class Image {
 
 		isset( $args ) and normalize_generation_args( $args );
 
-		$params = static::get_image_generation_params( $args, $context );
+		$params = self::get_image_generation_params( $args, $context );
 
 		foreach (
-			static::generate_image_from_callbacks( $args, $params['cbs'], $params['size'], ! $params['multi'] )
+			self::generate_image_from_callbacks( $args, $params['cbs'], $params['size'], ! $params['multi'] )
 			as $details
 		) {
 			yield $details;
@@ -322,7 +322,7 @@ class Image {
 		}
 
 		empty( $yielded_cbs )
-			and yield from static::generate_image_from_callbacks( $args, $params['fallback'], $params['size'], true );
+			and yield from self::generate_image_from_callbacks( $args, $params['fallback'], $params['size'], true );
 	}
 
 	/**
@@ -390,7 +390,7 @@ class Image {
 		}
 
 		if ( ! empty( $details['url'] ) ) {
-			$details = Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
+			$details = Sanitize::image_details( self::merge_extra_image_details( $details, 'full' ) );
 
 			if ( $details['url'] )
 				yield $details;
@@ -469,7 +469,7 @@ class Image {
 		}
 
 		if ( ! empty( $details['url'] ) ) {
-			$details = Sanitize::image_details( static::merge_extra_image_details( $details, 'full' ) );
+			$details = Sanitize::image_details( self::merge_extra_image_details( $details, 'full' ) );
 
 			if ( $details['url'] )
 				yield $details;
@@ -608,7 +608,7 @@ class Image {
 		if ( isset( $args ) ) {
 			foreach ( $cbs as $cb ) {
 				foreach ( \call_user_func_array( $cb, [ $args, $size ] ) as $details ) {
-					$details = Sanitize::image_details( static::merge_extra_image_details( $details, $size ) );
+					$details = Sanitize::image_details( self::merge_extra_image_details( $details, $size ) );
 
 					if ( $details['url'] ) {
 						yield $details;
@@ -647,7 +647,7 @@ class Image {
 
 				// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- gotta check and end early.
 				while ( $fiber->valid() || ( $fiber = false ) ) {
-					$details = Sanitize::image_details( static::merge_extra_image_details(
+					$details = Sanitize::image_details( self::merge_extra_image_details(
 						$fiber->current(),
 						$size,
 					) );

@@ -71,7 +71,7 @@ class Lock {
 		\status_header( 503 );
 		\nocache_headers();
 
-		$lock_key = static::get_lock_key( $sitemap_id );
+		$lock_key = self::get_lock_key( $sitemap_id );
 		$timeout  = $lock_key ? \get_transient( $lock_key ) : false;
 
 		if ( $timeout ) {
@@ -101,7 +101,7 @@ class Lock {
 	 */
 	public static function lock_sitemap( $sitemap_id ) {
 
-		$lock_key = static::get_lock_key( $sitemap_id );
+		$lock_key = self::get_lock_key( $sitemap_id );
 
 		if ( ! $lock_key ) return false;
 
@@ -128,7 +128,7 @@ class Lock {
 	 */
 	public static function unlock_sitemap( $sitemap_id ) {
 
-		$lock_key = static::get_lock_key( $sitemap_id );
+		$lock_key = self::get_lock_key( $sitemap_id );
 
 		return $lock_key ? \delete_transient( $lock_key ) : false;
 	}
@@ -144,7 +144,7 @@ class Lock {
 	 */
 	public static function is_sitemap_locked( $sitemap_id ) {
 
-		$lock_key = static::get_lock_key( $sitemap_id );
+		$lock_key = self::get_lock_key( $sitemap_id );
 
 		return $lock_key ? \get_transient( $lock_key ) : false;
 	}

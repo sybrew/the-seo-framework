@@ -60,7 +60,7 @@ final class Query {
 			if ( ! isset( $wp_query->query['s'] ) )
 				return;
 
-			if ( static::is_query_adjustment_blocked( $wp_query ) )
+			if ( self::is_query_adjustment_blocked( $wp_query ) )
 				return;
 
 			$excluded = Exclusion::get_excluded_ids_from_cache()['search'];
@@ -102,7 +102,7 @@ final class Query {
 			if ( ! isset( $wp_query->query['s'] ) )
 				return;
 
-			if ( static::is_query_adjustment_blocked( $wp_query ) )
+			if ( self::is_query_adjustment_blocked( $wp_query ) )
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {
@@ -133,7 +133,7 @@ final class Query {
 	public static function alter_archive_query_in( $wp_query ) {
 
 		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( static::is_query_adjustment_blocked( $wp_query ) )
+			if ( self::is_query_adjustment_blocked( $wp_query ) )
 				return;
 
 			$excluded = Exclusion::get_excluded_ids_from_cache()['archive'];
@@ -170,7 +170,7 @@ final class Query {
 	public static function alter_archive_query_post( $posts, $wp_query ) {
 
 		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( static::is_query_adjustment_blocked( $wp_query ) )
+			if ( self::is_query_adjustment_blocked( $wp_query ) )
 				return $posts;
 
 			foreach ( $posts as $n => $post ) {

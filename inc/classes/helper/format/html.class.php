@@ -364,7 +364,7 @@ class HTML {
 		if ( ! $args['allow_shortcodes'] || ! \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false, $args ) )
 			$html = \strip_shortcodes( $html );
 
-		$html = static::strip_tags_cs( $html, $strip_args );
+		$html = self::strip_tags_cs( $html, $strip_args );
 
 		if ( \is_int( $args['clamp'] ) )
 			$html = Strings::clamp_sentence( $html, 1, $args['clamp'] );

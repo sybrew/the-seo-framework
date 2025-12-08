@@ -45,6 +45,8 @@ use The_SEO_Framework\Helper\{
  * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\Sitemap`.
  *
  * @access private
+ *
+ * @NOTE: All static:: calls within this class are intentional to allow overrides in subclasses.
  */
 class Base extends Main {
 

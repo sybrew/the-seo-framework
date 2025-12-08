@@ -70,7 +70,7 @@ class Robots {
 		return umemo( __METHOD__ ) ?? umemo(
 			__METHOD__,
 			Data\Blog::is_public()
-				? implode( ',', static::get_generated_meta() )
+				? implode( ',', self::get_generated_meta() )
 				: '',
 		);
 	}

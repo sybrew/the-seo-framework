@@ -64,14 +64,14 @@ final class Args extends Factory {
 	protected static function assert_no( $type ) {
 
 		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$args hereinafter.
-		$args = static::$args;
+		$args = static::$args; // static: allow overrides
 
 		$asserting_noindex = 'noindex' === $type;
 
 		$query_type = get_query_type_from_args( $args );
 
 		// We assert options here for a jump to meta_settings might be unaware.
-		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) {
+		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) { // static: allow overrides
 			$qubit = null;
 
 			switch ( $query_type ) {
@@ -138,9 +138,9 @@ final class Args extends Factory {
 					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );
 			}
 
-		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) {
+		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) { // static: allow overrides
 			if ( 'single' === $query_type )
-				yield from static::assert_noindex_query_pass( 'protected' );
+				yield from static::assert_noindex_query_pass( 'protected' ); // static: allow overrides
 		}
 
 		end:;
@@ -160,7 +160,7 @@ final class Args extends Factory {
 	private static function assert_noindex_query_pass( $pass ) {
 
 		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$args hereinafter.
-		$args = static::$args;
+		$args = static::$args; // static: allow overrides
 
 		switch ( $pass ) {
 			case '404': // We only tests 404 terms via args.

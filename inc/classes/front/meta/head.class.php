@@ -71,11 +71,11 @@ final class Head {
 		 */
 		$print_start = hrtime( true );
 
-		static::print_plugin_indicator( 'before' );
+		self::print_plugin_indicator( 'before' );
 
-		static::print_tags();
+		self::print_tags();
 
-		static::print_plugin_indicator(
+		self::print_plugin_indicator(
 			'after',
 			( hrtime( true ) - $print_start ) / 1e9,
 			$bootstrap_timer,

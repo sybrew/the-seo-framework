@@ -39,6 +39,8 @@ use The_SEO_Framework\{
  * @since 5.1.0 Added the Property_Refresher trait.
  * @access protected
  *         Use tsf()->data()->plugin()->user() instead.
+ *
+ * @NOTE: All static:: calls within this class are intentional due to Property_Refresher trait.
  */
 class User {
 	use Property_Refresher;

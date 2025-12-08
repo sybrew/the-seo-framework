@@ -108,7 +108,7 @@ class Utils {
 		 * This protects against (accidental) negative-SEO bombarding.
 		 * Support broken queries, so we can noindex them.
 		 */
-		if ( ! $supported && static::is_query_exploited() )
+		if ( ! $supported && self::is_query_exploited() )
 			$supported = true;
 
 		/**
@@ -237,7 +237,7 @@ class Utils {
 
 					case 'numeric_array':
 						// We can't protect non-pretty permalinks.
-						if ( ! static::using_pretty_permalinks() ) break;
+						if ( ! self::using_pretty_permalinks() ) break;
 
 						// If WordPress didn't canonical_redirect() the user yet, it's exploited.
 						// WordPress mitigates this via a 404 query when a numeric value is found without a leading 0.
@@ -297,7 +297,7 @@ class Utils {
 	 * @return bool
 	 */
 	public static function has_assigned_page_on_front() {
-		return static::has_page_on_front() && \get_option( 'page_on_front' );
+		return self::has_page_on_front() && \get_option( 'page_on_front' );
 	}
 
 	/**
@@ -309,6 +309,6 @@ class Utils {
 	 * @return bool
 	 */
 	public static function has_blog_page() {
-		return ! static::has_page_on_front() || \get_option( 'page_for_posts' );
+		return ! self::has_page_on_front() || \get_option( 'page_for_posts' );
 	}
 }

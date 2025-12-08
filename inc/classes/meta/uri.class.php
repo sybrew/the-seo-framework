@@ -66,7 +66,7 @@ class URI {
 	 */
 	public static function get_indexable_canonical_url() {
 
-		$custom_url = static::get_custom_canonical_url();
+		$custom_url = self::get_custom_canonical_url();
 
 		if ( $custom_url )
 			return $custom_url;
@@ -74,7 +74,7 @@ class URI {
 		if ( str_contains( Robots::get_meta(), 'noindex' ) )
 			return '';
 
-		return static::get_generated_url();
+		return self::get_generated_url();
 	}
 
 	/**
@@ -93,8 +93,8 @@ class URI {
 	 * @return string The canonical URL, if any.
 	 */
 	public static function get_canonical_url( $args = null ) {
-		return static::get_custom_canonical_url( $args )
-			?: static::get_generated_url( $args );
+		return self::get_custom_canonical_url( $args )
+			?: self::get_generated_url( $args );
 	}
 
 	/**
@@ -108,8 +108,8 @@ class URI {
 	 */
 	public static function get_custom_canonical_url( $args = null ) {
 		return isset( $args )
-			? static::get_custom_canonical_url_from_args( $args )
-			: static::get_custom_canonical_url_from_query();
+			? self::get_custom_canonical_url_from_args( $args )
+			: self::get_custom_canonical_url_from_query();
 	}
 
 	/**
@@ -125,8 +125,8 @@ class URI {
 	 */
 	public static function get_generated_url( $args = null ) {
 		return isset( $args )
-			? static::get_generated_url_from_args( $args )
-			: static::get_generated_url_from_query();
+			? self::get_generated_url_from_args( $args )
+			: self::get_generated_url_from_query();
 	}
 
 	/**
@@ -210,21 +210,21 @@ class URI {
 	public static function get_generated_url_from_query() {
 
 		if ( Query::is_real_front_page() ) {
-			$url = static::get_front_page_url();
+			$url = self::get_front_page_url();
 		} elseif ( Query::is_singular() ) {
-			$url = static::get_singular_url();
+			$url = self::get_singular_url();
 		} elseif ( Query::is_archive() ) {
 			if ( Query::is_editable_term() ) {
-				$url = static::get_term_url();
+				$url = self::get_term_url();
 			} elseif ( \is_post_type_archive() ) {
-				$url = static::get_pta_url();
+				$url = self::get_pta_url();
 			} elseif ( Query::is_author() ) {
-				$url = static::get_author_url();
+				$url = self::get_author_url();
 			} elseif ( \is_date() ) {
-				$url = static::get_date_url();
+				$url = self::get_date_url();
 			}
 		} elseif ( Query::is_search() ) {
-			$url = static::get_search_url();
+			$url = self::get_search_url();
 		}
 
 		return $url ?? '' ?: '';
@@ -245,22 +245,22 @@ class URI {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$url = static::get_bare_front_page_url();
+					$url = self::get_bare_front_page_url();
 				} else {
-					$url = static::get_bare_singular_url( $args['id'] );
+					$url = self::get_bare_singular_url( $args['id'] );
 				}
 				break;
 			case 'term':
-				$url = static::get_bare_term_url( $args['id'], $args['tax'] );
+				$url = self::get_bare_term_url( $args['id'], $args['tax'] );
 				break;
 			case 'homeblog':
-				$url = static::get_bare_front_page_url();
+				$url = self::get_bare_front_page_url();
 				break;
 			case 'pta':
-				$url = static::get_bare_pta_url( $args['pta'] );
+				$url = self::get_bare_pta_url( $args['pta'] );
 				break;
 			case 'user':
-				$url = static::get_bare_author_url( $args['uid'] );
+				$url = self::get_bare_author_url( $args['uid'] );
 		}
 
 		return $url ?: '';
@@ -321,7 +321,7 @@ class URI {
 	public static function get_singular_url( $post_id = null ) {
 
 		if ( isset( $post_id ) )
-			return static::get_bare_singular_url( $post_id );
+			return self::get_bare_singular_url( $post_id );
 
 		$url = \get_permalink( Query::get_the_real_id() );
 
@@ -379,7 +379,7 @@ class URI {
 	public static function get_term_url( $term_id = null, $taxonomy = '' ) {
 
 		if ( isset( $term_id ) )
-			return static::get_bare_term_url( $term_id, $taxonomy );
+			return self::get_bare_term_url( $term_id, $taxonomy );
 
 		$url = \get_term_link( Query::get_the_real_id(), $taxonomy );
 
@@ -436,7 +436,7 @@ class URI {
 	public static function get_pta_url( $post_type = null ) {
 
 		if ( isset( $post_type ) )
-			return static::get_bare_pta_url( $post_type );
+			return self::get_bare_pta_url( $post_type );
 
 		$url = \get_post_type_archive_link( $post_type ?? Query::get_current_post_type() );
 
@@ -484,7 +484,7 @@ class URI {
 	public static function get_author_url( $id = null ) {
 
 		if ( isset( $id ) )
-			return static::get_bare_author_url( $id );
+			return self::get_bare_author_url( $id );
 
 		$url = \get_author_posts_url( Query::get_the_real_id() );
 
@@ -534,7 +534,7 @@ class URI {
 	public static function get_date_url( $year = null, $month = null, $day = null ) {
 
 		if ( isset( $year ) )
-			return static::get_bare_date_url( $year, $month, $day );
+			return self::get_bare_date_url( $year, $month, $day );
 
 		$year  = \get_query_var( 'year' );
 		$month = \get_query_var( 'monthnum' );
@@ -601,7 +601,7 @@ class URI {
 	public static function get_search_url( $search_query = null ) {
 
 		if ( isset( $search_query ) )
-			return static::get_bare_search_url( $search_query );
+			return self::get_bare_search_url( $search_query );
 
 		$url = \get_search_link();
 
@@ -671,7 +671,7 @@ class URI {
 			$get = false;
 		}
 
-		return $get ? static::get_generated_paged_urls() : [ '', '' ];
+		return $get ? self::get_generated_paged_urls() : [ '', '' ];
 	}
 
 	/**
@@ -693,7 +693,7 @@ class URI {
 
 		// If this page is not the last, create a next-URL.
 		if ( ( $page + 1 ) <= $numpages ) {
-			$url = URI\Utils::remove_pagination_from_url( static::get_generated_url() );
+			$url = URI\Utils::remove_pagination_from_url( self::get_generated_url() );
 
 			if ( $url )
 				$next = \sanitize_url(
@@ -704,7 +704,7 @@ class URI {
 
 		// If this page is not the first, create a prev-URL.
 		if ( $page > 1 ) {
-			$url ??= URI\Utils::remove_pagination_from_url( static::get_generated_url() );
+			$url ??= URI\Utils::remove_pagination_from_url( self::get_generated_url() );
 
 			if ( $url )
 				$prev = \sanitize_url(
@@ -792,7 +792,7 @@ class URI {
 			|| Query::is_real_front_page()
 		) return '';
 
-		return static::get_generated_shortlink_url();
+		return self::get_generated_shortlink_url();
 	}
 
 	/**
@@ -853,14 +853,14 @@ class URI {
 		}
 
 		$query       = http_build_query( $query );
-		$extra_query = parse_url( static::get_generated_url( null ), \PHP_URL_QUERY );
+		$extra_query = parse_url( self::get_generated_url( null ), \PHP_URL_QUERY );
 
 		if ( $extra_query )
 			$query .= "&$extra_query";
 
 		return \sanitize_url(
 			URI\Utils::append_query_to_url(
-				static::get_bare_front_page_url(),
+				self::get_bare_front_page_url(),
 				$query,
 			),
 			[ 'https', 'http' ],

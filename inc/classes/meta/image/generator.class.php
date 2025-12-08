@@ -153,7 +153,7 @@ final class Generator {
 				],
 			);
 
-			// TODO can we somehow limit this search to static::MAX_CONTENT_IMAGES?
+			// TODO can we somehow limit this search to self::MAX_CONTENT_IMAGES?
 			// -> We could, via preg_match() and strip content, but the function overhead won't help.
 			preg_match_all(
 				'/<img\b[^>]+?\bsrc=(["\'])?([^"\'>\s]+)\1?[^>]*?>/mi',
@@ -174,7 +174,7 @@ final class Generator {
 				'id'  => 0,
 			];
 
-			if ( ++$yielded_images > static::MAX_CONTENT_IMAGES ) break;
+			if ( ++$yielded_images > self::MAX_CONTENT_IMAGES ) break;
 		}
 	}
 

@@ -33,7 +33,7 @@ use The_SEO_Framework\Meta;
  * @since 5.0.0
  * @access private
  */
-class Post {
+final class Post {
 
 	/**
 	 * @since 5.0.0

@@ -88,8 +88,8 @@ class Open_Graph {
 	 * @return string Open Graph Title.
 	 */
 	public static function get_title( $args = null ) {
-		return coalesce_strlen( static::get_custom_title( $args ) )
-			?? static::get_generated_title( $args );
+		return coalesce_strlen( self::get_custom_title( $args ) )
+			?? self::get_generated_title( $args );
 	}
 
 	/**
@@ -104,8 +104,8 @@ class Open_Graph {
 	 */
 	public static function get_custom_title( $args = null ) {
 		return isset( $args )
-			? static::get_custom_title_from_args( $args )
-			: static::get_custom_title_from_query();
+			? self::get_custom_title_from_args( $args )
+			: self::get_custom_title_from_query();
 	}
 
 	/**
@@ -209,8 +209,8 @@ class Open_Graph {
 	 * @return string The real Open Graph description output.
 	 */
 	public static function get_description( $args = null ) {
-		return coalesce_strlen( static::get_custom_description( $args ) )
-			?? static::get_generated_description( $args );
+		return coalesce_strlen( self::get_custom_description( $args ) )
+			?? self::get_generated_description( $args );
 	}
 
 	/**
@@ -225,8 +225,8 @@ class Open_Graph {
 	 */
 	public static function get_custom_description( $args = null ) {
 		return isset( $args )
-			? static::get_custom_description_from_args( $args )
-			: static::get_custom_description_from_query();
+			? self::get_custom_description_from_args( $args )
+			: self::get_custom_description_from_query();
 	}
 
 	/**
@@ -331,7 +331,7 @@ class Open_Graph {
 		$locale = \get_locale();
 
 		$locale_len    = \strlen( $locale );
-		$valid_locales = static::get_supported_locales(); // [ ll_LL => ll ]
+		$valid_locales = self::get_supported_locales(); // [ ll_LL => ll ]
 
 		if ( $locale_len > 5 ) {
 			$locale_len = 5;

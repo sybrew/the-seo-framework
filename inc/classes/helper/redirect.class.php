@@ -33,7 +33,7 @@ use function The_SEO_Framework\memo;
  * @since 5.0.0
  * @access private
  */
-class Redirect {
+final class Redirect {
 
 	/**
 	 * Whether to allow external redirect through the 301 redirect option.

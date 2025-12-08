@@ -67,7 +67,7 @@ final class Redirect {
 			 */
 			\do_action( 'the_seo_framework_before_redirect', $url );
 
-			static::do_redirect( $url );
+			self::do_redirect( $url );
 		}
 	}
 

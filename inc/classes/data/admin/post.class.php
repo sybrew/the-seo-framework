@@ -36,7 +36,7 @@ use The_SEO_Framework\{
  * @since 5.0.0
  * @access private
  */
-class Post {
+final class Post {
 
 	/**
 	 * @since 5.1.3
@@ -82,12 +82,12 @@ class Post {
 		// phpcs:disable WordPress.Security.NonceVerification
 
 		if ( ! empty( $_POST['autodescription-quick'] ) ) {
-			static::update_via_quick_edit( $post_id );
+			self::update_via_quick_edit( $post_id );
 		} elseif ( ! empty( $_REQUEST['autodescription-bulk'] ) ) {
 			// This is sent via GET. Keep using $_REQUEST for future-compatibility.
-			static::update_via_bulk_edit( $post_id );
+			self::update_via_bulk_edit( $post_id );
 		} elseif ( ! empty( $_POST['autodescription'] ) ) {
-			static::update_via_post_edit( $post_id );
+			self::update_via_post_edit( $post_id );
 		}
 
 		// phpcs:enable WordPress.Security.NonceVerification
@@ -134,8 +134,8 @@ class Post {
 			// Post-edit
 			foreach ( Taxonomy::get_hierarchical( 'names', $post_type ) as $taxonomy ) {
 				if ( ! \wp_verify_nonce(
-					$_POST[ static::SAVE_NONCES['post-edit']['name'] . "_pt_{$taxonomy}" ] ?? '',
-					static::SAVE_NONCES['post-edit']['action'] . '_pt',
+					$_POST[ self::SAVE_NONCES['post-edit']['name'] . "_pt_{$taxonomy}" ] ?? '',
+					self::SAVE_NONCES['post-edit']['action'] . '_pt',
 				) )
 					continue;
 
@@ -221,8 +221,8 @@ class Post {
 		// Check that the user is allowed to edit the post. This is redundant and may need to be removed for full Gutenberg support.
 		if (
 			   ! \current_user_can( 'edit_post', $post_id )
-			|| ! isset( $_POST[ static::SAVE_NONCES['post-edit']['name'] ] )
-			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['post-edit']['name'] ], static::SAVE_NONCES['post-edit']['action'] )
+			|| ! isset( $_POST[ self::SAVE_NONCES['post-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['post-edit']['name'] ], self::SAVE_NONCES['post-edit']['action'] )
 		) return;
 
 		// Trim, sanitize, and save the metadata.
@@ -254,8 +254,8 @@ class Post {
 		if (
 			   ! \current_user_can( 'edit_post', $post_id )
 			|| ! \check_ajax_referer( 'inlineeditnonce', '_inline_edit', false )
-			|| ! isset( $_POST[ static::SAVE_NONCES['quick-edit']['name'] ] )
-			|| ! \wp_verify_nonce( $_POST[ static::SAVE_NONCES['quick-edit']['name'] ], static::SAVE_NONCES['quick-edit']['action'] )
+			|| ! isset( $_POST[ self::SAVE_NONCES['quick-edit']['name'] ] )
+			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['quick-edit']['name'] ], self::SAVE_NONCES['quick-edit']['action'] )
 		) return;
 
 		$new_data = [];
@@ -319,8 +319,8 @@ class Post {
 			\check_admin_referer( 'bulk-posts' );
 
 			if (
-				   ! isset( $_REQUEST[ static::SAVE_NONCES['bulk-edit']['name'] ] )
-				|| ! \wp_verify_nonce( $_REQUEST[ static::SAVE_NONCES['bulk-edit']['name'] ], static::SAVE_NONCES['bulk-edit']['action'] )
+				   ! isset( $_REQUEST[ self::SAVE_NONCES['bulk-edit']['name'] ] )
+				|| ! \wp_verify_nonce( $_REQUEST[ self::SAVE_NONCES['bulk-edit']['name'] ], self::SAVE_NONCES['bulk-edit']['action'] )
 			) return;
 
 			$verified_referer = true;

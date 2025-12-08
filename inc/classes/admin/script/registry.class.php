@@ -56,7 +56,7 @@ use The_SEO_Framework\Helper\{
  * @see \The_SEO_Framework\Admin\Script\Loader
  * @access private
  */
-class Registry {
+final class Registry {
 
 	/**
 	 * Codes to maintain the internal state of the scripts. This state might not reflect
@@ -117,7 +117,7 @@ class Registry {
 		 * @param bool $register Whether to register scripts and hooks.
 		 */
 		if ( \apply_filters( 'the_seo_framework_register_scripts', $register ) )
-			static::register_scripts_and_hooks();
+			self::register_scripts_and_hooks();
 	}
 
 	/**
@@ -135,15 +135,15 @@ class Registry {
 			Loader::init();
 
 		if ( \did_action( 'in_admin_header' ) )
-			static::footer_enqueue();
+			self::footer_enqueue();
 
 		// These fail when called in the body.
 		\add_action( 'admin_enqueue_scripts', [ Loader::class, 'init' ], 0 );
-		\add_filter( 'admin_body_class', [ static::class, '_add_body_class' ] );
-		\add_action( 'in_admin_header', [ static::class, '_print_tsfjs_script' ] );
+		\add_filter( 'admin_body_class', [ self::class, '_add_body_class' ] );
+		\add_action( 'in_admin_header', [ self::class, '_print_tsfjs_script' ] );
 
-		\add_action( 'admin_enqueue_scripts', [ static::class, '_prepare_admin_scripts' ], 1 ); // Magic number: we likely run at priority 0. Add 1.
-		\add_action( 'admin_footer', [ static::class, '_output_templates' ], 999 ); // Magic number: later is less likely to collide?
+		\add_action( 'admin_enqueue_scripts', [ self::class, '_prepare_admin_scripts' ], 1 ); // Magic number: we likely run at priority 0. Add 1.
+		\add_action( 'admin_footer', [ self::class, '_output_templates' ], 999 ); // Magic number: later is less likely to collide?
 	}
 
 	/**
@@ -152,8 +152,8 @@ class Registry {
 	 * @since 3.1.0
 	 */
 	public static function enqueue() {
-		static::_prepare_admin_scripts();
-		static::_output_templates();
+		self::_prepare_admin_scripts();
+		self::_output_templates();
 	}
 
 	/**
@@ -167,7 +167,7 @@ class Registry {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		\add_action( 'admin_footer', [ static::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
+		\add_action( 'admin_footer', [ self::class, 'enqueue' ], 998 ); // Magic number: 1 before output_templates.
 	}
 
 	/**
@@ -206,23 +206,23 @@ class Registry {
 	 * @since 5.0.0 Is now static.
 	 */
 	public static function _prepare_admin_scripts() {
-		static::forward_known_scripts();
-		static::autoload_known_scripts();
+		self::forward_known_scripts();
+		self::autoload_known_scripts();
 	}
 
 	/**
 	 * Returns the script status of $id for $type.
 	 *
 	 * @since 3.1.0
-	 * @see static::REGISTERED
-	 * @see static::LOADED
+	 * @see self::REGISTERED
+	 * @see self::LOADED
 	 *
 	 * @param string $id   The script ID.
 	 * @param string $type The script type, albeit 'js' or 'css'.
 	 * @return int <bit>
 	 */
 	public static function get_status_of( $id, $type ) {
-		return static::$queue[ $type ][ $id ] ?? 0b0;
+		return self::$queue[ $type ][ $id ] ?? 0b0;
 	}
 
 	/**
@@ -271,11 +271,11 @@ class Registry {
 	public static function register( $script ) {
 		// This is over 350x faster than a polyfill for `array_is_list()`.
 		if ( isset( $script[0] ) && array_values( $script ) === $script ) {
-			foreach ( $script as $s ) static::register( $s );
+			foreach ( $script as $s ) self::register( $s );
 			return;
 		}
 
-		static::$scripts[] = $script;
+		self::$scripts[] = $script;
 	}
 
 	/**
@@ -287,10 +287,10 @@ class Registry {
 	 * @param string $type The script type.
 	 */
 	public static function forward_known_script( $id, $type ) {
-		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) {
-			foreach ( static::$scripts as $s ) {
+		if ( ! ( self::get_status_of( $id, $type ) & self::REGISTERED ) ) {
+			foreach ( self::$scripts as $s ) {
 				if ( $s['id'] === $id && $s['type'] === $type )
-					static::forward_script( $s );
+					self::forward_script( $s );
 			}
 		}
 	}
@@ -305,12 +305,12 @@ class Registry {
 	 */
 	public static function enqueue_known_script( $id, $type ) {
 
-		static::forward_known_script( $id, $type );
+		self::forward_known_script( $id, $type );
 
-		$status = static::get_status_of( $id, $type );
+		$status = self::get_status_of( $id, $type );
 
-		if ( ( $status & static::REGISTERED ) && ! ( $status & static::LOADED ) )
-			static::load_script( $id, $type );
+		if ( ( $status & self::REGISTERED ) && ! ( $status & self::LOADED ) )
+			self::load_script( $id, $type );
 	}
 
 	/**
@@ -321,9 +321,9 @@ class Registry {
 	 */
 	private static function forward_known_scripts() {
 		// Register them first to accommodate for dependencies.
-		foreach ( static::$scripts as $s ) {
-			if ( static::get_status_of( $s['id'], $s['type'] ) & static::REGISTERED ) continue;
-			static::forward_script( $s );
+		foreach ( self::$scripts as $s ) {
+			if ( self::get_status_of( $s['id'], $s['type'] ) & self::REGISTERED ) continue;
+			self::forward_script( $s );
 		}
 	}
 
@@ -334,10 +334,10 @@ class Registry {
 	 * @since 5.0.0 Is now static.
 	 */
 	private static function autoload_known_scripts() {
-		foreach ( static::$scripts as $s ) {
+		foreach ( self::$scripts as $s ) {
 			if ( $s['autoload'] ) {
-				if ( static::get_status_of( $s['id'], $s['type'] ) & static::LOADED ) continue;
-				static::load_script( $s['id'], $s['type'] );
+				if ( self::get_status_of( $s['id'], $s['type'] ) & self::LOADED ) continue;
+				self::load_script( $s['id'], $s['type'] );
 			}
 		}
 	}
@@ -355,27 +355,27 @@ class Registry {
 
 		switch ( $s['type'] ) {
 			case 'css':
-				\wp_register_style( $s['id'], static::generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
+				\wp_register_style( $s['id'], self::generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
 				isset( $s['inline'] )
-					and \wp_add_inline_style( $s['id'], static::create_inline_css( $s['inline'] ) );
+					and \wp_add_inline_style( $s['id'], self::create_inline_css( $s['inline'] ) );
 				$registered = true;
 				break;
 			case 'js':
-				\wp_register_script( $s['id'], static::generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
+				\wp_register_script( $s['id'], self::generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
 				isset( $s['l10n'] )
 					and \wp_localize_script( $s['id'], $s['l10n']['name'], $s['l10n']['data'] );
 				isset( $s['tmpl'] )
-					and static::register_template( $s['id'], $s['tmpl'] );
+					and self::register_template( $s['id'], $s['tmpl'] );
 				isset( $s['inline'] )
-					and \wp_add_inline_script( $s['id'], static::create_inline_js( $s['inline'] ) );
+					and \wp_add_inline_script( $s['id'], self::create_inline_js( $s['inline'] ) );
 				$registered = true;
 		}
 
 		if ( $registered ) {
 			// Add to bitwise if exists, otherwise, write the variable.
-			isset( static::$queue[ $s['type'] ][ $s['id'] ] )
-				? ( static::$queue[ $s['type'] ][ $s['id'] ] |= static::REGISTERED )
-				: ( static::$queue[ $s['type'] ][ $s['id'] ]  = static::REGISTERED );
+			isset( self::$queue[ $s['type'] ][ $s['id'] ] )
+				? ( self::$queue[ $s['type'] ][ $s['id'] ] |= self::REGISTERED )
+				: ( self::$queue[ $s['type'] ][ $s['id'] ]  = self::REGISTERED );
 		}
 	}
 
@@ -389,7 +389,7 @@ class Registry {
 	 */
 	private static function load_script( $id, $type ) {
 
-		if ( ! ( static::get_status_of( $id, $type ) & static::REGISTERED ) ) return;
+		if ( ! ( self::get_status_of( $id, $type ) & self::REGISTERED ) ) return;
 
 		$loaded = false;
 
@@ -405,9 +405,9 @@ class Registry {
 
 		if ( $loaded ) {
 			// Add to bitwise if exists, otherwise, write the variable.
-			isset( static::$queue[ $type ][ $id ] )
-				? ( static::$queue[ $type ][ $id ] |= static::LOADED )
-				: ( static::$queue[ $type ][ $id ]  = static::LOADED );
+			isset( self::$queue[ $type ][ $id ] )
+				? ( self::$queue[ $type ][ $id ] |= self::LOADED )
+				: ( self::$queue[ $type ][ $id ]  = self::LOADED );
 		}
 	}
 
@@ -459,7 +459,7 @@ class Registry {
 			$out .= \sprintf(
 				'%s{%s}',
 				$selector,
-				implode( ';', static::convert_color_css_declaration( $declaration ) )
+				implode( ';', self::convert_color_css_declaration( $declaration ) )
 			);
 		}
 
@@ -563,7 +563,7 @@ class Registry {
 			$templates = [ $templates ];
 
 		foreach ( $templates as $t ) {
-			static::$templates[ $id ][] = [
+			self::$templates[ $id ][] = [
 				$t['file'],
 				$t['args'] ?? [],
 			];
@@ -582,10 +582,10 @@ class Registry {
 	 * @since 5.0.0 Is now static.
 	 */
 	public static function _output_templates() {
-		foreach ( static::$templates as $id => $templates ) {
+		foreach ( self::$templates as $id => $templates ) {
 			if ( \wp_script_is( $id, 'enqueued' ) ) { // This list retains scripts after they're outputted.
 				// Unset template before the loop, to prevent an infinite loop.
-				unset( static::$templates[ $id ] );
+				unset( self::$templates[ $id ] );
 
 				foreach ( $templates as $t )
 					Template::output_absolute_view( $t[0], $t[1] );

@@ -68,8 +68,8 @@ class Twitter {
 	 * @return string The Twitter Card type.
 	 */
 	public static function get_card_type( $args = null ) {
-		return static::get_custom_card_type( $args )
-			?: static::get_generated_card_type( $args );
+		return self::get_custom_card_type( $args )
+			?: self::get_generated_card_type( $args );
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Twitter {
 			}
 		}
 
-		if ( ! empty( $card ) && \in_array( $card, static::get_supported_cards(), true ) )
+		if ( ! empty( $card ) && \in_array( $card, self::get_supported_cards(), true ) )
 			return $card;
 
 		return '';
@@ -141,7 +141,7 @@ class Twitter {
 
 		$card = Data\Plugin::get_option( 'twitter_card' );
 
-		$supported_cards = static::get_supported_cards();
+		$supported_cards = self::get_supported_cards();
 		// Forward compatibility
 		if ( ! \in_array( $card, $supported_cards, true ) )
 			$card = reset( $supported_cards );
@@ -205,8 +205,8 @@ class Twitter {
 	 * @return string Twitter Title.
 	 */
 	public static function get_title( $args = null ) {
-		return coalesce_strlen( static::get_custom_title( $args ) )
-			?? static::get_generated_title( $args );
+		return coalesce_strlen( self::get_custom_title( $args ) )
+			?? self::get_generated_title( $args );
 	}
 
 	/**
@@ -221,8 +221,8 @@ class Twitter {
 	 */
 	public static function get_custom_title( $args = null ) {
 		return isset( $args )
-			? static::get_custom_title_from_args( $args )
-			: static::get_custom_title_from_query();
+			? self::get_custom_title_from_args( $args )
+			: self::get_custom_title_from_query();
 	}
 
 	/**
@@ -256,7 +256,7 @@ class Twitter {
 			return Sanitize::metadata_content( $title );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
-		return static::fallback_to_open_graph()
+		return self::fallback_to_open_graph()
 			? Open_Graph::get_custom_title_from_query()
 			: Title::get_custom_title( null, true );
 	}
@@ -299,7 +299,7 @@ class Twitter {
 			return Sanitize::metadata_content( $title );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
-		return static::fallback_to_open_graph()
+		return self::fallback_to_open_graph()
 			? Open_Graph::get_custom_title_from_args( $args )
 			: Title::get_custom_title( $args, true );
 	}
@@ -329,8 +329,8 @@ class Twitter {
 	 * @return string The real Twitter description output.
 	 */
 	public static function get_description( $args = null ) {
-		return coalesce_strlen( static::get_custom_description( $args ) )
-			?? static::get_generated_description( $args );
+		return coalesce_strlen( self::get_custom_description( $args ) )
+			?? self::get_generated_description( $args );
 	}
 
 	/**
@@ -345,8 +345,8 @@ class Twitter {
 	 */
 	public static function get_custom_description( $args = null ) {
 		return isset( $args )
-			? static::get_custom_description_from_args( $args )
-			: static::get_custom_description_from_query();
+			? self::get_custom_description_from_args( $args )
+			: self::get_custom_description_from_query();
 	}
 
 	/**
@@ -381,7 +381,7 @@ class Twitter {
 			return Sanitize::metadata_content( $desc );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
-		return static::fallback_to_open_graph()
+		return self::fallback_to_open_graph()
 			? Open_Graph::get_custom_description_from_query()
 			: Description::get_custom_description();
 	}
@@ -425,7 +425,7 @@ class Twitter {
 			return Sanitize::metadata_content( $desc );
 
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
-		return static::fallback_to_open_graph()
+		return self::fallback_to_open_graph()
 			? Open_Graph::get_custom_description_from_args( $args )
 			: Title::get_custom_description( $args );
 	}

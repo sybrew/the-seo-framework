@@ -40,7 +40,7 @@ use The_SEO_Framework\{
  *              3. No longer extends `\The_SEO_Framework\Sitemap\Optimized\Main`.
  * @access private
  */
-class Filter {
+final class Filter {
 
 	/**
 	 * Sets "doing sitemap" in TSF if preliminary conditions pass.

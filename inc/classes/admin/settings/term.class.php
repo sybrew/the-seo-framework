@@ -58,7 +58,7 @@ final class Term {
 
 		\add_action(
 			"{$taxonomy}_edit_form",
-			[ static::class, 'output_setting_fields' ],
+			[ self::class, 'output_setting_fields' ],
 			/**
 			 * @since 2.6.0
 			 * @param int $priority The meta box term priority.
