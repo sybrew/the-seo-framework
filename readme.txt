@@ -245,96 +245,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.1.3
 
-**For everyone:**
+This update adds primary term selection to quick/bulk edit, option visibility toggles, comprehensive Avada theme compatibility, improved Elementor handling, and [various bug fixes](https://theseoframework.com/?p=4423).
 
-* **Upgraded:** Now uses TSF database version 5130.
-	* Three new options will be registered to `THE_SEO_FRAMEWORK_SITE_OPTIONS` (`autodescription-site-settings`): `display_list_edit_options`, `display_term_edit_options`, and `display_user_edit_options`.
-* **Added:**
-	* You can now select the primary term in the quick edit and bulk edit interfaces on post overview pages.
-	* You can now hide TSF's term, user, and quick/bulk-edit interfaces via the "SEO Settings > General Settings > Layout."
-* **Compatibility:**
-	* **Theme: Adava:**
-		* Added comprehensive compatibility with the Avada theme to prevent SEO functionality conflicts.
-			1. We now hide Avada SEO settings from their post edit meta box.
-			2. We now hide most Avada's SEO settings from their theme options.
-				- Except for "Rich Snippets FAQ" (used by their fusion_faq shortcode), for which "Rich Snippets" should also be allowed.
-			3. We now disable all hidden Avada SEO settings on the front-end to prevent conflicts.
-				- This includes Open Graph and structured data for Title, Author, and Date output.
-	* **Plugin: Elementor:**
-		* We now again output The SEO Framework's metadata on Elementor's "Landing Pages" post type (`e-landing-page`) and "Templates" `elementor_library`.
-		* With that, we now force the "noindex" directive on these post types.
-			* This is something that they should've done a long time ago, and it's negatively impacting millions of websites' ranking, including yours -- unless you use TSF.
-		* We added Elementor's "Floating Buttons" post type (`e-floating-buttons`) to a bespoke "Elementor's dumb post type" list.
-			* This means that The SEO Framework will also hide its interface and force the "noindex" directive on this post type.
-		* **Note:** We considered adding a dynamic "headless" mode for Elementor's dumb post types, so that TSF's custom post meta fields could be ignored from these, but this adds needless complexity for a corner case that should never have existed in the first place.
-* **Fixed:**
-	* Resolved an issue where abbreviations at the start of sentences weren't considered by the description generator.
-	* Resolved an issue where the breadcrumb generator would include a broken ancestor if a parent post is deleted without purging the child post's `post_parent` field. Now skips the broken ancestor (theoretical fix; WordPress returns 404 for such posts anyway).
-	* Resolved an issue where the breadcrumb generator would add an "Archives" link pointing to the current post if a term ancestor is deleted. Now skips the broken ancestor.
-	* Resolved an issue where the more information about sitemaps-link wasn't outputted on the sitemap stylesheet.
-	* Resolved an issue where image type warnings that were meant for social sharing were also shown for other contexts, such as logos and structured data.
-	* Resolved an issue where the tooltip content would overflow its container in WordPress 6.9 (because they changed the ID of a common element AGAIN without considering other developers).
-	* Resolved an issue where tooltips were clipped on WordPress 6.9 due to needlessly added `overflow: hidden` on the meta box containers.
-* **Removed:**
-	* Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
-
-**For translators:**
-
-* **Updated:**
-	* POT translation file.
-	* Various sentences have been updated for clarity.
-
-**For developers:**
-
-* **PHP API notes:**
-	* **Added:**
-		* `The_SEO_Framework\Meta\URI\Utils::get_site_path()` (`tsf()->uri()->utils()->get_site_path()`) is now available. The value should be equivalent to `$wp_rewrite->front`, but then filtered via `get_home_url()`.
-	* **Changed:**
-		* `The_SEO_Framework\Data\Filter\Sanitize::metadata_content()` (`tsf()->sanitize()->metadata_content()`) now decodes HTML entities at the end of its process.
-		* `The_SEO_Framework\Meta\Title::get_custom_title()` and `get_generated_title()` (`tsf()->title()->get_custom_title()`, `tsf()->title()->get_generated_title()`) now run their output through `Sanitize::metadata_content()`.
-		* `The_SEO_Framework\Data\Filter\sanitize::metadata_content()` (`tsf()->sanitize()->metadata_content()`) now converts all non-breaking spaces to normal spaces.
-		* `The_SEO_Framework\Meta\Image::get_first_image_url()`, `get_first_custom_image_url()`, and `get_first_generated_image_url()` (`tsf()->image()->get_first_image_url()`, `tsf()->image()->get_first_custom_image_url()`, `tsf()->image()->get_first_generated_image_url()`) now have `null` as the default value for the first argument.
-		* `The_SEO_Framework\Data\Term::get_term_parents()` (`tsf()->data()->term()->get_term_parents()`) no longer uses memoization to cache results.
-			* This is now in line with `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`), which never used memoization.
-			* We probably added this because of this [unresolved caching issue](https://core.trac.wordpress.org/ticket/50568), but we never invoked the memoization anyway.
-	* **Fixed:**
-		* `The_SEO_Framework\Helper\Format\Markdown` (`tsf()->format()->markdown()->convert()`) no longer grabs closing parentheses as part of its link when two or more are followed. Parentheses in links are still supported, but they must be balanced with an opening parentheses.
-		* `The_SEO_Framework\Data\Post::get_post_parents()` (`tsf()->data()->post()->get_post_parents()`) now filters out deleted posts (broken ancestors). Next to the user-facing breadcrumb issue, this resolves some PHP warnings that could occur when fetching deleted parent posts for canonical URL generation.
-		* `The_SEO_Framework\Helper\Format\HTML::strip_tags_cs()` (`tsf()->format()->html()->strip_tags_cs()`):
-			1. Added 'body' and 'style' to the phrase elements.
-			2. Added conditional "NO_JIT" modifier for huge inputs to prevent abortion due to suspected memory issues.
-			3. Improved regex pattern to ignore bitwise operators (<<) encountered in scripts. Also prevents recursive lookup loops when encountering these operators in elements.
-		* Resolved an issue where pools `tsf()->escape()` and `tsf()->sanitize()` were incorrectly marked to be from pool `tsf()->filter()->escape()` and `tsf()->filter()->sanitize()` respectively.
-		* Resolved an issue in `The_SEO_Framework\Traits\Internal\Static_Deprecator` trait where dynamic property access used incorrect syntax (`self` instead of `static::class` and `self::$name` instead of `static::$$name`).
-	* **Other:**
-		* We now use `The_SEO_Framework\Data\User::get_userdata()` (`tsf()->data()->user()->get_userdata()`) instead of the expensive `get_userdata()` directly to fetch user data. This improves output performance at the expense of a slight memory overhead.
-		* Converted all `static` calls to `self` in final classes. This improves performance marginally by avoiding late static binding runtime resolution. We measured less than 1% performance improvement in our test suite; that's likely because most of our code is procedural instead of object-oriented.
-* **JS API notes:**
-	* **Changed:**
-		* `tsfCanonical.rewrite` is no longer available. This was not meant to be publicly accessible.
-		* `tsfCanonical.rootUrl` is no longer available, without deprecation. This was not meant to be publicly accessible.
-		* `tsfCanonicalL10n.rootUrl` is now an array of `scheme`, `host`, `port`, and `path` properties, instead of just a plain string of the host.
-		* `tsfCanonicalL10n.allowCanonicalURLNotationTool` is renamed to `tsfCanonicalL10n.allowCanonicalURLNotationTracker`, which is more consistent with the rest of the codebase.
-			* This change is not backward compatible; however, the property was marked with the comment "TEMP: [...]", as it was a quick workaround for a compatibility issue with multilingual plugins.
-		* `tsfMediaL10n.warning.warnedTypes` and `tsfMediaL10n.warning.forbiddenTypes` are now context-aware objects instead of flat arrays.
-			* `warnedTypes` now has a `social` property containing image types that trigger warnings for social images (e.g., webp, heic).
-			* `forbiddenTypes` now has an `all` property containing universally forbidden image types (e.g., apng, bmp, svg).
-			* This is a semi-breaking change for the JS API. We highly doubt anyone used these properties externally, as they were introduced in v5.1.0.
-			* The image warning system now checks for context-specific warnings first, then falls back to universal warnings, making it more extensible for future image contexts.
-* **Option notes:**
-	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
-		* Added index `display_list_edit_options`. Default `1`.
-		* Added index `display_term_edit_options`. Default `1`.
-		* Added index `display_user_edit_options`. Default `1`.
-* **Filter notes:**
-	* **Fixed:**
-		* For `the_seo_framework_extract_content_strip_args`, when adjusting the `space` or `clear` indexes in such a manner that empty void, clear, or space queries are created, the resulting Context-Sensitive tag stripper (`The_SEO_Framework\Helper\Format\strip_tags_cs()`) now correctly ignores those empty queries instead of halting the context-sensitive stripping process.
-* **Other:**
-	* We updated our coding standards, so the code is slightly altered.
-	* We now properly capitalize the proper noun Boolean.
-	* We purged all deprecated methods, properties, classes, files, folders, and filters that were marked for removal in v5.0.0.
-		* We removed about 7 classes, 388 methods, 13 properties, and 35 filters.
-		* For a full list, please refer to the [v5.0.0 detailed changelog](https://theseoframework.com/?p=4135#detailed).
+We also deleted all deprecated code from before TSF v5.0. If you added custom snippets from before 2 years ago without resolving the deprecations, you may experience issues. Feel free to reach out to us in our [support forums](https://wordpress.org/support/plugin/autodescription) if you need help.
 
 ### 5.1.2
 
