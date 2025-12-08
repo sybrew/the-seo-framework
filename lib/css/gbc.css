@@ -1,0 +1,56 @@
+:root {
+	/* Prevents a shift from the scrollbar gutter being added that happens if the tooltip popover
+	   overflows the viewport. The popover repositions to not overflow and the shift isn’t painted
+	   yet the wrap element’s rectangle gets read at the shifted position and the tooltip arrow
+	   displayed there only to jump in the next animation frame. This seems safe to add although
+	   ideally Gutenberg might add this itself. */
+	overflow-x: hidden;
+}
+
+.tsf-gbc-tooltip-popover {
+	pointer-events: none;
+	filter: drop-shadow(0 0 1px rgba( 0, 0, 0, .6 ) );
+}
+
+.tsf-gbc-tooltip-popover > .components-popover__content {
+	/* Unset the Gutenberg popover’s min-content width that would otherwise require
+	   setting width or min-width on either the tooltip or its content. */
+	width: unset;
+}
+
+.tsf-tooltip-arrow {
+	/* Hide our arrow in Gutenberg (to use theirs instead). */
+	display: none;
+}
+
+.tsf-gbc-tooltip-popover > .components-popover__arrow {
+	width: 16px;
+	height: 16px;
+}
+
+.tsf-gbc-tooltip-popover > .components-popover__arrow:before {
+	/* Hide Gutenberg’s arrow’s before pseudo because it’s only used to whiteout their
+	   popover’s border where the arrow sits. */
+	display: none;
+}
+
+.tsf-gbc-tooltip-popover .components-popover__triangle-bg {
+	fill: var(--tsf-user-colors-bg-accent);
+}
+
+.tsf-gbc-tooltip-popover .components-popover__triangle-border {
+	/* Hide the arrow stroke/border */
+	display: none;
+}
+
+.tsf-tooltip {
+	/* The popover component needs this to not be absolutely positioned so that the parent
+	   element has size. */
+	position: unset;
+}
+
+.tsf-tooltip-text-wrap {
+	flex-shrink: 1;
+	max-width: 23em;
+	box-shadow: none;
+}

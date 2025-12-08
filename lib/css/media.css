@@ -1,6 +1,12 @@
 .tsf-image-notifications {
 	line-height: 1;
 	vertical-align: bottom;
+
+	> .tsf-tooltip-wrap {
+		/* In Gutenberg, this ensures the wrap has the size of its contents, not sure why it’s
+		   not required in the classic editor. */
+		display: inline-block;
+	}
 }
 
 .tsf-set-image-button.button,
