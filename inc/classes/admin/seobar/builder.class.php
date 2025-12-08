@@ -245,7 +245,7 @@ final class Builder {
 		// Always return the wrap, may it be filled in via JS in the future.
 		return \sprintf(
 			'<div class="tsf-seo-bar tsf-tooltip-super-wrap"><span class=tsf-seo-bar-inner-wrap>%s</span></div>',
-			implode( $blocks )
+			implode( $blocks ),
 		);
 	}
 
@@ -327,7 +327,7 @@ final class Builder {
 					'<ol>%s</ol>',
 					implode(
 						'',
-						array_map( static fn( $a ) => "<li>$a</li>", $item['assess'] )
+						array_map( static fn( $a ) => "<li>$a</li>", $item['assess'] ),
 					),
 				),
 			);

@@ -544,7 +544,7 @@ class Sanitize {
 		$handle = preg_replace(
 			'/[^a-z\d_]/i',
 			'',
-			trim( Meta\URI\Utils::get_relative_part_from_url( $handle ), ' /@' )
+			trim( Meta\URI\Utils::get_relative_part_from_url( $handle ), ' /@' ),
 		);
 		$length = \strlen( $handle );
 

@@ -198,15 +198,14 @@ final class AJAX {
 				// Get the original image's post to pre-populate the cropped image.
 				$original_attachment  = \get_post( $attachment_id );
 				$sanitized_post_title = \sanitize_file_name( $original_attachment->post_title );
-				$use_original_title   = (
-					\strlen( trim( $original_attachment->post_title ) ) &&
-					/**
-					 * Check if the original image has a title other than the "filename" default,
-					 * meaning the image had a title when originally uploaded or its title was edited.
-					 */
-					( $parent_basename !== $sanitized_post_title ) &&
-					( pathinfo( $parent_basename, \PATHINFO_FILENAME ) !== $sanitized_post_title )
-				);
+				/**
+				 * Check if the original image has a title other than the "filename" default,
+				 * meaning the image had a title when originally uploaded or its title was edited.
+				 */
+				$use_original_title = \strlen( trim( $original_attachment->post_title ) )
+					&& ( $parent_basename !== $sanitized_post_title )
+					&& ( pathinfo( $parent_basename, \PATHINFO_FILENAME ) !== $sanitized_post_title );
+
 				$use_original_description = \strlen( trim( $original_attachment->post_content ) );
 
 				$attachment = [

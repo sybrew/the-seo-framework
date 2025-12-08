@@ -94,7 +94,7 @@ final class Post {
 			 * @param string $default Accepts 'high', 'default', 'low'
 			 *                        Defaults to high, this box is seen right below the post/page edit screen.
 			 */
-			(string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' )
+			(string) \apply_filters( 'the_seo_framework_metabox_priority', 'high' ),
 		);
 
 		$screen_id = \get_current_screen()->id;

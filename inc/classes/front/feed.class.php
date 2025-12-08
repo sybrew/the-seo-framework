@@ -104,9 +104,9 @@ final class Feed {
 					 */
 					\apply_filters(
 						'the_seo_framework_feed_source_link_text',
-						\_x( 'Source', 'The content source', 'autodescription' )
-					)
-				)
+						\_x( 'Source', 'The content source', 'autodescription' ),
+					),
+				),
 			);
 		}
 

@@ -97,7 +97,7 @@ class Form {
 					'<option value="%s"%s>%s</option>',
 					\esc_attr( $value ),
 					(string) $value === (string) $selected ? ' selected' : '',
-					\esc_html( $name )
+					\esc_html( $name ),
 				);
 			},
 			$args['selected'],
@@ -115,7 +115,7 @@ class Form {
 					Escape::option_name_attribute( $args['id'] ),
 					\sprintf(
 						$args['labelstrong'] ? '<strong>%s</strong>' : '%s',
-						\esc_html( $args['label'] )
+						\esc_html( $args['label'] ),
 					)
 				) : '',
 				$args['info'] ? HTML::make_info(
@@ -184,7 +184,7 @@ class Form {
 				),
 				\sprintf(
 					'<div class=tsf-pixel-shadow-wrap><span class="tsf-pixel-counter-shadow %s"></span></div>',
-					\esc_attr( "tsf-{$type}-pixel-counter-shadow" )
+					\esc_attr( "tsf-{$type}-pixel-counter-shadow" ),
 				),
 			],
 		);

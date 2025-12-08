@@ -38,7 +38,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 switch ( $instance ) : // Quite useless, but prepared for expansion.
 	case 'main':
 		HTML::description(
-			\__( 'The meta description suggests text to be used under the title on search engine results pages.', 'autodescription' )
+			\__( 'The meta description suggests text to be used under the title on search engine results pages.', 'autodescription' ),
 		);
 
 		?>
@@ -60,7 +60,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 			true,
 		);
 		HTML::description(
-			\__( "Open Graph requires descriptions. So, it's best to leave description generation enabled.", 'autodescription' )
+			\__( "Open Graph requires descriptions. So, it's best to leave description generation enabled.", 'autodescription' ),
 		);
 
 		?>
@@ -69,7 +69,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		HTML::header_title( \__( 'Advanced Generation Settings', 'autodescription' ) );
 
 		HTML::description(
-			\__( 'The HTML content of your pages can be used to generate descriptions. The generator processes this HTML in passing layers to understand the layout. If the HTML is complex, not all layers may be processed, and you might find spaces missing between sentences. Increasing the maximum number of passes reduces the chance of this happening, but at the cost of performance.', 'autodescription' )
+			\__( 'The HTML content of your pages can be used to generate descriptions. The generator processes this HTML in passing layers to understand the layout. If the HTML is complex, not all layers may be processed, and you might find spaces missing between sentences. Increasing the maximum number of passes reduces the chance of this happening, but at the cost of performance.', 'autodescription' ),
 		);
 
 		/**
@@ -116,7 +116,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 			\sprintf(
 				'<a href="%s" target=_blank rel="noreferrer noopener">%s</a>',
 				'https://kb.theseoframework.com/?p=65#html-passes',
-				\esc_html__( 'Learn how this works.', 'autodescription' )
+				\esc_html__( 'Learn how this works.', 'autodescription' ),
 			)
 		);
 endswitch;

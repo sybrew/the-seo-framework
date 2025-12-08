@@ -459,7 +459,7 @@ final class Registry {
 			$out .= \sprintf(
 				'%s{%s}',
 				$selector,
-				implode( ';', self::convert_color_css_declaration( $declaration ) )
+				implode( ';', self::convert_color_css_declaration( $declaration ) ),
 			);
 		}
 

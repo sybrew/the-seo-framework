@@ -97,7 +97,7 @@ switch ( $instance ) :
 			 * @since 2.6.0
 			 * @param array $tabs The default tabs.
 			 */
-			(array) \apply_filters( 'the_seo_framework_homepage_settings_tabs', $tabs )
+			(array) \apply_filters( 'the_seo_framework_homepage_settings_tabs', $tabs ),
 		);
 		break;
 
@@ -138,7 +138,8 @@ switch ( $instance ) :
 					'state' => [
 						'refTitleLocked'      => false, // This field is the mother of all references.
 						'defaultTitle'        => \esc_html(
-							coalesce_strlen( $post_meta_title ) ?? Meta\Title::get_bare_generated_title( $generator_args )
+							coalesce_strlen( $post_meta_title )
+								?? Meta\Title::get_bare_generated_title( $generator_args ),
 						),
 						'_defaultTitleLocked' => (bool) \strlen( $post_meta_title ), // Underscored index because it's non-standard API.
 						'addAdditions'        => Meta\Title\Conditions::use_branding( $generator_args ),
@@ -330,13 +331,13 @@ switch ( $instance ) :
 						'defaultTitle' => \esc_html(
 							   coalesce_strlen( $custom_og_title )
 							?? coalesce_strlen( $custom_title )
-							?? Meta\Open_Graph::get_generated_title( $generator_args )
+							?? Meta\Open_Graph::get_generated_title( $generator_args ),
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'og' ),
 						'defaultDesc'  => \esc_html(
 							   coalesce_strlen( $custom_og_desc )
 							?? coalesce_strlen( $custom_desc )
-							?? Meta\Open_Graph::get_generated_description( $generator_args )
+							?? Meta\Open_Graph::get_generated_description( $generator_args ),
 						),
 						'titlePhLock'  => (bool) \strlen( $custom_og_title ),
 						'descPhLock'   => (bool) \strlen( $custom_og_desc ),
@@ -348,14 +349,14 @@ switch ( $instance ) :
 							   coalesce_strlen( $custom_tw_title )
 							?? coalesce_strlen( $custom_og_title )
 							?? coalesce_strlen( $custom_title )
-							?? Meta\Twitter::get_generated_title( $generator_args )
+							?? Meta\Twitter::get_generated_title( $generator_args ),
 						),
 						'addAdditions' => Meta\Title\Conditions::use_branding( $generator_args, 'twitter' ),
 						'defaultDesc'  => \esc_html(
 							   coalesce_strlen( $custom_tw_desc )
 							?? coalesce_strlen( $custom_og_desc )
 							?? coalesce_strlen( $custom_desc )
-							?? Meta\Twitter::get_generated_description( $generator_args )
+							?? Meta\Twitter::get_generated_description( $generator_args ),
 						),
 						'titlePhLock'  => (bool) \strlen( $custom_tw_title ),
 						'descPhLock'   => (bool) \strlen( $custom_tw_desc ),
@@ -383,7 +384,7 @@ switch ( $instance ) :
 		<?php
 		if ( \strlen( $custom_og_title ) ) {
 			HTML::description(
-				\__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+				\__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ),
 			);
 		}
 		?>
@@ -430,7 +431,7 @@ switch ( $instance ) :
 		<?php
 		if ( \strlen( $custom_og_title ) || \strlen( $custom_tw_title ) ) {
 			HTML::description(
-				\__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+				\__( 'Note: The title placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ),
 			);
 		}
 		?>
@@ -453,7 +454,7 @@ switch ( $instance ) :
 		<?php
 		if ( \strlen( $custom_og_desc ) || \strlen( $custom_tw_desc ) ) {
 			HTML::description(
-				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ),
 			);
 		}
 		?>

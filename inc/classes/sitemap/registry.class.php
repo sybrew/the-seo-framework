@@ -65,9 +65,7 @@ class Registry {
 		// @link https://github.com/sybrew/the-seo-framework/issues/529
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 			$raw_uri = rawurldecode(
-				\wp_check_invalid_utf8(
-					stripslashes( $_SERVER['REQUEST_URI'] )
-				)
+				\wp_check_invalid_utf8( stripslashes( $_SERVER['REQUEST_URI'] ) ),
 			) ?: '/';
 		} else {
 			$raw_uri = '/';
@@ -394,7 +392,7 @@ class Registry {
 			printf(
 				'<?xml-stylesheet type="text/xsl" href="%s"?>' . "\n",
 				// phpcs:ignore WordPress.Security.EscapeOutput
-				self::get_expected_sitemap_endpoint_url( 'xsl-stylesheet' )
+				self::get_expected_sitemap_endpoint_url( 'xsl-stylesheet' ),
 			);
 		}
 	}

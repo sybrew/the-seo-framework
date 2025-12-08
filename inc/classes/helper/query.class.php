@@ -950,7 +950,7 @@ class Query {
 				 * @since 4.1.4 Now has its return value memoized.
 				 * @param bool $is_product_admin
 				 */
-				(bool) \apply_filters( 'the_seo_framework_is_product_admin', false )
+				(bool) \apply_filters( 'the_seo_framework_is_product_admin', false ),
 			);
 	}
 

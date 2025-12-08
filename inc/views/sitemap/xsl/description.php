@@ -76,8 +76,8 @@ printf(
 	),
 	\esc_xml(
 		Sanitize::metadata_content(
-			Data\Blog::get_public_blog_name() . ' &mdash; ' . \__( 'XML Sitemap', 'autodescription' )
-		)
+			Data\Blog::get_public_blog_name() . ' &mdash; ' . \__( 'XML Sitemap', 'autodescription' ),
+		),
 	),
 );
 ?>
@@ -96,7 +96,7 @@ printf(
 <p>
 	<?php
 	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- convert_markdown escapes.
-	Markdown::convert(
+	echo Markdown::convert(
 		/* translators: URLs are in Markdown. Don't localize this URL. */
 		\esc_xml( \__( 'You can find more information on XML sitemaps at [sitemaps.org](https://www.sitemaps.org/).', 'autodescription' ) ),
 		[ 'a' ],

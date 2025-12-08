@@ -349,7 +349,8 @@ TODO should we unschedule cron events on deactivation?
 	* Resolved an issue where abbreviations at the start of sentences weren't considered by the description generator.
 	* Resolved an issue where the breadcrumb generator would include a broken ancestor if a parent post is deleted without purging the child post's `post_parent` field. Now skips the broken ancestor (theoretical fix; WordPress returns 404 for such posts anyway).
 	* Resolved an issue where the breadcrumb generator would add an "Archives" link pointing to the current post if a term ancestor is deleted. Now skips the broken ancestor.
-  * Resolved an issue where image type warnings that were meant for social sharing were also shown for other contexts, such as logos and structured data.
+	* Resolved an issue where the more information about sitemaps-link wasn't outputted on the sitemap stylesheet.
+	* Resolved an issue where image type warnings that were meant for social sharing were also shown for other contexts, such as logos and structured data.
 * **Removed:**
 	* Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 

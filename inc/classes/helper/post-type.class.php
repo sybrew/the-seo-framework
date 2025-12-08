@@ -255,11 +255,11 @@ class Post_Type {
 						array_unique( array_merge(
 							self::get_all_forced_supported(),
 							// array_keys() because get_post_types() gives a sequential array.
-							array_keys( (array) \get_post_types( [ 'public' => true ] ) )
+							array_keys( (array) \get_post_types( [ 'public' => true ] ) ),
 						) ),
 						'is_post_type_viewable',
-					) )
-				)
+					) ),
+				),
 			);
 	}
 

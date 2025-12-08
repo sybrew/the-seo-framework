@@ -94,7 +94,7 @@ function _wpforo_filter_pre_title( $title, $args ) {
 		$sep          = Meta\Title::get_separator();
 		$wpforo_title = implode(
 			" $sep ",
-			array_filter( (array) \wpforo_meta_title( '' ), 'strlen' )
+			array_filter( (array) \wpforo_meta_title( '' ), 'strlen' ),
 		);
 	}
 

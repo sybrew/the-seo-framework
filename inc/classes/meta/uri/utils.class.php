@@ -348,7 +348,7 @@ class Utils {
 		return \WP_Http::make_absolute_url(
 			$path,
 			\trailingslashit(
-				$url ?: self::set_preferred_url_scheme( self::get_site_host() )
+				$url ?: self::set_preferred_url_scheme( self::get_site_host() ),
 			),
 		);
 	}

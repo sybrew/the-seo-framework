@@ -130,7 +130,7 @@ class Notice {
 				),
 				\sprintf(
 					'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s"></a>',
-					\esc_attr__( 'Dismiss this notice', 'default' )
+					\esc_attr__( 'Dismiss this notice', 'default' ),
 				),
 			],
 		);

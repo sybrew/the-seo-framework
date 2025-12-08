@@ -79,7 +79,7 @@ switch ( $instance ) :
 			 * @since 2.8.0
 			 * @param array $tabs The default tabs.
 			 */
-			(array) \apply_filters( 'the_seo_framework_general_settings_tabs', $tabs )
+			(array) \apply_filters( 'the_seo_framework_general_settings_tabs', $tabs ),
 		);
 		break;
 
@@ -161,23 +161,29 @@ switch ( $instance ) :
 		?>
 		<hr>
 		<?php
-		HTML::header_title( \__( 'Option fields', 'autodescription' ) );
+		HTML::header_title( \__( 'Option Field Settings', 'autodescription' ) );
+
+		$term_info = HTML::make_info(
+			\__( 'Terms are entries in taxonomies, e.g., Categories and Tags.', 'autodescription' ),
+			'',
+			false,
+		);
 
 		HTML::wrap_fields(
 			[
 				Input::make_checkbox( [
 					'id'     => 'display_list_edit_options',
-					'label'  => \esc_html__( 'Display quick and bulk option fields?', 'autodescription' ),
+					'label'  => \esc_html__( 'Display quick-edit and bulk-edit option fields?', 'autodescription' ),
 					'escape' => false,
 				] ),
 				Input::make_checkbox( [
 					'id'     => 'display_term_edit_options',
-					'label'  => \esc_html__( 'Display term option fields?', 'autodescription' ),
+					'label'  => \esc_html__( 'Display term-edit option fields?', 'autodescription' ) . " $term_info",
 					'escape' => false,
 				] ),
 				Input::make_checkbox( [
 					'id'     => 'display_user_edit_options',
-					'label'  => \esc_html__( 'Display user option fields?', 'autodescription' ),
+					'label'  => \esc_html__( 'Display user-edit option fields?', 'autodescription' ),
 					'escape' => false,
 				] ),
 			],
@@ -198,13 +204,13 @@ switch ( $instance ) :
 		HTML::description_noesc(
 			\esc_html__( "Altering the query allows for more control of the site's hierarchy.", 'autodescription' )
 			. '<br>' .
-			\esc_html__( 'If your website has thousands of pages, these options can greatly affect database performance.', 'autodescription' )
+			\esc_html__( 'If your website has thousands of pages, these options can greatly affect database performance.', 'autodescription' ),
 		);
 
 		HTML::description_noesc(
 			\esc_html__( 'Altering the query in the database is more accurate, but can increase database query time.', 'autodescription' )
 			. '<br>' .
-			\esc_html__( 'Altering the query on the site is much faster, but can lead to inconsistent pagination. It can also lead to 404 error messages if all queried pages have been excluded.', 'autodescription' )
+			\esc_html__( 'Altering the query on the site is much faster, but can lead to inconsistent pagination. It can also lead to 404 error messages if all queried pages have been excluded.', 'autodescription' ),
 		);
 
 		$query_types = (array) \apply_filters(
@@ -396,7 +402,7 @@ switch ( $instance ) :
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo HTML::code_wrap( $timestamp_date ), ' ', HTML::make_info(
-							\__( 'This outputs the complete date.', 'autodescription' )
+							\__( 'This outputs the complete date.', 'autodescription' ),
 						);
 						?>
 					</label>
@@ -407,7 +413,7 @@ switch ( $instance ) :
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput -- code_wrap escapes.
 						echo HTML::code_wrap( $timestamp_datetime ), ' ', HTML::make_info(
-							\__( 'This outputs the complete date including hours, minutes, seconds, and time zone.', 'autodescription' )
+							\__( 'This outputs the complete date including hours, minutes, seconds, and time zone.', 'autodescription' ),
 						);
 						?>
 					</label>

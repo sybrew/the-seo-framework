@@ -104,7 +104,7 @@ final class Redirect {
 		if ( ! Helper\Redirect::allow_external_redirect() ) {
 			// Only HTTP/HTTPS and home URLs are allowed. Maintain current request's scheme.
 			$url = Meta\URI\Utils::set_url_scheme( Meta\URI\Utils::convert_path_to_url(
-				Meta\URI\Utils::set_url_scheme( $url, 'relative' )
+				Meta\URI\Utils::set_url_scheme( $url, 'relative' ),
 			) );
 
 			\wp_safe_redirect( $url, $redirect_type );

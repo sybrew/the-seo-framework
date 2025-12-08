@@ -166,7 +166,7 @@ final class Open_Graph {
 		$i = 0;
 		foreach ( Meta\Image::get_image_details(
 			null,
-			! Data\Plugin::get_option( 'multi_og_image' )
+			! Data\Plugin::get_option( 'multi_og_image' ),
 		) as $image ) {
 			yield "og:image:$i" => [
 				'attributes' => [

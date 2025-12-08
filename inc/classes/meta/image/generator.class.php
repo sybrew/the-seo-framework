@@ -227,7 +227,7 @@ final class Generator {
 
 		$image = \get_theme_mod(
 			'header_image_data',
-			\get_theme_support( 'custom-header', 'default-image' )
+			\get_theme_support( 'custom-header', 'default-image' ),
 		);
 
 		if ( \is_string( $image ) && $image ) {

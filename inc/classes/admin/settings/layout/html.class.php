@@ -226,7 +226,7 @@ class HTML {
 		} else {
 			$output = \sprintf(
 				'<span class="tsf-tooltip-item tsf-help" title="%1$s" data-desc="%1$s" tabindex=0>[?]</span>',
-				\esc_attr( $description )
+				\esc_attr( $description ),
 			);
 		}
 
@@ -263,11 +263,11 @@ class HTML {
 				strtolower( preg_replace(
 					'/([A-Z])/',
 					'-$1',
-					preg_replace( '/[^a-z\d_-]/i', '', $k )
+					preg_replace( '/[^a-z\d_-]/i', '', $k ),
 				) ), // dash case.
 				\is_scalar( $v )
 					? \esc_attr( $v )
-					: Escape::json_encode_attribute( $v )
+					: Escape::json_encode_attribute( $v ),
 			);
 		}
 

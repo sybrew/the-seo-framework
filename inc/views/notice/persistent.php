@@ -106,10 +106,12 @@ vprintf(
 		\esc_attr( $args['type'] ),
 		( $args['icon'] ? 'tsf-show-icon' : '' ),
 		\sprintf(
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- conditionals bug.
-			( ! $args['escape'] && 0 === stripos( $message, '<p' ) ? '%s' : '<p>%s</p>' ),
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the invoker should be mindful.
-			( $args['escape'] ? \esc_html( $message ) : $message )
+			! $args['escape'] && 0 === stripos( $message, '<p' )
+				? '%s'
+				: '<p>%s</p>',
+			$args['escape']
+				? \esc_html( $message )
+				: $message, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the invoker should be mindful.
 		),
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- they are.
 		$button_js . $button_nojs,

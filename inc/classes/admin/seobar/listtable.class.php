@@ -112,7 +112,7 @@ final class ListTable extends Admin\Lists\Table {
 			$columns = array_merge(
 				array_splice( $columns, 0, $offset ),
 				$seocolumn,
-				array_splice( $columns_before, $offset )
+				array_splice( $columns_before, $offset ),
 			);
 		}
 

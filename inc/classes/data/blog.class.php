@@ -75,7 +75,7 @@ class Blog {
 		 */
 		return (string) \apply_filters(
 			'the_seo_framework_blog_name',
-			trim( \get_bloginfo( 'name', 'display' ) )
+			trim( \get_bloginfo( 'name', 'display' ) ),
 		);
 	}
 
@@ -169,7 +169,7 @@ class Blog {
 					\PHP_URL_PATH,
 				) ?? '',
 				' \\/',
-			) )
+			) ),
 		);
 	}
 

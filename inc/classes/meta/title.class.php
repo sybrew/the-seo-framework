@@ -745,8 +745,11 @@ class Title {
 	 */
 	public static function get_search_query_title() {
 		return Sanitize::metadata_content(
-			/* translators: %s: search phrase */
-			\sprintf( \__( 'Search Results for &#8220;%s&#8221;', 'default' ), \get_search_query( true ) )
+			\sprintf(
+				/* translators: %s: search phrase */
+				\__( 'Search Results for &#8220;%s&#8221;', 'default' ),
+				\get_search_query( true ),
+			),
 		);
 	}
 

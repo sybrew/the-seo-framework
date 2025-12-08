@@ -253,7 +253,7 @@ final class ListEdit extends Admin\Lists\Table {
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeData[%s]', (int) $post_id ),
 			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			HTML::make_data_attributes( [ 'le' => $data ] )
+			HTML::make_data_attributes( [ 'le' => $data ] ),
 		);
 
 		$primary_terms = [];
@@ -576,7 +576,7 @@ final class ListEdit extends Admin\Lists\Table {
 			'<span class=hidden id=%s %s></span>',
 			\sprintf( 'tsfLeData[%s]', (int) $term_id ),
 			// phpcs:ignore WordPress.Security.EscapeOutput -- make_data_attributes escapes.
-			HTML::make_data_attributes( [ 'le' => $data ] )
+			HTML::make_data_attributes( [ 'le' => $data ] ),
 		);
 
 		$term_prefix = Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $generator_args['id'], $generator_args['tax'] ) )

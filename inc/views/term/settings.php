@@ -203,7 +203,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 					[
 						'state' => [
 							'defaultDescription' => \esc_html(
-								Meta\Description::get_generated_description( $generator_args )
+								Meta\Description::get_generated_description( $generator_args ),
 							),
 						],
 					],

@@ -44,11 +44,13 @@ if (
 		\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ),
 	);
 } else {
-	$_extensions_button = Admin\Utils::display_extension_suggestions() ? \sprintf(
-		'<a href="%s" class=button rel="noreferrer noopener" target=_blank>%s</a>',
-		'https://theseoframework.com/?p=3599',
-		\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' )
-	) : '';
+	$_extensions_button = Admin\Utils::display_extension_suggestions()
+		? \sprintf(
+			'<a href="%s" class=button rel="noreferrer noopener" target=_blank>%s</a>',
+			'https://theseoframework.com/?p=3599',
+			\esc_html_x( 'Extensions', 'Plugin extensions', 'autodescription' ),
+		)
+		: '';
 }
 
 $_save_button = \get_submit_button(
@@ -56,7 +58,7 @@ $_save_button = \get_submit_button(
 	[ 'primary' ],
 	'submit',
 	false,
-	[ 'id' => '' ] // we output this twice, don't set ID.
+	[ 'id' => '' ], // we output this twice, don't set ID.
 );
 
 $_ays_reset    = \esc_js( \__( 'Are you sure you want to reset all SEO settings to their defaults?', 'autodescription' ) );

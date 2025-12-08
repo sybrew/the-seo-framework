@@ -640,11 +640,11 @@ switch ( $instance ) :
 					if ( $is_static_front_page ) {
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class="description attention">%s</span></div>',
-							\esc_html__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' )
+							\esc_html__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' ),
 						);
 						printf(
 							'<div class=tsf-flex-setting-label-sub-item><span class=description>%s</span></div>',
-							\esc_html__( 'Note: A non-default selection here will overwrite the global homepage SEO settings.', 'autodescription' )
+							\esc_html__( 'Note: A non-default selection here will overwrite the global homepage SEO settings.', 'autodescription' ),
 						);
 					}
 					?>

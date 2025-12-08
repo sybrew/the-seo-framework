@@ -282,7 +282,7 @@ switch ( $instance ) :
 		HTML::header_title( \__( 'Timestamps Settings', 'autodescription' ) );
 		HTML::description_noesc( Markdown::convert(
 			/* translators: the backticks are Markdown! Preserve them as-is! */
-			\esc_html__( 'The `<lastmod>` tag shows the last updated time of a page. It helps search engines to quickly find content changes via the sitemap.', 'autodescription' )
+			\esc_html__( 'The `<lastmod>` tag shows the last updated time of a page. It helps search engines to quickly find content changes via the sitemap.', 'autodescription' ),
 		) );
 
 		HTML::wrap_fields(
