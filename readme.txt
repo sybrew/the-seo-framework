@@ -273,6 +273,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where the breadcrumb generator would add an "Archives" link pointing to the current post if a term ancestor is deleted. Now skips the broken ancestor.
 	* Resolved an issue where the more information about sitemaps-link wasn't outputted on the sitemap stylesheet.
 	* Resolved an issue where image type warnings that were meant for social sharing were also shown for other contexts, such as logos and structured data.
+	* Resolved an issue where the tooltip content would overflow its container in WordPress 6.9 (because they changed the ID of a common element AGAIN without considering other developers).
+	* Resolved an issue where tooltips were clipped on WordPress 6.9 due to needlessly added `overflow: hidden` on the meta box containers.
 * **Removed:**
 	* Compatibility with the Headway theme has been removed. The theme is no longer maintained since 2017 and the developer's website is down.
 
