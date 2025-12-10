@@ -310,10 +310,11 @@ class Setup {
 				'pint_verification'   => '', // Pinterest Verification Code.
 
 				// Schema.org.
-				'ld_json_enabled'        => 1, // LD+Json toggle for Schema.
-				'ld_json_searchbox'      => 1, // LD+Json Sitelinks Search Box.
-				'ld_json_breadcrumbs'    => 1, // LD+Json Breadcrumbs.
-				'knowledge_output'       => 1, // Default for outputting the Knowledge SEO.
+				'ld_json_enabled'           => 1, // LD+Json toggle for Schema.
+				'ld_json_searchbox'         => 1, // LD+Json Sitelinks Search Box.
+				'ld_json_breadcrumbs'       => 1, // LD+Json Breadcrumbs.
+				'breadcrumb_use_meta_title' => 0, // Whether to consider meta titles for breadcrumbs.
+				'knowledge_output'          => 1, // Default for outputting the Knowledge SEO.
 
 				// Knowledge general <https://developers.google.com/structured-data/customize/contact-points> - This is extremely extended and valuable. Expect a premium version.
 				'knowledge_type'   => 'organization', // Organization or Person, dropdown.

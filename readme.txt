@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4.0
-Stable tag: 5.1.3
+Stable tag: 5.1.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -242,6 +242,10 @@ The SEO Framework outputs hidden breadcrumbs for search engines to find via its 
 You can also output these breadcrumbs visually in your theme by [using a shortcode](https://kb.theseoframework.com/?p=212).
 
 == Changelog ==
+
+### 5.1.4
+
+This tiny update adds a new setting and shortcode attribute for breadcrumb title output, letting you choose between meta titles or page titles. We rushed this one out because our notification didn't work, and we do not want to send out notifications without giving [a feature in return](https://theseoframework.com/?p=4425).
 
 ### 5.1.3
 

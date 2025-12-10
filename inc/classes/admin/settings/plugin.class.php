@@ -764,4 +764,14 @@ final class Plugin {
 	public static function _schema_metabox_presence_tab() {
 		Template::output_view( 'settings/metaboxes/schema', 'presence' );
 	}
+
+	/**
+	 * Schema Meta Box Breadcrumbs Tab output.
+	 *
+	 * @since 5.1.4
+	 * @see self::schema_metabox() Callback for Schema.org Settings box.
+	 */
+	public static function _schema_metabox_breadcrumbs_tab() {
+		Template::output_view( 'settings/metaboxes/schema', 'breadcrumbs' );
+	}
 }

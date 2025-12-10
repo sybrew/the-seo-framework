@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework 5.1.3\n"
+"Project-Id-Version: The SEO Framework 5.1.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/the-seo-framework\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-08T20:32:27+00:00\n"
+"POT-Creation-Date: 2025-12-10T15:26:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: autodescription\n"
@@ -156,7 +156,7 @@ msgid "Use this image"
 msgstr ""
 
 #: inc/classes/admin/script/loader.class.php:628
-#: inc/views/settings/metaboxes/schema.php:220
+#: inc/views/settings/metaboxes/schema.php:228
 #: inc/views/settings/metaboxes/sitemaps.php:389
 msgid "Select Logo"
 msgstr ""
@@ -1209,7 +1209,7 @@ msgstr ""
 #: inc/views/settings/metaboxes/homepage.php:73
 #: inc/views/settings/metaboxes/post-type-archive.php:98
 #: inc/views/settings/metaboxes/robots.php:88
-#: inc/views/settings/metaboxes/schema.php:53
+#: inc/views/settings/metaboxes/schema.php:56
 #: inc/views/settings/metaboxes/sitemaps.php:48
 #: inc/views/settings/metaboxes/social.php:47
 #: inc/views/settings/metaboxes/title.php:165
@@ -2210,167 +2210,189 @@ msgstr ""
 msgid "This blocks many crawlers that analyze your site for ranking insights that might benefit competitors."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:42
+#: inc/views/settings/metaboxes/schema.php:45
 msgid "Schema.org Output Settings"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:45
+#: inc/views/settings/metaboxes/schema.php:48
 msgid "Another Schema.org plugin has been detected. These markup settings might conflict."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:47
+#: inc/views/settings/metaboxes/schema.php:50
 msgid "The Schema.org markup is a standard way of annotating structured data for search engines. This markup is represented within hidden scripts throughout the website."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:48
+#: inc/views/settings/metaboxes/schema.php:51
 msgid "When your web pages include structured data markup, search engines can use that data to index your content better, present it more prominently in search results, and use it in several different applications."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:49
+#: inc/views/settings/metaboxes/schema.php:52
 msgid "This is also known as the \"Knowledge Graph\" and \"Structured Data\", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:58
+#: inc/views/settings/metaboxes/schema.php:61
 msgid "Presence"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:76
+#: inc/views/settings/metaboxes/schema.php:66
+msgid "Breadcrumbs"
+msgstr ""
+
+#: inc/views/settings/metaboxes/schema.php:84
 msgid "Structured Data Output"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:77
+#: inc/views/settings/metaboxes/schema.php:85
 msgid "Output supplementary information about your site and every page, such as the title, description, URLs, and language, using a standard search engines can easily understand."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:82
+#: inc/views/settings/metaboxes/schema.php:90
 msgid "Output structured data?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:91
+#: inc/views/settings/metaboxes/schema.php:99
 msgid "Advanced Structured Data"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:94
-#: inc/views/settings/metaboxes/schema.php:109
-#: inc/views/settings/metaboxes/schema.php:124
-#: inc/views/settings/metaboxes/schema.php:181
+#: inc/views/settings/metaboxes/schema.php:102
+#: inc/views/settings/metaboxes/schema.php:117
+#: inc/views/settings/metaboxes/schema.php:132
+#: inc/views/settings/metaboxes/schema.php:189
 msgid "Learn how this data is used."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:101
+#: inc/views/settings/metaboxes/schema.php:109
 msgid "Add authorized presence?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:102
+#: inc/views/settings/metaboxes/schema.php:110
 msgid "This tells search engines about the website ownership, its logo, and its social pages."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:116
+#: inc/views/settings/metaboxes/schema.php:124
 msgid "Add breadcrumbs?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:117
+#: inc/views/settings/metaboxes/schema.php:125
 msgid "Breadcrumbs help search engines understand the site's hierarchy."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:131
+#: inc/views/settings/metaboxes/schema.php:139
 msgctxt "Sitelinks Search Box is a product name"
 msgid "Add Sitelinks Search Box?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:132
+#: inc/views/settings/metaboxes/schema.php:140
 msgid "This tells search engines how to use the site's built-in search engine."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:143
+#: inc/views/settings/metaboxes/schema.php:151
 msgid "About this website"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:146
+#: inc/views/settings/metaboxes/schema.php:154
 msgctxt "...Organization or Person."
 msgid "This website represents:"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:152
+#: inc/views/settings/metaboxes/schema.php:160
 msgid "An Organization"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:153
+#: inc/views/settings/metaboxes/schema.php:161
 msgid "A Person"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:170
+#: inc/views/settings/metaboxes/schema.php:178
 msgid "The organization or personal name"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:179
+#: inc/views/settings/metaboxes/schema.php:187
 msgid "Organization logo"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:188
+#: inc/views/settings/metaboxes/schema.php:196
 msgid "Add logo?"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:198
+#: inc/views/settings/metaboxes/schema.php:206
 #: inc/views/settings/metaboxes/sitemaps.php:366
 msgid "Logo URL"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:230
+#: inc/views/settings/metaboxes/schema.php:238
 msgctxt "No spaces. E.g. https://facebook.com/RelatedProfile"
 msgid "RelatedProfile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:238
+#: inc/views/settings/metaboxes/schema.php:246
 msgid "Facebook Page"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:245
+#: inc/views/settings/metaboxes/schema.php:253
 msgid "X Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:252
+#: inc/views/settings/metaboxes/schema.php:260
 msgid "Instagram Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:259
+#: inc/views/settings/metaboxes/schema.php:267
 msgid "Youtube Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:266
+#: inc/views/settings/metaboxes/schema.php:274
 msgid "LinkedIn Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:273
+#: inc/views/settings/metaboxes/schema.php:281
 msgid "Pinterest Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:280
+#: inc/views/settings/metaboxes/schema.php:288
 msgid "SoundCloud Profile"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:287
+#: inc/views/settings/metaboxes/schema.php:295
 msgid "Tumblr Blog"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:296
+#: inc/views/settings/metaboxes/schema.php:304
 msgid "Connected Social Pages"
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:297
+#: inc/views/settings/metaboxes/schema.php:305
 msgid "Add links that lead directly to the connected social pages of this website."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:298
+#: inc/views/settings/metaboxes/schema.php:306
 msgid "Leave the fields empty if the social pages are not publicly accessible."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:299
+#: inc/views/settings/metaboxes/schema.php:307
 msgid "These settings do not affect sharing behavior with the social networks."
 msgstr ""
 
-#: inc/views/settings/metaboxes/schema.php:309
+#: inc/views/settings/metaboxes/schema.php:317
 msgid "View your profile."
+msgstr ""
+
+#: inc/views/settings/metaboxes/schema.php:332
+msgid "Breadcrumbs Output Settings"
+msgstr ""
+
+#: inc/views/settings/metaboxes/schema.php:337
+msgid "Use meta titles for breadcrumbs?"
+msgstr ""
+
+#: inc/views/settings/metaboxes/schema.php:338
+msgid "Meta titles are the custom SEO titles inputted via the SEO settings. If disabled, page titles from the editor will be used."
+msgstr ""
+
+#. translators: %s = Documentation URL in Markdown
+#: inc/views/settings/metaboxes/schema.php:347
+#, php-format
+msgid "You can also use a shortcode to output breadcrumbs. [Learn more](%s)."
 msgstr ""
 
 #: inc/views/settings/metaboxes/sitemaps.php:58

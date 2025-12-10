@@ -216,7 +216,7 @@ function _upgrade( $previous_version ) {
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5100', '5130',
+		'5001', '5050', '5100', '5130', '5140',
 	];
 	// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
@@ -1001,4 +1001,15 @@ function _do_upgrade_5130() {
 			'display_term_edit_options' => 1,
 			'display_user_edit_options' => 1,
 		] );
+}
+
+/**
+ * Registers new option 'breadcrumb_use_meta_title'. Enabled for upgraded sites, disabled for new sites.
+ *
+ * @since 5.1.4
+ */
+function _do_upgrade_5140() {
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5140' )
+		Data\Plugin::update_option( 'breadcrumb_use_meta_title', 1 );
 }

@@ -98,11 +98,11 @@ function _prepare( $previous_version, $current_version ) {
  */
 function _suggest_temp_sale( $previous_version, $current_version ) {
 
-	if ( $previous_version < '5110' && $current_version < '5130' ) {
+	if ( $previous_version < '5140' && $current_version < '5150' ) {
 		Admin\Notice\Persistent::register_notice(
 			Markdown::convert(
 				\sprintf(
-					'<p>The SEO Framework v5.1.3 has finally shipped. Thank you for updating!</p><p>Since we are far behind schedule ([because of a new product launch](%s)), we’re extending our BFCM sale by 2 weeks: [50%% lifetime discount on our extensions](%s).</p><p>This notification will vanish December 16th or when you dismiss it.</p>',
+					'<p>You\'re now on The SEO Framework v5.1.4 &mdash; thanks for sticking with us!</p><p>We spent the year [rethinking plugin distribution](%s). Because we\'re late, our BFCM sale runs 2 extra weeks: [50%% off extensions for life](%s).</p><p>This notice disappears December 16th or when dismissed.</p>',
 					'https://deploytroy.org/blog/official-release/',
 					'https://theseoframework.com/?p=3527',
 				),

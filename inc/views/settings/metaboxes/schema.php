@@ -13,7 +13,10 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-use The_SEO_Framework\Helper\Compatibility;
+use The_SEO_Framework\Helper\{
+	Compatibility,
+	Format\Markdown,
+};
 
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -49,15 +52,20 @@ switch ( $instance ) :
 		HTML::description( \__( 'This is also known as the "Knowledge Graph" and "Structured Data", which is under heavy active development by several search engines. Therefore, the usage of the outputted markup is not guaranteed.', 'autodescription' ) );
 
 		$tabs = [
-			'general'  => [
+			'general'     => [
 				'name'     => \__( 'General', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_schema_metabox_general_tab' ],
 				'dashicon' => 'admin-generic',
 			],
-			'presence' => [
+			'presence'    => [
 				'name'     => \__( 'Presence', 'autodescription' ),
 				'callback' => [ Admin\Settings\Plugin::class, '_schema_metabox_presence_tab' ],
 				'dashicon' => 'networking',
+			],
+			'breadcrumbs' => [
+				'name'     => \__( 'Breadcrumbs', 'autodescription' ),
+				'callback' => [ Admin\Settings\Plugin::class, '_schema_metabox_breadcrumbs_tab' ],
+				'dashicon' => 'ellipsis',
 			],
 		];
 
@@ -318,4 +326,29 @@ switch ( $instance ) :
 			</p>
 			<?php
 		}
+		break;
+
+	case 'breadcrumbs':
+		HTML::header_title( \__( 'Breadcrumbs Output Settings', 'autodescription' ) );
+
+		HTML::wrap_fields(
+			Input::make_checkbox( [
+				'id'          => 'breadcrumb_use_meta_title',
+				'label'       => \esc_html__( 'Use meta titles for breadcrumbs?', 'autodescription' ),
+				'description' => \esc_html__( 'Meta titles are the custom SEO titles inputted via the SEO settings. If disabled, page titles from the editor will be used.', 'autodescription' ),
+			] ),
+			true,
+		);
+
+		HTML::description_noesc(
+			Markdown::convert(
+				\sprintf(
+					/* translators: %s = Documentation URL in Markdown */
+					\esc_html__( 'You can also use a shortcode to output breadcrumbs. [Learn more](%s).', 'autodescription' ),
+					'https://kb.theseoframework.com/?p=212',
+				),
+				[ 'a' ],
+				[ 'a_internal' => false ],
+			),
+		);
 endswitch;

@@ -95,6 +95,7 @@ namespace {
 	 * Returns the breadcrumbs for front-end display.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.4 Added the `title` attribute.
 	 * @link <https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/examples/breadcrumb/>
 	 *
 	 * @param array $atts The shortcode attributes.
@@ -107,6 +108,7 @@ namespace {
 				'sep'   => '\203A',
 				'home'  => __( 'Home', 'default' ), // defined in wp_page_menu()
 				'class' => 'tsf-breadcrumb',
+				'title' => null,
 			],
 			$atts,
 			'tsf_breadcrumb',
@@ -118,7 +120,11 @@ namespace {
 		$class = $matches[0] ?? 'tsf-breadcrumb';
 		$sep   = esc_html( $atts['sep'] );
 
-		$crumbs = \The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list();
+		$options = [
+			'use_meta_title' => isset( $atts['title'] ) ? 'meta' === $atts['title'] : null,
+		];
+
+		$crumbs = \The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list( null, $options );
 		$count  = count( $crumbs );
 		$items  = [];
 
