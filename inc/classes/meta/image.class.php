@@ -689,7 +689,7 @@ class Image {
 	 */
 	public static function merge_extra_image_details( $details, $size = 'full' ) {
 
-		if ( $details['id'] ) {
+		if ( ! empty( $details['id'] ) ) {
 			// This returns an array with 'width' and 'height' indexes.
 			$details += Image\Utils::get_image_dimensions( $details['id'], $size );
 			// TODO PHP 8.1+ String unpacking in array, so we can directly add the above to it:
