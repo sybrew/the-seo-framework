@@ -981,11 +981,13 @@ function _do_upgrade_5130() {
 }
 
 /**
- * Clarifies author_tags behavior separation.
+ * Separates author tags efficacy from UI visibility.
+ *
+ * The author_tags option now strictly controls tag output and fallback behavior,
+ * not UI visibility. Profile settings are always visible regardless of this toggle.
  *
  * @since 5.1.5
  */
 function _do_upgrade_5150() {
 	// No database changes needed for this version.
-	// This upgrade clarifies that author_tags controls efficacy, not UI visibility.
 }

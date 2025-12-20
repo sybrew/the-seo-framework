@@ -45,7 +45,7 @@ class Facebook {
 
 		if ( 'article' !== Open_Graph::get_type() ) return;
 
-		// Check if author tags are enabled
+		// Use global fallback when author tags are disabled (ignores per-user settings)
 		if ( ! Data\Plugin::get_option( 'author_tags' ) ) {
 			return Data\Plugin::get_option( 'facebook_author' );
 		}

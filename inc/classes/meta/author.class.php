@@ -46,7 +46,7 @@ class Author {
 		// Only output on single posts where an author is available
 		if ( ! Query::is_single() ) return;
 
-		// Check if author tags are enabled
+		// Use global fallback when author tags are disabled (ignores per-user settings)
 		if ( ! Data\Plugin::get_option( 'author_tags' ) ) {
 			return Data\Plugin::get_option( 'post_author' );
 		}
