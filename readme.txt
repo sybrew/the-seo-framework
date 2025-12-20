@@ -271,6 +271,19 @@ TODO don't escape '\\_', just write '\_'.
 TODO add `@access private` to compat funcs (or files...)
 TODO in `The_SEO_Framework\Data\User::get_userdata()`, we may want implement this in the inc\classes\meta\schema and author classes.
 
+### 5.1.5
+
+**For everyone:**
+
+* **Fixed:** Author profile settings are now always visible in user profiles, independent of authorial tags toggle.
+* **Enhanced:** Authorial tags toggle now only controls tag output efficacy and whether per-user settings override global settings.
+* **Clarified:** When authorial tags are disabled, all author meta tags use global fallback settings instead of per-user customizations.
+
+**For developers:**
+
+* **Changed:** `author_tags` option now strictly controls tag generation behavior, not UI visibility.
+* **Enhanced:** Author, Facebook, and Twitter meta generators consistently respect `author_tags` toggle for fallback logic.
+
 ### 5.1.3
 
 **For everyone:**

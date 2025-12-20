@@ -214,7 +214,7 @@ function _upgrade( $previous_version ) {
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5100', '5130',
+		'5001', '5050', '5100', '5130', '5150',
 	];
 	// phpcs:enable, WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
@@ -978,4 +978,14 @@ function _do_upgrade_5130() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5130' ) {
 		Data\Plugin::update_option( 'author_tags', 1 );
 	}
+}
+
+/**
+ * Clarifies author_tags behavior separation.
+ *
+ * @since 5.1.5
+ */
+function _do_upgrade_5150() {
+	// No database changes needed for this version.
+	// This upgrade clarifies that author_tags controls efficacy, not UI visibility.
 }

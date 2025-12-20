@@ -46,6 +46,11 @@ class Author {
 		// Only output on single posts where an author is available
 		if ( ! Query::is_single() ) return;
 
+		// Check if author tags are enabled
+		if ( ! Data\Plugin::get_option( 'author_tags' ) ) {
+			return Data\Plugin::get_option( 'post_author' );
+		}
+
 		return Title::get_user_title( Query::get_post_author_id() )
 			?: Data\Plugin::get_option( 'post_author' );
 	}
