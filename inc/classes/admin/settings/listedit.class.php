@@ -552,7 +552,7 @@ final class ListEdit extends Admin\Lists\Table {
 
 		$memo['tax_object']               ??= \get_taxonomy( $taxonomy );
 		$memo['permastruct']              ??= Meta\URI\Utils::get_url_permastruct( $generator_args );
-		$memo['is_taxonomy_hierarchical'] ??= $memo['tax_object']->hierarchical && $memo['tax_object']->rewrite['hierarchical'];
+		$memo['is_taxonomy_hierarchical'] ??= $memo['tax_object']?->hierarchical && is_array( $memo['tax_object']->rewrite ) && $memo['tax_object']->rewrite['hierarchical'];
 
 		$permastruct = $memo['permastruct'];
 
