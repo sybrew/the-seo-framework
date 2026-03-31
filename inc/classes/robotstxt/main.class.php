@@ -59,6 +59,7 @@ class Main {
 	 * @since 5.0.0
 	 * @since 5.1.0 1. Refactored to output the directives via a priority system.
 	 *              2. Now supports blocking AI language model trainers and SEO analysis tools.
+	 * @since 5.1.5 Fixed WordPress Core sitemap URL extraction for robots.txt Sitemap Hinting.
 	 * @link <https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt>
 	 *
 	 * @return string Robots.txt output.
@@ -109,8 +110,9 @@ class Main {
 				$wp_sitemaps_server = \wp_sitemaps_get_server();
 
 				if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
-					// Already escaped.
-					$sitemaps[] = trim( "\n", \wp_sitemaps_get_server()->add_robots( '', Data\Blog::is_public() ) );
+					// add_robots() returns "Sitemap: <url>" formatted text; extract the URLs.
+					if ( preg_match_all( '/Sitemap:\s*(\S+)/', $wp_sitemaps_server->add_robots( '', Data\Blog::is_public() ), $matches ) )
+						array_push( $sitemaps, ...$matches[1] );
 				}
 			}
 		}

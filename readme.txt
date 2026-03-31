@@ -144,7 +144,7 @@ The SEO Framework works on many things without notifying you, because the best s
 
 1. Install **The SEO Framework** either via your WordPress dashboard using plugin search or by uploading the files to your server.
 1. Either network-activate this plugin or activate it on a single site.
-1. That's it! The plugin now improves your website with SEO. It also protects your website against SEO attacks.
+1. That's it! The plugin now handles your website's SEO. It also protects your website against SEO attacks.
 
 ### This plugin auto-configures its global settings
 
@@ -262,6 +262,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Added `touchcancel` event handling for multi-finger gesture support -- it won't invoke multiple tooltips anymore.
 		* Tooltips now stay when invoking a scroll or pan on touch devices.
 		* SEO Bar focus styles now use `:focus-visible` instead of `:focus`, preventing focus rings on touch taps, but still showing them for keyboard navigation.
+* **Fixed:**
+	* **Robots.txt:**
+		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
 
 ## For developers
 
