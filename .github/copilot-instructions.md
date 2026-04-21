@@ -4,12 +4,23 @@ This repository is responsible for "The SEO Framework" plugin for WordPress. Thi
 
 Follow these rules:
 
+## File Management
+
+- When creating new files or changing a file's purpose, update `.github/codemap.txt` to reflect the change. Do not add `.local/` contents to the codemap, but you may reference them as needed.
+- Refer to `.github/codemap.txt` first to understand the codebase structure and locate files.
+
 ## Repo Specific Guidelines
 
 - Use PHP 7.4+
 - In autodescription.php, increment the "Version: "-header by "-dev-{number}" when making a PR. If there's no -dev-{number} in the "Version: "-header, add it as -dev-1
 - Never increment the version number itself; that is done during release
 - We use var_dump() in comments to indicate a blocking issue
+- When copying content from code (docblocks, comments, commit notes) into readme.txt or other user-facing docs, preserve the essence verbatim. Only minor prose tweaks for readability are allowed. Do not add details that are not present in the source.
+- In the readme, when mentioning a method or property in public classes, use the fully qualified name, and then the API function in parentheses, e.g., `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`). This is to ensure that users can easily find the method/property in the codebase, and also understand how to access it via the public API.
+
+## Prompts
+
+For every prompt: Internally plan step-by-step, then execute the changes, verify against all repo and WordPress standards, and finally report only the changes made. Do not ask for permission to execute or confirmation unless the request is genuinely ambiguous or high-risk.
 
 ## General Guidelines
 
@@ -22,6 +33,7 @@ Follow these rules:
 - Interpolate variables in strings when possible
 - Do not use CLI to make changes; use built-in tools instead
 - When fixing bugs, fix the cause, not the symptom
+- If you're corrected thrice or more for misunderstanding a topic, you must research: perform a web search, ask questions, and request additional context until you understand the issue and work appropriately.
 
 ## General Coding Standards
 
@@ -50,6 +62,7 @@ Follow these rules:
 - Coalesce two control structures when the first contains only the second, e.g. `} else foreach {`
 
 ## Corrupted Files
+
 - Do not try to fix file encoding issues, just notify about them after your changes
 - If you believe the file is corrupted, stop immediately and wait for a new instruction
 - If you find a whitespace issue, it's probably because you forgot to add a newline at the end
@@ -85,6 +98,7 @@ Follow these rules:
 - You may use logical operators like and, or, and xor, but they are forbidden in conditional expressions
 
 ## SQL Queries
+
 - Do not create aliases unless necessary
 - When a clause contains an alias, put each item in that clause on its own line
 - For SQL queries over 80 chars:
@@ -122,9 +136,10 @@ Follow these rules:
 
 ## CSS
 
+- When debugging CSS spacing or layout issues, always read the full HTML template structure first to understand nesting, flex/grid contexts, and how gap/margin/padding compound across parent-child relationships
 - Use lowercase hex colors
 - Remove zero before decimal points
-- Don't close last property with a semicolon
+- Close last property with a semicolon
 
 ## Avoid
 

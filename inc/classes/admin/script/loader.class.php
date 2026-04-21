@@ -267,20 +267,20 @@ class Loader {
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
 				'inline'   => [
-					'.tsf-tooltip-text-wrap'   => [
+					'.tsf-tooltip-text-wrap'    => [
 						'background-color:{{$bg_accent}}',
 						'color:{{$rel_bg_accent}}',
 					],
-					'.tsf-tooltip-text-wrap *' => [
+					'.tsf-tooltip-text-wrap *'  => [
 						'color:{{$rel_bg_accent}}',
 					],
-					'.tsf-tooltip-arrow:after' => [
+					'.tsf-tooltip-arrow::after' => [
 						'border-top-color:{{$bg_accent}}',
 					],
-					'.tsf-tooltip-down .tsf-tooltip-arrow:after' => [
+					'.tsf-tooltip-down .tsf-tooltip-arrow::after' => [
 						'border-bottom-color:{{$bg_accent}}',
 					],
-					'.tsf-tooltip-text'        => [
+					'.tsf-tooltip-text'         => [
 						\is_rtl() ? 'direction:rtl' : '',
 					],
 				],

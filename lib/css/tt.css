@@ -111,7 +111,7 @@ a.tsf-tooltip-item {
 	top: -8px;
 }
 
-.tsf-tooltip-arrow:before {
+.tsf-tooltip-arrow::before {
 	content: "";
 	border-left: 9px solid transparent;
 	border-right: 9px solid transparent;
@@ -121,7 +121,7 @@ a.tsf-tooltip-item {
 	left: 0;
 }
 
-.tsf-tooltip-arrow:after {
+.tsf-tooltip-arrow::after {
 	content: "";
 	border-left: 8px solid transparent;
 	border-right: 8px solid transparent;
@@ -131,14 +131,14 @@ a.tsf-tooltip-item {
 	left: 1px;
 }
 
-.tsf-tooltip-down .tsf-tooltip-arrow:before {
+.tsf-tooltip-down .tsf-tooltip-arrow::before {
 	bottom: auto;
 	top: 0;
 	border-top: 0;
 	border-bottom: 9px solid rgba( 0, 0, 0, .25 );
 }
 
-.tsf-tooltip-down .tsf-tooltip-arrow:after {
+.tsf-tooltip-down .tsf-tooltip-arrow::after {
 	bottom: auto;
 	top: 1px;
 	border-top: 0;

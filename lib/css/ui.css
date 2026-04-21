@@ -7,7 +7,7 @@
 	clear: both;
 }
 
-.tsf-notice.tsf-show-icon p:before {
+.tsf-notice.tsf-show-icon p::before {
 	content: '';
 	margin-inline-end: 12px;
 	background: 0 0;
@@ -22,23 +22,23 @@
 	-webkit-font-smoothing: antialiased;
 }
 
-.error.tsf-notice.tsf-show-icon p:before {
+.error.tsf-notice.tsf-show-icon p::before {
 	color: #d63638;
 	content: "\f534";
 }
 
-.notice-warning.tsf-notice.tsf-show-icon p:before {
+.notice-warning.tsf-notice.tsf-show-icon p::before {
 	color: #dba617;
 	content: "\f227";
 }
 
-.notice-info.tsf-notice.tsf-show-icon p:before {
+.notice-info.tsf-notice.tsf-show-icon p::before {
 	color: #67a8e4;
 	font-size: 16px;
 	content: "\f223";
 }
 
-.updated.tsf-notice.tsf-show-icon p:before {
+.updated.tsf-notice.tsf-show-icon p::before {
 	color: #00a32a;
 	font-size: 16px;
 	content: "\f147";
@@ -69,7 +69,7 @@
 		0 0 2px 1px rgba( 30, 140, 190, .8);
 }
 
-.tsf-dismiss:before {
+.tsf-dismiss::before {
 	background: 0 0;
 	color: currentColor;
 	content: "\f153";

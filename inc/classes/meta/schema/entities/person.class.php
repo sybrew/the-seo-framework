@@ -37,6 +37,7 @@ use The_SEO_Framework\{
  *
  * @since 5.0.0
  * @access protected
+ *         Access via tsf()->schema()->entities['Person'] instead.
  */
 final class Person extends Reference {
 

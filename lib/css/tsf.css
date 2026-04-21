@@ -252,7 +252,7 @@ input.tsf-disabled {
 	margin-inline-start: .5ch;
 }
 
-.tsf-ajax:before {
+.tsf-ajax::before {
 	display: inline-block;
 	line-height: 1;
 	font-family: dashicons;
@@ -263,23 +263,23 @@ input.tsf-disabled {
 	content: "";
 }
 
-.tsf-ajax.tsf-loading:before {
+.tsf-ajax.tsf-loading::before {
 	content: "\f463";
 	color: #2271b1;
 	animation: tsf-spin 1.5s linear infinite;
 }
 
-.tsf-ajax.tsf-error:before {
+.tsf-ajax.tsf-error::before {
 	content: "\f158";
 	color: #d63638;
 }
 
-.tsf-ajax.tsf-success:before {
+.tsf-ajax.tsf-success::before {
 	content: "\f147";
 	color: #00a32a;
 }
 
-.tsf-ajax.tsf-unknown:after {
+.tsf-ajax.tsf-unknown::after {
 	content: "\f223";
 	color: #057c99;
 }

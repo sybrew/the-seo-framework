@@ -100,7 +100,6 @@ final class Term {
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param string $taxonomy Taxonomy slug.
-	 * @return void
 	 */
 	private static function update_via_quick_edit( $term_id, $taxonomy ) {
 
@@ -139,7 +138,6 @@ final class Term {
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param string $taxonomy Taxonomy slug.
-	 * @return void
 	 */
 	private static function update_via_term_edit( $term_id, $taxonomy ) {
 

@@ -40,6 +40,7 @@ use The_SEO_Framework\{
  *
  * @since 5.0.0
  * @access protected
+ *         Access via tsf()->schema()->entities['Author'] instead.
  */
 final class Author extends Reference {
 

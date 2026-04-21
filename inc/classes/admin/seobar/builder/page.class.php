@@ -103,14 +103,17 @@ final class Page extends Main {
 	 * @abstract
 	 */
 	protected function prime_query_cache() {
+
+		$post = \get_post( static::$query['id'] );
+
 		$this->query_cache = [
-			'post'   => \get_post( static::$query['id'] ),
+			'post'   => $post,
 			'meta'   => Data\Plugin\Post::get_meta( static::$query['id'] ), // Use TSF cache--TSF initializes it anyway.
 			'states' => [
 				'ishome'       => Query::is_real_front_page_by_id( static::$query['id'] ),
 				'locale'       => \get_locale(),
-				'isprotected'  => Data\Post::is_protected( static::$query['id'] ),
-				'isdraft'      => Data\Post::is_draft( static::$query['id'] ),
+				'isprotected'  => Data\Post::is_protected( $post ),
+				'isdraft'      => Data\Post::is_draft( $post ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,

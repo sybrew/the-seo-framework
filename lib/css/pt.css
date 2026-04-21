@@ -29,7 +29,7 @@
 		min-width: 18px;
 	}
 
-	.tsf-primary-term-selector input:checked:before {
+	.tsf-primary-term-selector input:checked::before {
 		width: 8px;
 		height: 8px;
 		margin: 4px;

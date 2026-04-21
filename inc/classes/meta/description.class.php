@@ -154,7 +154,7 @@ class Description {
 			$type,
 		);
 
-		// This page has a generated description that's far too short: https://theseoframework.com/em-changelog/1-0-0-amplified-seo/.
+		// This page has a generated description that's far too short: https://theseoframework.com/release-notes/extension-manager/1-0-0/.
 		// A direct directory-'site:' query will accept the description outputted--anything else will ignore it...
 		// We should not work around that, because it won't direct in the slightest what to display.
 		$desc = Strings::clamp_sentence(

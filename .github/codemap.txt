@@ -1,0 +1,437 @@
+The SEO Framework Codebase Map
+===============================
+
+WordPress SEO plugin focused on performance, best SEO practices, and user experience.
+Automates meta tags, sitemaps, Schema.org, robots directives, and social media output.
+Requires PHP 7.4+, WordPress 6.0+. Text domain: autodescription.
+
+Files named index.php are direct-access guards (empty PHP files).
+Files ending in .min.js or .min.css are minified mirrors of their source counterparts.
+
+
+Root
+----
+.editorconfig                   Editor config: tabs (4-wide), LF endings, UTF-8, trim trailing whitespace
+.gitattributes                  Line-ending normalization, binary markers, export-ignore rules for dev files
+.gitignore                      Ignores archives, logs, OS artifacts, vendor/, .venv/
+autodescription.php             Main plugin file: header metadata, version/path constants, bootstraps the plugin
+composer.json                   Composer manifest: PHP/WP dependencies and dev tooling (PHPCS, PHP Compatibility)
+cspell.json                     CSpell dictionary with project-specific allowed words
+index.php                       Empty direct-access guard
+license.txt                     GNU General Public License v3
+phpcs.xml                       PHP_CodeSniffer ruleset configuring the custom TSF coding standard
+README.md                       GitHub readme with badges (version, downloads, reviews) and ZIP download link
+readme.txt                      WordPress.org plugin readme (description, FAQ, installation, changelog)
+security.txt                    Security disclosure info pointing to GitHub Security Advisories
+wpml-config.xml                 WPML/Polylang config declaring translatable custom fields and settings
+
+.github/
+	codemap.txt                   This file
+	CONTRIBUTING.md               Contribution guidelines
+	copilot-instructions.md       Repository coding standards and conventions for AI assistants
+	FUNDING.yml                   GitHub Sponsors funding configuration
+	ISSUE_TEMPLATE/               Issue templates for bug reports and feature requests
+
+
+Bootstrap (bootstrap/)
+----------------------
+Initialization sequence: autodescription.php loads load.php, which registers the autoloader
+and hooks plugin loading. Context-specific init files wire hooks for admin, front, cron, etc.
+
+define.php                      Defines plugin-wide constants (capabilities, debug flag, settings slug, paths, option names)
+load.php                        Registers the PSR-4 autoloader, hooks plugin loading at plugins_loaded, wires activation/deactivation
+load-debug.php                  Hooks debug query output and rendering to footers (loaded only when THE_SEO_FRAMEWORK_DEBUG is true)
+init-admin.php                  Admin hooks: sitemap refresh, post/term meta saving, meta boxes, list columns, settings pages, scripts
+init-admin-ajax.php             Registers wp_ajax_* handlers (notice dismiss, image cropping, counter updates, Gutenberg data, slug fetching)
+init-compat.php                 Loads theme/plugin compatibility files by matching active themes and plugins against a known list
+init-cron.php                   Hooks sitemap pre-rendering to the cron event when output and cron options are enabled
+init-front.php                  Front-end setup: removes default WP head tags, registers sitemap routing, redirects, meta tags, robots headers
+init-global.php                 Shared hooks: text domain, XMLRPC noindex headers, primary-term filter, robots.txt override, breadcrumb shortcode
+plugin-activation.php           Activation: checks for conflicting plugins, enables options autoloading
+plugin-deactivation.php         Deactivation: disables options autoloading
+upgrade.php                     Incremental database migrations and version upgrades with notices
+
+
+Classes (inc/classes/)
+----------------------
+Core class hierarchy: Load (singleton facade via tsf()) extends Pool (composite sub-object proxy)
+extends Legacy_API (backward-compatible method relay). All classes use The_SEO_Framework namespace.
+
+load.class.php                  Singleton facade accessed via tsf(); main public API entry point
+pool.class.php                  Object pool holding proxied composite sub-objects (admin(), data(), etc.) with deprecation support
+legacy-api.class.php            Backward-compatible API class relaying legacy method calls to new internal data APIs
+
+
+Admin (inc/classes/admin/)
+--------------------------
+Admin UI: settings pages, meta boxes, list tables, scripts, SEO bar, and notices.
+
+menu.class.php                  Registers the TSF admin menu page under the WordPress dashboard
+notice.class.php                Renders dismissible admin notices with configurable type, icon, and escaping
+plugintable.class.php           Adds action and meta links (Settings, API, etc.) to the plugin row on the Plugins screen
+utils.class.php                 Admin utility methods: safe redirects with query-arg-based alerts
+
+lists/
+	poststates.class.php          Appends No Search / No Archive post-state labels to the post list table
+	table.class.php               Abstract base class for post/term list table column and action setup
+
+notice/
+	persistent.class.php          Manages persistent dismissible notices that respawn until dismissed or expired
+
+script/
+	ajax.class.php                AJAX callbacks: dismiss notice, update counters, crop images, save list-edit fields
+	loader.class.php              Prepares and enqueues admin JS/CSS scripts with localized states and params
+	registry.class.php            Registers, outputs, and deduplicates admin script/style assets via WP_Dependencies
+	utils.class.php               Entity-decoding utilities for values passed between PHP, JS, and HTML contexts
+
+seobar/
+	builder.class.php             Interprets SEO Bar test results (good/okay/bad/unknown) into rendered HTML bar items
+	listtable.class.php           Adds the SEO Bar column to post/term list tables and renders output per row
+	builder/
+		main.class.php            Abstract base: test-runner loop and shared caching for SEO Bar builders
+		page.class.php            SEO Bar assessments (title, description, indexing, etc.) for posts/pages
+		term.class.php            SEO Bar assessments (title, description, indexing, etc.) for taxonomy terms
+
+settings/
+	listedit.class.php            Quick-edit and bulk-edit SEO fields in post/term list tables
+	plugin.class.php              Builds the main SEO Settings admin page: metaboxes, columns, save handling
+	post.class.php                Registers and renders the per-post SEO meta box on the post-edit screen
+	term.class.php                Outputs SEO settings fields on the term-edit screen for supported taxonomies
+	user.class.php                Outputs SEO-related profile fields (author info) on the user-edit screen
+	layout/
+		form.class.php            Generates HTML form elements (selects, qubit tri-state fields) for setting controls
+		html.class.php            Reusable HTML layout primitives (headers, descriptions, attention marks) for setting pages
+		input.class.php           Constructs input field markup (checkboxes, text fields, IDs/names) for edit screens
+
+
+Data (inc/classes/data/)
+------------------------
+Data access layer: reading, saving, filtering, and sanitizing plugin options, post/term/user meta.
+
+blog.class.php                  Blog/site data helpers (public blog name, site title)
+plugin.class.php                Core data interface for TSF plugin options/settings and site cache storage
+post.class.php                  Post data helpers (excerpts, content, timestamps)
+term.class.php                  Term data helpers (latest term ID by taxonomy)
+user.class.php                  User data helpers (capability checks, user data retrieval)
+
+admin/
+	plugin.class.php              Admin-side plugin settings registration, saving, and sanitization (register_setting)
+	post.class.php                Admin-side post meta saving/sanitization with nonce handling (post/quick/bulk edit)
+	term.class.php                Admin-side term meta saving/sanitization with nonce handling (term/quick edit)
+	user.class.php                Admin-side user profile meta saving with nonce handling
+
+filter/
+	escape.class.php              Data escaping methods (option name attributes, JSON encoding for scripts)
+	plugin.class.php              Plugin option sanitization/filter callbacks applied when settings are updated
+	post.class.php                Post meta sanitization filters (title, description, canonical URI, robots fields)
+	sanitize.class.php            General-purpose data sanitization (booleans, URLs, metadata content)
+	term.class.php                Term meta sanitization filters (title, description, canonical, robots fields)
+	user.class.php                User meta sanitization filters (social profiles, counter type, author slug)
+
+plugin/
+	deprecated.class.php          Retrieval and mapping of deprecated plugin options for backward compatibility
+	helper.class.php              Small helper utilities for plugin data (e.g., robots option index key lookups)
+	post.class.php                TSF-specific post meta data interface (get/save/delete meta, primary terms)
+	pta.class.php                 Post Type Archive meta data interface for TSF settings per archive
+	setup.class.php               Default plugin options/settings definitions and reset/initialization logic
+	term.class.php                TSF-specific term meta data interface (get/save/delete term meta)
+	user.class.php                TSF-specific user meta data interface (author meta, user options)
+
+
+Front-end (inc/classes/front/)
+------------------------------
+Front-facing logic: meta tag output, feeds, redirects, and query modifications.
+
+feed.class.php                  Modifies RSS feed content (excerpts, nofollow links), sets X-Robots-Tag noindex on feeds
+oembed.class.php                Alters oEmbed response data to use SEO-optimized titles and images
+query.class.php                 Modifies front-end WP_Query to exclude noindex/noarchive posts from search and archive results
+redirect.class.php              Handles front-end 301 redirects based on per-post/term custom redirect URL meta
+title.class.php                 Overwrites WordPress document title filters with the plugin's generated SEO title
+
+meta/
+	head.class.php                Orchestrates printing the SEO meta tag block (indicator wrap and tags) in wp_head
+	tags.class.php                Interprets meta tag render data from PHP arrays into HTML output (tag builder/renderer)
+	generator/
+		advanced-query-protection.class.php   Generates the tsf:aqp meta tag for advanced query protection detection
+		description.class.php                 Generates the <meta name="description"> tag
+		facebook.class.php                    Generates Facebook article:author and article:publisher meta tags
+		open-graph.class.php                  Generates Open Graph meta tags (type, locale, title, description, URL, image, times)
+		robots.class.php                      Generates the <meta name="robots"> tag with computed directives
+		schema.class.php                      Generates the JSON-LD Schema.org structured data script block
+		theme-color.class.php                 Generates the <meta name="theme-color"> tag from plugin settings
+		twitter.class.php                     Generates Twitter Card meta tags (card type, site, creator, title, description, image)
+		uri.class.php                         Generates canonical URL, pagination rel-links (prev/next), and shortlink tags
+		webmasters.class.php                  Generates site verification meta tags for Google, Bing, Yandex, Baidu, Pinterest
+
+
+Helper (inc/classes/helper/)
+----------------------------
+Shared utility classes used across admin and front contexts.
+
+compatibility.class.php         Detects conflicting SEO plugins and displays admin warnings
+guidelines.class.php            Locale-aware character/pixel length guidelines for title and description inputs
+headers.class.php               HTTP response header utilities: output buffer cleanup and X-Robots-Tag noindex
+migrate.class.php               Detects and transforms unprocessed syntax from other SEO plugins (Yoast, Rank Math, SEOPress)
+post-type.class.php             Determines whether a post type is disabled, supported, or forced-supported for SEO
+query.class.php                 Comprehensive WordPress query interpretation helpers (post type, ID resolution, archive/singular checks)
+redirect.class.php              Filterable check for whether external 301 redirects are allowed
+taxonomy.class.php              Determines whether a taxonomy is disabled, supported, or available for SEO
+template.class.php              Secure view/template loader with secret token to prevent unauthorized inclusion
+
+format/
+	arrays.class.php              Array manipulation: list flattening, scrubbing, merging multidimensional arrays
+	color.class.php               Calculates WCAG-compliant relative font colors from hex background colors
+	html.class.php                HTML manipulation: stripping embed URLs, extracting content, making inline HTML
+	markdown.class.php            Converts limited inline Markdown syntax (bold, links, code) to HTML
+	minify.class.php              Rudimentary JS and CSS minification via string replacements (no AST parsing)
+	strings.class.php             String utilities: truncation with ellipsis, cloning, batch replacement, text transforms
+	time.class.php                Time/date formatting utilities for timestamps to ISO 8601 and other formats
+
+query/
+	cache.class.php               Memoization layer for query results respecting main query initialization state
+	exclusion.class.php           Builds and caches lists of post IDs excluded from search/archives by per-post settings
+	filter.class.php              Filters post permalink category links to use the primary term set via the plugin
+	utils.class.php               Query utility checks: pretty permalinks, SEO support, taxonomy/post-type validation
+
+
+Internal (inc/classes/internal/)
+--------------------------------
+Debug, deprecation, and infrastructure utilities.
+
+debug.class.php                 Plugin debug utilities: deprecation notices, query state dumping, front-end debug output
+deprecated.class.php            Empty container for removed deprecated tsf() methods
+silencer.class.php              Singleton stub that absorbs method calls on soft-disabled/unavailable API pool classes
+
+
+Meta (inc/classes/meta/)
+------------------------
+Meta tag value generators: title, description, robots, Schema.org, social, images, URIs.
+These classes compute values; front/meta/generator/ classes render them into HTML.
+
+breadcrumbs.class.php           Generates breadcrumb lists (URL + name pairs) for posts, terms, and post type archives
+description.class.php           Builds meta description output from custom fields or auto-generated excerpts
+facebook.class.php              Provides Facebook-specific meta values (author, publisher, app ID) for article pages
+image.class.php                 Retrieves and manages SEO image URLs (custom and generated) for social/oembed
+open-graph.class.php            Builds Open Graph meta tag values (type, title, description, URL, images, locale, site name)
+robots.class.php                Public API for generating robots meta tag values and collecting assertions
+schema.class.php                Assembles the Schema.org JSON-LD graph from registered entity builders
+theme-color.class.php           Returns sanitized theme-color meta tag hex value from plugin options
+title.class.php                 Builds meta/document title from custom fields or auto-generation with tagline/separator
+twitter.class.php               Builds Twitter Card meta tag values (card type, site, creator, title, description, image) with OG fallback
+uri.class.php                   Generates canonical, indexable, and bare permalink URLs with scheme/pagination handling
+
+description/
+	excerpt.class.php             Generates description excerpts from post/term/PTA/user content
+
+image/
+	generator.class.php           Yields image URLs and IDs from various sources (attachments, featured, content) via generators
+	utils.class.php               Utility helpers for fetching image dimensions and metadata from attachments
+
+robots/
+	args.class.php                Robots directive generator driven by explicit query arguments (id/tax/pta/uid)
+	factory.class.php             Abstract factory base for robots generators, holding shared state and generator logic
+	front.class.php               Robots directive generator using the live front-end query context
+	main.class.php                Singleton orchestrator dispatching to Args or Front generators, collects robots output
+
+schema/entities/
+	author.class.php              Schema.org Person entity representing a post's author
+	breadcrumblist.class.php      Schema.org BreadcrumbList entity built from the Breadcrumbs class output
+	organization.class.php        Schema.org Organization entity with name, URL, logo, and same-as links
+	person.class.php              Schema.org Person entity representing the site owner
+	reference.class.php           Abstract base providing @id generation and cross-referencing for Schema entities
+	webpage.class.php             Schema.org WebPage entity with title, description, dates, breadcrumbs, author refs
+	website.class.php             Schema.org WebSite entity with site name, URL, publisher, and sitelinks search
+
+title/
+	conditions.class.php          Conditional checks: protection-prefix usage, tagline addition, separator placement
+	utils.class.php               Title utility helpers: separator list, separator retrieval, tagline resolution
+
+uri/
+	utils.class.php               URI utilities: scheme detection, URL appending/prepending, slash handling, permalink checks
+
+
+Robots.txt (inc/classes/robotstxt/)
+-----------------------------------
+Virtual robots.txt generation.
+
+main.class.php                  Generates virtual robots.txt output with prioritized directives (user-agents, sitemaps, rules)
+utils.class.php                 Provides filterable lists of blockable user-agents (AI crawlers, SEO crawlers)
+
+
+Sitemap (inc/classes/sitemap/)
+------------------------------
+XML sitemap generation with caching, locking, and WP Core sitemap augmentation.
+
+cache.class.php                 Manages sitemap transient caching, per-blog/language cache keys, and cache clearing
+cron.class.php                  Schedules WP-Cron single events for sitemap ping notifications
+lock.class.php                  Locking mechanics to prevent concurrent sitemap generation; serves 503 when locked
+registry.class.php              Registers sitemap endpoints, parses requests, dispatches sitemap output
+utils.class.php                 Sitemap utilities: post query limits, URL exclusion checks, robots-based filtering
+
+optimized/
+	base.class.php                Generates the base (default) optimized sitemap XML with post/taxonomy URL building
+	main.class.php                Abstract base for the optimized sitemap generator; handles memory limits and URL counting
+	xsl.class.php                 Renders the XSL stylesheet for the optimized sitemap
+
+wp/
+	filter.class.php              Augments WP Core sitemap: sets TSF's "doing sitemap" state, filters query args
+	posts.class.php               Extends WP_Sitemaps_Posts: adds TSF-based filtering (noindex, lastmod) to Core posts sitemap
+	taxonomies.class.php          Extends WP_Sitemaps_Taxonomies: adds TSF-based filtering to Core taxonomies sitemap
+
+
+Traits (inc/traits/)
+--------------------
+Shared trait files used across multiple classes.
+
+property-refresher.trait.php    Registers automated static property flushing for multisite blog-switching scenarios
+
+internal/
+	static-deprecator.trait.php   Deprecation handling for static classes: intercepts calls to deprecated methods/properties
+
+
+Functions (inc/functions/)
+--------------------------
+Global and namespaced function definitions.
+
+api.php                         Defines global tsf() and the_seo_framework() factory functions plus namespaced helpers (memo, umemo, has_run)
+deprecated.php                  Holds deprecated global API functions to prevent fatal errors; emptied after deprecation cycles
+upgrade-suggestion.php          Shows a one-time admin notice suggesting the TSF Extension Manager plugin after upgrades
+
+
+Compatibility (inc/compat/)
+---------------------------
+Theme and plugin compatibility shims loaded conditionally based on active themes/plugins.
+
+plugin-bbpress.php              bbPress: overrides titles, robots, SEO columns, and archive queries on forum/topic/reply pages
+plugin-buddypress.php           BuddyPress: disables Robots, URI, OG, Twitter, and Schema meta on BuddyPress pages
+plugin-edd.php                  Easy Digital Downloads: registers download post type as product for is_product queries
+plugin-elementor.php            Elementor: hides incorrectly-public post types from TSF, forces noindex on them
+plugin-jetpack.php              Jetpack: disables its Open Graph and Twitter Card output when TSF's options are enabled
+plugin-polylang.php             Polylang: per-language sitemaps, pll__ string translation, canonical URL and home URL fixes
+plugin-ultimatemember.php       Ultimate Member: reinstates title support, conditionally disables SEO on profile pages
+plugin-woocommerce.php          WooCommerce: shop page ID, product detection, noindex cart/checkout, primary term links, image params
+plugin-wpforo.php               wpForo: page detection; defers to wpForo SEO when enabled or overrides with TSF's output
+plugin-wpml.php                 WPML: per-language sitemaps, sitemap cache flushing, translatable post filtering
+theme-avada.php                 Avada: disables conflicting Open Graph, rich snippets, and hides its SEO meta box tab
+theme-bricks.php                Bricks Builder: removes non-public template post types/taxonomies from TSF's public lists
+theme-genesis.php               Genesis: disables Genesis SEO features, migrates Genesis term meta into TSF's defaults
+
+
+Views (inc/views/)
+------------------
+PHP view templates rendered by the admin settings and front-end output systems.
+
+debug/
+	header.php                    Debug panel showing expected/determined SEO meta tag output for the current page
+	output.php                    Detailed debug info: query state, page type, ID, taxonomy, post type, generated meta values
+
+list/
+	bulk-post.php                 Bulk-edit fields (robots, canonical, redirect) for posts in admin list table
+	quick-post.php                Quick-edit fields (robots, title, description, canonical, redirect) for posts
+	quick-term.php                Quick-edit fields (robots, title, description, canonical, redirect) for terms
+
+notice/
+	persistent.php                Dismissible persistent admin notice with AJAX-powered dismiss button
+
+post/
+	gutenberg-data.php            Hidden data holder div with post ID for Gutenberg block editor integration
+	homepage-warning.php          Warning that post SEO fields may be overridden by global Homepage Settings
+	settings.php                  Full per-post SEO metabox content (title, description, social, visibility, robots, canonical, redirect tabs)
+	wrap-content.php              Tab content panels for the flex-tab navigation in the post edit metabox
+	wrap-nav.php                  Tab radio buttons/labels for the flex-tab navigation in the post edit metabox
+
+profile/
+	settings.php                  User profile SEO fields (Facebook URL, X/Twitter handle, author robots noindex/nofollow)
+
+settings/
+	columns.php                   Two-column metabox layout container for the main SEO Settings page
+	notice.php                    Contextual admin notice (updated/unchanged/reset/error) after saving settings
+	wrap.php                      Outer settings page wrapper: page title, form, submit/reset buttons, extensions link
+	wrap-content.php              Tab content panels for the navigation wrapper in settings metaboxes
+	wrap-nav.php                  Tab radio buttons/labels for the settings metabox tab wrapper
+	metaboxes/
+		description.php           Settings metabox: automated meta description generation behavior
+		feed.php                  Settings metabox: RSS/Atom feed options (excerpt conversion, source backlinks)
+		general.php               Settings metabox: general plugin options (layout, performance, canonical, timestamps, exclusions)
+		homepage.php              Settings metabox: homepage SEO (title, description, social, robots, social images)
+		post-type-archive.php     Settings metabox: post type archive SEO (title, description, social, visibility)
+		robots.php                Settings metabox: global robots/indexing directives per post type, taxonomy, archive type
+		schema.php                Settings metabox: Schema.org structured data output (presence, sitelinks)
+		sitemaps.php              Settings metabox: XML sitemap configuration (general, robots.txt, metadata, style)
+		social.php                Settings metabox: social meta tags (Open Graph, Twitter Cards, oEmbed, profiles)
+		title.php                 Settings metabox: title tag behavior (additions, separator, prefix, capitalization)
+		webmaster.php             Settings metabox: webmaster verification codes (Google, Bing, Yandex, Baidu, Pinterest)
+
+sitemap/
+	xml-sitemap.php               Generates and outputs the full XML sitemap document (header, urlset, URLs, debug stats)
+	xsl-stylesheet.php            Outputs the XSL stylesheet document for browser-rendered sitemap display
+	xsl/
+		description.php           XSL sitemap page: description/header section (logo, site title, text)
+		footer.php                XSL sitemap page: footer with "Generated by The SEO Framework" credit
+		styles.php                XSL sitemap page: inline CSS styles
+		table.php                 XSL sitemap page: data table template (URL, last updated, priority columns)
+		title.php                 XSL sitemap page: <title> element
+		vars.php                  XSL sitemap page: variables (table width, colors, logo pixel size)
+
+templates/
+	inpost/
+		primary-term-selector.php   JS template for primary term selector hidden input on the post edit screen
+	list/
+		primary-term-selector.php   JS templates for primary term selector dropdowns in quick/bulk edit views
+	settings/
+		warnings.php                JS templates for contextual warning tooltips on the settings page
+
+term/
+	settings.php                  Full per-term SEO settings fields (title, description, social, visibility, robots, canonical, redirect)
+
+
+JavaScript (lib/js/)
+--------------------
+Client-side scripts for admin interfaces. Each .js file has a corresponding .min.js minified version.
+
+authorslugs.js                  Author slug fetching and caching via REST API
+ays.js                          "Are You Sure" unsaved-changes detection for settings pages
+c.js                            Pixel and character counters for SEO input fields
+canonical.js                    Canonical URL field tracking and prediction
+description.js                  Meta description field handling and live previews
+gbc.js                          Gutenberg block editor forwards-compatibility shim
+le.js                           List Edit (quick/bulk edit) SEO field adjustments
+media.js                        Image selection, cropping, and media modal integration
+post.js                         Post editor SEO settings panel logic
+postslugs.js                    Post slug fetching and caching via REST API
+pt.js                           Primary Term selection for the classic editor
+pt-gb.js                        Primary Term selection for the Gutenberg block editor
+pt-le.js                        Primary Term selection in List Edit (quick/bulk edit)
+settings.js                     Global SEO Settings admin page logic
+social.js                       Social (Open Graph / Twitter) meta input field handling
+tabs.js                         UI tab navigation component (no jQuery)
+term.js                         Term (taxonomy) editor SEO settings logic
+termslugs.js                    Term slug fetching and caching via REST API
+title.js                        Meta title field handling, live previews, and additions
+tsf.js                          Core TSF JS library: shared utilities, state, and initialization
+tt.js                           Tooltip system for on-hover info balloons
+ui.js                           General UI helpers (postbox toggles, dismiss notices)
+utils.js                        Utility functions (debounce, etc.)
+
+
+CSS (lib/css/)
+--------------
+Stylesheets for admin interfaces. Each .css file has a corresponding .min.css minified version.
+
+le.css                          Styles for quick/bulk edit SEO columns and inline inputs
+media.css                       Styles for image selection buttons, previews, and warnings
+post.css                        Styles for the post editor SEO meta box (classic + block editor)
+pt.css                          Styles for the primary term selector dropdowns
+settings.css                    Styles for the SEO Settings admin page layout
+term.css                        Styles for the term editor SEO meta fields
+tsf.css                         Core shared styles (title wraps, offsets, JS visibility toggles)
+tsfc.css                        Character/pixel counter indicator styles (good/okay/bad colors)
+tt.css                          Tooltip positioning and balloon appearance styles
+ui.css                          Dismissible admin notice and icon styles
+
+
+Language (language/)
+--------------------
+Translation files for internationalization.
+
+autodescription.pot              POT translation template for the autodescription text domain

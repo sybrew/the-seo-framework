@@ -41,6 +41,7 @@ use The_SEO_Framework\{
  *
  * @since 5.0.0
  * @access protected
+ *         Access via tsf()->schema()->entities['WebPage'] instead.
  */
 final class WebPage extends Reference {
 

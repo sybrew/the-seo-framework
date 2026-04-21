@@ -145,7 +145,7 @@ class Utils {
 						$filtered[] = [ $filter, $function, $priority ];
 						\remove_filter( $filter, $function, $priority );
 						// Some noob might've destroyed \WP_Hook. Safeguard.
-						if ( ++$i > $it ) break 1;
+						if ( ++$i > $it ) break;
 					}
 				}
 			}
