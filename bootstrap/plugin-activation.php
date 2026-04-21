@@ -31,34 +31,13 @@ use The_SEO_Framework\Helper\Compatibility;
 Compatibility::try_plugin_conflict_notification();
 
 turn_on_autoloading: if ( ! is_headless( 'settings' ) ) {
-	// WP 6.4+, turns on auto loading for The SEO Framework's main options.
-	if ( \function_exists( 'wp_set_options_autoload' ) ) {
-		$options = [];
+	$options = [];
 
-		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) )
-			$options[] = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
+	if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) )
+		$options[] = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) )
-			$options[] = \THE_SEO_FRAMEWORK_SITE_CACHE;
+	if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) )
+		$options[] = \THE_SEO_FRAMEWORK_SITE_CACHE;
 
-		// WP 6.7+: we should change 'yes' to true.
-		\wp_set_options_autoload( $options, 'yes' );
-	} elseif ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) ) {
-		// Turns on auto loading for The SEO Framework's main options.
-		$options = \The_SEO_Framework\Data\Plugin::get_options();
-		$setting = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
-
-		\remove_all_filters( "pre_update_option_{$setting}" );
-		\remove_all_actions( "update_option_{$setting}" );
-		\remove_all_filters( "sanitize_option_{$setting}" );
-
-		$temp_options = $options;
-
-		if ( \is_array( $temp_options ) )
-			$temp_options['update_buster'] = time();
-
-		$_success = \update_option( $setting, $temp_options, true );
-		if ( $_success )
-			\update_option( $setting, $options, true );
-	}
+	\wp_set_options_autoload( $options, true );
 }

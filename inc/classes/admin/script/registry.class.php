@@ -515,7 +515,7 @@ final class Registry {
 				'admin_color',
 			) ?: (
 				// WP 7.0+ 'modern', fallback to 'fresh' for older versions
-				version_compare( \get_bloginfo( 'version' ), '7.0', '<' )
+				version_compare( \wp_get_wp_version(), '7.0', '<' )
 					? 'fresh'
 					: 'modern'
 			);

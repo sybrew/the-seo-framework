@@ -230,8 +230,7 @@ final class Query {
 		if ( ! \did_action( 'wp_loaded' ) )
 			return true;
 
-		// TODO WP 6.5+ https://core.trac.wordpress.org/ticket/42061: wp_is_serving_rest_request()
-		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
+		if ( \wp_is_serving_rest_request() ) {
 			$referer = \wp_get_referer();
 			if ( str_contains( $referer, 'post.php' ) || str_contains( $referer, 'post-new.php' ) ) {
 				/**

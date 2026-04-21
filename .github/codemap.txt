@@ -3,7 +3,7 @@ The SEO Framework Codebase Map
 
 WordPress SEO plugin focused on performance, best SEO practices, and user experience.
 Automates meta tags, sitemaps, Schema.org, robots directives, and social media output.
-Requires PHP 7.4+, WordPress 6.0+. Text domain: autodescription.
+Requires PHP 7.4+, WordPress 6.7+. Text domain: autodescription.
 
 Files named index.php are direct-access guards (empty PHP files).
 Files ending in .min.js or .min.css are minified mirrors of their source counterparts.

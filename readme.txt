@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
-Requires at least: 6.0
+Requires at least: 6.7
 Tested up to: 6.9
 Requires PHP: 7.4.0
 Stable tag: 5.1.4
@@ -267,6 +267,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Updated radio buttons and checkboxes to accomodate for WordPress 7.0.
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
+**Notes:**
+	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
+		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
 
 ## For developers
 
