@@ -157,6 +157,15 @@ input.tsf-warning-selected {
 	color: #d63638;
 }
 
+/* WP 7.0+ paints checked/focus states using --wp-admin-theme-color. */
+body:not(.branch-6-7):not(.branch-6-8):not(.branch-6-9) input:is( .tsf-default-selected, .tsf-warning-selected ):checked {
+	border-color: currentColor;
+	background: currentColor;
+}
+body:not(.branch-6-7):not(.branch-6-8):not(.branch-6-9) input:is( .tsf-default-selected, .tsf-warning-selected ):focus {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px currentColor;
+}
+
 input:is( .tsf-default-selected, .tsf-warning-selected ):after {
 	content: "";
 	position: absolute;

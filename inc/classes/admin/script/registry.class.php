@@ -497,6 +497,9 @@ final class Registry {
 	 * @since 3.1.0
 	 * @since 5.0.0 1. Is now static.
 	 *              2. Renamed from `convert_color_css`.
+	 * @since 5.1.5 1. Now registers the admin color scheme if not yet registered.
+	 *              2. Now uses cached user data for improved admin performance.
+	 *              3. Added support for WordPress 7.0 admin color schemes.
 	 * @link <https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/>
 	 *
 	 * @param array $css The CSS to convert.
@@ -507,22 +510,27 @@ final class Registry {
 		$conversions = umemo( __METHOD__ . '/conversions' );
 
 		if ( ! $conversions ) {
-			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
-			$_colors = $GLOBALS['_wp_admin_css_colors'];
+			$_scheme = Data\User::get_userdata(
+				Query::get_current_user_id(),
+				'admin_color',
+			) ?: (
+				// WP 7.0+ 'modern', fallback to 'fresh' for older versions
+				version_compare( \get_bloginfo( 'version' ), '7.0', '<' )
+					? 'fresh'
+					: 'modern'
+			);
 
-			if (
-				   ! \is_array( $_colors[ $_scheme ]->colors ?? null )
-				|| \count( $_colors[ $_scheme ]->colors ) < 4 // unexpected scheme, ignore and override.
-			) {
-				$_colors = [
-					'#222',
-					'#333',
-					'#0073aa',
-					'#00a0d2',
-				];
-			} else {
-				$_colors = $_colors[ $_scheme ]->colors;
-			}
+			// register_admin_color_schemes runs on admin_init; but we may want to convert colors elsewhere.
+			if ( empty( $GLOBALS['_wp_admin_css_colors'] ) )
+				\register_admin_color_schemes();
+
+			$_colors = $GLOBALS['_wp_admin_css_colors'][ $_scheme ]->colors ?? null;
+
+			if ( ! \is_array( $_colors ) || \count( $_colors ) < 3 )
+				$_colors = [ '#1e1e1e', '#3858e9', '#7b90ff' ]; // Default to 'modern' scheme colors if something's wrong.
+
+			// When the scheme lacks a 4th color, duplicate the background into the accent slot, shifting the rest down by one.
+			isset( $_colors[3] ) or array_unshift( $_colors, $_colors[0] );
 
 			$_conversion_table = [
 				'{{$bg}}'               => $_colors[0],

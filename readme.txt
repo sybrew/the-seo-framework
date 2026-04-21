@@ -262,7 +262,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Added `touchcancel` event handling for multi-finger gesture support -- it won't invoke multiple tooltips anymore.
 		* Tooltips now stay when invoking a scroll or pan on touch devices.
 		* SEO Bar focus styles now use `:focus-visible` instead of `:focus`, preventing focus rings on touch taps, but still showing them for keyboard navigation.
-* **Fixed:**
+	* **Styling:**
+		* The default admin style for WordPress 7.0 is now assumed to be `'modern'` instead of `'fresh'`.
+		* Updated radio buttons and checkboxes to accomodate for WordPress 7.0.
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
 

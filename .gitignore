@@ -26,3 +26,7 @@ Thumbs.db
 ## Packages
 /composer.lock
 /vendor/
+
+## Local folder (track folder, ignore contents)
+/.local/*
+!/.local/.gitkeep
