@@ -267,6 +267,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Updated radio buttons and checkboxes to accomodate for WordPress 7.0.
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
+	* **Head tags:**
+		* The metatag generator now always outputs in HTML5 syntax, dropping XHTML support.
 **Notes:**
 	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
