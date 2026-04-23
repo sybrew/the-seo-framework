@@ -30,6 +30,12 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 	CONTRIBUTING.md               Contribution guidelines
 	copilot-instructions.md       Repository coding standards and conventions for AI assistants
 	FUNDING.yml                   GitHub Sponsors funding configuration
+	instructions/                 File-scoped and task-scoped Copilot instruction files
+		css.instructions.md         Auto-applied CSS instruction file for stylesheet edits
+		docs.instructions.md        Auto-applied documentation instruction file for readme edits
+		javascript.instructions.md  Auto-applied JavaScript instruction file for script edits
+		local.instructions.md       Local-context and private workspace instruction dispatcher
+		php.instructions.md         Auto-applied PHP and WordPress instruction file for PHP edits
 	ISSUE_TEMPLATE/               Issue templates for bug reports and feature requests
 
 

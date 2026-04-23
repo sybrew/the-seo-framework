@@ -245,6 +245,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.1.5
 
+TODO Fix sitemaps on SUBDIRECTORIES already.
+
 ## For everyone
 
 * **Changed:**
@@ -275,24 +277,24 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ## For developers
 
-**PHP method notes:**
-* **Added:**
-	* Pool `tsf()->admin()->seobar()` is now available.
-		* It contains public methods `generate_bar()`, `collect_seo_bar_items()`, `register_seo_bar_item()`, and `edit_seo_bar_item()`.
-		* It contains public constants `STATE_UNDEFINED`, `STATE_UNKNOWN`, `STATE_BAD`, `STATE_OKAY`, and `STATE_GOOD`.
-		* Internally known as `The_SEO_Framework\Admin\SEOBar\Builder`.
-	* Pool `tsf()->admin()->scripts()->loader()` is now available.
-		* It contains public methods `mount()` and `init()`, among many script setup methods.
-		* Internally known as `The_SEO_Framework\Admin\Script\Loader`.
-	* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar xplainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
-* **Changed:**
-	* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`) no longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`.
-	* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
-		1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
-		2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
-* **Improved:**
-	* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
-	* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
+* **PHP API notes:**
+	* **Added:**
+		* Pool `tsf()->admin()->seobar()` is now available.
+			* It contains public methods `generate_bar()`, `collect_seo_bar_items()`, `register_seo_bar_item()`, and `edit_seo_bar_item()`.
+			* It contains public constants `STATE_UNDEFINED`, `STATE_UNKNOWN`, `STATE_BAD`, `STATE_OKAY`, and `STATE_GOOD`.
+			* Internally known as `The_SEO_Framework\Admin\SEOBar\Builder`.
+		* Pool `tsf()->admin()->scripts()->loader()` is now available.
+			* It contains public methods `mount()` and `init()`, among many script setup methods.
+			* Internally known as `The_SEO_Framework\Admin\Script\Loader`.
+		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar xplainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
+	* **Changed:**
+		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`) no longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`.
+		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
+			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
+			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
+	* **Improved:**
+		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
+		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 
 
 ### 5.1.4
