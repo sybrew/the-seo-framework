@@ -94,9 +94,11 @@ class Post_Type {
 		 */
 		return (bool) \apply_filters(
 			'the_seo_framework_supported_post_type',
-			$post_type
+			(
+				   $post_type
 				&& ! self::is_disabled( $post_type )
-				&& \in_array( $post_type, self::get_all_public(), true ),
+				&& \in_array( $post_type, self::get_all_public(), true )
+			),
 			$post_type,
 		);
 	}

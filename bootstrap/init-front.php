@@ -76,7 +76,7 @@ if ( Data\Plugin::get_option( 'alter_archive_query' ) ) {
 
 		case 'in_query':
 		default:
-			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_archive_query_in' ], 9999, 1 );
+			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_archive_query_in' ], 9999 );
 	}
 }
 
@@ -88,7 +88,7 @@ if ( Data\Plugin::get_option( 'alter_search_query' ) ) {
 
 		case 'in_query':
 		default:
-			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_search_query_in' ], 9999, 1 );
+			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_search_query_in' ], 9999 );
 	}
 }
 

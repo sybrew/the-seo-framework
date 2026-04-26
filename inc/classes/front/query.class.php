@@ -42,6 +42,7 @@ final class Query {
 	/**
 	 * Alters search query.
 	 *
+	 * @hook pre_get_posts 9999
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
@@ -100,7 +101,7 @@ final class Query {
 		if ( $wp_query->is_search ) {
 			// Only interact with an actual Search Query.
 			if ( ! isset( $wp_query->query['s'] ) )
-				return;
+				return $posts;
 
 			if ( self::is_query_adjustment_blocked( $wp_query ) )
 				return $posts;

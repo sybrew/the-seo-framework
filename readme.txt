@@ -272,6 +272,9 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 	* **Head tags:**
 		* The metatag generator now always outputs in HTML5 syntax, dropping XHTML support.
 **Notes:**
+* **Fixed:**
+	* Resolved an issue where search-result filtering could pass no post list onward when WordPress marked a request as search without a raw search parameter. Since the search parameter is always assumed, we couldn't reproduce this issue, but a dry run caught it.
+* **Notes:**
 	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
 
