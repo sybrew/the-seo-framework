@@ -59,7 +59,7 @@ if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 \add_action( 'template_redirect', [ Front\Redirect::class, 'init_meta_setting_redirect' ] );
 
 // Prepares requisite robots headers to avoid low-quality content penalties.
-\add_action( 'do_robots', [ Headers::class, 'output_robots_noindex_headers' ] );
+\add_action( 'do_robots', [ Headers::class, 'output_robots_noindex_headers' ], 9 );
 \add_action( 'the_seo_framework_sitemap_header', [ Headers::class, 'output_robots_noindex_headers' ] );
 
 // Overwrite title tags.
