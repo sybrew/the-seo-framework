@@ -12,6 +12,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
+use The_SEO_Framework\Front\Meta\Generator\Webmasters;
 
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
@@ -93,6 +94,10 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 			],
 		];
 
+		$enabled_settings = array_filter($settings, function($setting) {
+			return Webmasters::is_generator_enabled($setting);
+		}, ARRAY_FILTER_USE_KEY);
+
 		HTML::header_title( \__( 'Webmaster Integration Settings', 'autodescription' ) );
 		HTML::description( \__( "When adding your website to Google, Bing and other Webmaster Tools, you'll be asked to add a code or file to your website for verification purposes. These options will help you easily integrate those codes.", 'autodescription' ) );
 		HTML::description( \__( "Verifying your website has no SEO value whatsoever. But you might gain added benefits such as search ranking insights to help you improve your website's content.", 'autodescription' ) );
@@ -100,7 +105,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		?>
 		<hr>
 		<?php
-		foreach ( $settings as $setting ) {
+		foreach ( $enabled_settings as $setting ) {
 			printf(
 				'<p><label for=%s><strong>%s</strong> %s</label></p>',
 				\esc_attr( Input::get_field_id( $setting['setting'] ) ),

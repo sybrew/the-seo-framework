@@ -10,6 +10,7 @@ namespace The_SEO_Framework\Admin\Settings;
 
 use The_SEO_Framework\{
 	Admin,
+	Front\Meta\Generator\Webmasters,
 	Helper\Post_Type,
 	Helper\Template,
 };
@@ -176,7 +177,7 @@ final class Plugin {
 			);
 
 		// Webmaster Meta Box
-		if ( $webmaster )
+		if ( $webmaster && !empty(Webmasters::get_enabled_generators()) )
 			\add_meta_box(
 				'autodescription-webmaster-settings',
 				\esc_html__( 'Webmaster Meta Settings', 'autodescription' ),

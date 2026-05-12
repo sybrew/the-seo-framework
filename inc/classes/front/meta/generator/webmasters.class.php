@@ -47,11 +47,29 @@ final class Webmasters {
 		[ __CLASS__, 'generate_pinterest_verification' ],
 	];
 
+	public static function get_enabled_generators(): array {
+		$generator_functions = array_column(self::GENERATORS, 1);
+		$mapped = array_reduce($generator_functions, function($carry, $func) {
+			$key = str_replace('generate_', '', $func);
+			$key = str_replace('_verification', '', $key);
+			$carry[$key] = $func;
+
+			return $carry;
+		}, []);
+
+		return apply_filters('the_seo_framework_webmaster_fields', $mapped);
+	}
+
+	public static function is_generator_enabled($generator_key): bool {
+		return in_array($generator_key, array_keys(self::get_enabled_generators()));
+	}
+
 	/**
 	 * @since 5.0.0
 	 * @generator
 	 */
 	public static function generate_google_verification() {
+		if(!self::is_generator_enabled('google')) return;
 
 		$code = Data\Plugin::get_option( 'google_verification' );
 
@@ -69,6 +87,7 @@ final class Webmasters {
 	 * @generator
 	 */
 	public static function generate_bing_verification() {
+		if(!self::is_generator_enabled('bing')) return;
 
 		$code = Data\Plugin::get_option( 'bing_verification' );
 
@@ -86,6 +105,7 @@ final class Webmasters {
 	 * @generator
 	 */
 	public static function generate_yandex_verification() {
+		if(!self::is_generator_enabled('yandex')) return;
 
 		$code = Data\Plugin::get_option( 'yandex_verification' );
 
@@ -103,6 +123,7 @@ final class Webmasters {
 	 * @generator
 	 */
 	public static function generate_baidu_verification() {
+		if(!self::is_generator_enabled('baidu')) return;
 
 		$code = Data\Plugin::get_option( 'baidu_verification' );
 
@@ -120,6 +141,7 @@ final class Webmasters {
 	 * @generator
 	 */
 	public static function generate_pinterest_verification() {
+		if(!self::is_generator_enabled('pinterest')) return;
 
 		$code = Data\Plugin::get_option( 'pint_verification' );
 
