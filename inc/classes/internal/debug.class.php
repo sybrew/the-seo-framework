@@ -312,6 +312,8 @@ final class Debug {
 	/**
 	 * Echos debug output.
 	 *
+	 * @hook admin_footer 10
+	 * @hook wp_footer 10
 	 * @since 2.6.0
 	 * @since 5.0.0 is now static.
 	 * @access private
@@ -363,6 +365,7 @@ final class Debug {
 	/**
 	 * Sets debug query cache.
 	 *
+	 * @hook the_seo_framework_do_before_output 10
 	 * @since 3.1.0 Introduced in 2.8.0, but the name changed.
 	 * @access private
 	 */
@@ -454,7 +457,7 @@ final class Debug {
 		$is_protected                   = Data\Post::is_protected( $page_id );
 		$wp_doing_ajax                  = \wp_doing_ajax();
 		$wp_doing_cron                  = \wp_doing_cron();
-		$wp_is_rest                     = \defined( 'REST_REQUEST' ) && \REST_REQUEST; // TODO WP 6.5+ wp_is_serving_rest_request()
+		$wp_is_rest                     = \wp_is_serving_rest_request();
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 
 		$timer = ( hrtime( true ) - $_t ) / 1e9;

@@ -58,7 +58,7 @@ use The_SEO_Framework\{
 class URI {
 
 	/**
-	 * Gets the canonical URL for indexation.
+	 * Gets the canonical URL for indexing.
 	 *
 	 * @since 5.0.0
 	 *

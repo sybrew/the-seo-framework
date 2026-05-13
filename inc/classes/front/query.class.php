@@ -42,10 +42,12 @@ final class Query {
 	/**
 	 * Alters search query.
 	 *
+	 * @hook pre_get_posts 9999
 	 * @since 2.9.4
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_search_query_in`.
+	 * @since 5.1.5 Now also tests the effective search query vars.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *
@@ -54,31 +56,23 @@ final class Query {
 	 */
 	public static function alter_search_query_in( $wp_query ) {
 
-		// Don't exclude pages in wp-admin.
-		if ( $wp_query->is_search ) {
-			// Only interact with an actual Search Query.
-			if ( ! isset( $wp_query->query['s'] ) )
-				return;
+		if ( ! self::is_search_query( $wp_query ) || self::is_query_adjustment_blocked( $wp_query ) )
+			return;
 
-			if ( self::is_query_adjustment_blocked( $wp_query ) )
-				return;
+		$excluded = Exclusion::get_excluded_ids_from_cache()['search'];
 
-			$excluded = Exclusion::get_excluded_ids_from_cache()['search'];
+		if ( ! $excluded )
+			return;
 
-			if ( ! $excluded )
-				return;
+		$post__not_in = $wp_query->get( 'post__not_in' );
 
-			$post__not_in = $wp_query->get( 'post__not_in' );
+		if ( ! empty( $post__not_in ) )
+			$excluded = array_unique( array_merge(
+				(array) $post__not_in,
+				$excluded,
+			) );
 
-			if ( ! empty( $post__not_in ) ) {
-				$excluded = array_unique( array_merge(
-					(array) $post__not_in,
-					$excluded,
-				) );
-			}
-
-			$wp_query->set( 'post__not_in', $excluded );
-		}
+		$wp_query->set( 'post__not_in', $excluded );
 	}
 
 	/**
@@ -89,6 +83,7 @@ final class Query {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `alter_search_query_post`.
 	 * @since 5.1.3 Now verifies that the search query is actually set.
+	 * @since 5.1.5 Now also tests the effective search query vars.
 	 * @access private
 	 *
 	 * @param array     $posts    The array of retrieved posts.
@@ -97,23 +92,15 @@ final class Query {
 	 */
 	public static function alter_search_query_post( $posts, $wp_query ) {
 
-		if ( $wp_query->is_search ) {
-			// Only interact with an actual Search Query.
-			if ( ! isset( $wp_query->query['s'] ) )
-				return;
+		if ( ! self::is_search_query( $wp_query ) || self::is_query_adjustment_blocked( $wp_query ) )
+			return $posts;
 
-			if ( self::is_query_adjustment_blocked( $wp_query ) )
-				return $posts;
+		foreach ( $posts as $n => $post )
+			if ( Data\Plugin\Post::get_meta_item( 'exclude_local_search', $post->ID ) )
+				unset( $posts[ $n ] );
 
-			foreach ( $posts as $n => $post ) {
-				if ( Data\Plugin\Post::get_meta_item( 'exclude_local_search', $post->ID ) )
-					unset( $posts[ $n ] );
-			}
-			// Reset numeric index.
-			$posts = array_values( $posts );
-		}
-
-		return $posts;
+		// Reset numeric index before returning posts.
+		return array_values( $posts );
 	}
 
 	/**
@@ -128,30 +115,30 @@ final class Query {
 	 * @access private
 	 *
 	 * @param \WP_Query $wp_query The WP_Query instance.
-	 * @return void Early if query alteration is useless or blocked.
+	 * @return void Early if query alteration is blocked.
 	 */
 	public static function alter_archive_query_in( $wp_query ) {
 
-		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( self::is_query_adjustment_blocked( $wp_query ) )
-				return;
+		if (
+			   ! ( $wp_query->is_archive || $wp_query->is_home )
+			|| self::is_query_adjustment_blocked( $wp_query )
+		)
+			return;
 
-			$excluded = Exclusion::get_excluded_ids_from_cache()['archive'];
+		$excluded = Exclusion::get_excluded_ids_from_cache()['archive'];
 
-			if ( ! $excluded )
-				return;
+		if ( ! $excluded )
+			return;
 
-			$post__not_in = $wp_query->get( 'post__not_in' );
+		$post__not_in = $wp_query->get( 'post__not_in' );
 
-			if ( ! empty( $post__not_in ) ) {
-				$excluded = array_unique( array_merge(
-					(array) $post__not_in,
-					$excluded,
-				) );
-			}
+		if ( ! empty( $post__not_in ) )
+			$excluded = array_unique( array_merge(
+				(array) $post__not_in,
+				$excluded,
+			) );
 
-			$wp_query->set( 'post__not_in', $excluded );
-		}
+		$wp_query->set( 'post__not_in', $excluded );
 	}
 
 	/**
@@ -169,19 +156,32 @@ final class Query {
 	 */
 	public static function alter_archive_query_post( $posts, $wp_query ) {
 
-		if ( $wp_query->is_archive || $wp_query->is_home ) {
-			if ( self::is_query_adjustment_blocked( $wp_query ) )
-				return $posts;
+		if (
+			   ! ( $wp_query->is_archive || $wp_query->is_home )
+			|| self::is_query_adjustment_blocked( $wp_query )
+		)
+			return $posts;
 
-			foreach ( $posts as $n => $post ) {
-				if ( Data\Plugin\Post::get_meta_item( 'exclude_from_archive', $post->ID ) )
-					unset( $posts[ $n ] );
-			}
-			// Reset numeric index.
-			$posts = array_values( $posts );
-		}
+		foreach ( $posts as $n => $post )
+			if ( Data\Plugin\Post::get_meta_item( 'exclude_from_archive', $post->ID ) )
+				unset( $posts[ $n ] );
 
-		return $posts;
+		// Reset numeric index before returning posts.
+		return array_values( $posts );
+	}
+
+	/**
+	 * Determines whether a WP_Query instance handles an actual search query.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param \WP_Query $wp_query The WP_Query instance.
+	 * @return bool
+	 */
+	private static function is_search_query( $wp_query ) {
+		return $wp_query->is_search && (
+			isset( $wp_query->query['s'] ) || ! \is_null( $wp_query->get( 's', null ) )
+		);
 	}
 
 	/**
@@ -230,8 +230,7 @@ final class Query {
 		if ( ! \did_action( 'wp_loaded' ) )
 			return true;
 
-		// TODO WP 6.5+ https://core.trac.wordpress.org/ticket/42061: wp_is_serving_rest_request()
-		if ( \defined( 'REST_REQUEST' ) && \REST_REQUEST ) {
+		if ( \wp_is_serving_rest_request() ) {
 			$referer = \wp_get_referer();
 			if ( str_contains( $referer, 'post.php' ) || str_contains( $referer, 'post-new.php' ) ) {
 				/**

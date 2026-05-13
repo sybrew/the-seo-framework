@@ -31,7 +31,10 @@ use The_SEO_Framework\Meta;
  * Abstract class of Schema.org referential structured data entity builder.
  *
  * @since 5.0.0
- * @access private
+ * @access protected
+ *         Access via tsf()->schema()->entities['Reference'] instead.
+ *         Note: This class is not meant to be used directly, but to be extended by other entities.
+ *               So this "access" is for consistency's sake and probably has no good use case.
  *
  * @NOTE: All static:: calls within this class are intentional to allow overrides in subclasses.
  *

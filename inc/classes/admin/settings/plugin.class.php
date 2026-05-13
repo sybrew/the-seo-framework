@@ -227,7 +227,7 @@ final class Plugin {
 	/**
 	 * Outputs SEO Settings columns.
 	 *
-	 * @hook theseoframework-settings_settings_page_boxes
+	 * @hook toplevel_page_theseoframework-settings_settings_page_boxes 10
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_output_columns`.
 	 */
@@ -238,7 +238,7 @@ final class Plugin {
 	/**
 	 * Outputs notices on SEO setting changes.
 	 *
-	 * @hook the_seo_framework_setting_notices
+	 * @hook the_seo_framework_setting_notices 10
 	 * @since 4.0.0
 	 * @since 4.0.5 This is no longer a static function.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.

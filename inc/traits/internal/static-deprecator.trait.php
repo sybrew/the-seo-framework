@@ -179,7 +179,6 @@ trait Static_Deprecator {
 	 *
 	 * @param string $name      The method name.
 	 * @param array  $arguments The method arguments.
-	 * @return void
 	 */
 	final public static function __callStatic( $name, $arguments ) { // phpcs:ignore Generic.CodeAnalysis -- abstract magic method.
 		\tsf()->_inaccessible_p_or_m(

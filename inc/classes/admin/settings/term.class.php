@@ -45,8 +45,8 @@ final class Term {
 	/**
 	 * Prepares the setting fields.
 	 *
-	 * @since 5.0.0
 	 * @hook current_screen 10
+	 * @since 5.0.0
 	 */
 	public static function prepare_setting_fields() {
 
@@ -72,6 +72,7 @@ final class Term {
 	/**
 	 * Outputs the term settings fields.
 	 *
+	 * @hook {$taxonomy}_edit_form 0
 	 * @since 4.0.0
 	 *
 	 * @param \WP_Term $term     Current taxonomy term object.

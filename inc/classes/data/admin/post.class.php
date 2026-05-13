@@ -105,7 +105,6 @@ final class Post {
 	 * @since 5.1.3 Now supports quick-edit and bulk-edit.
 	 *
 	 * @param int $post_id The post ID.
-	 * @return void
 	 */
 	public static function update_primary_term( $post_id ) {
 
@@ -199,7 +198,6 @@ final class Post {
 	 *              2. Renamed from `update_post_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
-	 * @return void
 	 */
 	private static function update_via_post_edit( $post_id ) {
 
@@ -241,7 +239,6 @@ final class Post {
 	 *              2. Renamed from `update_quick_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
-	 * @return void
 	 */
 	private static function update_via_quick_edit( $post_id ) {
 
@@ -301,7 +298,6 @@ final class Post {
 	 *              2. Renamed from `update_bulk_edit_post_meta`.
 	 *
 	 * @param int $post_id The post ID.
-	 * @return void
 	 */
 	private static function update_via_bulk_edit( $post_id ) {
 

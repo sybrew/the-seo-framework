@@ -266,7 +266,7 @@ switch ( $instance ) :
 				'dashicon'    => 'genericon-youtube',
 				'desc'        => \__( 'Youtube Profile', 'autodescription' ),
 				'placeholder' => "https://www.youtube.com/channel/$connectedi18n",
-				'examplelink' => 'https://www.youtube.com/user/%2f', // Yes a double slash.
+				'examplelink' => 'https://www.youtube.com/user/',
 			],
 			'linkedin'   => [
 				'option'      => 'knowledge_linkedin',

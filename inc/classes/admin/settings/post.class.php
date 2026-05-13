@@ -185,6 +185,9 @@ final class Post {
 	/**
 	 * Outputs the Homepage SEO settings warning.
 	 *
+	 * @hook the_seo_framework_pre_page_inpost_general_tab 10
+	 * @hook the_seo_framework_pre_page_inpost_visibility_tab 10
+	 * @hook the_seo_framework_pre_page_inpost_social_tab 10
 	 * @since 5.0.0
 	 */
 	public static function output_homepage_warning() {

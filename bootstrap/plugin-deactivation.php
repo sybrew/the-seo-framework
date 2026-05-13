@@ -27,17 +27,13 @@ use function The_SEO_Framework\is_headless;
  */
 
 turn_off_autoloading: if ( ! is_headless( 'settings' ) ) {
-	// WP 6.4+, turns off auto loading for The SEO Framework's main options.
-	if ( \function_exists( 'wp_set_options_autoload' ) ) {
-		$options = [];
+	$options = [];
 
-		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) )
-			$options[] = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
+	if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) )
+		$options[] = \THE_SEO_FRAMEWORK_SITE_OPTIONS;
 
-		if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) )
-			$options[] = \THE_SEO_FRAMEWORK_SITE_CACHE;
+	if ( false !== \get_option( \THE_SEO_FRAMEWORK_SITE_CACHE ) )
+		$options[] = \THE_SEO_FRAMEWORK_SITE_CACHE;
 
-		// WP 6.7+: we should change 'no' to false.
-		\wp_set_options_autoload( $options, 'no' );
-	}
+	\wp_set_options_autoload( $options, false );
 }

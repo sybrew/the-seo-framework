@@ -164,6 +164,7 @@ final class Open_Graph {
 	public static function generate_open_graph_image() {
 
 		$i = 0;
+
 		foreach ( Meta\Image::get_image_details(
 			null,
 			! Data\Plugin::get_option( 'multi_og_image' ),

@@ -44,7 +44,7 @@ final class Plugin {
 
 	/**
 	 * @since 5.0.0
-	 * @var array[] The option filter sanitization callbacks.
+	 * @var array<string, callable[]> The option filter sanitization callbacks.
 	 */
 	private static $sanitizers = [];
 
@@ -78,8 +78,8 @@ final class Plugin {
 
 		/**
 		 * @since 5.0.0
-		 * @param array $filters {
-		 *     A map of option filters and their callbacks.
+		 * @param array<string, callable[]> $sanitizers {
+		 *     A map of option sanitizers and their callbacks.
 		 *
 		 *     @type callable[] {$option} The callback to sanitize the option indexed by option name.
 		 * }
@@ -124,7 +124,7 @@ final class Plugin {
 	 */
 	public static function register_sanitizers( $filters ) {
 
-		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use self::$filters hereinafter.
+		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use self::$sanitizers hereinafter.
 		$_sanitizers = &self::$sanitizers;
 
 		foreach ( $filters as $option => $callbacks ) {

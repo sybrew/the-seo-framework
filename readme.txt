@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
-Requires at least: 6.0
+Requires at least: 6.7
 Tested up to: 6.9
 Requires PHP: 7.4.0
 Stable tag: 5.1.4
@@ -144,7 +144,7 @@ The SEO Framework works on many things without notifying you, because the best s
 
 1. Install **The SEO Framework** either via your WordPress dashboard using plugin search or by uploading the files to your server.
 1. Either network-activate this plugin or activate it on a single site.
-1. That's it! The plugin now improves your website with SEO. It also protects your website against SEO attacks.
+1. That's it! The plugin now handles your website's SEO. It also protects your website against SEO attacks.
 
 ### This plugin auto-configures its global settings
 
@@ -245,6 +245,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.1.5
 
+TODO Fix sitemaps on SUBDIRECTORIES already.
+
 ## For everyone
 
 * **Changed:**
@@ -262,10 +264,32 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Added `touchcancel` event handling for multi-finger gesture support -- it won't invoke multiple tooltips anymore.
 		* Tooltips now stay when invoking a scroll or pan on touch devices.
 		* SEO Bar focus styles now use `:focus-visible` instead of `:focus`, preventing focus rings on touch taps, but still showing them for keyboard navigation.
+	* **Styling:**
+		* The default admin style for WordPress 7.0 is now assumed to be `'modern'` instead of `'fresh'`.
+		* Updated radio buttons and checkboxes to accomodate for WordPress 7.0.
+	* **Robots.txt:**
+		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
+	* **Head tags:**
+		* The metatag generator now always outputs in HTML5 syntax, dropping XHTML support.
+* **Compatibility:**
+	* **Plugins: Cachify, LiteSpeed Cache, SpeedyCache, Surge, W3 Total Cache, etc.:**
+		* Resolved an issue where cache plugins that do not have specific exclusion rules for sitemap or sitemap stylesheet endpoints could serve an empty sitemap or stylesheet on later visits.
+			* You must flush the entire cache for these plugins in order to make this effective. This update prevents new empty sitemap or stylesheet responses from being stored, but it cannot replace a broken response already written to a page cache, reverse proxy, CDN, or host-level cache before WordPress loads.
+			* After updating, use the cache plugin's "Purge All," "Clear all cache," or equivalent full-cache action. Do not purge only `sitemap.xml`, `sitemap_index.xml`, or `sitemap.xsl`, because cache plugins may store endpoint variants by host, scheme, compression, mobile view, language, or query state.
+			* Do not rely on the plugin update process to clear these entries. Cachify, SpeedyCache, and W3 Total Cache do not appear to purge all page cache entries on plugin updates; LiteSpeed Cache does so only when its "Purge All On Upgrade" setting is enabled; Surge expires all entries on automatic updates and plugin activation/deactivation, but not reliably on manual updates.
+	* **Plugin: Polylang:**
+		* Resolved an issue where posts excluded from local search could still appear in translated search results.
+* **Fixed:**
+	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
+	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
+	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
+* **Notes:**
+	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
+		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
 
 ## For developers
 
-**PHP method notes:**
+* **PHP API notes:**
 	* **Added:**
 		* Pool `tsf()->admin()->seobar()` is now available.
 			* It contains public methods `generate_bar()`, `collect_seo_bar_items()`, `register_seo_bar_item()`, and `edit_seo_bar_item()`.
@@ -276,9 +300,20 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* Internally known as `The_SEO_Framework\Admin\Script\Loader`.
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar xplainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
 	* **Changed:**
+		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`) no longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`.
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
 			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
+	* **Improved:**
+		* Method `The_SEO_Framework\Meta\Open_Graph::get_locale()` (`tsf()->open_graph()->get_locale()`) now derives the Open Graph locale from `The_SEO_Framework\Data\Blog::get_language()` (`tsf()->data()->blog()->get_language()`) instead of calling `get_locale()` directly. Because `get_language()` is memoized, repeated locale filter callbacks on multilingual sites (Polylang, WPML) are avoided.
+		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
+		* Method `The_SEO_Framework\Helper\Headers::clean_response_header()` (`tsf()->headers()->clean_response_header()`) now defines `DONOTCACHEPAGE` before clearing output buffers, so page caches can skip storing scrubbed responses.
+		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
+	* **Other:**
+		* Class `The_SEO_Framework\Pool` (`tsf()->pool()`) now stores cache keys by function name, instead of hardcoded strings, reducing duplication and the risk of mismatched keys. This was initiated after we found a typo in a string key.
+* **Filter notes:**
+	* **Changed:**
+		* Filter `the_seo_framework_breadcrumb_shortcode_css`: The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
 
 ### 5.1.4
 

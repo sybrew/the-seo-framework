@@ -24,10 +24,11 @@ use The_SEO_Framework\{
 \add_filter( 'the_seo_framework_generated_description', __NAMESPACE__ . '\pll__' );
 \add_filter( 'the_seo_framework_front_init', __NAMESPACE__ . '\_hijack_polylang_home_url' );
 \add_filter( 'pll_home_url_white_list', __NAMESPACE__ . '\_polylang_allow_tsf_home_url' );
-\add_filter( 'pll_home_url_allow_list', __NAMESPACE__ . '\_polylang_allow_tsf_home_url' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\_polylang_flush_sitemap' );
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\_defunct_badly_coded_polylang_script', 11 );
 \add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\_polylang_seo_column_keys_order' );
+\add_filter( 'the_seo_framework_supported_taxonomy', __NAMESPACE__ . '\_polylang_support_language_taxonomy', 10, 2 );
+\add_action( 'pre_get_posts', __NAMESPACE__ . '\_polylang_translate_query_exclusions', 10000 );
 
 /**
  * Registers more sitemaps for the robots.txt to parse.
@@ -197,6 +198,99 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 }
 
 /**
+ * Allows front-end query adjustments when Polylang filters by language.
+ *
+ * Polylang adds its non-public 'language' taxonomy to front-end tax queries.
+ * TSF supports it only for query adjustment checks; admin taxonomy SEO support
+ * remains unchanged.
+ *
+ * @hook the_seo_framework_supported_taxonomy 10
+ * @since 5.1.5
+ * @link https://github.com/polylang/polylang/pull/1871 Partially supersedes this for pre_get_posts.
+ *
+ * @param bool   $supported Whether the taxonomy is supported.
+ * @param string $taxonomy  The taxonomy name.
+ * @return bool
+ */
+function _polylang_support_language_taxonomy( $supported, $taxonomy ) {
+
+	if ( \is_admin() || 'language' !== $taxonomy )
+		return $supported;
+
+	return true;
+}
+
+/**
+ * Translates TSF's post exclusions to the current Polylang language.
+ *
+ * Polylang's front-end ID auto-translation is registered too late for the main
+ * query in released versions. This local fallback mirrors only the part TSF
+ * needs until Polylang translates IDs added during pre_get_posts itself.
+ *
+ * @hook pre_get_posts 10000
+ * @since 5.1.5
+ * @link https://github.com/polylang/polylang/pull/1871 May be redundant when Polylang translates late post IDs.
+ *
+ * @param \WP_Query $wp_query The WP_Query instance.
+ * @return void
+ */
+function _polylang_translate_query_exclusions( $wp_query ) {
+
+	if (
+		   \is_admin()
+		|| (
+			   ! $wp_query->is_search
+			&& ! $wp_query->is_archive
+			&& ! $wp_query->is_home
+		)
+	) return;
+
+	$post__not_in = $wp_query->get( 'post__not_in' );
+
+	if ( empty( $post__not_in ) || ! \function_exists( 'PLL' ) )
+		return;
+
+	$polylang = \PLL();
+
+	if ( ! ( $polylang instanceof \PLL_Frontend ) )
+		return;
+
+	$model     = $polylang->model;
+	$post_type = $wp_query->get( 'post_type' );
+
+	if ( $post_type && ! $model->is_translated_post_type( $post_type ) )
+		return;
+
+	$language = $polylang->curlang ?? null;
+
+	if ( ! $language ) {
+		$lang = $wp_query->get( 'lang' );
+
+		if ( $lang )
+			$language = $model->get_language( $lang );
+	}
+
+	if ( ! $language instanceof \PLL_Language )
+		return;
+
+	$translated = [];
+	$post_model = $model->post;
+
+	foreach ( (array) $post__not_in as $post_id ) {
+		if ( ! $post_id )
+			continue;
+
+		$translated[ $post_model->get(
+			$post_id,
+			$language,
+		) ?: $post_id ] = true;
+	}
+
+	if ( $translated )
+		$wp_query->set( 'post__not_in', array_keys( $translated ) );
+}
+
+/**
  * Enables string translation support on titles and descriptions.
  *
  * @hook the_seo_framework_title_from_custom_field 10
@@ -209,6 +303,7 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * @return string
  */
 function pll__( $string ) {
+
 	if ( \function_exists( 'PLL' ) && \function_exists( 'pll__' ) )
 		if ( \PLL() instanceof \PLL_Frontend )
 			return \pll__( $string );
@@ -228,6 +323,7 @@ function pll__( $string ) {
  * @global \wpdb $wpdb
  */
 function _polylang_flush_sitemap() {
+
 	global $wpdb;
 
 	$transient_prefix = Sitemap\Cache::get_transient_prefix();
@@ -292,6 +388,7 @@ function _defunct_badly_coded_polylang_script() {
  * @see https://github.com/polylang/polylang/issues/1422
  * @see https://github.com/sybrew/the-seo-framework/issues/665
  * @since 5.0.5
+ * @link https://github.com/polylang/polylang/pull/1871 May be redundant when Polylang allows early home_url filtering.
  */
 function _hijack_polylang_home_url() {
 
@@ -335,8 +432,7 @@ function _hijack_polylang_home_url() {
  * This filter adds TSF as correctly interpreting the home URL, so it can be
  * agnostic about the home URL request.
  *
- * @hook pll_home_url_white_list 10 - I didn't pick this name.
- * @hook pll_home_url_allow_list 10 - some day this will probably be instated.
+ * @hook pll_home_url_white_list 10
  * @since 5.0.5
  * @param string[][] $allow_list An array of arrays each of them having a 'file' key
  *                               and/or a 'function' key to decide which functions in

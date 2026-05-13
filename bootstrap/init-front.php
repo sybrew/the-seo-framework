@@ -59,7 +59,7 @@ if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 \add_action( 'template_redirect', [ Front\Redirect::class, 'init_meta_setting_redirect' ] );
 
 // Prepares requisite robots headers to avoid low-quality content penalties.
-\add_action( 'do_robots', [ Headers::class, 'output_robots_noindex_headers' ] );
+\add_action( 'do_robots', [ Headers::class, 'output_robots_noindex_headers' ], 9 );
 \add_action( 'the_seo_framework_sitemap_header', [ Headers::class, 'output_robots_noindex_headers' ] );
 
 // Overwrite title tags.
@@ -76,7 +76,7 @@ if ( Data\Plugin::get_option( 'alter_archive_query' ) ) {
 
 		case 'in_query':
 		default:
-			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_archive_query_in' ], 9999, 1 );
+			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_archive_query_in' ], 9999 );
 	}
 }
 
@@ -88,7 +88,7 @@ if ( Data\Plugin::get_option( 'alter_search_query' ) ) {
 
 		case 'in_query':
 		default:
-			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_search_query_in' ], 9999, 1 );
+			\add_action( 'pre_get_posts', [ Front\Query::class, 'alter_search_query_in' ], 9999 );
 	}
 }
 
@@ -105,7 +105,7 @@ if (
 
 	// Only add the feed link to the excerpt if we're only building excerpts.
 	if ( \get_option( 'rss_use_excerpt' ) )
-		\add_filter( 'the_excerpt_rss', [ Front\Feed::class, 'modify_the_content_feed' ], 10, 1 );
+		\add_filter( 'the_excerpt_rss', [ Front\Feed::class, 'modify_the_content_feed' ] );
 }
 
 /**

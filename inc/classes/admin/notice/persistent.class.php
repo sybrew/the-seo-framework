@@ -199,6 +199,7 @@ class Persistent {
 	/**
 	 * Outputs registered dismissible persistent notice.
 	 *
+	 * @hook admin_notices 10
 	 * @since 4.1.0
 	 * @since 4.1.2 Now only ignores timeout values of -1 to test against.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
@@ -235,6 +236,7 @@ class Persistent {
 	/**
 	 * Clears persistent notice on user request (clicked Dismiss icon) via the no-JS form.
 	 *
+	 * @hook admin_init 10
 	 * @since 4.1.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @access private

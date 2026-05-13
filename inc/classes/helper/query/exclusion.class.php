@@ -34,7 +34,7 @@ use The_SEO_Framework\Helper\{
  */
 
 /**
- * Excludes stuff from the query.
+ * Helper methods for excluding posts from queries.
  *
  * @since 5.0.0
  * @access protected

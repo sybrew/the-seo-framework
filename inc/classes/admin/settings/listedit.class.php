@@ -62,7 +62,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$instance = new self;
 
 		\add_action( 'current_screen', [ $instance, 'prepare_edit_box' ] );
-		\add_filter( 'hidden_columns', [ $instance, 'hide_quick_edit_column' ], 10, 1 );
+		\add_filter( 'hidden_columns', [ $instance, 'hide_quick_edit_column' ] );
 	}
 
 	/**

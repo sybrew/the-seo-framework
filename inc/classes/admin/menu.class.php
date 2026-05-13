@@ -42,6 +42,7 @@ class Menu {
 	/**
 	 * Adds menu links under "settings" in the wp-admin dashboard
 	 *
+	 * @hook admin_menu 10
 	 * @since 2.2.2
 	 * @since 2.9.2 Added static cache so the method can only run once.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.

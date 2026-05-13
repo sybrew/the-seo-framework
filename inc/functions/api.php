@@ -161,6 +161,7 @@ namespace {
 
 		/**
 		 * @since 5.0.0
+		 * @since 5.1.5 Added `padding-inline-start:0` to `nav.$class ol`.
 		 * @param array  $css   The CSS selectors and their attributes.
 		 * @param string $class The class name of the breadcrumb wrapper.
 		 */
@@ -171,6 +172,7 @@ namespace {
 					'display:inline',
 					'list-style:none',
 					'margin-inline-start:0',
+					'padding-inline-start:0',
 				],
 				"nav.$class ol li"                         => [ // We could combine with above; but this is easier for other devs.
 					'display:inline',

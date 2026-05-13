@@ -38,7 +38,7 @@ final class PluginTable {
 	/**
 	 * Adds various links to the plugin row on the plugin's screen.
 	 *
-	 * @hook plugin_action_links_the-seo-framework/the-seo-framework.php
+	 * @hook plugin_action_links_the-seo-framework/the-seo-framework.php 10
 	 * @since 3.1.0
 	 * @since 4.1.4 Moved to PluginTable.
 	 * @access private
@@ -75,7 +75,7 @@ final class PluginTable {
 	/**
 	 * Adds more row meta on the plugin screen.
 	 *
-	 * @hook plugin_row_meta
+	 * @hook plugin_row_meta 10
 	 * @since 3.2.4
 	 * @since 4.1.4 Moved to PluginTable.
 	 * @since 5.0.0 Exchanged API docs for GitHub link. Simplified translations.

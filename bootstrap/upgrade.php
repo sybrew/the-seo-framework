@@ -258,10 +258,9 @@ function _set_upgrade_lock( $release_timeout ) {
 
 	$lock_option = _get_lock_option();
 
-	// TODO WP 6.6+ change 'no' to 'off'.
 	$lock = $wpdb->query(
 		$wpdb->prepare(
-			"INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */",
+			"INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'off') /* LOCK */",
 			$lock_option,
 			time(),
 		),

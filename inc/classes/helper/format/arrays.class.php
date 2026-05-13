@@ -150,44 +150,54 @@ class Arrays {
 	 *
 	 * This is the only correct function of kind that exists, made bespoke by Sybre for TSF.
 	 *
-	 * @link <https://3v4l.org/CuItX> Test it here.
-	 * TODO consider array_reduce() for improved performance?
+	 * @link <https://3v4l.org/CuItX> Test the old one here (one function).
+	 * @link <https://3v4l.org/3rvrS> Test the new one here (1.9x faster, two functions).
 	 *
 	 * @since 5.1.0
+	 * @since 5.1.5 Now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
 	 *
 	 * @param array ...$arrays The arrays to differentiate. The leftmost array's values are dominant.
 	 * @return array The differentiated array values.
 	 */
 	public static function array_diff_assoc_recursive( ...$arrays ) {
 
-		$i = \count( $arrays );
+		$reversed = array_reverse( $arrays );
+		// Do not inline array_shift into array_reduce: PHP evaluates args left-to-right, so $reversed would be unshifted.
+		$init = array_shift( $reversed );
 
-		while ( --$i ) {
-			$p = $i - 1;
+		return array_reduce(
+			$reversed,
+			[ self::class, 'diff_assoc_pair' ],
+			$init,
+		);
+	}
 
-			if ( \is_array( $arrays[ $i ] ) && \is_array( $arrays[ $p ] ) ) {
-				foreach ( $arrays[ $i ] as $key => &$value ) {
-					if ( ! \array_key_exists( $key, $arrays[ $p ] ) ) {
-						// If the value doesn't exist in previous array, pass it along.
-						$arrays[ $p ][ $key ] = $value;
-						continue;
-					}
+	/**
+	 * Computes a pairwise difference between two arrays, recursively.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param array $compare The comparison array (carry from array_reduce).
+	 * @param array $base    The base array (item from array_reduce).
+	 * @return array The base array with matching keys removed and extra keys added.
+	 */
+	private static function diff_assoc_pair( $compare, $base ) {
 
-					if (
-						   $value === $arrays[ $p ][ $key ]
-						|| ( \is_array( $value ) && ! self::array_diff_assoc_recursive( ...array_column( $arrays, $key ) ) )
-					) {
-						// If there's no diff with the previous array or no diff can be found recursively, remove it from all the next arrays.
-						foreach ( range( $p, $i ) as $_i )
-							if ( \is_array( $arrays[ $_i ] ) )
-								unset( $arrays[ $_i ][ $key ] );
+		foreach ( $compare as $key => $value ) {
+			if ( ! \array_key_exists( $key, $base ) ) {
+				$base[ $key ] = $value;
+				continue;
+			}
 
-						continue;
-					}
-				}
+			if (
+				   $value === $base[ $key ]
+				|| ( \is_array( $value ) && \is_array( $base[ $key ] ) && ! self::diff_assoc_pair( $value, $base[ $key ] ) )
+			) {
+				unset( $base[ $key ] );
+				continue;
 			}
 		}
 
-		return $arrays[0];
+		return $base;
 	}
 }

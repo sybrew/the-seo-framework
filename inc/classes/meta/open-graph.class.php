@@ -323,12 +323,18 @@ class Open_Graph {
 	 * Returns the locale for Open Graph.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now uses the site language instead of the raw WordPress locale.
 	 *
 	 * @return string
 	 */
 	public static function get_locale() {
 
-		$locale = \get_locale();
+		// Open Graph locales use POSIX underscores (ll_CC); Data\Blog::get_language() uses BCP 47 hyphens (ll-CC).
+		$locale = str_replace(
+			'-',
+			'_',
+			Data\Blog::get_language(),
+		);
 
 		$locale_len    = \strlen( $locale );
 		$valid_locales = self::get_supported_locales(); // [ ll_LL => ll ]

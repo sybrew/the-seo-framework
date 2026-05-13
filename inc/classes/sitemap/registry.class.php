@@ -339,7 +339,7 @@ class Registry {
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
-			header( 'Content-type: text/xml; charset=utf-8', true );
+			header( 'Content-type: text/xml; charset=utf-8' );
 		}
 
 		// Fetch sitemap content and add trailing line. Already escaped internally.
@@ -360,6 +360,7 @@ class Registry {
 	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from `output_sitemap_xsl_stylesheet()`
 	 * @since 4.1.2 Is now static.
+	 * @since 5.1.5 Now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 	 */
 	public static function output_stylesheet() {
 
@@ -367,8 +368,9 @@ class Registry {
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
-			header( 'Content-type: text/xsl; charset=utf-8', true );
-			header( 'Cache-Control: max-age=1800', true );
+			header( 'Content-type: text/xsl; charset=utf-8' );
+			header( 'Cache-Control: max-age=1800' );
+			header( 'X-Robots-Tag: nofollow', false );
 		}
 
 		Optimized\XSL::register_hooks();

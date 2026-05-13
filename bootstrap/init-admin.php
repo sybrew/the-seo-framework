@@ -128,8 +128,8 @@ if ( ! $headless['user'] ) {
 		\add_action( 'edit_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
 	}
 
-	\add_action( 'personal_options_update', [ Data\Admin\User::class, 'update_meta' ], 10, 1 );
-	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, 'update_meta' ], 10, 1 );
+	\add_action( 'personal_options_update', [ Data\Admin\User::class, 'update_meta' ] );
+	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, 'update_meta' ] );
 }
 
 if ( \in_array( false, $headless, true ) ) { // Still got head...
@@ -140,7 +140,7 @@ if ( \in_array( false, $headless, true ) ) { // Still got head...
 	\add_action( 'admin_init', [ Admin\Notice\Persistent::class, '_dismiss_notice' ] );
 
 	// Enqueues admin scripts.
-	\add_action( 'admin_enqueue_scripts', [ Admin\Script\Registry::class, '_init' ], 0, 1 );
+	\add_action( 'admin_enqueue_scripts', [ Admin\Script\Registry::class, '_init' ], 0 );
 
 	// Setup user sanitization. If at least something isn't headless, user metadata can be used.
 	\add_action(

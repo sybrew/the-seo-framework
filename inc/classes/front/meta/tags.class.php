@@ -135,12 +135,10 @@ final class Tags {
 	}
 
 	/**
-	 * Renders an XHTML element. Sane drop-in for DOMDocument and whatnot.
-	 *
-	 * Even though most (if not all) WordPress sites use HTML5, we expect some still use XHTML.
-	 * We expect HTML5 fully on the back-end.
+	 * Renders an HTML5 element. Sane, performant, and secure drop-in for DOMDocument and whatnot.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Removed XHTML support. The tags are now always rendered in HTML5 syntax.
 	 *
 	 * @param array         $attributes {
 	 *                          Associative array of tag names and tag values.
@@ -216,8 +214,9 @@ final class Tags {
 			);
 		}
 
-		// phpcs:disable WordPress.Security.EscapeOutput -- already escaped.
+		// phpcs:disable WordPress.Security.EscapeOutput -- $attr is escaped above, and $content is conditionally escaped below.
 		if ( isset( $content ) ) {
+			// Normal elements.
 			vprintf(
 				'<%1$s%2$s>%3$s</%1$s>',
 				[
@@ -234,8 +233,9 @@ final class Tags {
 				],
 			);
 		} else {
+			// Void elements.
 			printf(
-				'<%s%s />', // XHTML compatible.
+				'<%s%s>',
 				/** @link <https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#syntax-tag-name> */
 				preg_replace( '/[^0-9a-zA-Z]+/', '', $tag ),
 				$attr,

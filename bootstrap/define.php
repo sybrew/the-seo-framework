@@ -83,7 +83,7 @@ namespace The_SEO_Framework;
  *
  * Used for storing the SEO options array.
  *
- * @since 2.2.2
+ * @since 2.2.5
  * @since 5.0.0 Removed its filter.
  */
 \define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS', 'autodescription-site-settings' );
@@ -117,7 +117,7 @@ namespace The_SEO_Framework;
  * The plugin folder URL. Has a trailing slash.
  * Used for calling browser files.
  *
- * @since 2.2.2
+ * @since 2.2.5
  */
 \define( 'THE_SEO_FRAMEWORK_DIR_URL', \plugin_dir_url( \THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) );
 
@@ -131,7 +131,7 @@ namespace The_SEO_Framework;
 /**
  * The plugin folder absolute path. Used for calling php files.
  *
- * @since 2.2.2
+ * @since 2.2.5
  */
 \define( 'THE_SEO_FRAMEWORK_DIR_PATH', \dirname( \THE_SEO_FRAMEWORK_PLUGIN_BASE_FILE ) . \DIRECTORY_SEPARATOR );
 

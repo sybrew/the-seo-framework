@@ -90,7 +90,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 		$offset = ( $page_num - 1 ) * \wp_sitemaps_get_max_urls( $this->object_type );
 
 		$args           = $this->get_taxonomies_query_args( $taxonomy );
-		$args['fields'] = 'all'; // On WP<6.0 this is 'ids'; overwrite it. This line is a mirror of WPv6.0, too.
+		$args['fields'] = 'all'; // Pin to 'all'; mirrors WP core's own sitemap query.
 		$args['offset'] = $offset;
 
 		$taxonomy_terms = new \WP_Term_Query( $args );
