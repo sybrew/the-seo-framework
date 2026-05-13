@@ -387,7 +387,7 @@ Input::output_js_social_data(
 				$permastruct = Meta\URI\Utils::get_url_permastruct( $generator_args );
 
 				$parent_term_slugs        = [];
-				$is_taxonomy_hierarchical = $tax_object->hierarchical && $tax_object->rewrite['hierarchical'];
+				$is_taxonomy_hierarchical = $tax_object->hierarchical && ( $tax_object->rewrite['hierarchical'] ?? false );
 
 				if ( $is_taxonomy_hierarchical && str_contains( $permastruct, "%$taxonomy%" ) ) {
 					// self is filled by current term name.

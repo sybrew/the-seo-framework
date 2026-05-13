@@ -309,6 +309,8 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
 		* Method `The_SEO_Framework\Helper\Headers::clean_response_header()` (`tsf()->headers()->clean_response_header()`) now defines `DONOTCACHEPAGE` before clearing output buffers, so page caches can skip storing scrubbed responses.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
+	* **Fixed:**
+		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin.
 	* **Other:**
 		* Class `The_SEO_Framework\Pool` (`tsf()->pool()`) now stores cache keys by function name, instead of hardcoded strings, reducing duplication and the risk of mismatched keys. This was initiated after we found a typo in a string key.
 * **Filter notes:**
