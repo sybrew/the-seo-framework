@@ -107,13 +107,10 @@ class Main {
 						$sitemaps[] = \esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url( $id ) );
 
 			} elseif ( ! Compatibility::get_active_conflicting_plugin_types()['sitemaps'] && Sitemap\Utils::use_core_sitemaps() ) {
-				$wp_sitemaps_server = \wp_sitemaps_get_server();
-
-				if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
-					// add_robots() returns "Sitemap: <url>" formatted text; extract the URLs. Links are already escaped.
-					if ( preg_match_all( '/Sitemap:\s*(\S+)/', $wp_sitemaps_server->add_robots( '', Data\Blog::is_public() ), $matches ) )
-						array_push( $sitemaps, ...$matches[1] );
-				}
+				// Mirror the optimized-sitemap branch above: push the bare, escaped index URL.
+				// use_core_sitemaps() already guarantees WordPress's 5.5+ sitemaps API is present.
+				if ( Data\Blog::is_public() )
+					$sitemaps[] = \esc_url( \wp_sitemaps_get_server()->index->get_index_url() );
 			}
 		}
 
