@@ -181,7 +181,7 @@ meta/
 		theme-color.class.php                 Generates the <meta name="theme-color"> tag from plugin settings
 		twitter.class.php                     Generates Twitter Card meta tags (card type, site, creator, title, description, image)
 		uri.class.php                         Generates canonical URL, pagination rel-links (prev/next), and shortlink tags
-		webmasters.class.php                  Generates site verification meta tags for Google, Bing, Yandex, Baidu, Pinterest
+		webmasters.class.php                  Generates site verification meta tags for Google, Bing, Yandex, Baidu, Pinterest, Facebook
 
 
 Helper (inc/classes/helper/)
@@ -380,7 +380,7 @@ settings/
 		sitemaps.php              Settings metabox: XML sitemap configuration (general, robots.txt, metadata, style)
 		social.php                Settings metabox: social meta tags (Open Graph, Twitter Cards, oEmbed, profiles)
 		title.php                 Settings metabox: title tag behavior (additions, separator, prefix, capitalization)
-		webmaster.php             Settings metabox: webmaster verification codes (Google, Bing, Yandex, Baidu, Pinterest)
+		webmaster.php             Settings metabox: webmaster verification codes (Google, Bing, Yandex, Baidu, Pinterest, Facebook)
 
 sitemap/
 	xml-sitemap.php               Generates and outputs the full XML sitemap document (header, urlset, URLs, debug stats)

@@ -216,7 +216,7 @@ function _upgrade( $previous_version ) {
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5100', '5130', '5140',
+		'5001', '5050', '5100', '5130', '5140', '5150',
 	];
 	// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
@@ -1011,4 +1011,15 @@ function _do_upgrade_5140() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5140' )
 		Data\Plugin::update_option( 'breadcrumb_use_meta_title', 1 );
+}
+
+/**
+ * Registers new option 'facebook_verification', string.
+ *
+ * @since 5.1.5
+ */
+function _do_upgrade_5150() {
+
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5150' )
+		Data\Plugin::update_option( 'facebook_verification', '' );
 }

@@ -91,6 +91,16 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				),
 				'placeholder' => '123456a7b8901de2fa34bcdef5a67b90',
 			],
+			'facebook'  => [
+				'setting'     => 'facebook_verification',
+				'label'       => \__( 'Facebook Domain Verification Code', 'autodescription' ),
+				'info'        => HTML::make_info(
+					\__( 'Get the Facebook verification code.', 'autodescription' ),
+					'https://business.facebook.com/settings/owned-domains',
+					false,
+				),
+				'placeholder' => '1a2bc3d4efg5hi6jklmno7pqrs8tu9',
+			],
 		];
 
 		HTML::header_title( \__( 'Webmaster Integration Settings', 'autodescription' ) );
