@@ -215,7 +215,10 @@ class Taxonomy {
 		$taxonomy = $taxonomy ?: Query::get_current_taxonomy();
 		$tax      = $taxonomy ? \get_taxonomy( $taxonomy ) : null;
 
-		return $tax->object_type ?? [];
+		// Reindex: WP's unregister_taxonomy_for_object_type() (and plugins
+		// filtering the object types) can leave holes in the array, which
+		// wp_json_encode() would then serialize as an object instead of a list.
+		return array_values( $tax->object_type ?? [] );
 	}
 
 	/**
