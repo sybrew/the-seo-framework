@@ -86,7 +86,7 @@ Do not argue a settled intent, rehash a corrected misread, or add meta-commentar
 
 ## File Health
 
-- Text files use LF line endings. After writing or editing files on Windows, normalize affected paths to LF before finishing the task. Use the `normalize-line-endings` skill command when needed.
+- Text files use LF line endings.
 - If you find a whitespace issue, it is probably because you forgot to add a newline at the end.
 
 ## Scoped Instruction Files
