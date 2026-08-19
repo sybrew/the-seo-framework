@@ -31,7 +31,7 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 		css.mdc                     CSS-scoped rule attaching css.instructions.md
 		docs.mdc                    Readme-scoped rule attaching docs.instructions.md
 		javascript.mdc              JavaScript-scoped rule attaching javascript.instructions.md
-		local.mdc                   .local/-scoped rule attaching local.instructions.md
+		local.mdc                   Always-applied: gitignored .local search workaround; attaches local.instructions.md
 		php.mdc                     PHP-scoped rule attaching php.instructions.md
 	skills/                       Project-scoped Agent Skills (SKILL.md workflows)
 		normalize-line-endings/     LF normalization skill for Windows agent writes

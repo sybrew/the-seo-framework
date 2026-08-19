@@ -1,9 +1,10 @@
 ---
-description: Private workspace guidance, support materials, related-repository cross-references, remediation, troubleshooting, reproduction, triage, and customer-facing diagnosis
-globs: .local/**
-alwaysApply: false
+description: Private workspace guidance and gitignored .local search (Grep/Glob are blind)
+alwaysApply: true
 ---
 
 Follow the local workspace rules in @.github/instructions/local.instructions.md when handling `.local/` content, support inquiries, or private workspace context.
 
-`.local/` is gitignored. Grep usually cannot search it; Glob is unreliable. Prefer Read/Write with explicit paths, or Shell to list/search.
+`.local/` is gitignored (`/.local/*`). `.cursorignore` `!.local/**` only helps indexing and @ mentions. Agent Grep and Glob still return zero results, even with an explicit `.local` path. Do not conclude the folder is empty. Use Read/Write with an explicit path, or Shell to list/search (`Get-ChildItem`, `Select-String`, `rg --no-ignore-vcs`).
+
+To load `.local/.instructions/*.instructions.md`, extract YAML frontmatter with the commands in that file, then Read only the matches. Do not Read every instruction file up front.
