@@ -7,7 +7,7 @@ applyTo: ".local/**"
 
 - Treat `.local/` as private workspace-only context.
 - Do not expose `.local/` details or related-repository context in public-facing instructions or responses unless the user asks for them.
-- When `.local/.instructions/*.instructions.md` files exist, find the most suitable one or ones for the current case and follow them.
+- `.local/.instructions/*.instructions.md` is not auto-injected. Read the applicable files before drafting or revising `.local/` content or customer-facing replies that depend on them.
 - Keep related-repository cross-references that should not be public in `.local/.instructions/*.instructions.md`, not in tracked repo instruction files.
 - Treat support inquiries as first-class engineering work.
 - Support inquiries may require code inspection, reproduction, remediation, or patches.

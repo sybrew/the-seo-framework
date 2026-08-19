@@ -346,7 +346,9 @@ namespace The_SEO_Framework {
 	 * @return bool True if already called, false otherwise.
 	 */
 	function has_run( $caller ) {
+
 		static $ran = [];
+
 		return $ran[ $caller ] ?? ! ( $ran[ $caller ] = true );
 	}
 

@@ -405,6 +405,7 @@ function _hijack_polylang_home_url() {
 	\add_filter(
 		'home_url',
 		function ( ...$args ) use ( $default_cb ) {
+
 			global $wp_actions;
 
 			// Polylang runs as intended at template_redirect or later. Don't trick when pll_language_defined didn't run.

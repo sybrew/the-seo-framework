@@ -5,6 +5,8 @@ param(
 )
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+$script:useful = 0
+$script:useless = 0
 $textExtensions = @(
 	'.md',
 	'.mdc',
@@ -39,11 +41,9 @@ function Normalize-LfFile {
 
 	$bytes = [System.IO.File]::ReadAllBytes($FilePath)
 
-	if ($bytes.Length -eq 0) {
-		return
-	}
-
-	if ($bytes -notcontains 13) {
+	if ($bytes.Length -eq 0 -or $bytes -notcontains 13) {
+		Write-Output "USELESS already LF: $FilePath"
+		$script:useless++
 		return
 	}
 
@@ -60,7 +60,8 @@ function Normalize-LfFile {
 	}
 
 	[System.IO.File]::WriteAllText($FilePath, $normalized, $utf8NoBom)
-	Write-Output "Normalized LF: $FilePath"
+	Write-Output "USEFUL converted: $FilePath"
+	$script:useful++
 }
 
 function Get-TextFilesFromDirectory {
@@ -113,3 +114,5 @@ foreach ($path in $Paths) {
 $files | Select-Object -ExpandProperty FullName -Unique | ForEach-Object {
 	Normalize-LfFile -FilePath $_
 }
+
+Write-Output "RESULT: useful=$script:useful useless=$script:useless"

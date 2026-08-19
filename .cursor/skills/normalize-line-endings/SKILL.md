@@ -12,7 +12,7 @@ On Windows, agent `Write` and `StrReplace` tools often persist `\r\n` even when 
 
 ## When to run
 
-After creating or editing any text file that must use LF created via `Write` or `StrReplace`, run normalization before finishing the task. Do this even when only one file changed.
+After creating or editing any text file that must use LF created via `Write` or `StrReplace`, run normalization before finishing the task. Do this even when only one file changed. Then append a row to `../../.local/skills/tally/normalize-line-endings.md` from the script `RESULT` line.
 
 ## Command
 
@@ -40,6 +40,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ".cursor\skills\normalize-li
 ```powershell
 python -c "from pathlib import Path; p=Path(r'PATH'); b=p.read_bytes(); print(p.name, 'CRLF' if b'\r\n' in b else 'LF')"
 ```
+
+## Tally
+
+After each run, append a row to `../../.local/skills/tally/normalize-line-endings.md` (create it if missing).
 
 ## Rules
 

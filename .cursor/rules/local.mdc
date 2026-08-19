@@ -5,3 +5,5 @@ alwaysApply: false
 ---
 
 Follow the local workspace rules in @.github/instructions/local.instructions.md when handling `.local/` content, support inquiries, or private workspace context.
+
+`.local/` is gitignored. Grep usually cannot search it; Glob is unreliable. Prefer Read/Write with explicit paths, or Shell to list/search.

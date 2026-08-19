@@ -24,16 +24,6 @@ This repository work generally falls into three categories:
 
 Support inquiries are first-class engineering work. They may require code inspection, reproduction, remediation, or patches.
 
-## Task Workflow
-
-For every coding task:
-
-1. First analyze the codebase structure and existing patterns.
-2. Identify reusable components or utilities.
-3. Explain the approach briefly.
-4. Only then implement the solution.
-5. Avoid creating new abstractions if an existing one fits.
-
 ## File Management
 
 - Refer to `.github/codemap.txt` first to understand the codebase structure and locate files.
@@ -43,32 +33,15 @@ For every coding task:
 
 ## Response Style
 
-For every user message, without exception:
+Think internally. Do not dump reasoning, planning, or status chatter into the chat.
 
-- Before final post-work summaries after researching, editing, testing, or validation, print a Markdown horizontal rule (`---`) on its own line above the response.
-- Hide your step-by-step reasoning, planning, and mental evaluations completely out of the user's view. If you need to reason sequentially before answering, write your thoughts into session memory (`/memories/session/plan.md`) via tool steps before continuing. Never print your chain of thought, evaluating sections, or preambles in the plain visible chat. Do not output routine announcements like `I'll read...` or `I'll patch...`.
-- Be direct, for example `Yes, doable and not a big deal.` or `No, that won't work because...`.
-- Be short, terse, clear, and information-dense. Use fewer words to convey more.
-- Use markdown for scannability only when it reduces prose or improves clarity.
-- Use numbered lists, bold, and tables only when they clarify the answer or reduce word count.
-- Use code blocks only for exact copy-paste text, such as DB queries, suggested DMs, flags, or commands the user requested.
-- Give concrete actionable paths when there are real options or next steps. Do not force a fixed number of paths.
-- End with the highest-signal recommendation and a short rationale when useful. Skip ritual closings.
-- Provide ready-to-copy suggested text in a fenced block when relevant.
-- Avoid walls of text. Add detail only when it changes the outcome or the user asks for it.
-- Do not provide preambles unless they are necessary for the final answer.
-- Do not correct the user when the user is clearly converging on the right conclusion and asking for confirmation.
-- Do not argue against earlier wording once the user's final intent is clear.
-- Do not revisit earlier mistaken interpretations after the user has clarified them.
-- Do not add meta-commentary about framing, reasoning style, nuance, or how the question could be interpreted unless the user asks for that analysis.
-- Do not guess. If you do not know, say that you do not know. If you are speculating or relying on training memory, say so explicitly.
-- When the user asks directly about a factual claim that you can verify from the environment, verify it before answering.
+Be direct, terse, and information-dense. Answer first. Skip preambles, filler, and ritual closings.
 
-Explicitly forbidden in any response:
+Use markdown only when it helps scan. Use code blocks for copy-paste text the user asked for.
 
-- Dreamy or talkative language, such as `So the right mental model is...` or `I would slightly tighten...`.
-- Padding, conversational filler, passive voice, or hedging language. State facts and actions directly.
-- Reframing the user's question unless it is genuinely ambiguous.
+Do not guess. If you do not know, say so. If you are speculating, say so. Verify factual claims from the environment when the user asks.
+
+Do not argue a settled intent, rehash a corrected misread, or add meta-commentary on framing unless asked.
 
 ## General Operating Rules
 
@@ -80,11 +53,7 @@ Explicitly forbidden in any response:
 - Use plain punctuation, not fancy quotes.
 - Interpolate variables in strings when possible.
 - Do not use CLI to make changes; use built-in tools instead.
-- Never commit or push. Do not create, amend, or push git commits, and do not interpret completion of work as permission to do so. This remains forbidden unless the user clearly changes this rule in a future session.
-- You are here to perform work, not merely to be conversational.
-- Be complete. If the user's latest request continues, rephrases, narrows, or extends an earlier request in the same conversation, treat it as part of the same ongoing task instead of a standalone instruction.
-- Unless the user clearly redirects or overrides that earlier path, build on it. Infer the likely intent behind the wording, account for relevant prior context, and do adjacent work that is necessary or obviously useful to save the user steps.
-- When the user gives a vague preference or shorthand instruction, infer reasonable practical consequences and apply them when they are safe and consistent with repository rules. For example, a preference for short functions can imply using concise arrow functions where the language and project style allow them.
+- Avoid creating new abstractions if an existing one fits.
 - When fixing bugs, fix the cause, not the symptom.
 - If the user corrects you three times or more on the same issue, or the user appears annoyed, assume you may be misunderstanding something. Reassess your understanding, verify direct factual claims from the environment when you can, and if needed research, ask precise follow-up questions, and request additional context until you understand the issue and work appropriately. If the failure stems from a missing or unclear instruction, update the relevant instruction files.
 - Always choose the path that creates the fewest bugs. Prioritize maintainability, edge-case safety, and clarity over short-term convenience. The end user must never encounter issues. Do not do what is easy; do what is right.
@@ -118,8 +87,6 @@ Explicitly forbidden in any response:
 ## File Health
 
 - Text files use LF line endings. After writing or editing files on Windows, normalize affected paths to LF before finishing the task. Use the `normalize-line-endings` skill command when needed.
-- Do not try to fix file encoding issues. Notify about them after your changes.
-- If you believe a file is corrupted, stop immediately and wait for a new instruction.
 - If you find a whitespace issue, it is probably because you forgot to add a newline at the end.
 
 ## Scoped Instruction Files
