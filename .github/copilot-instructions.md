@@ -117,7 +117,7 @@ Do not argue a settled intent, rehash a corrected misread, or add meta-commentar
 
 - You cannot rely on composer.json; it contains links to repositories you cannot access.
 - You may rely on phpcs.xml for coding standards.
-- Do not create minified versions of scripts unless there is a written build process.
+- Do not create, edit, or search for `*.min.js` or `*.min.css`.
 - Before executing commands, consider the development environment based on the file paths you are working with. For example, if you see `c:\`, you are working in Windows.
 
 ## Post-Change Processing
