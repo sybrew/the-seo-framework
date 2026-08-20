@@ -171,7 +171,7 @@ final class Term extends Main {
 	 */
 	protected function test_title() {
 
-		$cache = static::get_cache( 'term/title/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'term/title/defaults' ) ?? static::set_cache(
 			'term/title/defaults',
 			[
 				'params'   => [
@@ -372,7 +372,7 @@ final class Term extends Main {
 	 */
 	protected function test_description() {
 
-		$cache = static::get_cache( 'term/description/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'term/description/defaults' ) ?? static::set_cache(
 			'term/description/defaults',
 			[
 				'params'   => [
@@ -564,7 +564,7 @@ final class Term extends Main {
 	 */
 	protected function test_indexing() {
 
-		$cache = static::get_cache( 'term/indexing/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'term/indexing/defaults' ) ?? static::set_cache(
 			'term/indexing/defaults',
 			[
 				'params'   => [],
@@ -720,7 +720,7 @@ final class Term extends Main {
 	 */
 	protected function test_following() {
 
-		$cache = static::get_cache( 'term/following/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'term/following/defaults' ) ?? static::set_cache(
 			'term/following/defaults',
 			[
 				'params'   => [],
@@ -845,7 +845,7 @@ final class Term extends Main {
 	 */
 	protected function test_archiving() {
 
-		$cache = static::get_cache( 'term/archiving/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'term/archiving/defaults' ) ?? static::set_cache(
 			'term/archiving/defaults',
 			[
 				'params'   => [],
@@ -969,7 +969,7 @@ final class Term extends Main {
 	 */
 	protected function test_redirect() {
 		if ( empty( $this->query_cache['meta']['redirect'] ) ) {
-			return static::get_cache( 'term/redirect/default/0' ) ?: static::set_cache(
+			return static::get_cache( 'term/redirect/default/0' ) ?? static::set_cache(
 				'term/redirect/default/0',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
@@ -985,7 +985,7 @@ final class Term extends Main {
 				],
 			);
 		} else {
-			return static::get_cache( 'term/redirect/default/1' ) ?: static::set_cache(
+			return static::get_cache( 'term/redirect/default/1' ) ?? static::set_cache(
 				'term/redirect/default/1',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),

@@ -37,7 +37,7 @@ use The_SEO_Framework\{
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for Schema output.
  *
  * @since 5.0.0
  * @access protected

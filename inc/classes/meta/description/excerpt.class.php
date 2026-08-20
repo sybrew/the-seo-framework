@@ -91,6 +91,7 @@ class Excerpt {
 	 * Returns a description excerpt for the current query.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now keeps an excerpt of `0` instead of replacing it with an empty string.
 	 *
 	 * @return string
 	 */
@@ -107,7 +108,7 @@ class Excerpt {
 			$excerpt = self::get_archive_excerpt();
 		}
 
-		return memo( $excerpt ?? '' ?: '' );
+		return memo( $excerpt ?? '' );
 	}
 
 	/**

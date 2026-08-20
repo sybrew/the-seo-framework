@@ -39,7 +39,7 @@ use The_SEO_Framework\{
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for Open Graph output.
  *
  * @since 5.0.0
  * @access protected
@@ -120,8 +120,9 @@ class Open_Graph {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
-					  ?? Data\Plugin\Post::get_meta_item( '_open_graph_title' );
+				$title =
+					   coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
+					?? Data\Plugin\Post::get_meta_item( '_open_graph_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_og_title' );
 			}
@@ -158,8 +159,9 @@ class Open_Graph {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
-						  ?? Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
+					$title =
+						   coalesce_strlen( Data\Plugin::get_option( 'homepage_og_title' ) )
+						?? Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
 				} else {
 					$title = Data\Plugin\Post::get_meta_item( '_open_graph_title', $args['id'] );
 				}
@@ -241,8 +243,9 @@ class Open_Graph {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
-					 ?? Data\Plugin\Post::get_meta_item( '_open_graph_description' );
+				$desc =
+					   coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
+					?? Data\Plugin\Post::get_meta_item( '_open_graph_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_og_description' );
 			}
@@ -279,8 +282,9 @@ class Open_Graph {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
-						 ?? Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
+					$desc =
+						   coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
+						?? Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
 				} else {
 					$desc = Data\Plugin\Post::get_meta_item( '_open_graph_description', $args['id'] );
 				}

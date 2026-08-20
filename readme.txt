@@ -290,6 +290,7 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
+	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content.
 * **Notes:**
 	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
@@ -311,12 +312,18 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 			* It contains public methods `mount()` and `init()`, among many script setup methods.
 			* Internally known as `The_SEO_Framework\Admin\Script\Loader`.
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar explainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
+	* **Removed:**
+		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private and this pool pointed at a class that never existed.
 	* **Changed:**
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object.
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`) no longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`.
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
 			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
+		* Method `The_SEO_Framework\Meta\Title::get_bare_generated_title()` (`tsf()->title()->get_bare_generated_title()`) can now return `0` instead of an untitled fallback.
+		* Method `The_SEO_Framework\Meta\Title::get_search_query_title()` (`tsf()->title()->get_search_query_title()`) now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
+		* Methods `The_SEO_Framework\Meta\Title::get_archive_title_from_query()` (`tsf()->title()->get_archive_title_from_query()`) and `The_SEO_Framework\Meta\Title::get_archive_title_from_object()` (`tsf()->title()->get_archive_title_from_object()`) now sanitize the title and prefix on return.
+		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
 	* **Improved:**
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_locale()` (`tsf()->open_graph()->get_locale()`) now derives the Open Graph locale from `The_SEO_Framework\Data\Blog::get_language()` (`tsf()->data()->blog()->get_language()`) instead of calling `get_locale()` directly. Because `get_language()` is memoized, repeated locale filter callbacks on multilingual sites (Polylang, WPML) are avoided.
 		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
@@ -333,7 +340,10 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 		* Method `tsfCanonical.canTrackUrlStructure()` reports whether the Canonical URL Notation Tracker can predict URLs for an input.
 * **Filter notes:**
 	* **Changed:**
-		* Filter `the_seo_framework_breadcrumb_shortcode_css`: The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
+		* `the_seo_framework_breadcrumb_shortcode_css`, the default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
+	* **Fixed:**
+		* `the_seo_framework_title_from_generation` now passes through `0` instead of the untitled fallback.
+		* `the_seo_framework_seo_column_keys_order` returning an empty array no longer causes a PHP warning when placing the SEO column.
 
 ### 5.1.4
 

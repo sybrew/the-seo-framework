@@ -14,6 +14,7 @@ applyTo: "**/*.php"
 - Avoid functions `wp_sprintf`, except with `%l` lists, `wp_json_encode`, and `status_header`.
 - Never add hooks in class constructs.
 - In `add_filter()` and `add_action()`, write each argument on a new line when implementing anonymous functions.
+- Do not mark anonymous functions or arrow functions `static` except in instance methods. `static` only prevents binding `$this`.
 - Do not create `validate_callbacks` for REST routes. Validate and sanitize parameters directly in the route callback.
 - Use short array syntax.
 - Never use strict typing unless required.
@@ -25,6 +26,10 @@ applyTo: "**/*.php"
 - You may use `str_starts_with`, `str_ends_with`, and `str_contains`; WordPress provides these.
 - Refrain from colon syntax for conditionals and loops.
 - You may use logical operators like `and`, `or`, and `xor`, but not in conditional expressions.
+- Use `??` (or `??=`) when the coalesced value is assigned or returned. The miss value must be `null`.
+- Use `?:` when any empty value is a miss and a string of `0` is not a valid keep.
+- Use `or` / `and` for statement-level short-circuit, for example `isset( $x ) or $x = ...` or `get_cache() or set_cache()`. Do not use `??` as a statement.
+- Pass-through wrappers stay on the opener line; the inner call whose arguments exceed 30 characters starts on the next line. After the coalesce or ternary break, a remaining single nested call may stay compact, for example `?? Query\Cache::memo( self::is_menu_page( Admin\Menu::get_page_hook_name() ) )`.
 - When outside global namespace:
 	1. Namespace-escape only these native PHP functions: `strlen`, `is_null`, `is_bool`, `is_long`, `is_int`, `is_integer`, `is_float`, `is_double`, `is_string`, `is_array`, `is_object`, `is_resource`, `is_scalar`, `boolval`, `intval`, `floatval`, `doubleval`, `strval`, `defined`, `chr`, `ord`, `call_user_func_array`, `call_user_func`, `in_array`, `count`, `sizeof`, `get_class`, `get_called_class`, `gettype`, `func_num_args`, `func_get_args`, `array_slice`, `array_key_exists`, `sprintf`, `constant`, `function_exists`, `is_callable`, `extension_loaded`, `dirname`, `define`.
 	2. Do not namespace-escape any other native PHP functions.

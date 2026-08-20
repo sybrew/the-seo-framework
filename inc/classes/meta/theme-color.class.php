@@ -31,7 +31,7 @@ use The_SEO_Framework\{
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for theme color output.
  *
  * @since 5.0.1
  * @access protected

@@ -36,7 +36,7 @@ use The_SEO_Framework\{
  *
  * @since 4.1.2
  * @since 5.0.0 1. Renamed from `Main`.
- *              2. Moved from ``The_SEO_Framework\Builders\CoreSitemaps\Main`.
+ *              2. Moved from `\The_SEO_Framework\Builders\CoreSitemaps\Main`.
  *              3. No longer extends `\The_SEO_Framework\Sitemap\Optimized\Main`.
  * @access private
  */
@@ -107,7 +107,7 @@ final class Filter {
 	 * @since 4.1.2
 	 * @since 5.0.0 Renamed from `_filter_max_urls`.
 	 *
-	 * @return string The sitemap query limit.
+	 * @return int The sitemap query limit.
 	 */
 	public static function filter_max_urls() {
 		return Sitemap\Utils::get_sitemap_post_limit();

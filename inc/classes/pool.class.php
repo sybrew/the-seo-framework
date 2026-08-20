@@ -1,7 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Facade\Generate_Url
- * @subpackage The_SEO_Framework\Getters\URL
+ * @package The_SEO_Framework\Classes\Facade\Pool
  */
 
 namespace The_SEO_Framework;
@@ -89,7 +88,7 @@ class Pool extends Legacy_API {
 
 					/**
 					 * @since 5.0.0
-					 * @return \The_SEO_Framework\Admin\Settings\Layout\HTML
+					 * @return \The_SEO_Framework\Admin\Settings\Layout\Form
 					 */
 					public static function form() {
 						return static::$subpool[ __FUNCTION__ ] ??= new class extends Admin\Settings\Layout\Form {
@@ -193,14 +192,11 @@ class Pool extends Legacy_API {
 			 */
 			public static function scripts() {
 				return static::$subpool[ __FUNCTION__ ] ??= new class {
-
 					use Static_Deprecator;
 
 					private $colloquial_handle     = 'tsf()->admin()->scripts()';
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
-
-					private static $subpool = [];
 
 					/**
 					 * @since 5.1.5
@@ -282,19 +278,6 @@ class Pool extends Legacy_API {
 					private $deprecated_methods    = [];
 					private $deprecated_properties = [];
 
-					/**
-					 * @since 5.0.0
-					 * @return \The_SEO_Framework\Data\Plugin\Filter
-					 */
-					public static function filter() {
-						return static::$subpool[ __FUNCTION__ ] ??= new class extends Data\Plugin\Filter {
-							use Static_Deprecator;
-
-							private $colloquial_handle     = 'tsf()->data()->plugin()->filter()';
-							private $deprecated_methods    = [];
-							private $deprecated_properties = [];
-						};
-					}
 					/**
 					 * @since 5.0.0
 					 * @return \The_SEO_Framework\Data\Plugin\Helper

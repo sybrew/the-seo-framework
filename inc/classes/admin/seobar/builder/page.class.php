@@ -150,6 +150,7 @@ final class Page extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 Added syntax test.
+	 * @since 5.1.5 Now treats a homepage title of `0` as set when choosing the SEO Settings vs Edit Page assessment.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar title item.
@@ -164,7 +165,7 @@ final class Page extends Main {
 	 */
 	protected function test_title() {
 
-		$cache = static::get_cache( 'page/title/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'page/title/defaults' ) ?? static::set_cache(
 			'page/title/defaults',
 			[
 				'params'   => [
@@ -233,7 +234,7 @@ final class Page extends Main {
 
 			if ( $this->query_cache['states']['ishome'] ) {
 				// Don't use cache here, only one page can have this state.
-				if ( Data\Plugin::get_option( 'homepage_title' ) ) {
+				if ( \strlen( Data\Plugin::get_option( 'homepage_title' ) ) ) {
 					$item['assess']['homepage'] = \__( 'The title inputted at the SEO Settings screen is used.', 'autodescription' );
 				} else {
 					$item['assess']['homepage'] = \__( 'The title inputted at the Edit Page screen is used.', 'autodescription' );
@@ -374,6 +375,8 @@ final class Page extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 Added syntax test.
+	 * @since 5.1.5 1. Now treats a homepage description of `0` as set when choosing the SEO Settings vs Edit Page assessment.
+	 *              2. Now treats a post excerpt of `0` as excerpt content.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar description item.
@@ -388,7 +391,7 @@ final class Page extends Main {
 	 */
 	protected function test_description() {
 
-		$cache = static::get_cache( 'page/description/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'page/description/defaults' ) ?? static::set_cache(
 			'page/description/defaults',
 			[
 				'params'   => [
@@ -459,7 +462,7 @@ final class Page extends Main {
 
 			if ( $this->query_cache['states']['ishome'] ) {
 				// Don't use cache here, only one page can have this state.
-				if ( Data\Plugin::get_option( 'homepage_description' ) ) {
+				if ( \strlen( Data\Plugin::get_option( 'homepage_description' ) ) ) {
 					$item['assess']['homepage'] = \__( 'The description inputted at the SEO Settings screen is used.', 'autodescription' );
 				} else {
 					$item['assess']['homepage'] = \__( 'The description inputted at the Edit Page screen is used.', 'autodescription' );
@@ -504,7 +507,7 @@ final class Page extends Main {
 
 				// No description is found. There's no need to continue parsing.
 				return $item;
-			} elseif ( ! empty( $this->query_cache['post']->post_excerpt ) ) {
+			} elseif ( \strlen( $this->query_cache['post']->post_excerpt ?? '' ) ) {
 				// FIXME: This is not necessarily true if the field is filtered...
 				// TODO test if filter "the_seo_framework_description_excerpt" is used?
 				// Use something like the robots generator...? Ugh, here we go again.
@@ -601,7 +604,7 @@ final class Page extends Main {
 	 */
 	protected function test_indexing() {
 
-		$cache = static::get_cache( 'page/indexing/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'page/indexing/defaults' ) ?? static::set_cache(
 			'page/indexing/defaults',
 			[
 				'params'   => [],
@@ -763,7 +766,7 @@ final class Page extends Main {
 	 */
 	protected function test_following() {
 
-		$cache = static::get_cache( 'page/following/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'page/following/defaults' ) ?? static::set_cache(
 			'page/following/defaults',
 			[
 				'params'   => [],
@@ -902,7 +905,7 @@ final class Page extends Main {
 	 */
 	protected function test_archiving() {
 
-		$cache = static::get_cache( 'page/archiving/defaults' ) ?: static::set_cache(
+		$cache = static::get_cache( 'page/archiving/defaults' ) ?? static::set_cache(
 			'page/archiving/defaults',
 			[
 				'params'   => [],
@@ -1042,7 +1045,7 @@ final class Page extends Main {
 	protected function test_redirect() {
 
 		if ( empty( $this->query_cache['meta']['redirect'] ) ) {
-			$default = static::get_cache( 'page/redirect/default/0' ) ?: static::set_cache(
+			$default = static::get_cache( 'page/redirect/default/0' ) ?? static::set_cache(
 				'page/redirect/default/0',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
@@ -1063,7 +1066,7 @@ final class Page extends Main {
 
 			return $default;
 		} else {
-			return static::get_cache( 'post/redirect/default/1' ) ?: static::set_cache(
+			return static::get_cache( 'post/redirect/default/1' ) ?? static::set_cache(
 				'post/redirect/default/1',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),

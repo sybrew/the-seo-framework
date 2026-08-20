@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Sitemap\Cache
+ * @package The_SEO_Framework\Classes\Sitemap\Lock
  * @subpackage The_SEO_Framework\Sitemap
  */
 

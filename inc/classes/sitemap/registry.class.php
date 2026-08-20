@@ -139,9 +139,10 @@ class Registry {
 	 * @since 5.0.0
 	 * @access private
 	 *
-	 * @param \WP_Query $wp_query The WordPress WC_Query instance.
+	 * @param \WP_Query $wp_query The WordPress query instance.
 	 */
 	public static function _override_query_parameters( $wp_query ) {
+
 		$wp_query->is_home = false;
 		// $wp_query allows dynamic properties. This one is proposed in https://core.trac.wordpress.org/ticket/51117#comment:7
 		$wp_query->is_sitemap = true;
@@ -200,7 +201,7 @@ class Registry {
 			 *     @type string|false $cache_id Optional. The cache key to use for storing. Defaults to index 'id'.
 			 *                                  Set to false to disable caching.
 			 *     @type string       $endpoint The expected "pretty" endpoint, meant for administrative display.
-			 *     @type string       $epregex  The endpoint regex, following the home path regex.
+			 *     @type string       $regex    The endpoint regex, following the home path regex.
 			 *                                  N.B. Be wary of case sensitivity. Append the i-flag.
 			 *                                  N.B. Trailing slashes will cause the match to fail.
 			 *                                  N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.

@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function The_SEO_Framework\coalesce_strlen;
+
 use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
@@ -48,6 +50,7 @@ final class Organization extends Reference {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.1.5 Now keeps a knowledge name of `0` instead of falling back to the public blog name.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -58,7 +61,10 @@ final class Organization extends Reference {
 		$entity = [
 			'@type' => static::$type,
 			'@id'   => static::get_id(),
-			'name'  => Sanitize::metadata_content( Data\Plugin::get_option( 'knowledge_name' ) ?: Data\Blog::get_public_blog_name() ),
+			'name'  => Sanitize::metadata_content(
+				   coalesce_strlen( Data\Plugin::get_option( 'knowledge_name' ) )
+				?? Data\Blog::get_public_blog_name(),
+			),
 			'url'   => Meta\URI::get_bare_front_page_url(),
 		];
 

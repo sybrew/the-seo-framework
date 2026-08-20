@@ -334,7 +334,7 @@ final class Debug {
 			return;
 
 		if ( Query::is_seo_settings_page( true ) )
-			\add_filter( 'the_seo_framework_current_object_id', static fn() => Query::get_the_front_page_id() );
+			\add_filter( 'the_seo_framework_current_object_id', fn() => Query::get_the_front_page_id() );
 
 		// phpcs:ignore WordPress.Security.EscapeOutput -- callee escapes.
 		Template::output_view( 'debug/header' );

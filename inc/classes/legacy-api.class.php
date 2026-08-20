@@ -1,7 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Facade\Generate_Url
- * @subpackage The_SEO_Framework\Getters\URL
+ * @package The_SEO_Framework\Classes\Facade\Legacy_API
  */
 
 namespace The_SEO_Framework;

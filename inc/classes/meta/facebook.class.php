@@ -28,7 +28,7 @@ use The_SEO_Framework\Data;
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for Facebook output.
  *
  * @since 5.0.0
  * @access protected

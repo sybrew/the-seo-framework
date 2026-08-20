@@ -38,7 +38,7 @@ use The_SEO_Framework\{
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for URI output.
  *
  * Unlike other Meta functionality, we do not use "generated" vs. "custom" for every single function.
  * This is because URIs are ambiguously used throughout WordPress.
@@ -140,7 +140,8 @@ class URI {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$url = Data\Plugin::get_option( 'homepage_canonical' )
+				$url =
+					   Data\Plugin::get_option( 'homepage_canonical' )
 					?: Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri' );
 			} else {
 				$url = Data\Plugin::get_option( 'homepage_canonical' );
@@ -176,7 +177,8 @@ class URI {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$url = Data\Plugin::get_option( 'homepage_canonical' )
+					$url =
+						   Data\Plugin::get_option( 'homepage_canonical' )
 						?: Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri', $args['id'] );
 				} else {
 					$url = Data\Plugin\Post::get_meta_item( '_genesis_canonical_uri', $args['id'] );
@@ -741,7 +743,8 @@ class URI {
 			switch ( get_query_type_from_args( $args ) ) {
 				case 'single':
 					if ( Query::is_static_front_page( $args['id'] ) ) {
-						$url = Data\Plugin::get_option( 'homepage_redirect' )
+						$url =
+							   Data\Plugin::get_option( 'homepage_redirect' )
 							?: Data\Plugin\Post::get_meta_item( 'redirect', $args['id'] );
 					} else {
 						$url = Data\Plugin\Post::get_meta_item( 'redirect', $args['id'] );
@@ -759,7 +762,8 @@ class URI {
 		} else {
 			if ( Query::is_real_front_page() ) {
 				if ( Query::is_static_front_page() ) {
-					$url = Data\Plugin::get_option( 'homepage_redirect' )
+					$url =
+						   Data\Plugin::get_option( 'homepage_redirect' )
 						?: Data\Plugin\Post::get_meta_item( 'redirect' );
 				} else {
 					$url = Data\Plugin::get_option( 'homepage_redirect' );

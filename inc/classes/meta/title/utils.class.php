@@ -89,7 +89,7 @@ class Utils {
 	 * @since 4.1.0 Added a second parameter, $args, to help soften the burden of this method.
 	 * @since 5.0.0 1. Now handles filters with a priority of 0. Only a theoretical bug, so not in changelog.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
-	 * @internal Only to be used within Meta\Title::get_bare_unfiltered_generated_title()
+	 * @internal Only to be used within Meta\Title::get_bare_generated_title()
 	 *
 	 * @param bool       $reset Whether to reset the removed filters.
 	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -157,7 +157,7 @@ class Utils {
 	 *
 	 * @since 3.1.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @internal Only to be used within Meta\Title::get_bare_unfiltered_generated_title()
+	 * @internal Only to be used within Meta\Title::get_bare_generated_title()
 	 */
 	public static function reset_default_title_filters() {
 		self::remove_default_title_filters( true );

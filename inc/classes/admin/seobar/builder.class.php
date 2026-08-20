@@ -169,7 +169,7 @@ class Builder {
 	 *
 	 *     @type string $symbol The displayed symbol that identifies your bar.
 	 *     @type string $title  The title of the assessment.
-	 *     @type string $status Either 'good', 'okay', 'bad', or 'unknown'.
+	 *     @type int    $status Power of two. See SEOBar's `STATE_*` bit flags.
 	 *     @type string $reason The final assessment: The reason for the $status.
 	 *     @type string $assess The assessments on why the reason is set.
 	 * }
@@ -189,7 +189,7 @@ class Builder {
 	 *
 	 *     @type string $symbol Required. The displayed symbol that identifies your bar.
 	 *     @type string $title  Required. The title of the assessment.
-	 *     @type string $status Required. Accepts 'good', 'okay', 'bad', 'unknown'.
+	 *     @type int    $status Required. Power of two. See SEOBar's `STATE_*` bit flags.
 	 *     @type string $reason Required. The final assessment: The reason for the $status.
 	 *     @type string $assess Required. The assessments on why the reason is set. Keep it short and concise!
 	 *                          Does not accept HTML for performant ARIA support.
@@ -329,7 +329,7 @@ class Builder {
 					'<ol>%s</ol>',
 					implode(
 						'',
-						array_map( static fn( $a ) => "<li>$a</li>", $item['assess'] ),
+						array_map( fn( $a ) => "<li>$a</li>", $item['assess'] ),
 					),
 				),
 			);

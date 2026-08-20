@@ -78,7 +78,7 @@ abstract class Main {
 	/**
 	 * @since 4.0.0
 	 * Not shared between instances
-	 * @var \The_SEO_Framework\Builders\SEOBar_* $instance The instance.
+	 * @var static $instance The instance.
 	 */
 	protected static $instance;
 

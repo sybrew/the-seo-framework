@@ -46,7 +46,7 @@ use The_SEO_Framework\{
  *     @type string|false $cache_id Optional. The cache key to use for storing. Defaults to index 'id'.
  *                                  Set to false to disable caching.
  *     @type string       $endpoint The expected "pretty" endpoint, meant for administrative display.
- *     @type string       $epregex  The endpoint regex, following the home path regex.
+ *     @type string       $regex    The endpoint regex, following the home path regex.
  *     @type callable     $callback The callback for the sitemap output.
  *     @type bool         $robots   Whether the endpoint should be mentioned in the robots.txt file.
  * }

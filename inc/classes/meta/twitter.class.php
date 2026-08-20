@@ -38,7 +38,7 @@ use The_SEO_Framework\{
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for Twitter output.
  *
  * @since 5.0.0
  * @access protected
@@ -91,7 +91,8 @@ class Twitter {
 			switch ( get_query_type_from_args( $args ) ) {
 				case 'single':
 					if ( Query::is_static_front_page( $args['id'] ) ) {
-						$card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
+						$card =
+							   Data\Plugin::get_option( 'homepage_twitter_card_type' )
 							?: Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
 					} else {
 						$card = Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type', $args['id'] );
@@ -109,8 +110,9 @@ class Twitter {
 		} else {
 			if ( Query::is_real_front_page() ) {
 				if ( Query::is_static_front_page() ) {
-					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
-						 ?: Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type' );
+					$card =
+						   Data\Plugin::get_option( 'homepage_twitter_card_type' )
+						?: Data\Plugin\Post::get_meta_item( '_tsf_twitter_card_type' );
 				} else {
 					$card = Data\Plugin::get_option( 'homepage_twitter_card_type' );
 				}
@@ -239,8 +241,9 @@ class Twitter {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
-					  ?? Data\Plugin\Post::get_meta_item( '_twitter_title' );
+				$title =
+					   coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
+					?? Data\Plugin\Post::get_meta_item( '_twitter_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_twitter_title' );
 			}
@@ -279,8 +282,9 @@ class Twitter {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
-						  ?? Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
+					$title =
+						   coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_title' ) )
+						?? Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
 				} else {
 					$title = Data\Plugin\Post::get_meta_item( '_twitter_title', $args['id'] );
 				}
@@ -363,8 +367,9 @@ class Twitter {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
-					 ?? Data\Plugin\Post::get_meta_item( '_twitter_description' );
+				$desc =
+					   coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
+					?? Data\Plugin\Post::get_meta_item( '_twitter_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_twitter_description' );
 			}
@@ -404,8 +409,9 @@ class Twitter {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
-						 ?? Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
+					$desc =
+						   coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
+						?? Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
 				} else {
 					$desc = Data\Plugin\Post::get_meta_item( '_twitter_description', $args['id'] );
 				}

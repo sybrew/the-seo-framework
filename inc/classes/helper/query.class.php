@@ -157,7 +157,7 @@ class Query {
 			// Get in the loop first, fall back to globals or get parameters.
 			   \get_the_id()
 			?: self::get_admin_post_id()
-			?: self::get_admin_term_id()
+			?: self::get_admin_term_id(),
 		);
 	}
 

@@ -9,6 +9,7 @@ namespace The_SEO_Framework\Data;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function The_SEO_Framework\{
+	coalesce_strlen,
 	memo,
 	umemo,
 };
@@ -49,6 +50,7 @@ class Blog {
 	 * Do not consider this function safe for printing!
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now keeps a site title of `0` instead of falling back to the filtered blog name.
 	 *
 	 * @return string $blogname The sanitized blogname.
 	 */
@@ -56,7 +58,8 @@ class Blog {
 		return umemo( __METHOD__ )
 			?? umemo(
 				__METHOD__,
-				Data\Plugin::get_option( 'site_title' ) ?: self::get_filtered_blog_name(),
+				   coalesce_strlen( Data\Plugin::get_option( 'site_title' ) )
+				?? self::get_filtered_blog_name(),
 			);
 	}
 

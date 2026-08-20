@@ -44,7 +44,7 @@ use The_SEO_Framework\Helper\{
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for description output.
  *
  * @since 5.0.0
  * @access protected
@@ -199,8 +199,9 @@ class Description {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
-					 ?? Data\Plugin\Post::get_meta_item( '_genesis_description' );
+				$desc =
+					   coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
+					?? Data\Plugin\Post::get_meta_item( '_genesis_description' );
 			} else {
 				$desc = Data\Plugin::get_option( 'homepage_description' );
 			}
@@ -237,8 +238,9 @@ class Description {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$desc = coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
-						 ?? Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
+					$desc =
+						   coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
+						?? Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
 				} else {
 					$desc = Data\Plugin\Post::get_meta_item( '_genesis_description', $args['id'] );
 				}

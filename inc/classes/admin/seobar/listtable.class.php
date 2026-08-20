@@ -66,6 +66,7 @@ final class ListTable extends Admin\Lists\Table {
 	 * @hook manage_edit-{$taxonomy}_columns 1
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_add_column`.
+	 * @since 5.1.5 Now initializes `$offset` so an empty `the_seo_framework_seo_column_keys_order` list does not warn.
 	 * @abstract
 	 *
 	 * @param array $columns The existing columns.
@@ -91,6 +92,8 @@ final class ListTable extends Admin\Lists\Table {
 		 *                             The first key found will be used.
 		 */
 		$order_keys = (array) \apply_filters( 'the_seo_framework_seo_column_keys_order', $order_keys );
+
+		$offset = false;
 
 		foreach ( $order_keys as $key ) {
 			// Put value in $offset, if not false, break loop.

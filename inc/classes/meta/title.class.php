@@ -43,7 +43,7 @@ use The_SEO_Framework\Helper\{
  */
 
 /**
- * Holds getters for meta tag output.
+ * Holds getters for title output.
  *
  * @since 5.0.0
  * @access protected
@@ -161,9 +161,9 @@ class Title {
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                           Leave null to autodetermine query.
-	 * @return string The raw generated title output.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
+	 * @return string The raw custom field title output.
 	 */
 	public static function get_bare_custom_title( $args = null ) {
 
@@ -199,9 +199,10 @@ class Title {
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.1.5 Can now return `0` instead of an untitled fallback.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                           Leave null to autodetermine query.
+	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                         Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
 	public static function get_bare_generated_title( $args = null ) {
@@ -226,13 +227,14 @@ class Title {
 		 *        You may want to avoid this filter for the homepage and pta, by returning the default value.
 		 * @since 3.1.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
+		 * @since 5.1.5 Now passes through `0` instead of the untitled fallback.
 		 * @param string     $title The title.
 		 * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                          Is null when the query is auto-determined.
 		 */
 		$title = (string) \apply_filters(
 			'the_seo_framework_title_from_generation',
-			$title ?: self::get_untitled_title(),
+			coalesce_strlen( $title ) ?? self::get_untitled_title(),
 			$args,
 		);
 
@@ -243,7 +245,11 @@ class Title {
 	}
 
 	/**
-	 * Returns the custom user-inputted title.
+	 * Returns the custom user-inputted title, bypassing `apply_filters()`.
+	 *
+	 * Unlike `get_bare_custom_title()`, this does not run
+	 * `the_seo_framework_title_from_custom_field`. The title is still sanitized
+	 * via `get_custom_title_from_args()` or `get_custom_title_from_query()`.
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
@@ -273,8 +279,9 @@ class Title {
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
-				$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
-					  ?? Data\Plugin\Post::get_meta_item( '_genesis_title' );
+				$title =
+					   coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
+					?? Data\Plugin\Post::get_meta_item( '_genesis_title' );
 			} else {
 				$title = Data\Plugin::get_option( 'homepage_title' );
 			}
@@ -307,8 +314,9 @@ class Title {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$title = coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
-						  ?? Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
+					$title =
+						   coalesce_strlen( Data\Plugin::get_option( 'homepage_title' ) )
+						?? Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
 				} else {
 					$title = Data\Plugin\Post::get_meta_item( '_genesis_title', $args['id'] );
 				}
@@ -398,7 +406,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The Term object or error.
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|\WP_Error|null $object The archive object or error.
 	 *                                                               Leave null to autodetermine query.
 	 * @return string The generated archive title.
 	 */
@@ -418,7 +426,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object The Term object.
+	 * @param \WP_Term|\WP_User|\WP_Post_Type|null $object The archive object.
 	 *                                                     Leave null to autodetermine query.
 	 * @return String[title,prefix,title_without_prefix] The generated archive title items.
 	 */
@@ -430,27 +438,25 @@ class Title {
 
 		$title_without_prefix = $title;
 
-		if ( Title\Conditions::use_generated_archive_prefix( $object ) ) {
-			if ( $prefix ) {
-				$title = \sprintf(
-					/* translators: 1: Title prefix. 2: Title. */
-					\_x( '%1$s %2$s', 'archive title', 'default' ),
-					$prefix,
-					$title,
-				);
-			}
-		}
+		if ( \strlen( $prefix ) && Title\Conditions::use_generated_archive_prefix( $object ) )
+			$title = \sprintf(
+				/* translators: 1: Title prefix. 2: Title. */
+				\_x( '%1$s %2$s', 'archive title', 'default' ),
+				$prefix,
+				$title,
+			);
 
 		/**
 		 * @since 5.0.0
 		 * @param String[title,prefix,title_without_prefix] $items                The generated archive title items.
 		 * @param \WP_Term|\WP_User|\WP_Post_Type|null      $object               The archive object.
 		 *                                                                        Is null when query is autodetermined.
-		 * @param string                                    $title                The unmodified generated artive title.
+		 * @param string                                    $title                The generated archive title, with prefix
+		 *                                                                        applied when allowed.
 		 * @param string                                    $title_without_prefix The unmodified archive title without prefix.
 		 * @param string                                    $prefix               The unmodified archive title prefix.
 		 */
-		return \apply_filters(
+		return (array) \apply_filters(
 			'the_seo_framework_generated_archive_title_items',
 			[
 				$title,
@@ -465,9 +471,10 @@ class Title {
 	}
 
 	/**
-	 * Returns the generated archive title by evaluating the input Term only.
+	 * Returns the generated archive title by evaluating the current query.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now sanitizes the title and prefix on return.
 	 *
 	 * @return string[$title,$prefix] The title and prefix.
 	 */
@@ -527,20 +534,24 @@ class Title {
 				$prefix = \sprintf(
 					/* translators: %s: Taxonomy singular name. */
 					\_x( '%s:', 'taxonomy term archive title prefix', 'default' ),
-					Sanitize::metadata_content( Taxonomy::get_label( $term->taxonomy ?? '' ) ),
+					Taxonomy::get_label( $term->taxonomy ?? '' ),
 				);
 			}
 		}
 
-		return [ $title, $prefix ];
+		return [
+			Sanitize::metadata_content( $title ),
+			Sanitize::metadata_content( $prefix ),
+		];
 	}
 
 	/**
-	 * Returns the generated archive title by evaluating the input Term only.
+	 * Returns the generated archive title by evaluating the input object only.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now sanitizes the title and prefix on return.
 	 *
-	 * @param \WP_Term|\WP_User|\WP_Post_Type $object The Term object.
+	 * @param \WP_Term|\WP_User|\WP_Post_Type $object The archive object.
 	 * @return string[$title,$prefix] The title and prefix.
 	 */
 	public static function get_archive_title_from_object( $object ) {
@@ -573,7 +584,10 @@ class Title {
 			$prefix = \_x( 'Author:', 'author archive title prefix', 'default' );
 		}
 
-		return [ $title, $prefix ];
+		return [
+			Sanitize::metadata_content( $title ),
+			Sanitize::metadata_content( $prefix ),
+		];
 	}
 
 	/**
@@ -621,7 +635,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param null|\WP_Term $term The term name, required in the admin area.
+	 * @param null|\WP_Term $term The term object, required in the admin area.
 	 * @return string The generated single term title.
 	 */
 	public static function get_term_title( $term = null ) {
@@ -673,7 +687,7 @@ class Title {
 	 * @since 5.1.3 Now uses the memoized version of `get_userdata()`.
 	 *
 	 * @param int $user_id The user ID.
-	 * @return string The generated post type archive title.
+	 * @return string The generated user title.
 	 */
 	public static function get_user_title( $user_id = 0 ) {
 		return Sanitize::metadata_content(
@@ -686,7 +700,7 @@ class Title {
 	}
 
 	/**
-	 * Fetches single term title.
+	 * Fetches post type archive title.
 	 *
 	 * @NOTE Taken from WordPress core. Altered to work in the Admin area.
 	 * @see WP Core post_type_archive_title()
@@ -740,6 +754,7 @@ class Title {
 	 * Returns search title.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
 	 *
 	 * @return string The generated search title.
 	 */
@@ -748,7 +763,7 @@ class Title {
 			\sprintf(
 				/* translators: %s: search phrase */
 				\__( 'Search Results for &#8220;%s&#8221;', 'default' ),
-				\get_search_query( true ),
+				\get_search_query( false ),
 			),
 		);
 	}
@@ -770,7 +785,7 @@ class Title {
 			(string) \apply_filters(
 				'the_seo_framework_404_title',
 				\__( 'Page not found', 'default' ),
-			)
+			),
 		);
 	}
 
@@ -885,14 +900,14 @@ class Title {
 		if ( ! empty( $post->post_password ) ) {
 			return \sprintf(
 				/**
-				 * Filters the text prepended to the post title of private posts.
+				 * Filters the text prepended to the post title of protected posts.
 				 *
 				 * The filter is only applied on the front end.
 				 *
 				 * @since WP Core 2.8.0
 				 *
 				 * @param string  $prepend Text displayed before the post title.
-				 *                         Default 'Private: %s'.
+				 *                         Default 'Protected: %s'.
 				 * @param WP_Post $post    Current post object.
 				 */
 				(string) \apply_filters(
@@ -916,7 +931,7 @@ class Title {
 				 *                         Default 'Private: %s'.
 				 * @param WP_Post $post    Current post object.
 				 */
-				$private_title_format = (string) \apply_filters(
+				(string) \apply_filters(
 					'private_title_format',
 					/* translators: %s: Private post title. */
 					\__( 'Private: %s', 'default' ),
@@ -951,7 +966,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @return string The trimmed tagline.
+	 * @return string The trimmed blog name.
 	 */
 	public static function get_addition() {
 		return Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
@@ -1010,12 +1025,12 @@ class Title {
 		return memo() ?? memo(
 			/**
 			 * @since 2.3.9
-			 * @param string $eparator The title separator
+			 * @param string $separator The title separator.
 			 */
 			(string) \apply_filters(
 				'the_seo_framework_title_separator',
 				(
-					Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
+					   Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
 					?? '&#x2d;'
 				),
 			),
