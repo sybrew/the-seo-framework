@@ -249,7 +249,9 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 
 ## For everyone
 
+* **Upgraded:** Now uses TSF database version 5150.
 * **Added:**
+	* You can now enter a Facebook domain verification code in Webmaster Integration Settings.
 	* Plain permalink support to the Canonical URL Notation Tracker.
 * **Changed:**
 	* **Open Graph locales:** We couldn't find any documentation on the languages Facebook supports for Open Graph, so we resorted to scraping their network, testing all 46500 possible locale combinations, and adjusted support accordingly:
@@ -296,6 +298,9 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 
 ## For developers
 
+* **Option notes:**
+	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
+		* Added index `facebook_verification`. Default `''`.
 * **PHP API notes:**
 	* **Added:**
 		* Pool `tsf()->admin()->seobar()` is now available.

@@ -303,11 +303,12 @@ class Setup {
 				'social_image_fb_id'  => 0,  // Fallback image ID.
 
 				// Webmasters.
-				'google_verification' => '', // Google Verification Code.
-				'bing_verification'   => '', // Bing Verification Code.
-				'yandex_verification' => '', // Yandex Verification Code.
-				'baidu_verification'  => '', // Baidu Verification Code.
-				'pint_verification'   => '', // Pinterest Verification Code.
+				'google_verification'   => '', // Google Verification Code.
+				'bing_verification'     => '', // Bing Verification Code.
+				'yandex_verification'   => '', // Yandex Verification Code.
+				'baidu_verification'    => '', // Baidu Verification Code.
+				'pint_verification'     => '', // Pinterest Verification Code.
+				'facebook_verification' => '', // Facebook Verification Code.
 
 				// Schema.org.
 				'ld_json_enabled'           => 1, // LD+Json toggle for Schema.

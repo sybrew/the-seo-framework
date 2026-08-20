@@ -180,6 +180,7 @@ final class Plugin {
 			'facebook_author'              => 'facebook_profile_link',
 			'facebook_publisher'           => 'facebook_profile_link',
 			'facebook_tags'                => 'checkbox',
+			'facebook_verification'        => 'verification_code',
 			'google_verification'          => 'verification_code',
 			'home_paged_noindex'           => 'checkbox',
 			'home_title_location'          => 'title_location',
