@@ -37,6 +37,7 @@ final class Webmasters {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.1.5 Added the Facebook domain verification generator.
 	 * @var callable[] GENERATORS A list of auto-loaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -45,6 +46,7 @@ final class Webmasters {
 		[ __CLASS__, 'generate_yandex_verification' ],
 		[ __CLASS__, 'generate_baidu_verification' ],
 		[ __CLASS__, 'generate_pinterest_verification' ],
+		[ __CLASS__, 'generate_facebook_verification' ],
 	];
 
 	/**
@@ -127,6 +129,23 @@ final class Webmasters {
 			yield 'p:domain_verify' => [
 				'attributes' => [
 					'name'    => 'p:domain_verify',
+					'content' => $code,
+				],
+			];
+	}
+
+	/**
+	 * @since 5.1.5
+	 * @generator
+	 */
+	public static function generate_facebook_verification() {
+
+		$code = Data\Plugin::get_option( 'facebook_verification' );
+
+		if ( $code )
+			yield 'facebook-domain-verification' => [
+				'attributes' => [
+					'name'    => 'facebook-domain-verification',
 					'content' => $code,
 				],
 			];

@@ -1,7 +1,11 @@
 ---
-description: TSF stylesheet conventions and layout-debugging expectations
+description: TSF stylesheet conventions, layout debugging, and minification
 globs: **/*.css
 alwaysApply: false
 ---
 
 Follow the CSS rules in @.github/instructions/css.instructions.md when editing CSS files.
+
+After editing unminified `lib/css` sources, run the minify skill. Do not create, edit, or search for `*.min.css`.
+
+Read `.local/minify/permission.txt` with an explicit path (Grep/Glob cannot see `.local/`). If the file does not exist, prompt, then create it from the reply as two lines (`JS=True`/`JS=False` and `CSS=True`/`CSS=False`). If `CSS=False`, do not prompt again, and do not clone or minify CSS. If `CSS=True` and `.local/minify/cleancss-tsf/run.js` is missing, clone https://github.com/theseoframework/cleancss-tsf into `.local/minify/cleancss-tsf` and run `npm install` there. That public repo is the source of truth.

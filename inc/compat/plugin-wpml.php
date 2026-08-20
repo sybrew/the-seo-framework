@@ -43,6 +43,7 @@ use The_SEO_Framework\{
  * @return array[]
  */
 function _wpml_register_sitemap_languages( $list ) {
+
 	global $sitepress;
 
 	if ( empty( $list['base'] ) )
@@ -113,6 +114,7 @@ function _wpml_register_sitemap_languages( $list ) {
  * @global \wpdb $wpdb
  */
 function _wpml_flush_sitemap() {
+
 	global $wpdb;
 
 	$transient_prefix = Sitemap\Cache::get_transient_prefix();
@@ -155,6 +157,7 @@ function _wpml_sitemap_filter_display_translatables() {
  * @return array The augmented query arguments.
  */
 function _wpml_sitemap_filter_non_translatables( $args ) {
+
 	global $sitepress;
 
 	if (

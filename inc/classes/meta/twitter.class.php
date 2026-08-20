@@ -54,7 +54,9 @@ class Twitter {
 	 * @return bool Whether to fall back to Open Graph tags.
 	 */
 	public static function fallback_to_open_graph() {
+
 		static $fallback;
+
 		return $fallback ??= (bool) Data\Plugin::get_option( 'og_tags' );
 	}
 

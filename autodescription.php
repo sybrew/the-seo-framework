@@ -62,7 +62,7 @@ define( 'THE_SEO_FRAMEWORK_VERSION', '5.1.5' );
  *
  * @since 2.7.0
  */
-define( 'THE_SEO_FRAMEWORK_DB_VERSION', '5140' );
+define( 'THE_SEO_FRAMEWORK_DB_VERSION', '5150' );
 
 /**
  * The plugin file, absolute unix path.
