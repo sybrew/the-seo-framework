@@ -93,7 +93,7 @@ class Main {
 			'the_seo_framework_robots_disallow_queries',
 			[ false ],
 			'5.1.0 of The SEO Framework',
-			'the_seo_framework_robots_txt_sections'
+			'the_seo_framework_robots_txt_sections',
 		) ? '/*?*'
 		  : '';
 
@@ -105,15 +105,9 @@ class Main {
 				foreach ( Sitemap\Registry::get_sitemap_endpoint_list() as $id => $data )
 					if ( ! empty( $data['robots'] ) )
 						$sitemaps[] = \esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url( $id ) );
-
 			} elseif ( ! Compatibility::get_active_conflicting_plugin_types()['sitemaps'] && Sitemap\Utils::use_core_sitemaps() ) {
-				$wp_sitemaps_server = \wp_sitemaps_get_server();
-
-				if ( method_exists( $wp_sitemaps_server, 'add_robots' ) ) {
-					// add_robots() returns "Sitemap: <url>" formatted text; extract the URLs. Links are already escaped.
-					if ( preg_match_all( '/Sitemap:\s*(\S+)/', $wp_sitemaps_server->add_robots( '', Data\Blog::is_public() ), $matches ) )
-						array_push( $sitemaps, ...$matches[1] );
-				}
+				if ( Data\Blog::is_public() )
+					$sitemaps[] = \esc_url( \wp_sitemaps_get_server()->index->get_index_url() );
 			}
 		}
 
