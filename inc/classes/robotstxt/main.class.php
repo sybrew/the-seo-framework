@@ -93,7 +93,7 @@ class Main {
 			'the_seo_framework_robots_disallow_queries',
 			[ false ],
 			'5.1.0 of The SEO Framework',
-			'the_seo_framework_robots_txt_sections'
+			'the_seo_framework_robots_txt_sections',
 		) ? '/*?*'
 		  : '';
 
@@ -105,10 +105,7 @@ class Main {
 				foreach ( Sitemap\Registry::get_sitemap_endpoint_list() as $id => $data )
 					if ( ! empty( $data['robots'] ) )
 						$sitemaps[] = \esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url( $id ) );
-
 			} elseif ( ! Compatibility::get_active_conflicting_plugin_types()['sitemaps'] && Sitemap\Utils::use_core_sitemaps() ) {
-				// Mirror the optimized-sitemap branch above: push the bare, escaped index URL.
-				// use_core_sitemaps() already guarantees WordPress's 5.5+ sitemaps API is present.
 				if ( Data\Blog::is_public() )
 					$sitemaps[] = \esc_url( \wp_sitemaps_get_server()->index->get_index_url() );
 			}
