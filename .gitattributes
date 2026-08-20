@@ -2,33 +2,37 @@
 * text=auto
 
 # Declare files that will otherwise have CRLF line endings on checkout.
-*.php text eol=lf
-*.js text eol=lf
 *.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
 *.md text eol=lf
 *.mdc text eol=lf
-*.txt text eol=lf
-*.svg text eol=lf
-*.xml text eol=lf
+*.php text eol=lf
 *.pot text eol=lf
+*.ps1 text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+.cursorignore text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
-*.png binary
-*.jpg binary
 *.eot binary
+*.jpg binary
+*.png binary
 *.ttf binary
 *.woff binary
 *.woff2 binary
 
 # GitHub baggage for development.
 .cursor export-ignore
-.github export-ignore
-.gitattributes export-ignore
-.gitignore export-ignore
 .editorconfig export-ignore
+.gitattributes export-ignore
+.github export-ignore
+.gitignore export-ignore
 README.md export-ignore
 
 # Our baggage for development.
+.local export-ignore
 composer.json export-ignore
 cspell.json export-ignore
 phpcs.xml export-ignore

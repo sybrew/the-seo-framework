@@ -62,6 +62,7 @@ class Plugin {
 	 * @since 5.0.0
 	 */
 	public static function flush_cache() {
+
 		static::refresh_static_properties();
 		// PTA is stored in the default plugin options.
 		Plugin\PTA::refresh_static_properties();

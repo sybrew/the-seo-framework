@@ -352,6 +352,7 @@ class Query {
 			return Query\Cache::memo( true );
 
 		if ( isset( $GLOBALS['wp_query']->query ) && false === self::is_singular() ) {
+
 			global $wp_query;
 
 			if (
@@ -1017,6 +1018,7 @@ class Query {
 	 * @return bool true if screen match.
 	 */
 	public static function is_menu_page( $pagehook = '', $pageslug = '' ) {
+
 		global $page_hook;
 
 		if ( isset( $page_hook ) ) {

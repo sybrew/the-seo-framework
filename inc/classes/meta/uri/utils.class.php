@@ -511,14 +511,21 @@ class Utils {
 	 *
 	 * Ref, WP Core:
 	 * - `get_permalink()`, leads to: `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`
-	 * - `get_term_link()`
+	 * - `get_term_link()`, `get_post_type_archive_link()`, `get_author_posts_url()`
 	 *
 	 * @since 5.1.0
+	 * @since 5.1.5 1. Now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks
+	 *                 or rewrite disabled), matching Core's `get_permalink()`, `get_page_link()`,
+	 *                 `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`,
+	 *                 `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks.
+	 *              2. Now uses the extra permastruct for hierarchical custom post types, matching
+	 *                 `get_post_permalink()`, instead of the page permastruct.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The URL permastructure for the given query.
 	 */
 	public static function get_url_permastruct( $args ) {
+
 		global $wp_rewrite;
 
 		normalize_generation_args( $args );
@@ -532,8 +539,14 @@ class Utils {
 
 					switch ( $post_type ) {
 						case 'page':
-							// Both translate to the post's name; this translation eases later processing.
-							$permastruct = str_replace( '%pagename%', '%postname%', $wp_rewrite->get_page_permastruct() );
+							$permastruct = $wp_rewrite->get_page_permastruct();
+
+							if ( $permastruct ) {
+								// Both translate to the post's name; this translation eases later processing.
+								$permastruct = str_replace( '%pagename%', '%postname%', $permastruct );
+							} else {
+								$permastruct = '?page_id=%post_id%';
+							}
 							break;
 						case 'attachment':
 							if ( Query\Utils::using_pretty_permalinks() ) {
@@ -565,20 +578,25 @@ class Utils {
 								} else {
 									$permastruct = '%postname%';
 								}
-								break;
-							} // else: ?attachment_id=%post_id%, but this is handled via default.
+							} else {
+								$permastruct = '?attachment_id=%post_id%';
+							}
 							break;
 						case 'post':
-							$permastruct = $wp_rewrite->permalink_structure;
+							$permastruct = $wp_rewrite->permalink_structure ?: '?p=%post_id%';
 							break;
-						// actually: `\in_array( $post_type, \get_post_types( [ '_builtin' => false ] ), true )`, but we covered all others above.
 						default:
-							$permastruct = \is_post_type_hierarchical( $post_type )
-								? $wp_rewrite->get_page_permastruct()
-								: $wp_rewrite->get_extra_permastruct( $post_type );
+							$post_type_obj = \get_post_type_object( $post_type );
 
-							// Both translate to the post's name; this translation eases later processing.
-							$permastruct = str_replace( "%{$post_type}%", '%postname%', $permastruct );
+							if ( $post_type_obj ) {
+								$permastruct = $wp_rewrite->get_extra_permastruct( $post_type );
+
+								if ( empty( $permastruct ) )
+									$permastruct = self::get_query_permastruct_for_post_type( $post_type_obj );
+
+								if ( ! str_starts_with( $permastruct, '?' ) )
+									$permastruct = str_replace( "%{$post_type}%", '%postname%', $permastruct );
+							}
 					}
 				}
 				break;
@@ -587,14 +605,71 @@ class Utils {
 				break;
 			case 'term':
 				$permastruct = $wp_rewrite->get_extra_permastruct( $args['tax'] );
+
+				if ( empty( $permastruct ) )
+					$permastruct = self::get_query_permastruct_for_taxonomy( $args['tax'] );
 				break;
 			case 'pta':
 				$permastruct = $wp_rewrite->get_extra_permastruct( $args['pta'] );
+
+				if ( empty( $permastruct ) ) {
+					$post_type_obj = \get_post_type_object( $args['pta'] );
+
+					if ( $post_type_obj && $post_type_obj->has_archive )
+						$permastruct = '?post_type=' . $args['pta'];
+				}
 				break;
 			case 'user':
-				$permastruct = $wp_rewrite->get_author_permastruct();
+				$permastruct = $wp_rewrite->get_author_permastruct() ?: '?author=%author_id%';
 		}
 
-		return '/' . ltrim( \user_trailingslashit( $permastruct ?? '' ), '/' );
+		$permastruct ??= '';
+
+		if ( str_starts_with( (string) $permastruct, '?' ) )
+			return $permastruct;
+
+		return '/' . ltrim( \user_trailingslashit( $permastruct ), '/' );
+	}
+
+	/**
+	 * Returns the query permastruct for a post type with no extra permastruct.
+	 * Matches WordPress's `get_post_permalink()` fallback.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param \WP_Post_Type $post_type_obj The post type object.
+	 * @return string The query permastruct.
+	 */
+	private static function get_query_permastruct_for_post_type( $post_type_obj ) {
+
+		if ( $post_type_obj->query_var )
+			return "?{$post_type_obj->query_var}=%postname%";
+
+		return "?post_type={$post_type_obj->name}&p=%post_id%";
+	}
+
+	/**
+	 * Returns the query permastruct for a taxonomy with no extra permastruct.
+	 * Matches WordPress's `get_term_link()` fallback.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param string $taxonomy The taxonomy name.
+	 * @return string The query permastruct. Empty when the taxonomy does not exist.
+	 */
+	private static function get_query_permastruct_for_taxonomy( $taxonomy ) {
+
+		if ( 'category' === $taxonomy )
+			return '?cat=%term_id%';
+
+		$tax = \get_taxonomy( $taxonomy );
+
+		if ( ! $tax )
+			return '';
+
+		if ( $tax->query_var )
+			return "?{$tax->query_var}=%{$taxonomy}%";
+
+		return "?taxonomy={$taxonomy}&term=%{$taxonomy}%";
 	}
 }

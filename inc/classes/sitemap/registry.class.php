@@ -503,6 +503,7 @@ class Registry {
 	 * }
 	 */
 	private static function get_sitemap_base_path_info() {
+
 		global $wp_rewrite;
 
 		$base_path = self::get_sitemap_base_path();
