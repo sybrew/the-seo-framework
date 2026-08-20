@@ -206,6 +206,7 @@ class Taxonomy {
 	 * @since 4.0.0
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_post_types_from_taxonomy`.
+	 * @since 5.1.5 Now resets the index keys of the return value.
 	 *
 	 * @param string $taxonomy Optional. The taxonomy to check. Defaults to current screen/query taxonomy.
 	 * @return array List of post types.
@@ -215,9 +216,6 @@ class Taxonomy {
 		$taxonomy = $taxonomy ?: Query::get_current_taxonomy();
 		$tax      = $taxonomy ? \get_taxonomy( $taxonomy ) : null;
 
-		// Reindex: WP's unregister_taxonomy_for_object_type() (and plugins
-		// filtering the object types) can leave holes in the array, which
-		// wp_json_encode() would then serialize as an object instead of a list.
 		return array_values( $tax->object_type ?? [] );
 	}
 
