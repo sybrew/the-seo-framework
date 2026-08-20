@@ -205,9 +205,9 @@ class Post_Type {
 						array_filter(
 							self::get_all_public(),
 							fn( $post_type ) => \get_post_type_object( $post_type )->has_archive ?? false,
-						)
-					)
-				)
+						),
+					),
+				),
 			);
 	}
 
@@ -225,7 +225,7 @@ class Post_Type {
 			array_filter(
 				self::get_all_public(),
 				[ self::class, 'is_supported' ],
-			)
+			),
 		) );
 	}
 
@@ -297,19 +297,20 @@ class Post_Type {
 	 * @since 4.1.0 Now gets hierarchical post types that don't support rewrite, as well.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_hierarchical_post_types`.
+	 * @since 5.1.5 Now resets the index keys of the return value.
 	 *
 	 * @return string[] All public hierarchical post types.
 	 */
 	public static function get_all_hierarchical() {
-		return memo() ?? memo(
+		return memo() ?? memo( array_values(
 			\get_post_types(
 				[
 					'hierarchical' => true,
 					'public'       => true,
 				],
 				'names',
-			)
-		);
+			),
+		) );
 	}
 
 	/**
@@ -319,19 +320,20 @@ class Post_Type {
 	 * @since 4.1.0 Now gets non-hierarchical post types that don't support rewrite, as well.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_nonhierarchical_post_types`.
+	 * @since 5.1.5 Now resets the index keys of the return value.
 	 *
 	 * @return array The public nonhierarchical post types.
 	 */
 	public static function get_all_nonhierarchical() {
-		return memo() ?? memo(
+		return memo() ?? memo( array_values(
 			\get_post_types(
 				[
 					'hierarchical' => false,
 					'public'       => true,
 				],
 				'names',
-			)
-		);
+			),
+		) );
 	}
 
 	/**
