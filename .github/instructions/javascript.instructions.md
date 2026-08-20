@@ -13,3 +13,4 @@ applyTo: "**/*.js"
 - Use `const` instead of `import`.
 - Do not add parentheses to lone parameters in arrow functions.
 - Put each chained method call on a new line.
+- Do not create, edit, or search for `*.min.js`.

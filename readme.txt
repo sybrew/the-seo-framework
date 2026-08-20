@@ -249,6 +249,10 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 
 ## For everyone
 
+* **Upgraded:** Now uses TSF database version 5150.
+* **Added:**
+	* You can now enter a Facebook domain verification code in Webmaster Integration Settings.
+	* Plain permalink support to the Canonical URL Notation Tracker.
 * **Changed:**
 	* **Open Graph locales:** We couldn't find any documentation on the languages Facebook supports for Open Graph, so we resorted to scraping their network, testing all 46500 possible locale combinations, and adjusted support accordingly:
 		* **These WordPress locales are no longer supported by Facebook:** Cebuano, Esperanto, Spanish (Chile, Colombia, Mexico, Venezuela), Igbo, Limburgish, Lingala, Luganda, Māori, Romansh, Sanskrit, Silesian, Syriac, Tamazight, Wolof, Xhosa, Yoruba, Zulu.
@@ -282,6 +286,7 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 		* Resolved an issue where posts excluded from local search could still appear in translated search results.
 * **Fixed:**
 	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
+	* Resolved an issue where the Canonical URL Notation Tracker showed the homepage URL for hierarchical custom post types, and for post types with rewrite disabled.
 	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
@@ -293,6 +298,9 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 
 ## For developers
 
+* **Option notes:**
+	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
+		* Added index `facebook_verification`. Default `''`.
 * **PHP API notes:**
 	* **Added:**
 		* Pool `tsf()->admin()->seobar()` is now available.
@@ -316,8 +324,13 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 	* **Fixed:**
 		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin.
+		* Method `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`) now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks or rewrite disabled), matching WordPress's `get_permalink()`, `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`, `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks. Hierarchical custom post types now use the extra permastruct, matching `get_post_permalink()`, instead of the page permastruct.
 	* **Other:**
 		* Class `The_SEO_Framework\Pool` (`tsf()->pool()`) now stores cache keys by function name, instead of hardcoded strings, reducing duplication and the risk of mismatched keys. This was initiated after we found a typo in a string key.
+* **JavaScript API notes:**
+	* **Added:**
+		* Method `tsfCanonical.isQueryStructure()` tests whether a URL structure uses query parameters.
+		* Method `tsfCanonical.canTrackUrlStructure()` reports whether the Canonical URL Notation Tracker can predict URLs for an input.
 * **Filter notes:**
 	* **Changed:**
 		* Filter `the_seo_framework_breadcrumb_shortcode_css`: The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.

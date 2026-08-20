@@ -1,7 +1,11 @@
 ---
-description: TSF JavaScript syntax and formatting expectations
+description: TSF JavaScript syntax, formatting, and minification
 globs: **/*.js
 alwaysApply: false
 ---
 
 Follow the JavaScript rules in @.github/instructions/javascript.instructions.md when editing JavaScript files.
+
+After editing unminified `lib/js` sources, run the minify skill. Do not create, edit, or search for `*.min.js`.
+
+Read `.local/minify/permission.txt` with an explicit path (Grep/Glob cannot see `.local/`). If the file does not exist, prompt, then create it from the reply as two lines (`JS=True`/`JS=False` and `CSS=True`/`CSS=False`). If `JS=False`, do not prompt again, and do not clone or minify JS. If `JS=True` and `.local/minify/babel-tsf/run.js` is missing, clone https://github.com/theseoframework/babel-tsf into `.local/minify/babel-tsf` and run `npm install` there. That public repo is the source of truth.

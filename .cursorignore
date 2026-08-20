@@ -1,0 +1,3 @@
+# Re-include private local workspace for Cursor indexing / Agent tools.
+# Still ignored by git via .gitignore - not published on clone/push.
+!.local/**

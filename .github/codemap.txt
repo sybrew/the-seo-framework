@@ -31,13 +31,13 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 		css.mdc                     CSS-scoped rule attaching css.instructions.md
 		docs.mdc                    Readme-scoped rule attaching docs.instructions.md
 		javascript.mdc              JavaScript-scoped rule attaching javascript.instructions.md
-		local.mdc                   .local/-scoped rule attaching local.instructions.md
+		local.mdc                   Always-applied: gitignored .local search workaround; attaches local.instructions.md
 		php.mdc                     PHP-scoped rule attaching php.instructions.md
 	skills/                       Project-scoped Agent Skills (SKILL.md workflows)
-		normalize-line-endings/     LF normalization skill for Windows agent writes
-			SKILL.md                Skill instructions and PowerShell invocation examples
+		minify/                     Regenerates lib/js/*.min.js and lib/css/*.min.css
+			SKILL.md                Skill instructions: permission check, engine clone, minify command
 			scripts/
-				normalize-lf.ps1    Converts CRLF to LF for tracked text extensions
+				minify.js           Runs babel-tsf and cleancss-tsf against lib/js and lib/css
 
 .github/
 	codemap.txt                   This file
@@ -181,7 +181,7 @@ meta/
 		theme-color.class.php                 Generates the <meta name="theme-color"> tag from plugin settings
 		twitter.class.php                     Generates Twitter Card meta tags (card type, site, creator, title, description, image)
 		uri.class.php                         Generates canonical URL, pagination rel-links (prev/next), and shortlink tags
-		webmasters.class.php                  Generates site verification meta tags for Google, Bing, Yandex, Baidu, Pinterest
+		webmasters.class.php                  Generates site verification meta tags for Google, Bing, Yandex, Baidu, Pinterest, Facebook
 
 
 Helper (inc/classes/helper/)
@@ -380,7 +380,7 @@ settings/
 		sitemaps.php              Settings metabox: XML sitemap configuration (general, robots.txt, metadata, style)
 		social.php                Settings metabox: social meta tags (Open Graph, Twitter Cards, oEmbed, profiles)
 		title.php                 Settings metabox: title tag behavior (additions, separator, prefix, capitalization)
-		webmaster.php             Settings metabox: webmaster verification codes (Google, Bing, Yandex, Baidu, Pinterest)
+		webmaster.php             Settings metabox: webmaster verification codes (Google, Bing, Yandex, Baidu, Pinterest, Facebook)
 
 sitemap/
 	xml-sitemap.php               Generates and outputs the full XML sitemap document (header, urlset, URLs, debug stats)

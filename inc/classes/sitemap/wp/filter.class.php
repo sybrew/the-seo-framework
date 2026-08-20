@@ -56,15 +56,13 @@ final class Filter {
 	 * @return array $args The WP_Query arguments, unaltered.
 	 */
 	public static function trick_filter_doing_sitemap( $args ) {
+
 		global $wp_query;
 
 		// If doing Core sitemaps, verify if is actual sitemap, and block if so.
-		if ( isset( $wp_query->query_vars['sitemap'] ) ) {
-			// Didn't we request a simple API function for this? Anyway, null safe operators would also be nice here.
-			// For now, let's assume this API won't change. Test periodically.
+		if ( isset( $wp_query->query_vars['sitemap'] ) )
 			if ( \wp_sitemaps_get_server()->registry->get_provider( $wp_query->query_vars['sitemap'] ) )
 				Query::is_sitemap( true );
-		}
 
 		return $args;
 	}

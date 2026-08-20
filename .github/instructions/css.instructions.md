@@ -9,3 +9,4 @@ applyTo: "**/*.css"
 - Use lowercase hex colors.
 - Remove the zero before decimal points.
 - Close the last property with a semicolon.
+- Do not create, edit, or search for `*.min.css`.
