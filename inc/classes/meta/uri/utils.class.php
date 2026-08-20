@@ -117,7 +117,10 @@ class Utils {
 	 */
 	public static function get_parsed_front_page_url() {
 		return umemo( __METHOD__ )
-			?? umemo( __METHOD__, parse_url( Data\Blog::get_front_page_url() ) );
+			?? umemo(
+				__METHOD__,
+				parse_url( Data\Blog::get_front_page_url() ),
+			);
 	}
 
 	/**

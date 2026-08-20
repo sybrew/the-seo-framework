@@ -299,7 +299,7 @@ final class Compatibility {
 					|| \defined( 'WPB_VC_VERSION' )
 					|| \defined( 'BRICKS_VERSION' )
 				),
-			)
+			),
 		);
 	}
 }

@@ -52,7 +52,8 @@ class Utils {
 	 * @return bool
 	 */
 	public static function using_pretty_permalinks() {
-		return memo() ?? memo( '' !== \get_option( 'permalink_structure' ) );
+		return memo()
+			?? memo( '' !== \get_option( 'permalink_structure' ) );
 	}
 
 	/**

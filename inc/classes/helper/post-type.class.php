@@ -155,7 +155,10 @@ class Post_Type {
 		$post_type = $post_type ?: Query::get_current_post_type();
 
 		// Return false if no post type if found -- do not memo that, for query call might be too early.
-		return $post_type && memo( (bool) \get_object_taxonomies( $post_type, 'names' ), $post_type );
+		return $post_type && memo(
+			(bool) \get_object_taxonomies( $post_type, 'names' ),
+			$post_type,
+		);
 	}
 
 	/**
@@ -174,7 +177,7 @@ class Post_Type {
 			array_filter(
 				self::get_public_pta(),
 				[ self::class, 'is_pta_supported' ],
-			)
+			),
 		) );
 	}
 
@@ -253,14 +256,18 @@ class Post_Type {
 				 */
 				(array) \apply_filters(
 					'the_seo_framework_public_post_types',
-					array_values( array_filter(
-						array_unique( array_merge(
-							self::get_all_forced_supported(),
-							// array_keys() because get_post_types() gives a sequential array.
-							array_keys( (array) \get_post_types( [ 'public' => true ] ) ),
-						) ),
-						'is_post_type_viewable',
-					) ),
+					array_values(
+						array_filter(
+							array_unique(
+								array_merge(
+									self::get_all_forced_supported(),
+									// array_keys() because get_post_types() gives a sequential array.
+									array_keys( (array) \get_post_types( [ 'public' => true ] ) ),
+								),
+							),
+							'is_post_type_viewable',
+						),
+					),
 				),
 			);
 	}
@@ -278,9 +285,9 @@ class Post_Type {
 	 */
 	public static function get_all_forced_supported() {
 		/**
-		* @since 3.1.0
-		* @param string[] $forced Forced supported post types.
-		*/
+		 * @since 3.1.0
+		 * @param string[] $forced Forced supported post types.
+		 */
 		return (array) \apply_filters(
 			'the_seo_framework_forced_supported_post_types',
 			array_values( \get_post_types( [

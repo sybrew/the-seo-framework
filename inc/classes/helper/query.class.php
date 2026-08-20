@@ -247,7 +247,7 @@ class Query {
 			?? Query\Cache::memo(
 				\is_admin()
 					? self::get_admin_post_type()
-					: self::get_post_type_real_id()
+					: self::get_post_type_real_id(),
 			);
 	}
 
@@ -568,9 +568,7 @@ class Query {
 	 */
 	public static function is_editable_term() {
 		return Query\Cache::memo()
-			?? Query\Cache::memo(
-				Query::is_category() || Query::is_tag() || Query::is_tax()
-			);
+			?? Query\Cache::memo( Query::is_category() || Query::is_tag() || Query::is_tax() );
 	}
 
 	/**
@@ -944,15 +942,14 @@ class Query {
 	 * @return bool
 	 */
 	public static function is_product_admin() {
-		return Query\Cache::memo()
-			?? Query\Cache::memo(
-				/**
-				 * @since 4.0.5
-				 * @since 4.1.4 Now has its return value memoized.
-				 * @param bool $is_product_admin
-				 */
-				(bool) \apply_filters( 'the_seo_framework_is_product_admin', false ),
-			);
+		return Query\Cache::memo() ?? Query\Cache::memo(
+			/**
+			 * @since 4.0.5
+			 * @since 4.1.4 Now has its return value memoized.
+			 * @param bool $is_product_admin
+			 */
+			(bool) \apply_filters( 'the_seo_framework_is_product_admin', false ),
+		);
 	}
 
 	/**

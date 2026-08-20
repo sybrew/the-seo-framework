@@ -967,11 +967,10 @@ class Title {
 	 * @return string The trimmed tagline.
 	 */
 	public static function get_addition_for_front_page() {
-		return memo()
-			?? memo( Sanitize::metadata_content(
-				   coalesce_strlen( Data\Plugin::get_option( 'homepage_title_tagline' ) )
-				?? Data\Blog::get_filtered_blog_description()
-			) );
+		return memo() ?? memo( Sanitize::metadata_content(
+			   coalesce_strlen( Data\Plugin::get_option( 'homepage_title_tagline' ) )
+			?? Data\Blog::get_filtered_blog_description(),
+		) );
 	}
 
 	/**

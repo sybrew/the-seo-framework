@@ -164,7 +164,7 @@ class Input {
 				'<label for="%s"%s>%s</label>',
 				[
 					Escape::option_name_attribute( $field_id ),
-					( $args['disabled'] ? ' class=tsf-disabled' : '' ),
+					$args['disabled'] ? ' class=tsf-disabled' : '',
 					vsprintf(
 						'<input type=checkbox class="%s" name="%s" id="%s" value=1 %s%s %s /> %s',
 						[
@@ -172,7 +172,7 @@ class Input {
 							Escape::option_name_attribute( $field_name ),
 							Escape::option_name_attribute( $field_id ),
 							\checked( $value, true, false ),
-							( $args['disabled'] ? ' disabled' : '' ),
+							$args['disabled'] ? ' disabled' : '',
 							HTML::make_data_attributes( $args['data'] ),
 							$args['label'],
 						],

@@ -131,10 +131,12 @@ class Taxonomy {
 	 * @return string[] All supported taxonomies.
 	 */
 	public static function get_all_supported() {
-		return memo() ?? memo( array_values( array_filter(
-			self::get_all_public(),
-			[ self::class, 'is_supported' ],
-		) ) );
+		return memo() ?? memo( array_values(
+			array_filter(
+				self::get_all_public(),
+				[ self::class, 'is_supported' ],
+			),
+		) );
 	}
 
 	/**
@@ -145,6 +147,7 @@ class Taxonomy {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_public_taxonomies`.
 	 *              3. Is now public.
+	 * @since 5.1.5 Now resets the index keys of the return value.
 	 *
 	 * @return string[] The taxonomies that are public.
 	 */
@@ -160,18 +163,22 @@ class Taxonomy {
 				 */
 				(array) \apply_filters(
 					'the_seo_framework_public_taxonomies',
-					array_filter(
-						array_unique( array_merge(
-							self::get_all_forced_supported(),
-							// array_values() because get_taxonomies() gives a sequential array.
-							array_values( \get_taxonomies( [
-								'public'   => true,
-								'_builtin' => false,
-							] ) ),
-						) ),
-						'is_taxonomy_viewable',
-					)
-				)
+					array_values(
+						array_filter(
+							array_unique(
+								array_merge(
+									self::get_all_forced_supported(),
+									// array_values() because get_taxonomies() gives a sequential array.
+									array_values( \get_taxonomies( [
+										'public'   => true,
+										'_builtin' => false,
+									] ) ),
+								),
+							),
+							'is_taxonomy_viewable',
+						),
+					),
+				),
 			);
 	}
 

@@ -67,12 +67,13 @@ class Robots {
 	 * @return string
 	 */
 	public static function get_meta() {
-		return umemo( __METHOD__ ) ?? umemo(
-			__METHOD__,
-			Data\Blog::is_public()
-				? implode( ',', self::get_generated_meta() )
-				: '',
-		);
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				Data\Blog::is_public()
+					? implode( ',', self::get_generated_meta() )
+					: '',
+			);
 	}
 
 	/**

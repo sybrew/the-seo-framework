@@ -290,8 +290,8 @@ final class AJAX {
 						(array) ( $_POST['get'] ?? [] ),
 					),
 					$_get_defaults,
-				)
-			)
+				),
+			),
 		);
 
 		$generator_args = [ 'id' => $post_id ];

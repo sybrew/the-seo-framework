@@ -299,15 +299,16 @@ class URI {
 	 * @return string The home URL.
 	 */
 	public static function get_bare_front_page_url() {
-		return umemo( __METHOD__ ) ?? umemo(
-			__METHOD__,
-			\sanitize_url(
-				URI\Utils::slash_front_page_url( URI\Utils::set_preferred_url_scheme(
-					Data\Blog::get_front_page_url(),
-				) ),
-				[ 'https', 'http' ],
-			),
-		);
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				\sanitize_url(
+					URI\Utils::slash_front_page_url( URI\Utils::set_preferred_url_scheme(
+						Data\Blog::get_front_page_url(),
+					) ),
+					[ 'https', 'http' ],
+				),
+			);
 	}
 
 	/**

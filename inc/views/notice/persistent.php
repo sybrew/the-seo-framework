@@ -104,7 +104,7 @@ vprintf(
 	'<div class="notice %s tsf-notice %s">%s%s</div>',
 	[
 		\esc_attr( $args['type'] ),
-		( $args['icon'] ? 'tsf-show-icon' : '' ),
+		$args['icon'] ? 'tsf-show-icon' : '',
 		\sprintf(
 			! $args['escape'] && 0 === stripos( $message, '<p' )
 				? '%s'

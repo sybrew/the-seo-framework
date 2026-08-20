@@ -102,7 +102,8 @@ class Blog {
 	 * @return string The home URL.
 	 */
 	public static function get_front_page_url() {
-		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_home_url() );
+		return umemo( __METHOD__ )
+			?? umemo( __METHOD__, \get_home_url() );
 	}
 
 	/**
@@ -116,7 +117,11 @@ class Blog {
 	 * @return string $blogname The sanitized blogname.
 	 */
 	public static function get_language() {
-		return umemo( __METHOD__ ) ?? umemo( __METHOD__, \get_bloginfo( 'language' ) );
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				\get_bloginfo( 'language' ),
+			);
 	}
 
 	/**

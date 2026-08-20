@@ -82,7 +82,7 @@ final class Main {
 	 * @since 4.2.0
 	 * @access private
 	 */
-	private function __construct() { }
+	private function __construct() {}
 
 	/**
 	 * Creates and returns the instance.
@@ -178,11 +178,11 @@ final class Main {
 			null,
 			isset( $this->args ),
 		)
-		?? umemo(
-			__METHOD__,
-			isset( $this->args ) ? new Args : new Front,
-			isset( $this->args ),
-		);
+			?? umemo(
+				__METHOD__,
+				isset( $this->args ) ? new Args : new Front,
+				isset( $this->args ),
+			);
 	}
 
 	/**

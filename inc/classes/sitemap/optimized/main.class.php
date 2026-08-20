@@ -65,7 +65,7 @@ abstract class Main {
 	 * @since 4.2.0 No longer resets time zone.
 	 * @ignore
 	 */
-	final public function shutdown_generation() { }
+	final public function shutdown_generation() {}
 
 	/**
 	 * Generates and returns the sitemap content.

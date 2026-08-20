@@ -99,7 +99,11 @@ class Breadcrumbs {
 			normalize_generation_args( $args );
 			$list = self::get_breadcrumb_list_from_args( $args );
 		} else {
-			$list = memo( null, self::$options ) ?? memo( self::get_breadcrumb_list_from_query(), self::$options );
+			$list = memo( null, self::$options )
+				?? memo(
+					self::get_breadcrumb_list_from_query(),
+					self::$options,
+				);
 		}
 
 		/**

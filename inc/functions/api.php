@@ -377,7 +377,7 @@ namespace The_SEO_Framework {
 	 *     return $arg * 2;
 	 * }
 	 * function my_function( $arg ) {
-	 *     return memo( null, $arg );
+	 *     return memo( null, $arg )
 	 *         ?? memo( expensive_call( $arg ), $arg );
 	 * }
 	 * my_function( 1 ); // prints "expensive 1!", returns 2.
@@ -436,7 +436,7 @@ namespace The_SEO_Framework {
 	 *     return $arg * 2;
 	 * }
 	 * function my_function( $arg ) {
-	 *     return umemo( __METHOD__, null, $arg );
+	 *     return umemo( __METHOD__, null, $arg )
 	 *         ?? umemo( __METHOD__, expensive_call( $arg ), $arg );
 	 * }
 	 * my_function( 1 ); // prints "expensive 1!", returns 2.

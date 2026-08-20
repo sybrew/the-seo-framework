@@ -81,7 +81,7 @@ final class Load extends Pool {
 	 * @since 4.1.4.Now constructs headlessness.
 	 * @since 5.0.0 Is now protected. Use `tsf()` or `the_seo_framework()` instead.
 	 */
-	protected function __construct() { }
+	protected function __construct() {}
 
 	/**
 	 * Handles unapproachable invoked properties.

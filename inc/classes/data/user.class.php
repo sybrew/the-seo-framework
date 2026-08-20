@@ -103,8 +103,13 @@ class User {
 	 */
 	public static function get_userdata( $user_id, $key = null ) {
 
-		$userdata = umemo( __METHOD__, null, $user_id )
-				 ?? umemo( __METHOD__, \get_userdata( $user_id ), $user_id );
+		$userdata =
+			   umemo( __METHOD__, null, $user_id )
+			?? umemo(
+				__METHOD__,
+				\get_userdata( $user_id ),
+				$user_id,
+			);
 
 		return isset( $key )
 			? ( $userdata->$key ?? null )
