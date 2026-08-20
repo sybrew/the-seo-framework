@@ -99,7 +99,7 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 					'https://business.facebook.com/settings/owned-domains',
 					false,
 				),
-				'placeholder' => '1a2bc3d4efg5hi6jklmno7pqrs8tu9',
+				'placeholder' => 'abc1d234efghij56k7l8mn9op1qrst',
 			],
 		];
 
