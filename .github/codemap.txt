@@ -144,7 +144,7 @@ filter/
 	escape.class.php              Data escaping methods (option name attributes, JSON encoding for scripts)
 	plugin.class.php              Plugin option sanitization/filter callbacks applied when settings are updated
 	post.class.php                Post meta sanitization filters (title, description, canonical URI, robots fields)
-	sanitize.class.php            General-purpose data sanitization (booleans, URLs, metadata content)
+	sanitize.class.php            General-purpose data sanitization (Booleans, URLs, metadata content)
 	term.class.php                Term meta sanitization filters (title, description, canonical, robots fields)
 	user.class.php                User meta sanitization filters (social profiles, counter type, author slug)
 

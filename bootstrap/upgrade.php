@@ -104,7 +104,7 @@ function _do_upgrade() {
 
 	if ( \wp_doing_ajax() ) return;
 
-	if ( Query::is_seo_settings_page( false ) ) {
+	if ( Query::is_seo_settings_page( 'page_query' ) ) { // $_GET['page']: admin_menu has not registered the hook yet.
 		// phpcs:ignore WordPress.Security.SafeRedirect -- self_admin_url() is safe.
 		\wp_redirect( \self_admin_url() );
 		exit;

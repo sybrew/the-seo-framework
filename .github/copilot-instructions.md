@@ -67,10 +67,10 @@ Do not argue a settled intent, rehash a corrected misread, or add meta-commentar
 - Align object and array key/value separators with spaces after the separator.
 - When creating an object or array with a single property, put that property on a single line.
 - When creating an object or array with a single property whose value contains an operator, put that property on a new line.
-- Place multiline operators at the start of new lines, including in conditional checks and coalescing. When a line must split, break at ternary or coalesce first (`??`, `?:`, `? :`), then at the innermost remaining call. Do not use a call-count threshold; wrapper pipelines such as `memo() ?? memo( array_values( array_filter(` would trip it.
-- Keep `fn() ?? fn(` on one line when the right-hand call takes a single argument with no assignment, comparison, or logic operators and that argument continues below as a pass-through wrapper, for example `memo() ?? memo( array_values(`. Nested calls and pass-through wrappers do not count as extra arguments. Break before `??` when the right-hand call takes multiple arguments, when its own argument contains assignment, comparison, or logic operators, or when packing the coalescing expression on one line would nest further calls inside the memoized value.
+- Place multiline operators at the start of new lines, including in conditional checks and coalescing. When a line must split, break at ternary or coalesce first (`??`, `? :`), then at the innermost remaining call. Do not use a call-count threshold; nested wrapper pipelines would trip it.
+- Keep a coalesce of two wrappers on one line when the right-hand call takes a single argument with no assignment, comparison, or logic operators and that argument continues below as a pass-through wrapper. Nested calls and pass-through wrappers do not count as extra arguments. Break before `??` when the right-hand call takes multiple arguments, when its own argument contains assignment, comparison, or logic operators, or when packing the coalescing expression on one line would nest further calls inside the wrapped value.
 - Put function arguments on a new line when they are over 30 characters in total.
-- Put multiple function arguments on new lines when any argument is an anonymous function, array, or object. A compact single-property array is not that trigger: keep `get_post_types( [ 'public' => true ] )`. If the array is the only argument and has multiple properties, keep `fn( [` and wrap the properties. If an array, object, or closure is one of multiple arguments, put every argument of that call on its own line.
+- Put multiple function arguments on new lines when any argument is an anonymous function, array, or object. A compact single-property array or object is not that trigger. If an array or object is the only argument and has multiple properties, keep the opener with the call and wrap the properties. If an array, object, or closure is one of multiple arguments, put every argument of that call on its own line.
 - Add trailing commas at the end of multiline object or array properties and function arguments if the language supports it.
 - Pad brackets and braces with spaces around arguments.
 - Align consecutive variable assignments at the equal signs.
@@ -80,11 +80,11 @@ Do not argue a settled intent, rehash a corrected misread, or add meta-commentar
 - Write detailed docblocks for all functions, classes, and methods.
 - Add a newline after a function opening brace unless its body is a single line.
 - A tab is 4 characters wide.
-- Use tabs for indentation, not spaces. Continuation indent is one tab. When the right-hand side of `=` is a multiline `??`, `?:`, or ternary, break after `=` and pad the first operand by 3 spaces so the operator aligns (`$home_domain =`, `static::$site_cache_memo =`). Do not pad a `return` that is not an assignment.
-- When a ternary or elvis branch is a complex `&&` / `||` chain, wrap that branch in parentheses. Pad the first operand by 3 spaces so the operators align at the start of continuation lines. Use the same wrapping when that boolean is a function argument, so phpcs treats it as one argument. When there is an operator in an argument of a multi-argument call, split all arguments into separate lines. A single boolean or coalesce argument may stay on the opener if it fits.
-- Always use braces with branching control structures.
-- Do not use braces for single-line constructs that lack a conditional follow-up, such as if, for, foreach, do, or while without a paired else, elseif, or do/while follow-up.
-- Coalesce two control structures when the first contains only the second, for example `} else foreach {`.
+- Use tabs for indentation, not spaces. Continuation indent is one tab. When the right-hand side of `=` is a multiline coalesce or ternary, break after `=` and pad the first operand by 3 spaces so the operator aligns. Do not pad a `return` that is not an assignment.
+- When a ternary or coalesce branch is a complex `&&` / `||` chain, wrap that branch in parentheses. Pad the first operand by 3 spaces so the operators align at the start of continuation lines. Use the same wrapping when that Boolean is a function argument, so the linter treats it as one argument. When there is an operator in an argument of a multi-argument call, split all arguments into separate lines. A single Boolean or coalesce argument may stay on the opener if it fits.
+- Use braces with branching control structures when the body has more than one statement, or when there is a paired `else`, `elseif`, or `do`/`while` follow-up.
+- Do not use braces when the body is a single statement and there is no such follow-up. Wrapping that statement across lines does not require braces.
+- Coalesce two control structures when the first contains only the second, for example `} else foreach {` or `} else for {`.
 
 ## File Health
 

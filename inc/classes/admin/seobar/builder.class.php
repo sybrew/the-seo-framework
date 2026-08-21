@@ -63,12 +63,12 @@ class Builder {
 	 * @var array $item {
 	 *     The current SEO Bar item list.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's class constants.
-	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
-	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string[]  $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	private static $items = [];
@@ -167,11 +167,11 @@ class Builder {
 	 * @return array {
 	 *     An array of SEO Bar items.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's `STATE_*` bit flags.
-	 *     @type string $reason The final assessment: The reason for the $status.
-	 *     @type string $assess The assessments on why the reason is set.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status.
+	 *     @type string[]  $assess The assessments on why the reason is set.
 	 * }
 	 */
 	public static function &collect_seo_bar_items() {
@@ -187,12 +187,12 @@ class Builder {
 	 * @param array  $item {
 	 *     The SEO Bar item.
 	 *
-	 *     @type string $symbol Required. The displayed symbol that identifies your bar.
-	 *     @type string $title  Required. The title of the assessment.
-	 *     @type int    $status Required. Power of two. See SEOBar's `STATE_*` bit flags.
-	 *     @type string $reason Required. The final assessment: The reason for the $status.
-	 *     @type string $assess Required. The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol Required. The displayed symbol that identifies your bar.
+	 *     @type string    $title  Required. The title of the assessment.
+	 *     @type int <bit> $status Required. See `STATE_*` class constants.
+	 *     @type string    $reason Required. The final assessment: The reason for the $status.
+	 *     @type string[]  $assess Required. The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	public static function register_seo_bar_item( $key, $item ) {
@@ -334,16 +334,14 @@ class Builder {
 				),
 			);
 
-			$count       = \count( $item['assess'] );
-			$assessments = [];
+			$single_assessment = \count( $item['assess'] ) < 2;
+			$assessments       = [];
 
-			if ( $count < 2 ) {
+			if ( $single_assessment ) {
 				$assessments[] = reset( $item['assess'] );
-			} else {
-				$i = 0;
-				foreach ( $item['assess'] as $text ) {
-					$assessments[] = \sprintf( $gettext['enum'], ++$i, $text );
-				}
+			} else foreach ( $item['assess'] as $text ) {
+				// an ++$i loop instead of count saves 6ns but adds 2ns for single assessment loops
+				$assessments[] = \sprintf( $gettext['enum'], \count( $assessments ) + 1, $text );
 			}
 
 			$aria = \sprintf(
@@ -352,7 +350,7 @@ class Builder {
 				$item['reason'],
 				\sprintf(
 					$gettext['list'],
-					$count < 2 ? $gettext['assessment'] : $gettext['assessments'],
+					$single_assessment ? $gettext['assessment'] : $gettext['assessments'],
 					implode( ' ', $assessments ),
 				),
 			);

@@ -474,14 +474,11 @@ class Title {
 	 * Returns the generated archive title by evaluating the current query.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now sanitizes the title and prefix on return.
+	 * @since 5.1.5 Now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.
 	 *
 	 * @return string[$title,$prefix] The title and prefix.
 	 */
 	public static function get_archive_title_from_query() {
-
-		$title  = \__( 'Archives', 'default' );
-		$prefix = '';
 
 		if ( Query::is_category() ) {
 			$title  = self::get_term_title();
@@ -503,6 +500,8 @@ class Title {
 				$title  = \get_the_date( \_x( 'F j, Y', 'daily archives date format', 'default' ) );
 				$prefix = \_x( 'Day:', 'date archive title prefix', 'default' );
 			}
+
+			$title = Sanitize::metadata_content( $title ?? \__( 'Archives', 'default' ) );
 		} elseif ( \is_tax( 'post_format' ) ) {
 			if ( \is_tax( 'post_format', 'post-format-aside' ) ) {
 				$title = \_x( 'Asides', 'post format archive title', 'default' );
@@ -523,6 +522,8 @@ class Title {
 			} elseif ( \is_tax( 'post_format', 'post-format-chat' ) ) {
 				$title = \_x( 'Chats', 'post format archive title', 'default' );
 			}
+
+			$title = Sanitize::metadata_content( $title ?? \__( 'Archives', 'default' ) );
 		} elseif ( \is_post_type_archive() ) {
 			$title  = self::get_post_type_archive_title();
 			$prefix = \_x( 'Archives:', 'post type archive title prefix', 'default' );
@@ -540,8 +541,8 @@ class Title {
 		}
 
 		return [
-			Sanitize::metadata_content( $title ),
-			Sanitize::metadata_content( $prefix ),
+			$title ?? Sanitize::metadata_content( \__( 'Archives', 'default' ) ),
+			Sanitize::metadata_content( $prefix ?? '' ),
 		];
 	}
 
@@ -549,14 +550,14 @@ class Title {
 	 * Returns the generated archive title by evaluating the input object only.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now sanitizes the title and prefix on return.
+	 * @since 5.1.5 Now sanitizes generated archive titles and prefixes. Titles from `get_term_title()`, `get_user_title()`, and `get_post_type_archive_title()` are not sanitized again.
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type $object The archive object.
 	 * @return string[$title,$prefix] The title and prefix.
 	 */
 	public static function get_archive_title_from_object( $object ) {
 
-		$title  = \__( 'Archives', 'default' );
+		$title  = Sanitize::metadata_content( \__( 'Archives', 'default' ) );
 		$prefix = '';
 
 		if ( ! empty( $object->taxonomy ) ) {
@@ -585,7 +586,7 @@ class Title {
 		}
 
 		return [
-			Sanitize::metadata_content( $title ),
+			$title,
 			Sanitize::metadata_content( $prefix ),
 		];
 	}

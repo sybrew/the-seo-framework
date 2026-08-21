@@ -330,11 +330,20 @@ final class Debug {
 	 */
 	public static function _output_debug_header() {
 
-		if ( \is_admin() && ! Query::is_term_edit() && ! Query::is_post_edit() && ! Query::is_seo_settings_page( true ) )
-			return;
+		if (
+			   \is_admin()
+			&& ! (
+				   Query::is_post_edit()
+				|| Query::is_term_edit()
+				|| Query::is_seo_settings_page()
+			)
+		) return;
 
-		if ( Query::is_seo_settings_page( true ) )
-			\add_filter( 'the_seo_framework_current_object_id', fn() => Query::get_the_front_page_id() );
+		if ( Query::is_seo_settings_page() )
+			\add_filter(
+				'the_seo_framework_current_object_id',
+				fn() => Query::get_the_front_page_id(),
+			);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput -- callee escapes.
 		Template::output_view( 'debug/header' );
@@ -436,7 +445,7 @@ final class Debug {
 		$is_tax                         = Query::is_tax();
 		$is_shop                        = Query::is_shop();
 		$is_product                     = Query::is_product();
-		$is_seo_settings_page           = Query::is_seo_settings_page( true );
+		$is_seo_settings_page           = Query::is_seo_settings_page();
 		$numpages                       = Query::numpages();
 		$is_multipage                   = Query::is_multipage();
 		$is_singular_archive            = Query::is_singular_archive();

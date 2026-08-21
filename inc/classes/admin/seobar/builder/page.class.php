@@ -155,12 +155,12 @@ final class Page extends Main {
 	 * @return array $item {
 	 *     The SEO Bar title item.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's class constants.
-	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
-	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string[]  $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	protected function test_title() {
@@ -381,12 +381,12 @@ final class Page extends Main {
 	 * @return array $item {
 	 *     The SEO Bar description item.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's class constants.
-	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
-	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string[]  $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	protected function test_description() {
@@ -594,12 +594,12 @@ final class Page extends Main {
 	 * @return array $item {
 	 *     The SEO Bar robots indexing item.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's class constants.
-	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
-	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string[]  $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	protected function test_indexing() {
@@ -756,12 +756,12 @@ final class Page extends Main {
 	 * @return array $item {
 	 *     The SEO Bar robots following item.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's class constants.
-	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
-	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string[]  $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	protected function test_following() {
@@ -895,12 +895,12 @@ final class Page extends Main {
 	 * @return array $item {
 	 *     The SEO Bar robots archiving item.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's class constants.
-	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
-	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string[]  $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	protected function test_archiving() {
@@ -1034,12 +1034,12 @@ final class Page extends Main {
 	 * @return array $item {
 	 *     The SEO Bar redirect item.
 	 *
-	 *     @type string $symbol The displayed symbol that identifies your bar.
-	 *     @type string $title  The title of the assessment.
-	 *     @type int    $status Power of two. See SEOBar's class constants.
-	 *     @type string $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
-	 *     @type string $assess The assessments on why the reason is set. Keep it short and concise!
-	 *                          Does not accept HTML for performant ARIA support.
+	 *     @type string    $symbol The displayed symbol that identifies your bar.
+	 *     @type string    $title  The title of the assessment.
+	 *     @type int <bit> $status See `STATE_*` class constants.
+	 *     @type string    $reason The final assessment: The reason for the $status. The latest state-changing reason is used.
+	 *     @type string[]  $assess The assessments on why the reason is set. Keep it short and concise!
+	 *                             Does not accept HTML for performant ARIA support.
 	 * }
 	 */
 	protected function test_redirect() {

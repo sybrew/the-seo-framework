@@ -227,7 +227,7 @@ class Utils {
 
 		foreach ( $exploitables as $type => $qvs ) {
 			foreach ( $qvs as $qv ) {
-				// Only test isset, because falsey or empty-array is what we need to test against.
+				// Only test isset, because falsy or empty-array is what we need to test against.
 				if ( ! isset( $query[ $qv ] ) ) continue;
 
 				switch ( $type ) {
