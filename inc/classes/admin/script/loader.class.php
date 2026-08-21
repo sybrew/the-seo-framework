@@ -208,6 +208,7 @@ class Loader {
 	 * Returns the common TSF scripts.
 	 *
 	 * @since 5.1.0
+	 * @since 5.1.5 No longer includes unused `manage_options` and `upload_files` l10n nonces.
 	 *
 	 * @return array The script params.
 	 */
@@ -244,14 +245,7 @@ class Loader {
 					'name' => 'tsfL10n',
 					'data' => [
 						'nonces' => [
-							/**
-							 * Use THE_SEO_FRAMEWORK_SETTINGS_CAP ?... might conflict with other nonces.
-							 * -> Just add it to the end, if it matches the existing ones, that's fine (just double work).
-							 * If we do this, also add it to "states" or something.
-							 */
-							'manage_options' => Utils::create_ajax_capability_nonce( 'manage_options' ), // unused
-							'upload_files'   => Utils::create_ajax_capability_nonce( 'upload_files' ), // unused
-							'edit_posts'     => Utils::create_ajax_capability_nonce( 'edit_posts' ),
+							'edit_posts' => Utils::create_ajax_capability_nonce( 'edit_posts' ),
 						],
 						'states' => [
 							'debug' => \SCRIPT_DEBUG,

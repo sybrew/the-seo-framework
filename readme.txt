@@ -339,6 +339,8 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 	* **Added:**
 		* Method `tsfCanonical.isQueryStructure()` tests whether a URL structure uses query parameters.
 		* Method `tsfCanonical.canTrackUrlStructure()` reports whether the Canonical URL Notation Tracker can predict URLs for an input.
+	* **Removed:**
+		* `tsfL10n.nonces.manage_options` and `tsfL10n.nonces.upload_files`. They were unused. Media still uses `tsfMediaL10n.nonce`.
 * **Filter notes:**
 	* **Changed:**
 		* `the_seo_framework_breadcrumb_shortcode_css`, the default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
