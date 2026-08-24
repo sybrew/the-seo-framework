@@ -16,6 +16,7 @@ use The_SEO_Framework\{
 
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\_polylang_set_sitemap_language' );
 \add_filter( 'the_seo_framework_sitemap_endpoint_list', __NAMESPACE__ . '\_polylang_register_sitemap_languages', 20 );
+\add_filter( 'the_seo_framework_sitemap_base_path', __NAMESPACE__ . '\_polylang_fix_sitemap_base_path' );
 \add_filter( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\_polylang_sitemap_append_non_translatables' );
 \add_filter( 'the_seo_framework_title_from_custom_field', __NAMESPACE__ . '\pll__' );
@@ -31,13 +32,19 @@ use The_SEO_Framework\{
 \add_action( 'pre_get_posts', __NAMESPACE__ . '\_polylang_translate_query_exclusions', 10000 );
 
 /**
- * Registers more sitemaps for the robots.txt to parse.
+ * Registers per-language sitemaps for robots.txt and request matching.
  *
- * This has no other intended effect. But default permalinks may react more tsf_sitemap query values,
- * specifically ?tsf_sitemap=_base_polylang_es&lang=es" (assumed, untested).
+ * Plain permalinks match extra IDs (`?tsf-sitemap=_base_polylang_nl`). Language
+ * is taken from the ID, or from `lang` when present.
  *
  * @hook the_seo_framework_sitemap_endpoint_list 20
  * @since 5.0.5
+ * @since 5.1.5 1. Now sets a language-specific endpoint regex so directory sitemaps match
+ *                 when the home URL includes a language or front-page slug.
+ *              2. Now registers a non-advertised directory alias for the default language
+ *                 when Polylang does not hide it.
+ *              3. Now prefixes directory endpoints with `language/` when that slug is not removed.
+ * @link https://github.com/sybrew/the-seo-framework/issues/675
  * @param array[] $list {
  *     A list of sitemap endpoints keyed by ID.
  *
@@ -64,9 +71,11 @@ function _polylang_register_sitemap_languages( $list ) {
 		],
 	] ) ) return $list;
 
+	$pll_options = \get_option( 'polylang' ) ?: [];
+
 	// Do most work outside of a loop. We have two loops because of this.
 	// We fall back to -1 because null/false match with '0'
-	switch ( \get_option( 'polylang' )['force_lang'] ?? -1 ) {
+	switch ( $pll_options['force_lang'] ?? -1 ) {
 		case 0: // The language is set from content.
 			foreach (
 				array_diff(
@@ -84,15 +93,24 @@ function _polylang_register_sitemap_languages( $list ) {
 			}
 			break;
 		case 1: // The language is set from the directory name in pretty permalinks.
-			foreach (
-				array_diff(
-					\pll_languages_list( [ 'hide_empty' => 1 ] ),
-					[ \pll_default_language() ],
-				)
-				as $language
-			) {
+			$default    = \pll_default_language();
+			$dir_prefix = empty( $pll_options['rewrite'] ) ? 'language/' : '';
+
+			foreach ( \pll_languages_list( [ 'hide_empty' => 1 ] ) as $language ) {
+				$is_default = $language === $default;
+
+				// hide_default off still has /en/sitemap.xml. The sitemap base path
+				// is unfiltered, so that URL cannot match `base`; register it as a
+				// non-advertised alias. Skip when the default slug is hidden (404).
+				if ( $is_default && ! empty( $pll_options['hide_default'] ) )
+					continue;
+
+				$endpoint = "{$dir_prefix}{$language}/{$list['base']['endpoint']}";
+
 				$list[ "_base_polylang_$language" ] = [
-					'endpoint' => "$language/{$list['base']['endpoint']}",
+					'endpoint' => $endpoint,
+					'regex'    => '/^' . preg_quote( $endpoint, '/' ) . '/i',
+					'robots'   => ! $is_default,
 				] + $list['base'];
 			}
 	}
@@ -101,7 +119,41 @@ function _polylang_register_sitemap_languages( $list ) {
 }
 
 /**
- * Sets the correct Polylang query language for the sitemap based on the 'lang' GET parameter.
+ * Returns the sitemap base path without Polylang's language or front-page slug.
+ *
+ * Polylang filters `home_url` to the current language's front page. Language
+ * sitemaps are registered as endpoints off the site root, so that path is wrong
+ * for matching and for robots.txt.
+ *
+ * `PLL()->links_model->home` is the home URL stored before Polylang's own filter
+ * runs. Calling `get_home_url()` from this file would be filtered: since 5.0.5
+ * TSF's directory is on Polylang's home_url allowlist.
+ *
+ * @hook the_seo_framework_sitemap_base_path 10
+ * @since 4.1.2 Introduced as `_polylang_fix_sitemap_base_bath`. Dropped during the 5.0 refactor.
+ * @since 5.1.5 Restored. Now always uses the unfiltered home path; directory sitemaps match
+ *              via their endpoint regex instead of a language-prefixed base path.
+ * @link https://github.com/sybrew/the-seo-framework/issues/514
+ * @link https://github.com/sybrew/the-seo-framework/issues/675
+ *
+ * @param string $path The home path.
+ * @return string The unfiltered home path.
+ */
+function _polylang_fix_sitemap_base_path( $path ) {
+
+	if ( ! \function_exists( 'PLL' ) )
+		return $path;
+
+	$home = \PLL()->links_model->home ?? '';
+
+	if ( ! \strlen( $home ) )
+		return $path;
+
+	return rtrim( (string) parse_url( $home, \PHP_URL_PATH ), '/' );
+}
+
+/**
+ * Sets the correct Polylang query language for the sitemap.
  *
  * When the user supplies a correct 'lang' query parameter, they can overwrite our testing for force_lang settings.
  * This is a fallback solution because we get endless support requests for Polylang, and we wish that plugin would be
@@ -109,8 +161,13 @@ function _polylang_register_sitemap_languages( $list ) {
  *
  * @hook the_seo_framework_sitemap_header 10
  * @since 4.1.2
+ * @since 5.1.5 1. Now accepts the sitemap ID from the hook.
+ *              2. Now forces the default language for the unprefixed directory sitemap, so cookie or
+ *                 browser detection cannot hijack `/sitemap.xml` when the default language slug is shown.
+ *
+ * @param string $sitemap_id The sitemap ID.
  */
-function _polylang_set_sitemap_language() {
+function _polylang_set_sitemap_language( $sitemap_id = '' ) {
 
 	if ( ! \function_exists( 'PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
 
@@ -120,15 +177,27 @@ function _polylang_set_sitemap_language() {
 	// Language codes are user-definable: copy Polylang's filtering.
 	// The preg_match's source: \PLL_Admin_Model::validate_lang();
 	if ( ! \is_string( $lang ) || ! \strlen( $lang ) || ! preg_match( '#^[a-z_-]+$#', $lang ) ) {
+		$prefix = '_base_polylang_';
 
-		switch ( \get_option( 'polylang' )['force_lang'] ?? -1 ) {
-			case 0:
-				// Polylang determines language sporadically from content: can't be trusted. Overwrite.
-				$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
-				break;
-			default:
-				// Polylang can differentiate languages by (sub)domain/directory name early. No need to interfere. Cancel.
-				return;
+		if ( str_starts_with( $sitemap_id, $prefix ) ) {
+			$lang = substr( $sitemap_id, \strlen( $prefix ) );
+		} else {
+			switch ( \get_option( 'polylang' )['force_lang'] ?? -1 ) {
+				case 0:
+					// Polylang determines language sporadically from content: can't be trusted. Overwrite.
+					$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
+					break;
+				case 1:
+					// Directory: the unprefixed sitemap is the default language, even when hide_default is off.
+					if ( ! \in_array( $sitemap_id, [ 'base', 'index', 'xsl-stylesheet' ], true ) )
+						return;
+
+					$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
+					break;
+				default:
+					// Polylang can differentiate languages by (sub)domain name early. No need to interfere. Cancel.
+					return;
+			}
 		}
 	}
 

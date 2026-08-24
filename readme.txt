@@ -245,8 +245,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.1.5
 
-TODO Fix sitemaps on SUBDIRECTORIES already.
-
 ## For everyone
 
 * **Upgraded:** Now uses TSF database version 5150.
@@ -284,6 +282,9 @@ TODO Fix sitemaps on SUBDIRECTORIES already.
 			* Do not rely on the plugin update process to clear these entries. Cachify, SpeedyCache, and W3 Total Cache do not appear to purge all page cache entries on plugin updates; LiteSpeed Cache does so only when its "Purge All On Upgrade" setting is enabled; Surge expires all entries on automatic updates and plugin activation/deactivation, but not reliably on manual updates.
 	* **Plugin: Polylang:**
 		* Resolved an issue where posts excluded from local search could still appear in translated search results.
+		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory or the static front-page slug, so advertised sitemaps 404'd or redirected to WordPress's sitemap.
+	* **Plugin: WPML:**
+		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory twice, including when "Use directory for default language" is enabled, so advertised sitemaps 404'd.
 * **Fixed:**
 	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the homepage URL for hierarchical custom post types, and for post types with rewrite disabled.

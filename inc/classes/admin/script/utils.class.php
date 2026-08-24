@@ -99,10 +99,9 @@ final class Utils {
 	 *
 	 * @param string $capability The capability that was required for the nonce check to be created.
 	 * @param mixed  ...$args    The arguments to pass to the capability check.
-	 * @return null|false|int False if the nonce is invalid, 1 if the nonce is valid
-	 *                        and generated between 0-12 hours ago, 2 if the nonce is
-	 *                        valid and generated between 12-24 hours ago.
-	 *                        Null on capability check failure.
+	 * @return false|int False if the nonce is invalid, 1 if the nonce is valid
+	 *                   and generated between 0-12 hours ago, 2 if the nonce is
+	 *                   valid and generated between 12-24 hours ago.
 	 */
 	public static function check_ajax_capability_referer( $capability, ...$args ) {
 

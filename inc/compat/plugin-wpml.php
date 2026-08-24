@@ -15,19 +15,26 @@ use The_SEO_Framework\{
 };
 
 \add_filter( 'the_seo_framework_sitemap_endpoint_list', __NAMESPACE__ . '\_wpml_register_sitemap_languages', 20 );
+\add_filter( 'the_seo_framework_sitemap_base_path', __NAMESPACE__ . '\_wpml_fix_sitemap_base_path' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\_wpml_flush_sitemap', 10 );
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\_wpml_sitemap_filter_display_translatables' );
 \add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
 \add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
 
 /**
- * Registers more sitemaps for the robots.txt to parse.
+ * Registers per-language sitemaps for robots.txt and request matching.
  *
- * This has no other intended effect. But default permalinks may react more tsf_sitemap query values,
- * specifically ?tsf_sitemap=_base_wpml_es&lang=es" (assumed, untested).
+ * Plain permalinks match extra IDs (`?tsf-sitemap=_base_wpml_nl`). WPML still
+ * takes language from the request URL, so those sitemaps stay in the default
+ * language. Pretty permalinks are the supported path.
  *
  * @hook the_seo_framework_sitemap_endpoint_list 20
  * @since 5.0.5
+ * @since 5.1.5 1. Now prefixes endpoint IDs with an underscore.
+ *              2. Now sets a language-specific endpoint regex so directory sitemaps match
+ *                 when the sitemap base path is the unfiltered home.
+ *              3. Now registers a non-advertised directory alias for the default language
+ *                 when "Use directory for default language" is enabled.
  * @param array[] $list {
  *     A list of sitemap endpoints keyed by ID.
  *
@@ -77,7 +84,7 @@ function _wpml_register_sitemap_languages( $list ) {
 				)
 				as $language
 			) {
-				$list[ "base_wpml_$language" ] = [
+				$list[ "_base_wpml_$language" ] = [
 					'endpoint' => URI\Utils::append_query_to_url(
 						$list['base']['endpoint'],
 						"lang=$language",
@@ -86,20 +93,53 @@ function _wpml_register_sitemap_languages( $list ) {
 			}
 			break;
 		case \WPML_LANGUAGE_NEGOTIATION_TYPE_DIRECTORY: // 1
-			foreach (
-				array_diff(
-					array_column( $sitepress->get_active_languages(), 'code' ),
-					[ $sitepress->get_default_language() ],
-				)
-				as $language
-			) {
-				$list[ "base_wpml_$language" ] = [
-					'endpoint' => "$language/{$list['base']['endpoint']}",
+			$default         = $sitepress->get_default_language();
+			$dir_for_default = ! empty( $sitepress->get_setting( 'urls' )['directory_for_default_language'] );
+
+			foreach ( array_column( $sitepress->get_active_languages(), 'code' ) as $language ) {
+				$is_default = $language === $default;
+
+				// Skip when the default language has no directory (checkbox off).
+				if ( $is_default && ! $dir_for_default )
+					continue;
+
+				$endpoint = "$language/{$list['base']['endpoint']}";
+
+				$list[ "_base_wpml_$language" ] = [
+					'endpoint' => $endpoint,
+					'regex'    => '/^' . preg_quote( $endpoint, '/' ) . '/i',
+					'robots'   => ! $is_default,
 				] + $list['base'];
 			}
 	}
 
 	return $list;
+}
+
+/**
+ * Returns the sitemap base path without WPML's language directory.
+ *
+ * WPML filters `home_url` and, from theme files, `pre_option_home`. Language
+ * sitemaps are registered as endpoints off the site root, so that path is wrong
+ * for matching and for robots.txt when the default language also uses a directory.
+ *
+ * `get_option( 'home' )` from this file is unfiltered; WPML's `pre_option_home`
+ * only rewrites theme-template backtraces. `home_url` would still be converted.
+ *
+ * @hook the_seo_framework_sitemap_base_path 10
+ * @since 5.1.5
+ *
+ * @param string $path The home path.
+ * @return string The unfiltered home path.
+ */
+function _wpml_fix_sitemap_base_path( $path ) {
+
+	$home = \get_option( 'home' );
+
+	if ( empty( $home ) )
+		return $path;
+
+	return rtrim( parse_url( $home, \PHP_URL_PATH ) ?: '', '/' );
 }
 
 /**
