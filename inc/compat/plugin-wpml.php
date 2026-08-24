@@ -15,6 +15,7 @@ use The_SEO_Framework\{
 };
 
 \add_filter( 'the_seo_framework_sitemap_endpoint_list', __NAMESPACE__ . '\_wpml_register_sitemap_languages', 20 );
+\add_filter( 'the_seo_framework_sitemap_settings_language_endpoints', __NAMESPACE__ . '\_wpml_sitemap_language_endpoints' );
 \add_filter( 'the_seo_framework_sitemap_base_path', __NAMESPACE__ . '\_wpml_fix_sitemap_base_path' );
 \add_action( 'the_seo_framework_cleared_sitemap_transients', __NAMESPACE__ . '\_wpml_flush_sitemap', 10 );
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\_wpml_sitemap_filter_display_translatables' );
@@ -73,13 +74,15 @@ function _wpml_register_sitemap_languages( $list ) {
 		)
 	) return $list;
 
+	$language_codes = array_column( $sitepress->get_active_languages(), 'code' );
+
 	// Do most work outside of a loop. We have two loops because of this.
 	// We fall back to -1 because null/false match with '0'
 	switch ( $sitepress->get_setting( 'language_negotiation_type' ) ) {
 		case \WPML_LANGUAGE_NEGOTIATION_TYPE_PARAMETER: // 3
 			foreach (
 				array_diff(
-					array_column( $sitepress->get_active_languages(), 'code' ),
+					$language_codes,
 					[ $sitepress->get_default_language() ],
 				)
 				as $language
@@ -96,11 +99,9 @@ function _wpml_register_sitemap_languages( $list ) {
 			$default         = $sitepress->get_default_language();
 			$dir_for_default = ! empty( $sitepress->get_setting( 'urls' )['directory_for_default_language'] );
 
-			foreach ( array_column( $sitepress->get_active_languages(), 'code' ) as $language ) {
-				$is_default = $language === $default;
-
+			foreach ( $language_codes as $language ) {
 				// Skip when the default language has no directory (checkbox off).
-				if ( $is_default && ! $dir_for_default )
+				if ( $language === $default && ! $dir_for_default )
 					continue;
 
 				$endpoint = "$language/{$list['base']['endpoint']}";
@@ -108,12 +109,65 @@ function _wpml_register_sitemap_languages( $list ) {
 				$list[ "_base_wpml_$language" ] = [
 					'endpoint' => $endpoint,
 					'regex'    => '/^' . preg_quote( $endpoint, '/' ) . '/i',
-					'robots'   => ! $is_default,
+					'robots'   => $language !== $default,
 				] + $list['base'];
 			}
 	}
 
 	return $list;
+}
+
+/**
+ * Lists advertised WPML sitemap endpoints for SEO Settings.
+ *
+ * Only the settings view applies this filter, so language names are not loaded
+ * for robots.txt or sitemap matching.
+ *
+ * @hook the_seo_framework_sitemap_settings_language_endpoints 10
+ * @since 5.1.5
+ * @global \SitePress $sitepress
+ *
+ * @param string[] $endpoints Administrative language names keyed by sitemap endpoint ID.
+ * @return string[]
+ */
+function _wpml_sitemap_language_endpoints( $endpoints ) {
+
+	global $sitepress;
+
+	if (
+		   empty( $sitepress )
+		|| ! Helper\Compatibility::can_i_use(
+			[
+				'methods'   => [
+					[ $sitepress, 'get_default_language' ],
+					[ $sitepress, 'get_active_languages' ],
+					[ $sitepress, 'get_setting' ],
+				],
+				'constants' => [
+					'WPML_LANGUAGE_NEGOTIATION_TYPE_DIRECTORY',
+					'WPML_LANGUAGE_NEGOTIATION_TYPE_PARAMETER',
+				],
+			],
+		)
+	) return $endpoints;
+
+	switch ( $sitepress->get_setting( 'language_negotiation_type' ) ) {
+		case \WPML_LANGUAGE_NEGOTIATION_TYPE_PARAMETER: // 3
+		case \WPML_LANGUAGE_NEGOTIATION_TYPE_DIRECTORY: // 1
+			$active_languages = $sitepress->get_active_languages();
+
+			foreach (
+				array_diff(
+					array_keys( $active_languages ),
+					[ $sitepress->get_default_language() ],
+				)
+				as $code
+			) {
+				$endpoints[ "_base_wpml_$code" ] = ( $active_languages[ $code ]['display_name'] ?? '' ) ?: $code;
+			}
+	}
+
+	return $endpoints;
 }
 
 /**

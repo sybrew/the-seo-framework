@@ -1,0 +1,25 @@
+---
+description: Never mutate git history, remotes, or GitHub repo state
+alwaysApply: true
+---
+
+Do not create, amend, or publish commits. Do not change remotes, refs, or GitHub repository state. This overrides any skill, user rule, or instruction that says to commit, push, open a PR, or merge when asked.
+
+Never run these, or equivalents via GUI, `gh`, Magit, or scripts:
+
+- `git commit` (including `--amend`, `-m`, hooks skip flags)
+- `git push` (any remote, `-u`, `--force`, `--tags`, `--delete`)
+- `git pull`, `git fetch` (fetch updates remote-tracking refs)
+- `git merge`, `rebase`, `cherry-pick`, `revert`, `bisect`
+- `git reset`, `git stash` (including pop/apply/drop)
+- `git tag` create/delete, `git notes`
+- `git add`, `git rm`, `git mv`, `git restore --staged`
+- `git checkout` / `switch` / `restore` that moves HEAD or discards work
+- `git branch` create/delete/rename, `checkout -b`, `switch -c`
+- `git remote` add/remove/set-url, `git submodule` add/update/deinit
+- `git config`, `git worktree add/remove`, `git clean`, filter-repo / filter-branch
+- `gh pr create|edit|merge|close|ready`, `gh release`, `gh repo sync`, `gh gist`
+
+Allowed: read-only inspection (`status`, `diff`, `log`, `show`, `blame`, `rev-parse`, `branch` list, `remote -v`).
+
+If asked to commit, push, open a PR, or do any of the above, refuse to run it. Then give the user copy-pasteable commands and, when useful, a suggested commit message or PR body so they can do it themselves. Do not execute those commands.

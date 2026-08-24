@@ -272,6 +272,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Fixed a layout issue where hovering title prefix and addition overlays were misaligned in WordPress 7.0 admin input fields. Remains compatible with WordPress 6.8 and 6.9.
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
+	* **Sitemap settings:**
+		* When a multilingual plugin is detected, language sitemap links are now listed under "View translated sitemaps," using the language name as the link text. A note that each language has its own sitemap is shown with those links.
+		* Toggling the optimized sitemap now warns that the sitemap links still reflect the saved setting until you save.
 	* **Head tags:**
 		* The metatag generator now always outputs in HTML5 syntax, dropping XHTML support.
 * **Compatibility:**
@@ -343,6 +346,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Removed:**
 		* `tsfL10n.nonces.manage_options` and `tsfL10n.nonces.upload_files`. They were unused. Media still uses `tsfMediaL10n.nonce`.
 * **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_sitemap_settings_language_endpoints` returns administrative language names keyed by sitemap endpoint ID, used for translated sitemap links in SEO Settings.
 	* **Changed:**
 		* `the_seo_framework_breadcrumb_shortcode_css`, the default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
 	* **Fixed:**

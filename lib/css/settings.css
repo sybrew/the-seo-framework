@@ -259,3 +259,11 @@ body.js .tsf-nav-tab-content {
 body.js .tsf-nav-tab-content.tsf-nav-tab-content-active {
 	display: block;
 }
+
+#tsf-sitemap-view-links details {
+	margin-block: 1em;
+}
+
+#tsf-sitemap-view-links summary {
+	cursor: pointer;
+}

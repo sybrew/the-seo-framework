@@ -77,8 +77,9 @@ switch ( $instance ) :
 		break;
 
 	case 'general':
-		$has_sitemap_plugin = Compatibility::get_active_conflicting_plugin_types()['sitemaps'];
-		$sitemap_detected   = Sitemap\Utils::has_root_sitemap_xml();
+		$conflicting_plugins = Compatibility::get_active_conflicting_plugin_types();
+		$has_sitemap_plugin  = $conflicting_plugins['sitemaps'];
+		$sitemap_detected    = Sitemap\Utils::has_root_sitemap_xml();
 
 		HTML::header_title( \__( 'Sitemap Integration Settings', 'autodescription' ) );
 		HTML::description( \__( 'The sitemap is an XML file that lists indexable pages of your website along with optional metadata. It helps search engines find new and updated content quickly.', 'autodescription' ) );
@@ -129,37 +130,90 @@ switch ( $instance ) :
 
 		if ( ! $has_sitemap_plugin && ! $sitemap_detected ) {
 			// Note to self: Do not toggle this condition in JS. The user would get a 404 message if the options have yet to be saved.
+			$sitemap_base_links       = [];
+			$sitemap_translated_links = [];
+
 			if ( Data\Plugin::get_option( 'sitemaps_output' ) ) {
-				HTML::description_noesc( \sprintf(
+				$sitemap_base_links[] = \sprintf(
 					'<a href="%s" target=_blank rel=noopener>%s</a>',
 					\esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url(), [ 'https', 'http' ] ),
 					\esc_html__( 'View the base sitemap.', 'autodescription' ),
-				) );
-				// TODO In settings generator (TSF 5.0): Overwrite this section for Polylang/WPML and output each sitemap language link respectively.
+				);
+
+				/**
+				 * @since 5.1.5
+				 * @param string[] $endpoints Administrative language names keyed by sitemap endpoint ID.
+				 *                            The ID must exist in `the_seo_framework_sitemap_endpoint_list`.
+				 */
+				$sitemap_language_endpoints = (array) \apply_filters(
+					'the_seo_framework_sitemap_settings_language_endpoints',
+					[],
+				);
+
+				foreach ( $sitemap_language_endpoints as $id => $label ) {
+					$url = Sitemap\Registry::get_expected_sitemap_endpoint_url( $id );
+
+					if ( $url && \strlen( (string) $label ) )
+						$sitemap_translated_links[] = \sprintf(
+							'<a href="%s" target=_blank rel=noopener>%s</a>',
+							\esc_url( $url, [ 'https', 'http' ] ),
+							\esc_html( $label ),
+						);
+				}
 				// TODO Also add a link telling where why it may not work consistently ('try opening in another browser, incognito, etc.')
 			} elseif ( Sitemap\Utils::use_core_sitemaps() ) {
 				$_index_url = \get_sitemap_url( 'index' );
 				if ( $_index_url )
-					HTML::description_noesc( \sprintf(
+					$sitemap_base_links[] = \sprintf(
 						'<a href="%s" target=_blank rel=noopener>%s</a>',
 						\esc_url( $_index_url, [ 'https', 'http' ] ),
 						\esc_html__( 'View the sitemap index.', 'autodescription' ),
-					) );
+					);
 			}
 
-			if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
-				HTML::attention_noesc(
-					// Markdown escapes.
-					Markdown::convert(
-						\sprintf(
-							/* translators: %s = Documentation URL in markdown */
-							\esc_html__( 'A multilingual plugin has been detected, so your site may have multiple sitemaps. [Learn more](%s).', 'autodescription' ),
-							'https://kb.theseoframework.com/?p=104#same-site-sitemaps',
-						),
-						[ 'a' ],
-						[ 'a_internal' => false ] // opens in new tab.
-					),
-				);
+			if ( $sitemap_base_links || $sitemap_translated_links ) {
+				?>
+				<div id=tsf-sitemap-view-links-unsaved class=hidden>
+					<?php
+					HTML::attention_description( \_n(
+						'The sitemap link below will update after saving.',
+						'The sitemap links below will update after saving.',
+						\count( $sitemap_base_links ) + \count( $sitemap_translated_links ),
+						'autodescription',
+					) );
+					?>
+				</div>
+				<div id=tsf-sitemap-view-links>
+					<?php
+					foreach ( $sitemap_base_links as $sitemap_view_link )
+						HTML::description_noesc( $sitemap_view_link );
+
+					if ( $sitemap_translated_links ) {
+						?>
+						<details>
+							<summary class=description><?php \esc_html_e( 'View translated sitemaps', 'autodescription' ); ?></summary>
+							<?php
+							foreach ( $sitemap_translated_links as $sitemap_view_link )
+								HTML::description_noesc( $sitemap_view_link );
+							?>
+						</details>
+						<?php
+						HTML::description_noesc(
+							// Markdown escapes.
+							Markdown::convert(
+								\sprintf(
+									/* translators: %s = Documentation URL in markdown */
+									\esc_html__( 'Each language has its own sitemap. [Learn more](%s).', 'autodescription' ),
+									'https://kb.theseoframework.com/?p=104#same-site-sitemaps',
+								),
+								[ 'a' ],
+								[ 'a_internal' => false ], // opens in new tab.
+							),
+						);
+					}
+					?>
+				</div>
+				<?php
 			}
 		}
 		?>
