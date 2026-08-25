@@ -26,7 +26,8 @@ use The_SEO_Framework\Helper\Query;
  */
 function _set_edd_is_product( $is_product, $post ) {
 
-	if ( $is_product || ! \function_exists( 'edd_get_download' ) ) return $is_product;
+	if ( $is_product || ! \function_exists( 'edd_get_download' ) )
+		return $is_product;
 
 	$download = \edd_get_download(
 		$post ? \get_post( $post ) : Query::get_the_real_id()
@@ -47,7 +48,8 @@ function _set_edd_is_product( $is_product, $post ) {
  */
 function _set_edd_is_product_admin( $is_product_admin ) {
 
-	if ( $is_product_admin ) return $is_product_admin;
+	if ( $is_product_admin )
+		return $is_product_admin;
 
 	// Checks for "is_singular_admin()" because the post type is non-hierarchical.
 	return Query::is_singular_admin() && 'download' === Query::get_admin_post_type();

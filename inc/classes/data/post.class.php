@@ -114,8 +114,12 @@ class Post {
 			return $detected;
 
 		// If there's no meta, or no builder active, it doesn't use a builder.
-		if ( empty( $meta ) || ! Helper\Compatibility::is_non_html_builder_active() )
+		if (
+			   empty( $meta )
+			|| ! Helper\Compatibility::is_non_html_builder_active()
+		) {
 			return false;
+		}
 
 		// Divi Builder by Elegant Themes
 		// || Visual Composer by WPBakery
@@ -217,7 +221,8 @@ class Post {
 	public static function get_latest_post_id() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		$query = new \WP_Query( [
 			'posts_per_page'   => 1,
@@ -251,7 +256,8 @@ class Post {
 	public static function has_posts_in_pta( $post_type ) {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
+		if ( null !== $memo = memo( null, $post_type ) )
+			return $memo;
 
 		$query = new \WP_Query( [
 			'posts_per_page' => 1,

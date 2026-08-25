@@ -122,7 +122,8 @@ class Description {
 	 */
 	public static function get_generated_description( $args = null, $type = 'search' ) {
 
-		if ( ! self::may_generate( $args ) ) return '';
+		if ( ! self::may_generate( $args ) )
+			return '';
 
 		switch ( $type ) {
 			case 'opengraph':
@@ -136,7 +137,8 @@ class Description {
 		isset( $args ) and normalize_generation_args( $args );
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $args, $type ) ) return $memo;
+		if ( null !== $memo = memo( null, $args, $type ) )
+			return $memo;
 
 		$excerpt = Description\Excerpt::get_excerpt( $args );
 

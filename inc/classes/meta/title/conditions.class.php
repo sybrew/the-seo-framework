@@ -65,7 +65,8 @@ class Conditions {
 
 			$id = $args['id'];
 		} else {
-			if ( ! Query::is_singular() ) return false;
+			if ( ! Query::is_singular() )
+				return false;
 
 			$id = Query::get_the_real_id();
 		}

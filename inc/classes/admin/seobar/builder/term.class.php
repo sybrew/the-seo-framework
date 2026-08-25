@@ -68,6 +68,7 @@ final class Term extends Main {
 	 * @abstract
 	 */
 	protected function prime_cache() {
+
 		// phpcs:disable PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 		static::get_cache( 'general/i18n/textsizeguidelines' )
 			or static::set_cache(
@@ -501,6 +502,7 @@ final class Term extends Main {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];
 				$item['status'] = Builder::STATE_BAD;
+
 				return $item;
 			} else {
 				$item['reason'] = $cache['reason']['founddupe'];

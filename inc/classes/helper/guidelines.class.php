@@ -66,7 +66,8 @@ class Guidelines {
 		$locale = substr( $locale ?? \get_locale(), 0, 5 );
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $locale ) ) return $memo;
+		if ( null !== $memo = memo( null, $locale ) )
+			return $memo;
 
 		// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingAfter
 		// cspell:disable

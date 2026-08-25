@@ -267,7 +267,12 @@ class HTML {
 							$input          = preg_replace( $regex, $replacement, $input ) ?? '';
 
 							// If nothing changed, or no more HTML is present, we're done.
-							if ( $pre_pass_input === $input || ! str_contains( $input, '<' ) ) break;
+							if (
+								   $pre_pass_input === $input
+								|| ! str_contains( $input, '<' )
+							) {
+								break;
+							}
 						}
 
 						// Reset for next fall-through null-coalescing.
@@ -314,7 +319,8 @@ class HTML {
 	 */
 	public static function extract_content( $html, $args = [] ) {
 
-		if ( empty( $html ) ) return '';
+		if ( empty( $html ) )
+			return '';
 
 		$args += [
 			'allow_shortcodes' => true,

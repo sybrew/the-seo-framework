@@ -86,8 +86,7 @@ class Loader {
 	 */
 	public static function init() {
 
-		if ( has_run( __METHOD__ ) )
-			return;
+		if ( has_run( __METHOD__ ) ) return;
 
 		$scripts = [
 			self::get_common_scripts(),

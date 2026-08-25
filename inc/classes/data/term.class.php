@@ -51,7 +51,8 @@ class Term {
 	public static function get_latest_term_id( $taxonomy = 'category' ) {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $taxonomy ) ) return $memo;
+		if ( null !== $memo = memo( null, $taxonomy ) )
+			return $memo;
 
 		$cats = \get_terms( [
 			'taxonomy'   => $taxonomy,

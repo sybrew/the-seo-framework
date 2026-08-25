@@ -73,7 +73,9 @@ final class Post {
 			   ! Query::is_post_edit()
 			|| ! Post_Type::is_supported( $post_type )
 			|| ! \apply_filters( 'the_seo_framework_seobox_output', true )
-		) return;
+		) {
+			return;
+		}
 
 		$box_id = 'tsf-inpost-box';
 
@@ -130,6 +132,7 @@ final class Post {
 	 * }
 	 */
 	public static function flex_nav_tab_wrapper( $id, $tabs = [] ) {
+
 		Template::output_view( 'post/wrap-nav', $id, $tabs );
 		Template::output_view( 'post/wrap-content', $id, $tabs );
 	}
@@ -202,6 +205,7 @@ final class Post {
 	 *              2. Renamed from `_general_tab`.
 	 */
 	public static function general_tab() {
+
 		/**
 		 * @since 2.9.0
 		 */
@@ -221,6 +225,7 @@ final class Post {
 	 *              2. Renamed from `_visibility_tab`.
 	 */
 	public static function visibility_tab() {
+
 		/**
 		 * @since 2.9.0
 		 */
@@ -240,6 +245,7 @@ final class Post {
 	 *              2. Renamed from `_social_tab`.
 	 */
 	public static function social_tab() {
+
 		/**
 		 * @since 2.9.0
 		 */

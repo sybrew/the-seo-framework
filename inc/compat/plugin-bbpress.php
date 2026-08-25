@@ -60,7 +60,9 @@ function _bbpress_filter_title( $title, $args ) {
 		   isset( $args )
 		|| ! \function_exists( 'is_bbpress' )
 		|| ! \is_bbpress()
-	) return $title;
+	) {
+		return $title;
+	}
 
 	// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment, WordPress.WP.I18n.TextDomainMismatch -- Not my code.
 	$new_title = [];
@@ -266,7 +268,9 @@ function _bbpress_filter_robots( $meta, $args ) {
 				'bbp_get_topic_post_type',
 				'bbp_get_reply_post_type',
 			],
-		] ) ) return $meta;
+		] ) ) {
+			return $meta;
+		}
 
 		normalize_generation_args( $args );
 
@@ -287,7 +291,9 @@ function _bbpress_filter_robots( $meta, $args ) {
 				'bbp_is_single_topic',
 				'bbp_is_single_reply',
 			],
-		] ) ) return $meta;
+		] ) ) {
+			return $meta;
+		}
 
 		// Front-end
 		if ( \bbp_is_single_forum() ) {
@@ -325,7 +331,9 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 			'bbp_get_reply_post_type',
 			'bbp_is_forum_public',
 		],
-	] ) ) return;
+	] ) ) {
+		return;
+	}
 
 	$items = $interpreter::collect_seo_bar_items();
 

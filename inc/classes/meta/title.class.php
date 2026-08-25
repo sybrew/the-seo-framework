@@ -102,7 +102,8 @@ class Title {
 		$title = self::get_bare_custom_title( $args );
 
 		// Allow 0 to be the title.
-		if ( ! \strlen( $title ) ) return '';
+		if ( ! \strlen( $title ) )
+			return '';
 
 		if ( Title\Conditions::use_protection_status( $args ) )
 			$title = self::add_protection_status( $title, $args );
@@ -210,7 +211,8 @@ class Title {
 		isset( $args ) and normalize_generation_args( $args );
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $args ) ) return $memo;
+		if ( null !== $memo = memo( null, $args ) )
+			return $memo;
 
 		Title\Utils::remove_default_title_filters( false, $args );
 
@@ -644,7 +646,8 @@ class Title {
 		$term ??= \get_queried_object();
 
 		// We're allowing `0` as a term name here. https://core.trac.wordpress.org/ticket/56518
-		if ( ! isset( $term->name ) ) return '';
+		if ( ! isset( $term->name ) )
+			return '';
 
 		switch ( $term->taxonomy ) {
 			case 'category':

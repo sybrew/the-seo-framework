@@ -67,7 +67,8 @@ final class Feed {
 	public static function modify_the_content_feed( $content = '', $feed_type = null ) {
 
 		// When there's no content, there's nothing to modify or quote.
-		if ( empty( $content ) ) return '';
+		if ( empty( $content ) )
+			return '';
 
 		/**
 		 * Don't alter already-excerpts or descriptions.

@@ -56,13 +56,16 @@ final class Query {
 	 */
 	public static function alter_search_query_in( $wp_query ) {
 
-		if ( ! self::is_search_query( $wp_query ) || self::is_query_adjustment_blocked( $wp_query ) )
+		if (
+			   ! self::is_search_query( $wp_query )
+			|| self::is_query_adjustment_blocked( $wp_query )
+		) {
 			return;
+		}
 
 		$excluded = Exclusion::get_excluded_ids_from_cache()['search'];
 
-		if ( ! $excluded )
-			return;
+		if ( ! $excluded ) return;
 
 		$post__not_in = $wp_query->get( 'post__not_in' );
 
@@ -92,8 +95,12 @@ final class Query {
 	 */
 	public static function alter_search_query_post( $posts, $wp_query ) {
 
-		if ( ! self::is_search_query( $wp_query ) || self::is_query_adjustment_blocked( $wp_query ) )
+		if (
+			   ! self::is_search_query( $wp_query )
+			|| self::is_query_adjustment_blocked( $wp_query )
+		) {
 			return $posts;
+		}
 
 		foreach ( $posts as $n => $post )
 			if ( Data\Plugin\Post::get_meta_item( 'exclude_local_search', $post->ID ) )
@@ -122,13 +129,13 @@ final class Query {
 		if (
 			   ! ( $wp_query->is_archive || $wp_query->is_home )
 			|| self::is_query_adjustment_blocked( $wp_query )
-		)
+		) {
 			return;
+		}
 
 		$excluded = Exclusion::get_excluded_ids_from_cache()['archive'];
 
-		if ( ! $excluded )
-			return;
+		if ( ! $excluded ) return;
 
 		$post__not_in = $wp_query->get( 'post__not_in' );
 
@@ -159,8 +166,9 @@ final class Query {
 		if (
 			   ! ( $wp_query->is_archive || $wp_query->is_home )
 			|| self::is_query_adjustment_blocked( $wp_query )
-		)
+		) {
 			return $posts;
+		}
 
 		foreach ( $posts as $n => $post )
 			if ( Data\Plugin\Post::get_meta_item( 'exclude_from_archive', $post->ID ) )
@@ -224,8 +232,12 @@ final class Query {
 		 * @param bool      $adjust   True is unblocked (do adjustment), false is blocked (don't do adjustment).
 		 * @param \WP_Query $wp_query The current query.
 		 */
-		if ( $has_filter && ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query ) )
+		if (
+			   $has_filter
+			&& ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query )
+		) {
 			return true;
+		}
 
 		if ( ! \did_action( 'wp_loaded' ) )
 			return true;

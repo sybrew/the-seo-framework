@@ -103,7 +103,8 @@ final class Author extends Reference {
 
 		$author_id = static::get_author_id_from_args( $args );
 
-		if ( empty( $author_id ) ) return null;
+		if ( empty( $author_id ) )
+			return null;
 
 		$user_data = Data\User::get_userdata( $author_id );
 		$user_meta = Data\Plugin\User::get_meta( $author_id );

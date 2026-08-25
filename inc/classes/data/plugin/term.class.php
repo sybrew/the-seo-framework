@@ -108,8 +108,12 @@ class Term {
 		empty( static::$meta_memo ) and static::register_automated_refresh( 'meta_memo' );
 
 		// We test taxonomy support to be consistent with `get_post_meta()`.
-		if ( empty( $term_id ) || ! Taxonomy::is_supported( \get_term( $term_id )->taxonomy ?? '' ) )
+		if (
+			   empty( $term_id )
+			|| ! Taxonomy::is_supported( \get_term( $term_id )->taxonomy ?? '' )
+		) {
 			return static::$meta_memo[ $term_id ] = static::get_default_meta( $term_id );
+		}
 
 		// Keep lucky first when exceeding nice numbers. This way, we won't overload memory in memoization.
 		if ( \count( static::$meta_memo ) > 69 )

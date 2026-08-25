@@ -134,7 +134,8 @@ class Open_Graph {
 			$title = Data\Plugin\PTA::get_meta_item( 'og_title' );
 		}
 
-		if ( ! isset( $title ) ) return '';
+		if ( ! isset( $title ) )
+			return '';
 
 		if ( \strlen( $title ) )
 			return Sanitize::metadata_content( $title );
@@ -178,7 +179,8 @@ class Open_Graph {
 		}
 
 		// Do not check empty(). See strlen below.
-		if ( ! isset( $title ) ) return '';
+		if ( ! isset( $title ) )
+			return '';
 
 		if ( \strlen( $title ) )
 			return Sanitize::metadata_content( $title );
@@ -257,7 +259,8 @@ class Open_Graph {
 			$desc = Data\Plugin\PTA::get_meta_item( 'og_description' );
 		}
 
-		if ( ! isset( $desc ) ) return '';
+		if ( ! isset( $desc ) )
+			return '';
 
 		if ( \strlen( $desc ) )
 			return Sanitize::metadata_content( $desc );
@@ -301,7 +304,8 @@ class Open_Graph {
 		}
 
 		// Do not check empty(). See strlen below.
-		if ( ! isset( $desc ) ) return '';
+		if ( ! isset( $desc ) )
+			return '';
 
 		if ( \strlen( $desc ) )
 			return Sanitize::metadata_content( $desc );
@@ -402,8 +406,12 @@ class Open_Graph {
 	 */
 	public static function get_article_published_time() {
 
-		if ( ! Data\Plugin::get_option( 'post_publish_time' ) || ! Query::is_single() )
+		if (
+			   ! Data\Plugin::get_option( 'post_publish_time' )
+			|| ! Query::is_single()
+		) {
 			return '';
+		}
 
 		return Data\Post::get_published_time();
 	}
@@ -417,8 +425,12 @@ class Open_Graph {
 	 */
 	public static function get_article_modified_time() {
 
-		if ( ! Data\Plugin::get_option( 'post_modify_time' ) || ! Query::is_single() )
+		if (
+			   ! Data\Plugin::get_option( 'post_modify_time' )
+			|| ! Query::is_single()
+		) {
 			return '';
+		}
 
 		return Data\Post::get_modified_time();
 	}

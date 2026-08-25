@@ -165,8 +165,10 @@ class Utils {
 	 * @return bool Whether the robots.txt file exists.
 	 */
 	public static function has_root_robots_txt() {
+
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = umemo( __METHOD__ ) ) return $memo;
+		if ( null !== $memo = umemo( __METHOD__ ) )
+			return $memo;
 
 		// Ensure get_home_path() is declared.
 		if ( ! \function_exists( 'get_home_path' ) )
@@ -192,7 +194,8 @@ class Utils {
 	public static function get_robots_txt_url() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = umemo( __METHOD__ ) ) return $memo;
+		if ( null !== $memo = umemo( __METHOD__ ) )
+			return $memo;
 
 		if ( $GLOBALS['wp_rewrite']->using_permalinks() && ! Data\Blog::is_subdirectory_installation() ) {
 			$home = \trailingslashit( Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() ) );

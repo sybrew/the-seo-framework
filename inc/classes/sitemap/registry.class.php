@@ -167,7 +167,8 @@ class Registry {
 
 		$list = self::get_sitemap_endpoint_list();
 
-		if ( ! isset( $list[ $id ] ) ) return false;
+		if ( ! isset( $list[ $id ] ) )
+			return false;
 
 		$host      = Meta\URI\Utils::set_preferred_url_scheme( Meta\URI\Utils::get_site_host() );
 		$path_info = self::get_sitemap_base_path_info();
@@ -256,7 +257,8 @@ class Registry {
 	 */
 	public static function refresh_sitemaps() {
 
-		if ( has_run( __METHOD__ ) ) return false;
+		if ( has_run( __METHOD__ ) )
+			return false;
 
 		Cache::clear_sitemap_caches();
 
@@ -290,7 +292,8 @@ class Registry {
 	public static function _refresh_sitemap_on_post_change( $post_id ) {
 
 		// Don't refresh sitemap on revision.
-		if ( ! $post_id || \wp_is_post_revision( $post_id ) ) return false;
+		if ( ! $post_id || \wp_is_post_revision( $post_id ) )
+			return false;
 
 		return self::refresh_sitemaps();
 	}
@@ -558,7 +561,8 @@ class Registry {
 	 */
 	private static function clean_up_globals( $get_freed_memory = false ) {
 
-		if ( $get_freed_memory ) return memo() ?? 0;
+		if ( $get_freed_memory )
+			return memo() ?? 0;
 
 		$memory = memory_get_usage();
 

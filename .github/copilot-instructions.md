@@ -78,12 +78,15 @@ Do not argue a settled intent, rehash a corrected misread, or add meta-commentar
 - Add a short inline comment next to or above magic numbers.
 - Do not add comments about your executions.
 - Write detailed docblocks for all functions, classes, and methods.
-- Add a newline after a function opening brace unless its body is a single line.
+- After a function opening `{`, insert a blank line when the body has two or more statements. A leading comment is not a statement: comment plus a single `return` stays tight, comment on the first interior line. With two or more statements, the blank line comes first so that comment sits on the next interior line.
+- A final `return` or `yield` always has a blank line before it if that interior has two or more statements. A single-statement body that is only a `return` or `yield` stays tight. Own-line comments immediately above that `return` or `yield` stay attached to it; the blank line goes before that comment group.
 - A tab is 4 characters wide.
 - Use tabs for indentation, not spaces. Continuation indent is one tab. When the right-hand side of `=` is a multiline coalesce or ternary, break after `=` and pad the first operand by 3 spaces so the operator aligns. Do not pad a `return` that is not an assignment.
 - When a ternary or coalesce branch is a complex `&&` / `||` chain, wrap that branch in parentheses. Pad the first operand by 3 spaces so the operators align at the start of continuation lines. Use the same wrapping when that Boolean is a function argument, so the linter treats it as one argument. When there is an operator in an argument of a multi-argument call, split all arguments into separate lines. A single Boolean or coalesce argument may stay on the opener if it fits.
-- Use braces with branching control structures when the body has more than one statement, or when there is a paired `else`, `elseif`, or `do`/`while` follow-up.
-- Do not use braces when the body is a single statement and there is no such follow-up. Wrapping that statement across lines does not require braces.
+- Use braces with branching control structures when the condition is multiline, when the body has more than one statement, or when the structure has a paired `else`, `elseif`, or `do`/`while`. Keep `{` on the closing `)` line.
+- Do not use braces when the condition is one line, the body is a single statement, and the structure has no paired `else`, `elseif`, or `do`/`while`. Wrapping that statement across lines does not require braces.
+- Compact `if` / `elseif`: keep a void `return;`, `continue;`, or `break;` on the same line when that line is at most 80 columns (tab = 4). Put a `return` with a value on the next line, unbraced.
+- If that compact `if` / `elseif` line still exceeds 80 columns or must wrap for operators or calls, wrap the condition (operators at the start of continuation lines, first operand padded by 3 spaces) and use braces. Do not wrap only the `return`.
 - Coalesce two control structures when the first contains only the second, for example `} else foreach {` or `} else for {`.
 
 ## File Health

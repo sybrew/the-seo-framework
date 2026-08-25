@@ -107,7 +107,8 @@ class Query {
 			return self::get_the_real_admin_id();
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && ( null !== $memo = umemo( __METHOD__ ) ) ) return $memo;
+		if ( $use_cache && ( null !== $memo = umemo( __METHOD__ ) ) )
+			return $memo;
 
 		// Try to get ID from plugins or feed when caching is available.
 		if ( $use_cache ) {
@@ -346,7 +347,8 @@ class Query {
 			return self::is_archive_admin();
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = Query\Cache::memo() ) return $memo;
+		if ( null !== $memo = Query\Cache::memo() )
+			return $memo;
 
 		if ( \is_archive() && false === self::is_singular() )
 			return Query\Cache::memo( true );
@@ -362,8 +364,9 @@ class Query {
 				|| $wp_query->is_post_type_archive
 				|| $wp_query->is_author
 				|| $wp_query->is_date
-			)
+			) {
 				return Query\Cache::memo( true );
+			}
 		}
 
 		return Query\Cache::memo( false );

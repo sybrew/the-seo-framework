@@ -154,7 +154,8 @@ class URI {
 			$url = Data\Plugin\PTA::get_meta_item( 'canonical' );
 		}
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		if ( URI\Utils::url_matches_blog_domain( $url ) )
 			$url = URI\Utils::set_preferred_url_scheme( $url );
@@ -194,7 +195,8 @@ class URI {
 				$url = Data\Plugin\PTA::get_meta_item( 'canonical', $args['pta'] );
 		}
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		if ( URI\Utils::url_matches_blog_domain( $url ) )
 			$url = URI\Utils::set_preferred_url_scheme( $url );
@@ -280,7 +282,8 @@ class URI {
 
 		$url = URI\Utils::slash_front_page_url( Data\Blog::get_front_page_url() );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		$page = max( Query::paged(), Query::page() );
 
@@ -328,7 +331,8 @@ class URI {
 
 		$url = \get_permalink( Query::get_the_real_id() );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		if ( Query::is_singular_archive() ) {
 			// Singular archives, like blog pages and shop pages, use the pagination base with 'paged'.
@@ -361,7 +365,8 @@ class URI {
 
 		$url = \get_permalink( $post_id );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
@@ -443,7 +448,8 @@ class URI {
 
 		$url = \get_post_type_archive_link( $post_type ?? Query::get_current_post_type() );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
@@ -468,7 +474,8 @@ class URI {
 
 		$url = \get_post_type_archive_link( $post_type ?? Query::get_current_post_type() );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
@@ -491,7 +498,8 @@ class URI {
 
 		$url = \get_author_posts_url( Query::get_the_real_id() );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
@@ -515,7 +523,8 @@ class URI {
 
 		$url = \get_author_posts_url( $id ?? Query::get_the_real_id() );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
@@ -551,7 +560,8 @@ class URI {
 			$url = \get_year_link( $year );
 		}
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
@@ -583,7 +593,8 @@ class URI {
 			$url = \get_year_link( $year );
 		}
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
@@ -608,7 +619,8 @@ class URI {
 
 		$url = \get_search_link();
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( URI\Utils::add_pagination_to_url(
@@ -632,7 +644,8 @@ class URI {
 
 		$url = \get_search_link( $search_query );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url(
 			URI\Utils::set_preferred_url_scheme( $url ),
@@ -777,7 +790,8 @@ class URI {
 			}
 		}
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
@@ -795,7 +809,9 @@ class URI {
 		if (
 			   ! Data\Plugin::get_option( 'shortlink_tag' )
 			|| Query::is_real_front_page()
-		) return '';
+		) {
+			return '';
+		}
 
 		return self::get_generated_shortlink_url();
 	}
@@ -846,7 +862,8 @@ class URI {
 			$query = [ 's' => \get_search_query( false ) ];
 		}
 
-		if ( empty( $query ) ) return '';
+		if ( empty( $query ) )
+			return '';
 
 		$page  = Query::page();
 		$paged = Query::paged();

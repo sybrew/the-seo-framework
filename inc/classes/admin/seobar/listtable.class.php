@@ -97,8 +97,7 @@ final class ListTable extends Admin\Lists\Table {
 		foreach ( $order_keys as $key ) {
 			// Put value in $offset, if not false, break loop.
 			$offset = array_search( $key, $column_keys, true );
-			if ( false !== $offset )
-				break;
+			if ( false !== $offset ) break;
 		}
 
 		// It tried but found nothing
@@ -167,7 +166,8 @@ final class ListTable extends Admin\Lists\Table {
 	 */
 	public function output_column_contents_for_term( $string, $column_name, $term_id ) {
 
-		if ( $this->column_name !== $column_name ) return $string;
+		if ( $this->column_name !== $column_name )
+			return $string;
 
 		if ( $this->doing_ajax )
 			$string .= $this->get_ajax_dispatch_updated_event();

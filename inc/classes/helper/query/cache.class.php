@@ -110,8 +110,12 @@ class Cache {
 		if ( \defined( 'WP_CLI' ) && \WP_CLI )
 			return self::$can_cache_query = false;
 
-		if ( isset( $GLOBALS['wp_query']->query ) || isset( $GLOBALS['current_screen'] ) )
+		if (
+			   isset( $GLOBALS['wp_query']->query )
+			|| isset( $GLOBALS['current_screen'] )
+		) {
 			return self::$can_cache_query = true;
+		}
 
 		if ( \THE_SEO_FRAMEWORK_DEBUG )
 			self::do_query_error_notice();
@@ -134,7 +138,8 @@ class Cache {
 
 		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 8 );
 
-		if ( ! $backtrace ) return [];
+		if ( ! $backtrace )
+			return [];
 
 		/**
 		 * 0 = caller of this func

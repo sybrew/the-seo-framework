@@ -67,7 +67,8 @@ final class BreadcrumbList extends Reference {
 			];
 		}
 
-		if ( empty( $list_items ) ) return null;
+		if ( empty( $list_items ) )
+			return null;
 
 		// Pop off the last URL, so search engines will use the page URL instead.
 		unset( $list_items[ array_key_last( $list_items ) ]['item'] );

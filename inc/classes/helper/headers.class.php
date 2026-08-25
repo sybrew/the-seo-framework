@@ -53,6 +53,7 @@ class Headers {
 
 		if ( $level ) {
 			while ( $level-- ) ob_end_clean();
+
 			return true;
 		}
 

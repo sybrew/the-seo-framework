@@ -213,6 +213,7 @@ final class Plugin {
 	 * @since 5.0.0 Renamed from `_output_wrap`.
 	 */
 	public static function output_wrap() {
+
 		/**
 		 * @since 3.0.0
 		 */
@@ -269,6 +270,7 @@ final class Plugin {
 	 * }
 	 */
 	public static function nav_tab_wrapper( $id, $tabs = [] ) {
+
 		Template::output_view( 'settings/wrap-nav', $id, $tabs );
 		Template::output_view( 'settings/wrap-content', $id, $tabs );
 	}
@@ -279,6 +281,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _general_metabox() {
+
 		/**
 		 * @since 2.8.0
 		 */
@@ -356,6 +359,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _title_metabox() {
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -405,6 +409,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _description_metabox() {
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -422,6 +427,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _robots_metabox() {
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -470,6 +476,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _homepage_metabox() {
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -527,6 +534,7 @@ final class Plugin {
 	 * @since 4.2.0
 	 */
 	public static function _post_type_archive_metabox() {
+
 		/**
 		 * @since 4.2.0
 		 */
@@ -577,6 +585,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _social_metabox() {
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -644,6 +653,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _webmaster_metabox() {
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -662,6 +672,7 @@ final class Plugin {
 	 * @see self::sitemaps_metabox() Callback for Sitemaps Settings box.
 	 */
 	public static function _sitemaps_metabox() {
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -719,6 +730,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _feed_metabox() {
+
 		/**
 		 * @since 2.5.2
 		 */
@@ -736,6 +748,7 @@ final class Plugin {
 	 * @since 4.0.0
 	 */
 	public static function _schema_metabox() {
+
 		/**
 		 * @since 2.6.0
 		 */

@@ -113,7 +113,9 @@ final class Term {
 			|| ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
 			|| ! isset( $_POST[ self::SAVE_NONCES['quick-edit']['name'] ] )
 			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['quick-edit']['name'] ], self::SAVE_NONCES['quick-edit']['action'] )
-		) return;
+		) {
+			return;
+		}
 
 		// Unlike the term-edit saving, we don't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.
@@ -150,7 +152,9 @@ final class Term {
 			|| ! \current_user_can( 'edit_term', $term->term_id )
 			|| ! isset( $_POST[ self::SAVE_NONCES['term-edit']['name'] ] )
 			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['term-edit']['name'] ], self::SAVE_NONCES['term-edit']['action'] )
-		) return;
+		) {
+			return;
+		}
 
 		// Trim, sanitize, and save the metadata.
 		Data\Plugin\Term::save_meta(

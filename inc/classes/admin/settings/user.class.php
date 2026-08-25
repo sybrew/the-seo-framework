@@ -53,8 +53,7 @@ final class User {
 	 */
 	public static function prepare_setting_fields( $user ) {
 
-		if ( ! Data\User::user_has_author_info_cap_on_network( $user ) )
-			return;
+		if ( ! Data\User::user_has_author_info_cap_on_network( $user ) ) return;
 
 		self::output_setting_fields( $user );
 	}

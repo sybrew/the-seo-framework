@@ -77,7 +77,8 @@ class Utils {
 	public static function query_supports_seo() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		switch ( true ) {
 			case \is_feed():
@@ -164,7 +165,8 @@ class Utils {
 	public static function is_query_exploited() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		if ( ! Data\Plugin::get_option( 'advanced_query_protection' ) )
 			return memo( false );
@@ -232,8 +234,12 @@ class Utils {
 
 				switch ( $type ) {
 					case 'numeric':
-						if ( '0' === $query[ $qv ] || ! is_numeric( $query[ $qv ] ) )
+						if (
+							   '0' === $query[ $qv ]
+							|| ! is_numeric( $query[ $qv ] )
+						) {
 							return memo( true );
+						}
 						break;
 
 					case 'numeric_array':

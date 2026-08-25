@@ -85,7 +85,8 @@ class Exclusion {
 
 		$cache = Data\Plugin::get_site_cache( 'excluded_ids' );
 
-		if ( isset( $cache['archive'], $cache['search'] ) ) return $cache;
+		if ( isset( $cache['archive'], $cache['search'] ) )
+			return $cache;
 
 		global $wpdb;
 

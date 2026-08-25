@@ -71,6 +71,7 @@ final class Debug {
 	 *                             Expected to be escaped.
 	 */
 	public static function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
+
 		/**
 		 * Fires when a deprecated function is called.
 		 *
@@ -135,6 +136,7 @@ final class Debug {
 	 * @param string $version  The version of WordPress where the message was added.
 	 */
 	public static function _doing_it_wrong( $function, $message, $version = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
+
 		/**
 		 * Fires when the given function is being used incorrectly.
 		 *
@@ -244,7 +246,8 @@ final class Debug {
 
 		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 6 );
 
-		if ( ! $backtrace ) return [];
+		if ( ! $backtrace )
+			return [];
 
 		/**
 		 * Always one step before TSF:
@@ -337,7 +340,9 @@ final class Debug {
 				|| Query::is_term_edit()
 				|| Query::is_seo_settings_page()
 			)
-		) return;
+		) {
+			return;
+		}
 
 		if ( Query::is_seo_settings_page() )
 			\add_filter(

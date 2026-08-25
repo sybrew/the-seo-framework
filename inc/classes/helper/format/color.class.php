@@ -69,6 +69,7 @@ class Color {
 		);
 
 		$get_relative_luminance = function ( $v ) {
+
 			// Convert hex to 0~1 float.
 			$v /= 0xFF;
 
@@ -77,6 +78,7 @@ class Color {
 			} else {
 				$lum = $v / 12.92;
 			}
+
 			return $lum;
 		};
 

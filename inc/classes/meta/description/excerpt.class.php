@@ -98,7 +98,8 @@ class Excerpt {
 	public static function get_excerpt_from_query() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		if ( Query::is_blog_as_page() ) {
 			$excerpt = self::get_blog_page_excerpt();
@@ -197,7 +198,8 @@ class Excerpt {
 			'the_seo_framework_get_excerpt',
 		);
 
-		if ( $excerpt ) return $excerpt;
+		if ( $excerpt )
+			return $excerpt;
 
 		if ( $in_the_loop ) {
 			if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
@@ -266,7 +268,8 @@ class Excerpt {
 		$post = \get_post( $id ?? Query::get_the_real_id() );
 
 		// If the post is protected, don't generate a description.
-		if ( ! $post || Data\Post::is_protected( $post ) ) return '';
+		if ( ! $post || Data\Post::is_protected( $post ) )
+			return '';
 
 		$excerpt = Data\Post::get_excerpt( $post );
 
@@ -279,7 +282,8 @@ class Excerpt {
 				$excerpt = Format\HTML::strip_paragraph_urls( Format\HTML::strip_newline_urls( $excerpt ) );
 		}
 
-		if ( empty( $excerpt ) ) return '';
+		if ( empty( $excerpt ) )
+			return '';
 
 		return Format\HTML::extract_content( $excerpt );
 	}

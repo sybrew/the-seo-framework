@@ -98,7 +98,8 @@ class Menu {
 	public static function get_top_menu_args() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		$issue_count = self::get_top_menu_issue_count();
 
@@ -156,7 +157,8 @@ class Menu {
 	 */
 	public static function get_top_menu_issue_count() {
 
-		if ( is_headless( 'settings' ) ) return 0;
+		if ( is_headless( 'settings' ) )
+			return 0;
 
 		/**
 		 * @since 4.2.8

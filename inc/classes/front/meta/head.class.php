@@ -237,7 +237,8 @@ final class Head {
 			) ) ),
 		] );
 
-		if ( ! $cache['run'] ) return '';
+		if ( ! $cache['run'] )
+			return '';
 
 		switch ( $where ) {
 			case 'before':

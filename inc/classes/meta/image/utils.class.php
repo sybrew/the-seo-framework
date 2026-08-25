@@ -135,8 +135,7 @@ class Utils {
 		$size = '';
 
 		foreach ( $sizes as $_s => $_d ) {
-			if ( ( $_d['filesize'] ?? 0 ) > $max_filesize )
-				continue;
+			if ( ( $_d['filesize'] ?? 0 ) > $max_filesize ) continue;
 
 			if (
 				   isset( $_d['width'], $_d['height'] )

@@ -107,8 +107,10 @@ final class Main {
 	 * @return Main $this
 	 */
 	public function set( $args = null, $options = 0 ) {
+
 		$this->args    = $args;
 		$this->options = $options;
+
 		return $this;
 	}
 
@@ -221,6 +223,7 @@ final class Main {
 	 * @see $this->collect_assertions()
 	 */
 	private function reset_assertions() {
+
 		// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- No function by reference support?
 		$assertions = &$this->collect_assertions();
 		$assertions = [];

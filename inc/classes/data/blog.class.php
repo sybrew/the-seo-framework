@@ -154,8 +154,12 @@ class Blog {
 
 		$site = \get_site();
 
-		if ( $site instanceof \WP_Site && ( '1' === $site->spam || '1' === $site->deleted ) )
+		if (
+			   $site instanceof \WP_Site
+			&& ( '1' === $site->spam || '1' === $site->deleted )
+		) {
 			return true;
+		}
 
 		return false;
 	}

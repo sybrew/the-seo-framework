@@ -127,11 +127,9 @@ class Strings {
 			if ( $count < $min_count ) continue;
 
 			if ( ( $use_mb ? mb_strlen( $word ) : \strlen( $word ) ) <= $args['short_word_length'] ) {
-				if ( $count < $args['filter_short_under'] )
-					continue;
+				if ( $count < $args['filter_short_under'] ) continue;
 			} else {
-				if ( $count < $args['filter_under'] )
-					continue;
+				if ( $count < $args['filter_under'] ) continue;
 			}
 
 			// !! Don't use mb_* here. preg_split's offset is in bytes, NOT multibytes.

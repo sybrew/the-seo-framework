@@ -69,7 +69,12 @@ function _prepare( $previous_version, $current_version ) {
 	// phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- might be mixed types.
 	if ( $previous_version == $current_version ) return;
 	// 1
-	if ( \defined( 'TSF_DISABLE_SUGGESTIONS' ) && \TSF_DISABLE_SUGGESTIONS ) return;
+	if (
+		   \defined( 'TSF_DISABLE_SUGGESTIONS' )
+		&& \TSF_DISABLE_SUGGESTIONS
+	) {
+		return;
+	}
 	// 2
 	if ( ! \is_main_site() ) return;
 

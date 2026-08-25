@@ -27,7 +27,9 @@ function _um_reinstate_title_support() {
 			'um_get_requested_user',
 			'um_dynamic_user_profile_pagetitle',
 		],
-	] ) ) return;
+	] ) ) {
+		return;
+	}
 
 	if ( \um_is_core_page( 'user' ) && \um_get_requested_user() ) {
 		// This number has nothing to do with the reasoning hereinbefore -- merely to reflect their API.
@@ -48,14 +50,17 @@ function _um_reinstate_title_support() {
 function _um_determine_support( $supported = true ) {
 
 	// No need to modify support if it's already not supported.
-	if ( ! $supported ) return $supported;
+	if ( ! $supported )
+		return $supported;
 
 	if ( ! Helper\Compatibility::can_i_use( [
 		'functions' => [
 			'um_queried_user',
 			'um_is_core_page',
 		],
-	] ) ) return $supported;
+	] ) ) {
+		return $supported;
+	}
 
 	/**
 	 * We do not test for 'um_get_requested_user()' -- but this is safe.

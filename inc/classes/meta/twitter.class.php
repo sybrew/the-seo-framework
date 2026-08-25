@@ -125,8 +125,12 @@ class Twitter {
 			}
 		}
 
-		if ( ! empty( $card ) && \in_array( $card, self::get_supported_cards(), true ) )
+		if (
+			   ! empty( $card )
+			&& \in_array( $card, self::get_supported_cards(), true )
+		) {
 			return $card;
+		}
 
 		return '';
 	}
@@ -255,7 +259,8 @@ class Twitter {
 			$title = Data\Plugin\PTA::get_meta_item( 'tw_title' );
 		}
 
-		if ( ! isset( $title ) ) return '';
+		if ( ! isset( $title ) )
+			return '';
 
 		if ( \strlen( $title ) )
 			return Sanitize::metadata_content( $title );
@@ -299,7 +304,8 @@ class Twitter {
 				$title = Data\Plugin\PTA::get_meta_item( 'tw_title', $args['pta'] );
 		}
 
-		if ( ! isset( $title ) ) return '';
+		if ( ! isset( $title ) )
+			return '';
 
 		if ( \strlen( $title ) )
 			return Sanitize::metadata_content( $title );
@@ -382,7 +388,8 @@ class Twitter {
 		}
 
 		// Do not check empty(). See strlen below.
-		if ( ! isset( $desc ) ) return '';
+		if ( ! isset( $desc ) )
+			return '';
 
 		if ( \strlen( $desc ) )
 			return Sanitize::metadata_content( $desc );
@@ -427,7 +434,8 @@ class Twitter {
 		}
 
 		// Do not check empty(). See strlen below.
-		if ( ! isset( $desc ) ) return '';
+		if ( ! isset( $desc ) )
+			return '';
 
 		if ( \strlen( $desc ) )
 			return Sanitize::metadata_content( $desc );

@@ -358,7 +358,8 @@ class Sanitize {
 
 		$url = trim( $url );
 
-		if ( empty( $url ) ) return '';
+		if ( empty( $url ) )
+			return '';
 
 		// This is also checked when performing a redirect.
 		if ( ! Helper\Redirect::allow_external_redirect() ) {
@@ -427,15 +428,18 @@ class Sanitize {
 			'filesize' => 0,
 		];
 
-		if ( empty( $details ) ) return $defaults;
+		if ( empty( $details ) )
+			return $defaults;
 
 		[ $url, $id, $width, $height, $alt, $caption, $filesize ] = array_values( array_merge( $defaults, $details ) );
 
-		if ( empty( $url ) ) return $defaults;
+		if ( empty( $url ) )
+			return $defaults;
 
 		$url = \sanitize_url( Meta\URI\Utils::make_absolute_current_scheme_url( $url ), [ 'https', 'http' ] );
 
-		if ( empty( $url ) ) return $defaults;
+		if ( empty( $url ) )
+			return $defaults;
 
 		/**
 		 * Skip APNG, BMP, ICO, TIFF, and SVG.
@@ -453,7 +457,9 @@ class Sanitize {
 			strtolower( strtok( pathinfo( $url, \PATHINFO_EXTENSION ), '?' ) ),
 			[ 'apng', 'bmp', 'ico', 'cur', 'svg', 'tif', 'tiff' ],
 			true,
-		) ) return $defaults;
+		) ) {
+			return $defaults;
+		}
 
 		$width  = \absint( $width );
 		$height = \absint( $height );
@@ -469,7 +475,8 @@ class Sanitize {
 				[ 'https', 'http' ],
 			) : '';
 
-			if ( empty( $url ) ) return $defaults;
+			if ( empty( $url ) )
+				return $defaults;
 
 			// No sanitization needed. PHP's getimagesize() returns the correct values.
 			$width  = $new_image[1];
@@ -508,7 +515,8 @@ class Sanitize {
 		$path = trim( Meta\URI\Utils::get_relative_part_from_url( $link ), ' /' );
 
 		// /0 is a valid profile link.
-		if ( ! \strlen( $path ) ) return '';
+		if ( ! \strlen( $path ) )
+			return '';
 
 		$link = "https://www.facebook.com/{$path}";
 
@@ -516,7 +524,8 @@ class Sanitize {
 			// Extract query parameters.
 			parse_str( parse_url( $link, \PHP_URL_QUERY ), $r );
 
-			if ( empty( $r['id'] ) ) return '';
+			if ( empty( $r['id'] ) )
+				return '';
 
 			$link = 'https://www.facebook.com/profile.php?id=' . \absint( $r['id'] );
 		}

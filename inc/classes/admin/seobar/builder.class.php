@@ -109,7 +109,8 @@ class Builder {
 			'post_type' => '',
 		];
 
-		if ( empty( $query['id'] ) ) return '';
+		if ( empty( $query['id'] ) )
+			return '';
 
 		if ( empty( $query['tax'] ) )
 			$query['post_type'] = $query['post_type'] ?: \get_post_type( $query['id'] );

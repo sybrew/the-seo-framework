@@ -499,11 +499,11 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 			],
 		];
 
-		$esc_sql_in = function ( $val ) {
-			if ( ! \is_scalar( $val ) )
-				$val = array_filter( (array) $val, 'is_scalar' );
-			return \esc_sql( $val );
-		};
+		$esc_sql_in = fn( $val ) => \esc_sql(
+			\is_scalar( $val )
+				? $val
+				: array_filter( (array) $val, 'is_scalar' ),
+		);
 
 		$found_titles = [];
 

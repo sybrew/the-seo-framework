@@ -41,6 +41,7 @@ use The_SEO_Framework\{
  *              3. Now modifies the SEO Bar.
  */
 function _init_wc_compat() {
+
 	// Adjust the product link acknowledging the primary category.
 	\add_filter( 'wc_product_post_type_link_product_cat', [ Query\Filter::class, 'filter_post_link_category' ], 10, 3 );
 
@@ -64,7 +65,8 @@ function _get_shop_page_id() {
 
 	static $id;
 
-	if ( isset( $id ) ) return $id;
+	if ( isset( $id ) )
+		return $id;
 
 	$id = \function_exists( 'wc_get_page_id' ) ? (int) \wc_get_page_id( 'shop' ) : 0;
 
@@ -158,7 +160,8 @@ function _set_wc_is_shop( $is_shop, $post ) {
  */
 function _set_wc_is_product( $is_product, $post ) {
 
-	if ( $is_product ) return $is_product;
+	if ( $is_product )
+		return $is_product;
 
 	if ( $post )
 		return 'product' === \get_post_type( $post );
@@ -179,7 +182,8 @@ function _set_wc_is_product( $is_product, $post ) {
  */
 function _set_wc_is_product_admin( $is_product_admin ) {
 
-	if ( $is_product_admin ) return $is_product_admin;
+	if ( $is_product_admin )
+		return $is_product_admin;
 
 	return Query::is_singular_admin() && 'product' === Query::get_admin_post_type();
 }
@@ -214,7 +218,8 @@ function _set_wc_is_product_admin( $is_product_admin ) {
 function _set_wc_noindex_defaults( $meta, $args, $options ) {
 
 	// Nothing to do here...
-	if ( 'noindex' === $meta['noindex'] ) return $meta;
+	if ( 'noindex' === $meta['noindex'] )
+		return $meta;
 
 	if ( isset( $args ) ) {
 		if ( 'single' === get_query_type_from_args( $args ) )
@@ -225,18 +230,21 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 	}
 
 	// No page_id was found: unsupported query.
-	if ( empty( $page_id ) ) return $meta;
+	if ( empty( $page_id ) )
+		return $meta;
 
 	static $page_ids;
 
 	if ( ! isset( $page_ids ) ) {
-		if ( ! \function_exists( 'wc_get_page_id' ) ) return $meta;
+		if ( ! \function_exists( 'wc_get_page_id' ) )
+			return $meta;
 
 		$page_ids = array_filter( [ \wc_get_page_id( 'cart' ), \wc_get_page_id( 'checkout' ), \wc_get_page_id( 'myaccount' ) ] );
 	}
 
 	// This current page isn't a WC cart/checkout/myaccount page.
-	if ( ! \in_array( $page_id, $page_ids, true ) ) return $meta;
+	if ( ! \in_array( $page_id, $page_ids, true ) )
+		return $meta;
 
 	// Set the default to 'noindex' if settings are ignored, or if the setting is set to "default" (0).
 	if (
@@ -260,7 +268,12 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
  */
 function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
-	if ( $interpreter::$query['tax'] || ! \function_exists( 'wc_get_page_id' ) ) return;
+	if (
+		   $interpreter::$query['tax']
+		|| ! \function_exists( 'wc_get_page_id' )
+	) {
+		return;
+	}
 
 	static $page_ids;
 
@@ -433,7 +446,8 @@ function _filter_public_wc_post_type_archives( $post_types ) {
 
 	// Don't mess with it on the front-end, or when no post ID is assigned to the shop.
 	// phpcs:ignore TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- local func
-	if ( ! \is_admin() || ! _get_shop_page_id() ) return $post_types;
+	if ( ! \is_admin() || ! _get_shop_page_id() )
+		return $post_types;
 
 	return array_diff( $post_types, [ 'product' ] );
 }
@@ -458,7 +472,8 @@ function _filter_wc_shop_pta_title_items( $items, $object ) {
 		$replace = Query::is_shop();
 	}
 
-	if ( ! $replace ) return $items;
+	if ( ! $replace )
+		return $items;
 
 	// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Source: WC_Install::create_pages();
 	$shop = \_x( 'Shop', 'Page title', 'woocommerce' );

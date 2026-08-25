@@ -217,7 +217,8 @@ class Utils {
 	public static function use_core_sitemaps() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		if ( Data\Plugin::get_option( 'sitemaps_output' ) )
 			return memo( false );
@@ -250,8 +251,10 @@ class Utils {
 	 * @return bool Whether the sitemap.xml file exists.
 	 */
 	public static function has_root_sitemap_xml() {
+
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		// Ensure get_home_path() is declared.
 		if ( ! \function_exists( 'get_home_path' ) )

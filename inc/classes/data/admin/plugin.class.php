@@ -74,11 +74,12 @@ final class Plugin {
 		if (
 			   empty( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
 			|| ! \is_array( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ] )
-		) return;
+		) {
+			return;
+		}
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
-		if ( ! \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) )
-			return;
+		if ( ! \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) ) return;
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		\check_admin_referer( \THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options', '_wpnonce' );

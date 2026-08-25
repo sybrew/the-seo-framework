@@ -70,7 +70,9 @@ function _polylang_register_sitemap_languages( $list ) {
 			'pll_languages_list',
 			'pll_default_language',
 		],
-	] ) ) return $list;
+	] ) ) {
+		return $list;
+	}
 
 	$pll_options = \get_option( 'polylang' ) ?: [];
 	$languages   = \pll_languages_list( [ 'hide_empty' => 1 ] );
@@ -102,8 +104,12 @@ function _polylang_register_sitemap_languages( $list ) {
 				// hide_default off still has /en/sitemap.xml. The sitemap base path
 				// is unfiltered, so that URL cannot match `base`; register it as a
 				// non-advertised alias. Skip when the default slug is hidden (404).
-				if ( $language === $default && ! empty( $pll_options['hide_default'] ) )
+				if (
+					   $language === $default
+					&& ! empty( $pll_options['hide_default'] )
+				) {
 					continue;
+				}
 
 				$endpoint = "{$dir_prefix}{$language}/{$list['base']['endpoint']}";
 
@@ -138,7 +144,9 @@ function _polylang_sitemap_language_endpoints( $endpoints ) {
 			'pll_languages_list',
 			'pll_default_language',
 		],
-	] ) ) return $endpoints;
+	] ) ) {
+		return $endpoints;
+	}
 
 	$pll_options = \get_option( 'polylang' ) ?: [];
 
@@ -214,7 +222,12 @@ function _polylang_fix_sitemap_base_path( $path ) {
  */
 function _polylang_set_sitemap_language( $sitemap_id = '' ) {
 
-	if ( ! \function_exists( 'PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
+	if (
+		   ! \function_exists( 'PLL' )
+		|| ! ( \PLL() instanceof \PLL_Frontend )
+	) {
+		return;
+	}
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Arbitrary input expected.
 	$lang = $_GET['lang'] ?? '';
@@ -234,8 +247,11 @@ function _polylang_set_sitemap_language( $sitemap_id = '' ) {
 					break;
 				case 1:
 					// Directory: the unprefixed sitemap is the default language, even when hide_default is off.
-					if ( ! \in_array( $sitemap_id, [ 'base', 'index', 'xsl-stylesheet' ], true ) )
+					if (
+						   ! \in_array( $sitemap_id, [ 'base', 'index', 'xsl-stylesheet' ], true )
+					) {
 						return;
+					}
 
 					$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
 					break;
@@ -283,13 +299,17 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 			'pll_languages_list',
 			'pll_default_language',
 		],
-	] ) ) return $args;
+	] ) ) {
+		return $args;
+	}
 
-	if ( ! ( \PLL() instanceof \PLL_Frontend ) ) return $args;
+	if ( ! ( \PLL() instanceof \PLL_Frontend ) )
+		return $args;
 
 	$default_lang = \pll_default_language( \OBJECT );
 
-	if ( ! isset( $default_lang->slug, $default_lang->term_id ) ) return $args;
+	if ( ! isset( $default_lang->slug, $default_lang->term_id ) )
+		return $args;
 
 	if ( ( \PLL()->curlang->slug ?? null ) === $default_lang->slug ) {
 		$args['lang']      = ''; // Select all lang, so that Polylang doesn't affect the query below with an AND (we need OR).
@@ -357,23 +377,22 @@ function _polylang_translate_query_exclusions( $wp_query ) {
 			&& ! $wp_query->is_archive
 			&& ! $wp_query->is_home
 		)
-	) return;
+	) {
+		return;
+	}
 
 	$post__not_in = $wp_query->get( 'post__not_in' );
 
-	if ( empty( $post__not_in ) || ! \function_exists( 'PLL' ) )
-		return;
+	if ( empty( $post__not_in ) || ! \function_exists( 'PLL' ) ) return;
 
 	$polylang = \PLL();
 
-	if ( ! ( $polylang instanceof \PLL_Frontend ) )
-		return;
+	if ( ! ( $polylang instanceof \PLL_Frontend ) ) return;
 
 	$model     = $polylang->model;
 	$post_type = $wp_query->get( 'post_type' );
 
-	if ( $post_type && ! $model->is_translated_post_type( $post_type ) )
-		return;
+	if ( $post_type && ! $model->is_translated_post_type( $post_type ) ) return;
 
 	$language = $polylang->curlang ?? null;
 
@@ -384,15 +403,13 @@ function _polylang_translate_query_exclusions( $wp_query ) {
 			$language = $model->get_language( $lang );
 	}
 
-	if ( ! $language instanceof \PLL_Language )
-		return;
+	if ( ! $language instanceof \PLL_Language ) return;
 
 	$translated = [];
 	$post_model = $model->post;
 
 	foreach ( (array) $post__not_in as $post_id ) {
-		if ( ! $post_id )
-			continue;
+		if ( ! $post_id ) continue;
 
 		$translated[ $post_model->get(
 			$post_id,
@@ -506,7 +523,12 @@ function _defunct_badly_coded_polylang_script() {
  */
 function _hijack_polylang_home_url() {
 
-	if ( ! \function_exists( 'PLL' ) || ! ( \PLL() instanceof \PLL_Frontend ) ) return;
+	if (
+		   ! \function_exists( 'PLL' )
+		|| ! ( \PLL() instanceof \PLL_Frontend )
+	) {
+		return;
+	}
 
 	$default_cb = [ \PLL()->filters_links ?? null, 'home_url' ];
 	// If not false, this will imply method `home_url()` exists and is public.
@@ -523,8 +545,12 @@ function _hijack_polylang_home_url() {
 			global $wp_actions;
 
 			// Polylang runs as intended at template_redirect or later. Don't trick when pll_language_defined didn't run.
-			if ( isset( $wp_actions['template_redirect'] ) || ! isset( $wp_actions['pll_language_defined'] ) )
+			if (
+				   isset( $wp_actions['template_redirect'] )
+				|| ! isset( $wp_actions['pll_language_defined'] )
+			) {
 				return \call_user_func_array( $default_cb, $args );
+			}
 
 			// Trick Polylang.
 			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- it's called a hijack for a reason.

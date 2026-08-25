@@ -111,7 +111,9 @@ abstract class Table {
 		if (
 			   ! \check_ajax_referer( 'add-tag', '_wpnonce_add-tag', false )
 			|| empty( $_POST['taxonomy'] )
-		) return;
+		) {
+			return;
+		}
 
 		$taxonomy   = stripslashes( $_POST['taxonomy'] );
 		$tax_object = $taxonomy ? \get_taxonomy( $taxonomy ) : false;
@@ -139,7 +141,9 @@ abstract class Table {
 				'page' === $_POST['post_type'] ? 'edit_page' : 'edit_post',
 				(int) $_POST['post_ID'],
 			)
-		) return;
+		) {
+			return;
+		}
 
 		$this->init_columns_ajax();
 	}
@@ -158,7 +162,9 @@ abstract class Table {
 			   ! \check_ajax_referer( 'taxinlineeditnonce', '_inline_edit', false )
 			|| empty( $_POST['tax_ID'] )
 			|| ! \current_user_can( 'edit_term', (int) $_POST['tax_ID'] )
-		) return;
+		) {
+			return;
+		}
 
 		$this->init_columns_ajax();
 	}
@@ -175,17 +181,17 @@ abstract class Table {
 		if (
 			   ! Query::is_wp_lists_edit()
 			|| empty( $screen->id )
-		) return;
+		) {
+			return;
+		}
 
 		$post_type = $screen->post_type ?? '';
 		$taxonomy  = $screen->taxonomy ?? '';
 
 		if ( $taxonomy ) {
-			if ( ! Taxonomy::is_supported( $taxonomy ) )
-				return;
+			if ( ! Taxonomy::is_supported( $taxonomy ) ) return;
 		} else {
-			if ( ! Post_Type::is_supported( $post_type ) )
-				return;
+			if ( ! Post_Type::is_supported( $post_type ) ) return;
 		}
 
 		$this->post_type = $post_type;
@@ -214,6 +220,7 @@ abstract class Table {
 	 *    `_prepare_columns_wp_ajax_inline_save_tax()`
 	 */
 	private function init_columns_ajax() {
+
 		// phpcs:disable WordPress.Security.NonceVerification -- _prepare_columns_wp_ajax_* verifies this.
 
 		$taxonomy  = isset( $_POST['taxonomy'] ) ? stripslashes( $_POST['taxonomy'] ) : '';
@@ -225,11 +232,9 @@ abstract class Table {
 			?: ( isset( $_POST['tax_type'] ) ? stripslashes( $_POST['tax_type'] ) : '' );
 
 		if ( $taxonomy ) {
-			if ( ! Taxonomy::is_supported( $taxonomy ) )
-				return;
+			if ( ! Taxonomy::is_supported( $taxonomy ) ) return;
 		} else {
-			if ( ! Post_Type::is_supported( $post_type ) )
-				return;
+			if ( ! Post_Type::is_supported( $post_type ) ) return;
 		}
 
 		$this->doing_ajax = true;

@@ -163,7 +163,8 @@ class Utils {
 	public static function get_preferred_url_scheme() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo() ) return $memo;
+		if ( null !== $memo = memo() )
+			return $memo;
 
 		// May be 'https', 'http', or 'automatic'.
 		switch ( Data\Plugin::get_option( 'canonical_scheme' ) ) {

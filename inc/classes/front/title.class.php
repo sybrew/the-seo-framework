@@ -53,7 +53,9 @@ final class Title {
 			 * @param bool $overwrite_titles Whether to enable title overwriting.
 			 */
 			|| ! \apply_filters( 'the_seo_framework_overwrite_titles', true )
-		) return;
+		) {
+			return;
+		}
 
 		// Removes all pre_get_document_title filters.
 		\remove_all_filters( 'pre_get_document_title', false );

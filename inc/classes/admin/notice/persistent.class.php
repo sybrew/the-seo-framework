@@ -220,7 +220,9 @@ class Persistent {
 				|| ( $cond['user'] && Query::get_current_user_id() !== $cond['user'] )
 				|| ( $cond['screens'] && ! \in_array( $screen_base, $cond['screens'], true ) )
 				|| ( $cond['excl_screens'] && \in_array( $screen_base, $cond['excl_screens'], true ) )
-			) continue;
+			) {
+				continue;
+			}
 
 			if ( -1 !== $cond['timeout'] && $cond['timeout'] < time() ) {
 				self::clear_notice( $key );

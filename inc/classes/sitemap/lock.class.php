@@ -49,7 +49,8 @@ class Lock {
 
 		$ep_list = Registry::get_sitemap_endpoint_list();
 
-		if ( ! isset( $ep_list[ $sitemap_id ] ) ) return false;
+		if ( ! isset( $ep_list[ $sitemap_id ] ) )
+			return false;
 
 		$lock_id = $ep_list[ $sitemap_id ]['lock_id'] ?? $sitemap_id;
 
@@ -103,7 +104,8 @@ class Lock {
 
 		$lock_key = self::get_lock_key( $sitemap_id );
 
-		if ( ! $lock_key ) return false;
+		if ( ! $lock_key )
+			return false;
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 

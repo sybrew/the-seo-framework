@@ -150,7 +150,8 @@ class Post_Type {
 	public static function supports_taxonomies( $post_type = '' ) {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $post_type ) ) return $memo;
+		if ( null !== $memo = memo( null, $post_type ) )
+			return $memo;
 
 		$post_type = $post_type ?: Query::get_current_post_type();
 

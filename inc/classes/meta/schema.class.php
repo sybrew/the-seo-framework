@@ -145,7 +145,8 @@ class Schema {
 			$args,
 		);
 
-		if ( empty( $graph ) ) return [];
+		if ( empty( $graph ) )
+			return [];
 
 		return [
 			'@context' => 'https://schema.org',

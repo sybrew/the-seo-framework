@@ -183,6 +183,7 @@ final class Open_Graph {
 						'content'  => $image['width'],
 					],
 				];
+
 				yield "og:image:height:$i" => [
 					'attributes' => [
 						'property' => 'og:image:height',
