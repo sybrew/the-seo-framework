@@ -281,6 +281,7 @@ final class Registry {
 		// This is over 350x faster than a polyfill for `array_is_list()`.
 		if ( isset( $script[0] ) && array_values( $script ) === $script ) {
 			foreach ( $script as $s ) self::register( $s );
+
 			return;
 		}
 
@@ -333,7 +334,9 @@ final class Registry {
 
 		// Register them first to accommodate for dependencies.
 		foreach ( self::$scripts as $s ) {
-			if ( self::get_status_of( $s['id'], $s['type'] ) & self::REGISTERED ) continue;
+			if ( self::get_status_of( $s['id'], $s['type'] ) & self::REGISTERED )
+				continue;
+
 			self::forward_script( $s );
 		}
 	}
@@ -347,7 +350,9 @@ final class Registry {
 	private static function autoload_known_scripts() {
 		foreach ( self::$scripts as $s ) {
 			if ( $s['autoload'] ) {
-				if ( self::get_status_of( $s['id'], $s['type'] ) & self::LOADED ) continue;
+				if ( self::get_status_of( $s['id'], $s['type'] ) & self::LOADED )
+					continue;
+
 				self::load_script( $s['id'], $s['type'] );
 			}
 		}
@@ -400,7 +405,8 @@ final class Registry {
 	 */
 	private static function load_script( $id, $type ) {
 
-		if ( ! ( self::get_status_of( $id, $type ) & self::REGISTERED ) ) return;
+		if ( ! ( self::get_status_of( $id, $type ) & self::REGISTERED ) )
+			return;
 
 		$loaded = false;
 

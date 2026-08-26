@@ -72,7 +72,9 @@ function _wpml_register_sitemap_languages( $list ) {
 				],
 			],
 		)
-	) return $list;
+	) {
+		return $list;
+	}
 
 	$language_codes = array_column( $sitepress->get_active_languages(), 'code' );
 
@@ -101,8 +103,7 @@ function _wpml_register_sitemap_languages( $list ) {
 
 			foreach ( $language_codes as $language ) {
 				// Skip when the default language has no directory (checkbox off).
-				if ( $language === $default && ! $dir_for_default )
-					continue;
+				if ( $language === $default && ! $dir_for_default ) continue;
 
 				$endpoint = "$language/{$list['base']['endpoint']}";
 
@@ -149,7 +150,9 @@ function _wpml_sitemap_language_endpoints( $endpoints ) {
 				],
 			],
 		)
-	) return $endpoints;
+	) {
+		return $endpoints;
+	}
 
 	switch ( $sitepress->get_setting( 'language_negotiation_type' ) ) {
 		case \WPML_LANGUAGE_NEGOTIATION_TYPE_PARAMETER: // 3
@@ -265,9 +268,12 @@ function _wpml_sitemap_filter_non_translatables( $args ) {
 				],
 			],
 		)
-	) return $args;
+	) {
+		return $args;
+	}
 
-	if ( $sitepress->get_default_language() === $sitepress->get_current_language() ) return $args;
+	if ( $sitepress->get_default_language() === $sitepress->get_current_language() )
+		return $args;
 
 	// Filter out only 'Not translatable'.
 	$args['post_type'] = array_filter( (array) $args['post_type'], [ $sitepress, 'is_translated_post_type' ] );

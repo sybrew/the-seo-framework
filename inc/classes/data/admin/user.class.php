@@ -75,9 +75,12 @@ final class User {
 		if (
 			   ! isset( $_POST[ self::SAVE_NONCES['user-edit']['name'] ] )
 			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['user-edit']['name'] ], self::SAVE_NONCES['user-edit']['action'] )
-		) return;
+		) {
+			return;
+		}
 
-		if ( ! Data\User::user_has_author_info_cap_on_network( $user_id ) ) return;
+		if ( ! Data\User::user_has_author_info_cap_on_network( $user_id ) )
+			return;
 
 		// We won't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.

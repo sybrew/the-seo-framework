@@ -398,7 +398,8 @@ final class Plugin {
 	 */
 	public static function disabled_post_types( $value ) {
 
-		if ( empty( $value ) || ! \is_array( $value ) ) return [];
+		if ( empty( $value ) || ! \is_array( $value ) )
+			return [];
 
 		foreach ( Post_Type::get_all_forced_supported() as $forced )
 			unset( $value[ $forced ] );
@@ -414,7 +415,8 @@ final class Plugin {
 	 */
 	public static function disabled_taxonomies( $value ) {
 
-		if ( empty( $value ) || ! \is_array( $value ) ) return [];
+		if ( empty( $value ) || ! \is_array( $value ) )
+			return [];
 
 		foreach ( Taxonomy::get_all_forced_supported() as $forced )
 			unset( $value[ $forced ] );
@@ -430,7 +432,8 @@ final class Plugin {
 	 */
 	public static function checkbox_array( $value ) {
 
-		if ( empty( $value ) || ! \is_array( $value ) ) return [];
+		if ( empty( $value ) || ! \is_array( $value ) )
+			return [];
 
 		foreach ( $value as &$val )
 			$val = Sanitize::boolean_integer( $val );
@@ -494,7 +497,8 @@ final class Plugin {
 	 */
 	public static function fully_qualified_url( $value ) {
 
-		if ( empty( $value ) ) return '';
+		if ( empty( $value ) )
+			return '';
 
 		return \sanitize_url(
 			Meta\URI\Utils::make_absolute_current_scheme_url( $value ),

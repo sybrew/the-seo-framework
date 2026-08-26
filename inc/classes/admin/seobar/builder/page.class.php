@@ -67,6 +67,7 @@ final class Page extends Main {
 	 * @abstract
 	 */
 	protected function prime_cache() {
+
 		// phpcs:disable PEAR.Functions.FunctionCallSignature.Indent -- False negative.
 		static::get_cache( 'general/i18n/textsizeguidelines' )
 			or static::set_cache(
@@ -542,6 +543,7 @@ final class Page extends Main {
 				// This must be resolved.
 				$item['reason'] = $cache['reason']['foundmanydupe'];
 				$item['status'] = Builder::STATE_BAD;
+
 				return $item;
 			} else {
 				$item['reason'] = $cache['reason']['founddupe'];
@@ -657,6 +659,7 @@ final class Page extends Main {
 
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
+
 			// TODO Really stop asserting from here?
 			return $item;
 		} elseif ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
@@ -816,6 +819,7 @@ final class Page extends Main {
 
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
+
 			// TODO Really stop asserting from here?
 			return $item;
 		} elseif ( $this->query_cache['states']['robotsmeta']['nofollow'] ) {
@@ -955,6 +959,7 @@ final class Page extends Main {
 
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
+
 			// TODO Really stop asserting from here?
 			return $item;
 		} elseif ( $this->query_cache['states']['robotsmeta']['noarchive'] ) {

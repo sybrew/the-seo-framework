@@ -99,14 +99,13 @@ final class Utils {
 	 *
 	 * @param string $capability The capability that was required for the nonce check to be created.
 	 * @param mixed  ...$args    The arguments to pass to the capability check.
-	 * @return false|int False if the nonce is invalid, 1 if the nonce is valid
-	 *                   and generated between 0-12 hours ago, 2 if the nonce is
-	 *                   valid and generated between 12-24 hours ago.
+	 * @return int 1 if the nonce is valid and generated between 0-12 hours ago,
+	 *             2 if the nonce is valid and generated between 12-24 hours ago.
 	 */
 	public static function check_ajax_capability_referer( $capability, ...$args ) {
 
 		if ( \current_user_can( $capability, ...$args ) )
-			return \check_ajax_referer( "tsf-ajax-$capability", 'nonce', true );
+			return \check_ajax_referer( "tsf-ajax-$capability", 'nonce' );
 
 		\wp_die( -1, 403 );
 	}

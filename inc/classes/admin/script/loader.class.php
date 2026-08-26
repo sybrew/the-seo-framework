@@ -105,8 +105,12 @@ class Loader {
 			$scripts[] = self::get_primaryterm_scripts();
 			$scripts[] = self::get_ays_scripts();
 
-			if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
+			if (
+				   Data\Plugin::get_option( 'display_pixel_counter' )
+				|| Data\Plugin::get_option( 'display_character_counter' )
+			) {
 				$scripts[] = self::get_counter_scripts();
+			}
 
 			if ( Query::is_block_editor() )
 				$scripts[] = self::get_gutenberg_compat_scripts();
@@ -122,8 +126,12 @@ class Loader {
 				$scripts[] = self::get_canonical_scripts();
 				$scripts[] = self::get_ays_scripts();
 
-				if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
+				if (
+					   Data\Plugin::get_option( 'display_pixel_counter' )
+					|| Data\Plugin::get_option( 'display_character_counter' )
+				) {
 					$scripts[] = self::get_counter_scripts();
+				}
 			}
 		} elseif ( Query::is_wp_lists_edit() ) {
 			if ( Data\Plugin::get_option( 'display_list_edit_options' ) ) {
@@ -135,8 +143,12 @@ class Loader {
 				if ( Query::is_singular_admin() )
 					$scripts[] = self::get_primaryterm_scripts();
 
-				if ( Data\Plugin::get_option( 'display_pixel_counter' ) || Data\Plugin::get_option( 'display_character_counter' ) )
+				if (
+					   Data\Plugin::get_option( 'display_pixel_counter' )
+					|| Data\Plugin::get_option( 'display_character_counter' )
+				) {
 					$scripts[] = self::get_counter_scripts();
+				}
 			}
 		} elseif ( Query::is_seo_settings_page() ) {
 			self::prepare_media_scripts();

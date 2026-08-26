@@ -83,7 +83,8 @@ class Base extends Main {
 		if ( ! Sitemap\Cache::is_sitemap_cache_enabled() ) return;
 
 		// Don't prerender if the sitemap is already generated.
-		if ( false !== Sitemap\Cache::get_cached_sitemap_content( $sitemap_id ) ) return;
+		if ( false !== Sitemap\Cache::get_cached_sitemap_content( $sitemap_id ) )
+			return;
 
 		$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 		if ( 0 !== $ini_max_execution_time && \function_exists( 'set_time_limit' ) )
@@ -485,6 +486,7 @@ class Base extends Main {
 				}
 
 				++$this->url_count;
+
 				yield $_values;
 			}
 		}
@@ -525,6 +527,7 @@ class Base extends Main {
 					$_values['lastmod'] = $post->post_modified_gmt ?? '0000-00-00 00:00:00';
 
 				++$this->url_count;
+
 				yield $_values;
 			}
 
@@ -550,7 +553,8 @@ class Base extends Main {
 	 */
 	protected static function build_url_item( $args ) {
 
-		if ( empty( $args['loc'] ) ) return '';
+		if ( empty( $args['loc'] ) )
+			return '';
 
 		$xml = [
 			'loc' => Escape::xml_uri( $args['loc'] ),
@@ -584,6 +588,7 @@ class Base extends Main {
 	 * }
 	 */
 	protected function generate_additional_base_urls( $args ) {
+
 		/**
 		 * @since 2.5.2
 		 * @since 3.2.2 Invalid URLs are now skipped.
@@ -621,6 +626,7 @@ class Base extends Main {
 				$_values['lastmod'] = ! empty( $values['lastmod'] ) ? $values['lastmod'] : '0000-00-00 00:00:00';
 
 			++$this->url_count;
+
 			yield $_values;
 		}
 	}

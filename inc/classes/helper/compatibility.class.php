@@ -49,7 +49,8 @@ final class Compatibility {
 	public static function try_plugin_conflict_notification() {
 
 		// We refresh here because the list is loaded before a plugin is (de)activated.
-		if ( ! self::get_active_conflicting_plugin_types( true )['seo_tools'] ) return;
+		if ( ! self::get_active_conflicting_plugin_types( true )['seo_tools'] )
+			return;
 
 		Admin\Notice\Persistent::register_notice(
 			\__( 'Multiple SEO plugins have been detected. You should only use one.', 'autodescription' ),
@@ -166,7 +167,8 @@ final class Compatibility {
 	public static function get_active_conflicting_plugin_types( $refresh = false ) {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( ! $refresh && null !== $memo = memo() ) return $memo;
+		if ( ! $refresh && null !== $memo = memo() )
+			return $memo;
 
 		$conflicting_types = [
 			'seo_tools'    => false,

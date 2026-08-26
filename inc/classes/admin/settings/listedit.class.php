@@ -97,7 +97,9 @@ final class ListEdit extends Admin\Lists\Table {
 	 * @return array $columns the column data
 	 */
 	public function hide_quick_edit_column( $hidden ) {
+
 		$hidden[] = $this->column_name;
+
 		return $hidden;
 	}
 
@@ -115,8 +117,10 @@ final class ListEdit extends Admin\Lists\Table {
 	 * @return array $columns the column data
 	 */
 	public function add_column( $columns ) {
+
 		// Don't set a title, otherwise it's displayed in the screen settings.
 		$columns[ $this->column_name ] = '';
+
 		return $columns;
 	}
 
@@ -182,7 +186,9 @@ final class ListEdit extends Admin\Lists\Table {
 		if (
 			   $this->column_name !== $column_name
 			|| ! \current_user_can( 'edit_post', $post_id )
-		) return;
+		) {
+			return;
+		}
 
 		$generator_args = [ 'id' => $post_id ];
 
@@ -474,8 +480,11 @@ final class ListEdit extends Admin\Lists\Table {
 	 */
 	public function output_column_contents_for_term( $string, $column_name, $term_id ) {
 
-		if ( $this->column_name !== $column_name )          return $string;
-		if ( ! \current_user_can( 'edit_term', $term_id ) ) return $string;
+		if ( $this->column_name !== $column_name )
+			return $string;
+
+		if ( ! \current_user_can( 'edit_term', $term_id ) )
+			return $string;
 
 		$taxonomy = $this->taxonomy;
 

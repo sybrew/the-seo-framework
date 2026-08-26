@@ -27,7 +27,13 @@ use The_SEO_Framework\Meta;
  */
 function _wpforo_fix_page() {
 
-	if ( \is_admin() || ! \function_exists( 'is_wpforo_page' ) || ! \is_wpforo_page() ) return;
+	if (
+		   \is_admin()
+		|| ! \function_exists( 'is_wpforo_page' )
+		|| ! \is_wpforo_page()
+	) {
+		return;
+	}
 
 	if ( _wpforo_seo_title_enabled() ) { // phpcs:ignore TSF.Performance.Opcodes -- is local.
 		\add_filter( 'the_seo_framework_title_from_generation', __NAMESPACE__ . '\_wpforo_filter_pre_title', 10, 2 );
@@ -124,7 +130,8 @@ function _assert_wpforo_page_seo_bar( $interpreter ) {
 	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
 
 	// Skip if we're not dealing with the wpForo page.
-	if ( ! \has_shortcode( Data\Post::get_content( $interpreter::$query['id'] ), 'wpforo' ) ) return;
+	if ( ! \has_shortcode( Data\Post::get_content( $interpreter::$query['id'] ), 'wpforo' ) )
+		return;
 
 	foreach ( $items as $id => &$item ) {
 		switch ( $id ) {

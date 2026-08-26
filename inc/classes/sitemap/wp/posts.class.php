@@ -59,6 +59,7 @@ class Posts extends \WP_Sitemaps_Posts {
 	 * @return array[] Array of URL information for a sitemap.
 	 */
 	public function get_url_list( $page_num, $object_subtype = '' ) {
+
 		// Restores the more descriptive, specific name for use within this method.
 		$post_type = $object_subtype;
 

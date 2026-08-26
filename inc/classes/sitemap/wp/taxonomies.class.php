@@ -54,6 +54,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 	 * @return array[] Array of URL information for a sitemap.
 	 */
 	public function get_url_list( $page_num, $object_subtype = '' ) {
+
 		// Restores the more descriptive, specific name for use within this method.
 		$taxonomy        = $object_subtype;
 		$supported_types = $this->get_object_subtypes();
@@ -104,8 +105,7 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 
 			$term_link = \get_term_link( $term, $taxonomy );
 
-			if ( \is_wp_error( $term_link ) )
-				continue;
+			if ( \is_wp_error( $term_link ) ) continue;
 
 			$sitemap_entry = [
 				'loc' => $term_link,

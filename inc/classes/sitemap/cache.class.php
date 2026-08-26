@@ -125,7 +125,8 @@ class Cache {
 
 		$ep_list = Registry::get_sitemap_endpoint_list();
 
-		if ( empty( $ep_list[ $sitemap_id ] ) ) return false;
+		if ( empty( $ep_list[ $sitemap_id ] ) )
+			return false;
 
 		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
 
@@ -146,7 +147,8 @@ class Cache {
 
 		$transient_key = self::get_sitemap_cache_key( $sitemap_id );
 
-		if ( ! $transient_key ) return false;
+		if ( ! $transient_key )
+			return false;
 
 		return \set_transient( $transient_key, $content, $expiration );
 	}
@@ -163,7 +165,8 @@ class Cache {
 
 		$transient_key = self::get_sitemap_cache_key( $sitemap_id );
 
-		if ( ! $transient_key ) return false;
+		if ( ! $transient_key )
+			return false;
 
 		return \get_transient( $transient_key );
 	}
