@@ -13,16 +13,17 @@ Edit unminified sources only. Never write `*.min.js` or `*.min.css` by hand. Nev
 
 Read `.local/minify/permission.txt` with an explicit path before cloning engines. Grep/Glob cannot see `.local/`.
 
-Format is always two lines:
+Never invent `True` or `False`. Never write this file unless the user has replied with both flags.
+
+Format is always two lines (`True` or `False` per line, never guessed):
 
 ```
-JS=True
-CSS=True
+JS=True|False
+CSS=True|False
 ```
 
-Values are `True` or `False`.
-
-- If the file does not exist, prompt, then create it from the reply. Always write both lines.
+- If the file does not exist, prompt. If you cannot prompt and no permissions exist, skip minification altogether and ask at the end of the chat.
+- After the user replies with both flags, create the file from that reply. Always write both lines.
 - If a flag is `False`, do not prompt again, and do not clone or minify that type.
 - If a flag is `True`, proceed. After a permitted import, keep that flag `True`.
 

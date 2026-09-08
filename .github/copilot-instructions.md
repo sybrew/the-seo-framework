@@ -49,7 +49,7 @@ Do not argue a settled intent, rehash a corrected misread, or add meta-commentar
 - No SOLID.
 - KISS.
 - Procedural code is the way.
-- Never add phpcs comments.
+- Never add phpcs comments. That includes `phpcs:disable`, `phpcs:enable`, `phpcs:ignore`, `phpcs:set`, and any `-- phpcs:` annotation. Do not copy them from existing files into new or edited code. Existing comments in unmodified files stay.
 - Before making broad assumptions, ask for clarification.
 - Use plain punctuation, not fancy quotes.
 - Interpolate variables in strings when possible.
@@ -78,8 +78,8 @@ Do not argue a settled intent, rehash a corrected misread, or add meta-commentar
 - Add a short inline comment next to or above magic numbers.
 - Do not add comments about your executions.
 - Write detailed docblocks for all functions, classes, and methods.
-- After a function opening `{`, insert a blank line when the body has two or more statements. A single-statement body stays tight. A leading comment is not a statement: comment plus a single `return` or `yield` stays tight, comment on the first interior line. With two or more statements, the blank line comes first so that comment sits on the next interior line. Do not insert that blank after `if`, `elseif`, `else`, loop, or `try` braces.
-- A `return` or `yield` that ends that interior always has a blank line before it if that interior has two or more statements. Early `return` / `yield` inside `if` / `else` count: the blank is a visual split that this path ends there. A single-statement interior that is only a `return` or `yield` stays tight. Own-line comments immediately above that `return` or `yield` stay attached to it; the blank line goes before that comment group. Do not insert that blank before `continue` or `break`. After an early `return`, `continue`, or `break` guard, insert a blank line before the next sibling statement, including another guard.
+- After a function opening `{`, insert a blank line when the body has two or more statements. A single-statement body stays tight. A leading comment is not a statement: comment plus a single `return` or `yield` stays tight, comment on the first interior line. With two or more statements, the blank line comes first so that comment sits on the next interior line. Do not insert that blank after `if`, `elseif`, `else`, loop, `try`, or labeled `{` (`label: {`) braces.
+- A `return` or `yield` that ends that interior always has a blank line before it if that interior has two or more statements. Early `return` / `yield` inside `if` / `else` count: the blank is a visual split that this path ends there. A single-statement interior that is only a `return` or `yield` stays tight. Own-line comments immediately above that `return` or `yield` stay attached to it; the blank line goes before that comment group. Do not insert that blank before `continue` or `break`. After an early `return`, `continue`, or `break` guard, insert a blank line before the next sibling statement, including another guard. `do_action()` is a statement, not a guard: a `return` after it still gets that blank. Do not insert a blank after `do_action()` before a non-return sibling such as `Template::output_view()`.
 - A tab is 4 characters wide.
 - Use tabs for indentation, not spaces. Continuation indent is one tab. When the right-hand side of `=` is a multiline coalesce or ternary, break after `=` and pad the first operand by 3 spaces so the operator aligns. Do not pad a `return` that is not an assignment.
 - When a ternary or coalesce branch is a complex `&&` / `||` chain, wrap that branch in parentheses. Pad the first operand by 3 spaces so the operators align at the start of continuation lines. Use the same wrapping when that Boolean is a function argument, so the linter treats it as one argument. When there is an operator in an argument of a multi-argument call, split all arguments into separate lines. A single Boolean or coalesce argument may stay on the opener if it fits.

@@ -38,6 +38,14 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 			SKILL.md                Skill instructions: permission check, engine clone, minify command
 			scripts/
 				minify.js           Runs babel-tsf and cleancss-tsf against lib/js and lib/css
+		wrap/                       Visual line width (tab = 4) and TSF wrap-rule decision tree
+			SKILL.md                When 80 columns applies; compact-if vs assignment/ternary
+			scripts/
+				visual-width.php    Prints path:line:width; --line, --gt, --compact-if
+		trailing-comma/             Multiline trailing commas on PHP/JS calls and arrays
+			SKILL.md                PHP 7.4 call/array commas; no commas on parameter lists
+			scripts/
+				find-missing.php    Reports missing trailing commas in PHP files
 
 .github/
 	codemap.txt                   This file
