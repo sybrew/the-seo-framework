@@ -93,7 +93,8 @@ class Minify {
 	 * This method is compatible with XSLT syntax.
 	 *
 	 * @since 5.0.5
-	 * @since 5.1.5 No longer minifies ')' followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`.
+	 * @since 5.1.5 1. No longer minifies ')' followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`.
+	 *              2. No longer minifies spaces around '+', to prevent breaking `calc()` addition.
 	 *
 	 * @param string $sheet The sheet to minify.
 	 * @return string The minified CSS.
@@ -112,7 +113,6 @@ class Minify {
 				'  '   => ' ',
 				' :'   => ':',
 				': '   => ':',
-				' + '  => '+',
 				' )'   => ')',
 				' ('   => '(',
 				'( '   => '(',

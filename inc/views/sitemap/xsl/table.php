@@ -29,6 +29,7 @@ namespace The_SEO_Framework;
 
 $vars  = [
 	'itemURL' => '<xsl:variable name="itemURL" select="sitemap:loc"/>',
+	// Display only: date + time, drop timezone. Do not change sitemap XML lastmod to match.
 	'lastmod' => '<xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(\' \',substring(sitemap:lastmod,12,8)))"/>',
 ];
 $empty = array_fill_keys( [ 'th', 'td' ], '' );

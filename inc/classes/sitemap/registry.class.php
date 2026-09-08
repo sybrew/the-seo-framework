@@ -185,6 +185,7 @@ class Registry {
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 Is now static.
+	 * @since 5.1.5 Now registers the `css` endpoint.
 	 *
 	 * @return array[] The sitemap endpoints with their callbacks.
 	 */
@@ -193,6 +194,7 @@ class Registry {
 			/**
 			 * @since 4.0.0
 			 * @since 4.0.2 Made the endpoints' regex case-insensitive.
+			 * @since 5.1.5 Now includes a `css` endpoint in the default list.
 			 * @link Example: https://github.com/sybrew/tsf-term-sitemap
 			 * @param array[] $list {
 			 *     A list of sitemap endpoints keyed by ID.
@@ -238,6 +240,14 @@ class Registry {
 						'cache_id' => false,
 						'endpoint' => 'sitemap.xsl',
 						'regex'    => '/^sitemap\.xsl/i',
+						'callback' => [ self::class, 'output_stylesheet' ],
+						'robots'   => false,
+					],
+					'css'            => [
+						'lock_id'  => false,
+						'cache_id' => false,
+						'endpoint' => 'sitemap.css',
+						'regex'    => '/^sitemap\.css/i',
 						'callback' => [ self::class, 'output_stylesheet' ],
 						'robots'   => false,
 					],
@@ -355,7 +365,7 @@ class Registry {
 	}
 
 	/**
-	 * Sitemap XSL stylesheet output.
+	 * Sitemap stylesheet output.
 	 *
 	 * @since 2.8.0
 	 * @since 3.1.0 1. Now outputs 200-response code.
@@ -364,22 +374,32 @@ class Registry {
 	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from `output_sitemap_xsl_stylesheet()`
 	 * @since 4.1.2 Is now static.
-	 * @since 5.1.5 Now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
+	 * @since 5.1.5 1. Now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
+	 *              2. Now also outputs the CSS when `$sitemap_id` is `css`.
+	 *
+	 * @param string $sitemap_id The sitemap ID. Accepts 'xsl-stylesheet' and 'css'.
 	 */
-	public static function output_stylesheet() {
+	public static function output_stylesheet( $sitemap_id = 'xsl-stylesheet' ) {
 
 		Helper\Headers::clean_response_header();
 
+		$is_css       = 'css' === $sitemap_id;
+		$content_type = $is_css ? 'text/css' : 'text/xsl';
+
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
-			header( 'Content-type: text/xsl; charset=utf-8' );
+			header( "Content-type: $content_type; charset=utf-8" );
 			header( 'Cache-Control: max-age=1800' );
 			header( 'X-Robots-Tag: nofollow', false );
 		}
 
-		Optimized\XSL::register_hooks();
+		if ( $is_css ) {
+			Template::output_view( 'sitemap/css/styles' );
+		} else {
+			Optimized\XSL::register_hooks();
+			Template::output_view( 'sitemap/xsl-stylesheet' );
+		}
 
-		Template::output_view( 'sitemap/xsl-stylesheet' );
 		exit;
 	}
 
@@ -389,6 +409,7 @@ class Registry {
 	 * @since 4.0.0
 	 * @since 4.1.3 Added a trailing newline to the stylesheet-tag for readability.
 	 * @since 5.0.0 Is now static.
+	 * @since 5.1.5 Now also emits a CSS xml-stylesheet processing instruction after the XSL one.
 	 */
 	public static function output_sitemap_header() {
 
@@ -399,6 +420,11 @@ class Registry {
 				'<?xml-stylesheet type="text/xsl" href="%s"?>' . "\n",
 				// phpcs:ignore WordPress.Security.EscapeOutput
 				self::get_expected_sitemap_endpoint_url( 'xsl-stylesheet' ),
+			);
+			printf(
+				'<?xml-stylesheet type="text/css" href="%s"?>' . "\n",
+				// phpcs:ignore WordPress.Security.EscapeOutput
+				self::get_expected_sitemap_endpoint_url( 'css' ),
 			);
 		}
 	}

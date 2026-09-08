@@ -10,7 +10,7 @@ namespace The_SEO_Framework\Data\Filter;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -33,6 +33,53 @@ namespace The_SEO_Framework\Data\Filter;
  *         Use tsf()->escape() instead.
  */
 class Escape {
+
+	/**
+	 * Escapes a string for use as a CSS <string> (`content`, quoted `url()` arguments).
+	 *
+	 * `safecss_filter_attr()` is an allowlist for HTML `style` attribute declarations.
+	 * It does not encode a CSS string token. Passing a title through it would look
+	 * for `property:value` pairs and drop the text.
+	 *
+	 * `<` is emitted as a CSS hex escape so a `<style>` embed cannot close on
+	 * `</style>`. `JSON_HEX_TAG` (`\u003C`) is a JSON escape; CSS would not treat
+	 * it as `<`.
+	 *
+	 * CRLF and leftover CR are collapsed to LF before encoding, so a Windows newline
+	 * is one CSS line break (`\A`) instead of CR+LF.
+	 *
+	 * @since 5.1.5
+	 * @see https://www.w3.org/TR/css-values-4/#string-value
+	 * @see https://www.w3.org/TR/css-content-3/#propdef-content
+	 *
+	 * @param mixed $value The value to encode. Expected to be text, not HTML.
+	 * @return string The CSS-safe quoted string.
+	 */
+	public static function css_content( $value ) {
+
+		$text = strtr(
+			str_replace(
+				[ "\r\n", "\r" ],
+				"\n",
+				html_entity_decode(
+					(string) $value,
+					  \ENT_HTML5
+					| \ENT_QUOTES
+					| \ENT_SUBSTITUTE,
+					'UTF-8',
+				),
+			),
+			[
+				'\\' => '\\\\',
+				'"'  => '\\"',
+				"\n" => '\\A ',
+				"\f" => '\\C ',
+				'<'  => '\\3C ',
+			],
+		);
+
+		return "\"{$text}\"";
+	}
 
 	/**
 	 * Escapes option key. Mainly removing spaces and coding characters.

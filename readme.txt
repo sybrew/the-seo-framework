@@ -251,6 +251,19 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Added:**
 	* You can now enter a Facebook domain verification code in Webmaster Integration Settings.
 	* Plain permalink support to the Canonical URL Notation Tracker.
+	* A CSS stylesheet for the optimized sitemap, so browsers that no longer apply XSLT still show a styled, human-readable sitemap.
+		* We are forced to use CSS because all major browsers will soon no longer apply XSLT by default.
+		* As long as browsers still apply XSLT, the XSL view is still the preferred way to display the sitemap.
+		* Differences from the XSL view -- these are all cosmetic regressions and do not affect the XML output:
+			1. URLs are not clickable
+			2. The title and logo are not a homepage link
+			3. Intro and footer links are plain text
+			4. Last Updated stays in W3C datetime form
+			5. Phones do not get a mobile viewport
+			6. Long URLs clip with an ellipsis
+			7. The browser tab has no document title
+			8. The page is not HTML for assistive technology.
+		* To learn more, see our knowledge base article on [sitemap styling](https://kb.theseoframework.com/?p=119#tsf-sitemap-styling).
 * **Changed:**
 	* **Open Graph locales:** We couldn't find any documentation on the languages Facebook supports for Open Graph, so we resorted to scraping their network, testing all 46500 possible locale combinations, and adjusted support accordingly:
 		* **These WordPress locales are no longer supported by Facebook:** Cebuano, Esperanto, Spanish (Chile, Colombia, Mexico, Venezuela), Igbo, Limburgish, Lingala, Luganda, Māori, Romansh, Sanskrit, Silesian, Syriac, Tamazight, Wolof, Xhosa, Yoruba, Zulu.
@@ -273,6 +286,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
 	* **Sitemap settings:**
+		* The Sitemap Styling Settings now link to the knowledge base article about sitemap styles.
 		* When a multilingual plugin is detected, language sitemap links are now listed under "View translated sitemaps," using the language name as the link text. A note that each language has its own sitemap is shown with those links.
 		* Toggling the optimized sitemap now warns that the sitemap links still reflect the saved setting until you save.
 	* **Head tags:**
@@ -281,7 +295,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Plugins: Cachify, LiteSpeed Cache, SpeedyCache, Surge, W3 Total Cache, etc.:**
 		* Resolved an issue where cache plugins that do not have specific exclusion rules for sitemap or sitemap stylesheet endpoints could serve an empty sitemap or stylesheet on later visits.
 			* You must flush the entire cache for these plugins in order to make this effective. This update prevents new empty sitemap or stylesheet responses from being stored, but it cannot replace a broken response already written to a page cache, reverse proxy, CDN, or host-level cache before WordPress loads.
-			* After updating, use the cache plugin's "Purge All," "Clear all cache," or equivalent full-cache action. Do not purge only `sitemap.xml`, `sitemap_index.xml`, or `sitemap.xsl`, because cache plugins may store endpoint variants by host, scheme, compression, mobile view, language, or query state.
+			* After updating, use the cache plugin's "Purge All," "Clear all cache," or equivalent full-cache action. Do not purge only `sitemap.xml`, `sitemap_index.xml`, `sitemap.xsl`, or `sitemap.css`, because cache plugins may store endpoint variants by host, scheme, compression, mobile view, language, or query state.
 			* Do not rely on the plugin update process to clear these entries. Cachify, SpeedyCache, and W3 Total Cache do not appear to purge all page cache entries on plugin updates; LiteSpeed Cache does so only when its "Purge All On Upgrade" setting is enabled; Surge expires all entries on automatic updates and plugin activation/deactivation, but not reliably on manual updates.
 	* **Plugin: Polylang:**
 		* Resolved an issue where posts excluded from local search could still appear in translated search results.
@@ -316,11 +330,14 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* It contains public methods `mount()` and `init()`, among many script setup methods.
 			* Internally known as `The_SEO_Framework\Admin\Script\Loader`.
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar explainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
+		* Method `The_SEO_Framework\Data\Filter\Escape::css_content()` (`tsf()->escape()->css_content()`) escapes a string as a CSS `<string>` (using in `content` and quoted `url()` arguments).
 	* **Removed:**
 		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private and this pool pointed at a class that never existed.
 	* **Changed:**
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object.
-		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`) no longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`.
+		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):
+			1. No longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`
+			2. No longer minifies spaces around `+`, to prevent breaking `calc()` addition.
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
 			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
@@ -329,6 +346,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Methods `The_SEO_Framework\Meta\Title::get_archive_title_from_query()` (`tsf()->title()->get_archive_title_from_query()`) and `The_SEO_Framework\Meta\Title::get_archive_title_from_object()` (`tsf()->title()->get_archive_title_from_object()`) now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.
 		* Method `The_SEO_Framework\Helper\Query::is_seo_settings_page()` (`tsf()->query()->is_seo_settings_page()`): Replaced `$secure` with `'page_hook'` (default) and `'page_query'` (kept backward compatibility for a falsy value). `$secure` was a misnomer that never checked capabilities.
 		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
+		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now accepts `$sitemap_id` (`xsl-stylesheet` or `css`) and outputs the CSS when that ID is `css`.
+		* Method `The_SEO_Framework\Sitemap\Registry::output_sitemap_header()` (`tsf()->sitemap()->registry()->output_sitemap_header()`) now also emits a CSS xml-stylesheet processing instruction after the XSL one.
 	* **Improved:**
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_locale()` (`tsf()->open_graph()->get_locale()`) now derives the Open Graph locale from `The_SEO_Framework\Data\Blog::get_language()` (`tsf()->data()->blog()->get_language()`) instead of calling `get_locale()` directly. Because `get_language()` is memoized, repeated locale filter callbacks on multilingual sites (Polylang, WPML) are avoided.
 		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
@@ -345,11 +364,15 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `tsfCanonical.canTrackUrlStructure()` reports whether the Canonical URL Notation Tracker can predict URLs for an input.
 	* **Removed:**
 		* `tsfL10n.nonces.manage_options` and `tsfL10n.nonces.upload_files`. They were unused. Media still uses `tsfMediaL10n.nonce`.
+* **Action notes:**
+	* **Changed:**
+		* `the_seo_framework_xsl_head`, `the_seo_framework_xsl_description`, `the_seo_framework_xsl_content`, and `the_seo_framework_xsl_footer` no longer pass the first parameter. It was the object of `tsf()`, which has always been publicly accessible.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_sitemap_settings_language_endpoints` returns administrative language names keyed by sitemap endpoint ID, used for translated sitemap links in SEO Settings.
 	* **Changed:**
 		* `the_seo_framework_breadcrumb_shortcode_css`, the default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
+		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`) in the default list.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation` now passes through `0` instead of the untitled fallback.
 		* `the_seo_framework_seo_column_keys_order` returning an empty array no longer causes a PHP warning when placing the SEO column.

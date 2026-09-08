@@ -163,6 +163,7 @@ switch ( $instance ) :
 				// TODO Also add a link telling where why it may not work consistently ('try opening in another browser, incognito, etc.')
 			} elseif ( Sitemap\Utils::use_core_sitemaps() ) {
 				$_index_url = \get_sitemap_url( 'index' );
+
 				if ( $_index_url )
 					$sitemap_base_links[] = \sprintf(
 						'<a href="%s" target=_blank rel=noopener>%s</a>',
@@ -355,7 +356,17 @@ switch ( $instance ) :
 
 	case 'style':
 		HTML::header_title( \__( 'Sitemap Styling Settings', 'autodescription' ) );
-		HTML::description( \__( 'You can style the sitemap to give it a more personal look for your visitors. Search engines do not use these styles.', 'autodescription' ) );
+		HTML::description_noesc(
+			Markdown::convert(
+				\sprintf(
+					/* translators: %s = Learn more URL. Markdown! */
+					\esc_html__( 'You can style the sitemap to give it a more personal look for your visitors. Search engines do not use these styles. [Learn more](%s).', 'autodescription' ),
+					'https://kb.theseoframework.com/?p=119#tsf-sitemap-styling',
+				),
+				[ 'a' ],
+				[ 'a_internal' => false ],
+			),
+		);
 		HTML::description( \__( 'Note: Changes may not appear to have an effect directly because the stylesheet is cached in the browser for 30 minutes.', 'autodescription' ) );
 		?>
 		<hr>
