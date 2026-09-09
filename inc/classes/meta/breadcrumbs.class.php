@@ -16,9 +16,11 @@ use function The_SEO_Framework\{
 
 use The_SEO_Framework\{
 	Data,
-	Helper\Query,
-	Helper\Taxonomy,
 	Meta,
+};
+use The_SEO_Framework\Helper\{
+	Query,
+	Taxonomy,
 };
 
 /**

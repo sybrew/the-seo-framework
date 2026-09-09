@@ -8,13 +8,12 @@ namespace The_SEO_Framework;
 
 ( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use The_SEO_Framework\Internal\Debug;
-
 use The_SEO_Framework\Helper\{
 	Post_Type,
 	Query,
 	Taxonomy,
 };
+use The_SEO_Framework\Internal\Debug;
 
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 

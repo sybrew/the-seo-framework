@@ -12,11 +12,12 @@ use The_SEO_Framework\{
 	Admin,
 	Admin\Settings\Layout\HTML,
 	Data,
-	Data\Filter\Sanitize,
-	Helper\Query,
-	Helper\Taxonomy,
-	Helper\Template,
 	Meta,
+};
+use The_SEO_Framework\Helper\{
+	Query,
+	Taxonomy,
+	Template,
 };
 
 /**

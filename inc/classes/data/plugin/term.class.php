@@ -10,11 +10,11 @@ namespace The_SEO_Framework\Data\Plugin;
 
 use function The_SEO_Framework\is_headless;
 
-use The_SEO_Framework\{
-	Helper\Query,
-	Helper\Taxonomy,
-	Traits\Property_Refresher,
+use The_SEO_Framework\Helper\{
+	Query,
+	Taxonomy,
 };
+use The_SEO_Framework\Traits\Property_Refresher;
 
 /**
  * The SEO Framework plugin

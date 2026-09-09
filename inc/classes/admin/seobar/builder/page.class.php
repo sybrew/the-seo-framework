@@ -11,15 +11,15 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
 use const The_SEO_Framework\ROBOTS_ASSERT;
 
 use The_SEO_Framework\{
+	Admin\SEOBar\Builder, // Yes, it is legal to import the same namespace.
 	Data,
 	Data\Filter\Sanitize,
 	Meta,
 	RobotsTXT,
-	Admin\SEOBar\Builder, // Yes, it is legal to import the same namespace.
 };
 use The_SEO_Framework\Helper\{
-	Guidelines,
 	Format\Strings,
+	Guidelines,
 	Migrate,
 	Query,
 };
@@ -72,7 +72,7 @@ final class Page extends Main {
 		static::get_cache( 'general/i18n/textsizeguidelines' )
 			or static::set_cache(
 				'general/i18n/textsizeguidelines',
-				Guidelines::get_text_size_guidelines_i18n()
+				Guidelines::get_text_size_guidelines_i18n(),
 			);
 
 		static::get_cache( 'general/detect/robotsglobal' )
@@ -337,7 +337,7 @@ final class Page extends Main {
 		$title_len = mb_strlen( $strcmp_title );
 
 		$guidelines      = Guidelines::get_text_size_guidelines(
-			$this->query_cache['states']['locale']
+			$this->query_cache['states']['locale'],
 		)['title']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
@@ -552,7 +552,7 @@ final class Page extends Main {
 		}
 
 		$guidelines      = Guidelines::get_text_size_guidelines(
-			$this->query_cache['states']['locale']
+			$this->query_cache['states']['locale'],
 		)['description']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 

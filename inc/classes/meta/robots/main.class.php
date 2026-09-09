@@ -152,8 +152,9 @@ final class Main {
 			$generator->send( $g );
 
 			do {
+				// goto while() -- motivating generator.
 				// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.Found -- Shhh. It's OK. I'm a professional.
-				if ( ( $r = $generator->current() ) === $halt ) continue; // goto while() -- motivating generator.
+				if ( ( $r = $generator->current() ) === $halt ) continue;
 
 				$results[ $g ] = $r;
 

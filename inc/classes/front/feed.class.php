@@ -8,10 +8,10 @@ namespace The_SEO_Framework\Front;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\{
-	Data,
-	Helper,
-	Helper\Format,
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
+	Format\HTML,
+	Headers,
 };
 
 /**
@@ -47,7 +47,7 @@ final class Feed {
 	 * @since 5.0.0
 	 */
 	public static function output_robots_noindex_headers_on_feed() {
-		\is_feed() and Helper\Headers::output_robots_noindex_headers();
+		\is_feed() and Headers::output_robots_noindex_headers();
 	}
 
 	/**
@@ -82,7 +82,7 @@ final class Feed {
 			$clamp_length = (int) \apply_filters( 'the_seo_framework_max_content_feed_length', 400 );
 
 			// Strip all code and lines, and AI-trim it.
-			$excerpt = Format\HTML::extract_content(
+			$excerpt = HTML::extract_content(
 				$content,
 				[
 					'allow_shortcodes' => false,

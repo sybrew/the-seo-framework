@@ -11,16 +11,15 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
 use const The_SEO_Framework\ROBOTS_ASSERT;
 
 use The_SEO_Framework\{
+	Admin\SEOBar\Builder,
 	Data,
 	Data\Filter\Sanitize,
 	Meta,
 	RobotsTXT,
-	Admin\SEOBar\Builder,
 };
 use The_SEO_Framework\Helper\{
-	Guidelines,
 	Format\Strings,
-	Query,
+	Guidelines,
 	Migrate,
 	Taxonomy,
 };
@@ -73,7 +72,7 @@ final class Term extends Main {
 		static::get_cache( 'general/i18n/textsizeguidelines' )
 			or static::set_cache(
 				'general/i18n/textsizeguidelines',
-				Guidelines::get_text_size_guidelines_i18n()
+				Guidelines::get_text_size_guidelines_i18n(),
 			);
 
 		static::get_cache( 'general/detect/robotsglobal' )
@@ -320,7 +319,7 @@ final class Term extends Main {
 		$title_len = mb_strlen( $strcmp_title );
 
 		$guidelines      = Guidelines::get_text_size_guidelines(
-			$this->query_cache['states']['locale']
+			$this->query_cache['states']['locale'],
 		)['title']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 
@@ -511,7 +510,7 @@ final class Term extends Main {
 		}
 
 		$guidelines      = Guidelines::get_text_size_guidelines(
-			$this->query_cache['states']['locale']
+			$this->query_cache['states']['locale'],
 		)['description']['search']['chars'];
 		$guidelines_i18n = static::get_cache( 'general/i18n/textsizeguidelines' );
 

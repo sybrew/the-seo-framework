@@ -226,7 +226,7 @@ class Utils {
 		$wp_sitemaps_server = \wp_sitemaps_get_server();
 
 		return memo(
-			method_exists( $wp_sitemaps_server, 'sitemaps_enabled' ) && $wp_sitemaps_server->sitemaps_enabled()
+			method_exists( $wp_sitemaps_server, 'sitemaps_enabled' ) && $wp_sitemaps_server->sitemaps_enabled(),
 		);
 	}
 

@@ -15,7 +15,6 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 use The_SEO_Framework\Helper\{
 	Format\Markdown,
 	Post_Type,
-	Query,
 	Taxonomy,
 };
 

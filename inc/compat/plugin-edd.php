@@ -30,7 +30,7 @@ function _set_edd_is_product( $is_product, $post ) {
 		return $is_product;
 
 	$download = \edd_get_download(
-		$post ? \get_post( $post ) : Query::get_the_real_id()
+		$post ? \get_post( $post ) : Query::get_the_real_id(),
 	);
 
 	return ! empty( $download->ID );

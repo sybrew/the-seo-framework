@@ -8,10 +8,7 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\Helper\{
-	Headers,
-	Query,
-};
+use The_SEO_Framework\Helper\Headers;
 
 /**
  * The SEO Framework plugin

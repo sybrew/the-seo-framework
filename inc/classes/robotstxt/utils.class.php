@@ -12,7 +12,6 @@ use function The_SEO_Framework\umemo;
 
 use The_SEO_Framework\{
 	Data,
-	Helper\Query,
 	Meta,
 };
 

@@ -17,7 +17,6 @@ use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
 	Helper\Query,
-	Meta,
 };
 
 /**

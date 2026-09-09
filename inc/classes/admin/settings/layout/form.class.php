@@ -8,10 +8,10 @@ namespace The_SEO_Framework\Admin\Settings\Layout;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\{
-	Data\Filter\Escape,
-	Helper\Format\Arrays,
-	Helper\Query,
+use The_SEO_Framework\Data\Filter\Escape;
+use The_SEO_Framework\Helper\{
+	Format\Arrays,
+	Query,
 };
 
 /**
@@ -116,12 +116,12 @@ class Form {
 					\sprintf(
 						$args['labelstrong'] ? '<strong>%s</strong>' : '%s',
 						\esc_html( $args['label'] ),
-					)
+					),
 				) : '',
 				$args['info'] ? HTML::make_info(
 					$args['info'][0],
 					$args['info'][1] ?? '',
-					false
+					false,
 				) . ' ' : '',
 				vsprintf(
 					'<select id="%s" name="%s"%s %s>%s</select>',

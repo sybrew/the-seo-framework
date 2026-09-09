@@ -11,9 +11,11 @@ namespace The_SEO_Framework\Data\Admin;
 use The_SEO_Framework\{
 	Admin, // Yes, it is legal to share class and namespace.
 	Data,
-	Helper\Query,
-	Helper\Format\Arrays,
 	Sitemap,
+};
+use The_SEO_Framework\Helper\{
+	Format\Arrays,
+	Query,
 };
 
 /**
@@ -149,7 +151,7 @@ final class Plugin {
 		\add_action(
 			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[ Data\Plugin::class, 'flush_cache' ],
-			0
+			0,
 		);
 
 		// Sets that the options are unchanged, preemptively.

@@ -455,7 +455,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 						\sprintf(
 							/* translators: %s = Link, markdown. */
 							\esc_html__( 'To take full advantage of all SEO features, please follow our [5-minute setup guide](%s).', 'autodescription' ),
-							'https://theseoframework.com/docs/seo-plugin-setup/' // Use https://tsf.fyi/docs/setup ? Needless redirection...
+							'https://theseoframework.com/docs/seo-plugin-setup/', // Use https://tsf.fyi/docs/setup ? Needless redirection...
 						),
 						[ 'a' ],
 						[ 'a_internal' => false ],
@@ -515,7 +515,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 
 			if ( $wpdb->get_var(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table/$indexes are escaped.
-				"SELECT 1 FROM `$table` WHERE meta_key IN ('$indexes') LIMIT 1"
+				"SELECT 1 FROM `$table` WHERE meta_key IN ('$indexes') LIMIT 1",
 			) ) {
 				$found_titles[] = $data['title'];
 			}

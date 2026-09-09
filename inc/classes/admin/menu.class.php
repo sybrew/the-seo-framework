@@ -189,7 +189,7 @@ class Menu {
 				/* translators: %s: number of issues waiting */
 				\_n( '%s issue waiting', '%s issues waiting', $issue_count, 'autodescription' ),
 				$notice_i18n,
-			)
+			),
 		);
 	}
 }

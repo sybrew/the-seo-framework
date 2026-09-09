@@ -307,12 +307,13 @@ class Base extends Main {
 		 * @param int[] $hierarchical_post_ids     The post IDs from hierarchical post types.
 		 * @param int[] $non_hierarchical_post_ids The post IDs from non-hierarchical post types.
 		 */
-		$_items      = (array) \apply_filters(
+		$_items = (array) \apply_filters(
 			'the_seo_framework_sitemap_items',
 			array_merge( $hierarchical_post_ids, $non_hierarchical_post_ids ),
 			$hierarchical_post_ids,
 			$non_hierarchical_post_ids,
 		);
+
 		$total_items = \count( $_items );
 
 		// 49998 = 50000-2 (home+blog), max sitemap items.
@@ -339,7 +340,7 @@ class Base extends Main {
 				[
 					'show_modified' => $show_modified,
 					'count'         => $this->url_count,
-				]
+				],
 			) as $_values ) {
 				$content .= static::build_url_item( $_values );
 			}

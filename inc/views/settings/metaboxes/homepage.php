@@ -59,7 +59,7 @@ switch ( $instance ) :
 						\esc_url( \admin_url( "post.php?post={$home_id}&action=edit#tsf-inpost-box" ) ),
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ] // opens in new tab.
+					[ 'a_internal' => false ], // opens in new tab.
 				);
 			}
 
@@ -198,9 +198,9 @@ switch ( $instance ) :
 										'_genesis_description',
 										$home_id,
 									) )
-									: ''
+									: '',
 							)
-							?? Meta\Description::get_generated_description( $generator_args )
+							?? Meta\Description::get_generated_description( $generator_args ),
 						),
 					],
 				],
@@ -211,7 +211,7 @@ switch ( $instance ) :
 
 		if ( $home_id && \strlen( Data\Plugin\Post::get_meta_item( '_genesis_description', $home_id ) ) ) {
 			HTML::description(
-				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ),
 			);
 		}
 		break;
@@ -220,13 +220,13 @@ switch ( $instance ) :
 		// Fetches escaped title parts.
 		$_example_title = \esc_html(
 			Meta\Title::get_bare_custom_title( $generator_args )
-			?: Meta\Title::get_bare_generated_title( $generator_args )
+			?: Meta\Title::get_bare_generated_title( $generator_args ),
 		);
 		// On JS: The 'Untitled' title will disappear, this is intentional. On no-JS one will see 'Untitled'.
 		// TODO: Deprecate no-JS support? WordPress doesn't function without JS since 5.0 anyway...
 		$_example_blogname  = \esc_html(
 			Meta\Title::get_addition_for_front_page()
-			?: Meta\Title::get_untitled_title()
+			?: Meta\Title::get_untitled_title(),
 		);
 		$_example_separator = \esc_html( Meta\Title::get_separator() );
 
@@ -407,7 +407,7 @@ switch ( $instance ) :
 		<?php
 		if ( \strlen( $custom_og_desc ) ) {
 			HTML::description(
-				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+				\__( 'Note: The description placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ),
 			);
 		}
 		?>
@@ -495,7 +495,7 @@ switch ( $instance ) :
 		<?php
 		if ( $custom_tw_card ) {
 			HTML::description(
-				\__( 'Note: The default Twitter Card Type is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+				\__( 'Note: The default Twitter Card Type is fetched from the Page SEO Settings on the homepage.', 'autodescription' ),
 			);
 		}
 		?>
@@ -529,7 +529,7 @@ switch ( $instance ) :
 		<?php
 		if ( $custom_image ) {
 			HTML::description(
-				\__( 'Note: The image placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' )
+				\__( 'Note: The image placeholder is fetched from the Page SEO Settings on the homepage.', 'autodescription' ),
 			);
 		}
 		break;
@@ -608,7 +608,7 @@ switch ( $instance ) :
 					\esc_url( \admin_url( "post.php?post=$home_id&action=edit#tsf-inpost-box" ) ),
 					\esc_attr_x( 'Edit homepage page settings', 'Bear with me: the homepage can be edited globally, or via its page. Thus "homepage page".', 'autodescription' ),
 					\esc_html__( 'Overwritten by page settings', 'autodescription' ),
-				)
+				),
 			);
 		}
 

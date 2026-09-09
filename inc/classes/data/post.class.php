@@ -10,10 +10,10 @@ namespace The_SEO_Framework\Data;
 
 use function The_SEO_Framework\memo;
 
-use The_SEO_Framework\{
-	Helper,
-	Helper\Format\Time,
-	Helper\Query,
+use The_SEO_Framework\Helper\{
+	Compatibility,
+	Format\Time,
+	Query,
 };
 
 /**
@@ -116,7 +116,7 @@ class Post {
 		// If there's no meta, or no builder active, it doesn't use a builder.
 		if (
 			   empty( $meta )
-			|| ! Helper\Compatibility::is_non_html_builder_active()
+			|| ! Compatibility::is_non_html_builder_active()
 		) {
 			return false;
 		}

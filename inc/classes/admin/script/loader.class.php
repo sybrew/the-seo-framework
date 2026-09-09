@@ -16,8 +16,8 @@ use The_SEO_Framework\{
 };
 use The_SEO_Framework\Helper\{
 	Compatibility,
-	Guidelines,
 	Format\Arrays,
+	Guidelines,
 	Query,
 	Taxonomy,
 	Template,

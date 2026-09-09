@@ -10,7 +10,9 @@ description: >-
 
 Do not guess column counts. Tabs are 1 character in editors and in `.length`. House width is **tab = 4**.
 
-Source of truth: `.github/copilot-instructions.md` and `.github/instructions/php.instructions.md`. This skill only stops misreads.
+Source of truth: `.github/copilot-instructions.md`, `.github/instructions/php.instructions.md`, and `.github/instructions/javascript.instructions.md`. This skill only stops misreads.
+
+Width measurement works on any text. `--compact-if` is the 80-column void `if` / `elseif` / `else if` terminator.
 
 ## Measure
 
@@ -22,7 +24,7 @@ php .cursor/skills/wrap/scripts/visual-width.php --line 85 path/to/file.php
 php .cursor/skills/wrap/scripts/visual-width.php --compact-if --gt 80 path/to/file.php
 ```
 
-`--line N` one 1-based line. `--gt N` only lines wider than N. `--compact-if` only same-line `if ( … ) return|continue|break`. Output is `path:line:width`.
+`--line N` one 1-based line. `--gt N` only lines wider than N. `--compact-if` only same-line void `if` / `elseif` / `else if ( … ) return;` / `continue;` / `break;`. Output is `path:line:width`. Files only; directories are not scanned.
 
 Pipe a snippet:
 
@@ -40,18 +42,9 @@ printf '%s\n' 'if ( ! $x ) return;' | php .cursor/skills/wrap/scripts/visual-wid
 
 PHP 7.4+ on `PATH`. If `php` is missing, say so and do not invent a width.
 
-## Hold
-
-Do not apply these across the repo until the user says **go**:
-
-- Repo-wide wrap scan
-- `do_action` / `return` blanks
-- Blanks after labeled `{` (`label: {`); same as `if` / loop / `try`
-- First-order-only and alphabetically sorted `use` lists
-
 ## Decision tree
 
-**80 visual columns apply to compact void `if` / `elseif` that keep `return;`, `continue;`, or `break;` on the same line, and to PHP attributes kept on the same line as the annotated symbol.** Measure that whole line.
+**80 visual columns apply to compact void `if` / `elseif` / `else if` that keep `return;`, `continue;`, or `break;` on the same line, and to PHP attributes kept on the same line as the annotated symbol.** Measure that whole line.
 
 | Case | 80? | What to do |
 |---|---|---|
@@ -67,7 +60,7 @@ Do not apply these across the repo until the user says **go**:
 | PHP attribute + symbol vis > 80 | yes | Attribute on the line above. If the attribute itself vis > 80, wrap its arguments like a call |
 | Function `{` blank | n/a | Functions/closures only, 2+ statements. Never after `if` / loop / `try` / labeled `{` |
 | Blank before `return` / `yield` | n/a | Interior has 2+ statements. Not before `continue` / `break` |
-| `do_action()` then `return` | n/a | Blank before `return` (the return rule). Tight before `Template::output_view()`. Repo apply is on Hold until **go**. |
+| Hook-doc isolation | n/a | Sibling statements only. Glue the docblock to the call, including as an operand of a compound `if`. Do not split that `if` into extra guards. Not translators, not filter-as-argument |
 
 ## Do not
 
@@ -76,6 +69,7 @@ Do not apply these across the repo until the user says **go**:
 - Break `$a = $cond ? $b : $c;` only because vis > 80.
 - Pad a `return` that is not an assignment.
 - Insert a function-body blank after `if` / `elseif` / `else` / loop / `try` / labeled `{`.
+- Treat `do_action` / `apply_filters` as a wrap or 80-column case. Hook-doc isolation is sibling-statement spacing in php.instructions; glue the docblock to the call.
 
 ## Misreads
 

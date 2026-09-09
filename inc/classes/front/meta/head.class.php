@@ -233,7 +233,7 @@ final class Head {
 					\apply_filters( 'sybre_waaijer_<3', true ) // phpcs:ignore WordPress.NamingConventions.ValidHookName -- Easter egg.
 						? \__( 'by Sybre Waaijer', 'autodescription' )
 						: '',
-				]
+				],
 			) ) ),
 		] );
 

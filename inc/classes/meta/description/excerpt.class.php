@@ -14,10 +14,10 @@ use function The_SEO_Framework\{
 	normalize_generation_args,
 };
 
-use The_SEO_Framework\{
-	Data,
-	Helper\Query,
-	Helper\Format,
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
+	Format\HTML,
+	Query,
 };
 
 /**
@@ -207,7 +207,7 @@ class Excerpt {
 				// See https://wpscan.com/vulnerability/8bc4cf95-79f7-4d92-b320-a841ab7e6a6f/. We won't parse HTML tags unless WordPress adds native support.
 				$excerpt = $object->description ?? '';
 			} elseif ( Query::is_author() ) {
-				$excerpt = Format\HTML::extract_content( \get_the_author_meta(
+				$excerpt = HTML::extract_content( \get_the_author_meta(
 					'description',
 					(int) \get_query_var( 'author' ),
 				) );
@@ -279,12 +279,12 @@ class Excerpt {
 			$excerpt = Data\Post::get_content( $post );
 
 			if ( $excerpt )
-				$excerpt = Format\HTML::strip_paragraph_urls( Format\HTML::strip_newline_urls( $excerpt ) );
+				$excerpt = HTML::strip_paragraph_urls( HTML::strip_newline_urls( $excerpt ) );
 		}
 
 		if ( empty( $excerpt ) )
 			return '';
 
-		return Format\HTML::extract_content( $excerpt );
+		return HTML::extract_content( $excerpt );
 	}
 }

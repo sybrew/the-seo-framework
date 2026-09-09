@@ -17,7 +17,10 @@ use function The_SEO_Framework\{
 use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
-	Helper\Query,
+};
+use The_SEO_Framework\Helper\{
+	Compatibility,
+	Query,
 };
 
 /**
@@ -262,7 +265,7 @@ function _bbpress_filter_do_adjust_query( $adjust, $wp_query ) {
 function _bbpress_filter_robots( $meta, $args ) {
 
 	if ( isset( $args ) ) {
-		if ( ! Helper\Compatibility::can_i_use( [
+		if ( ! Compatibility::can_i_use( [
 			'functions' => [
 				'bbp_get_forum_post_type',
 				'bbp_get_topic_post_type',
@@ -285,7 +288,7 @@ function _bbpress_filter_robots( $meta, $args ) {
 			}
 		}
 	} else {
-		if ( ! Helper\Compatibility::can_i_use( [
+		if ( ! Compatibility::can_i_use( [
 			'functions' => [
 				'bbp_is_single_forum',
 				'bbp_is_single_topic',
@@ -324,7 +327,7 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
 	if ( $interpreter::$query['tax'] ) return;
 
-	if ( ! Helper\Compatibility::can_i_use( [
+	if ( ! Compatibility::can_i_use( [
 		'functions' => [
 			'bbp_get_forum_post_type',
 			'bbp_get_topic_post_type',

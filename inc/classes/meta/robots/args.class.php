@@ -18,8 +18,10 @@ use function The_SEO_Framework\get_query_type_from_args;
 use The_SEO_Framework\{
 	Data,
 	Meta\Robots, // Yes, it is legal to share class and namespaces.
-	Helper\Query,
-	Helper\Taxonomy,
+};
+use The_SEO_Framework\Helper\{
+	Query,
+	Taxonomy,
 };
 
 /**

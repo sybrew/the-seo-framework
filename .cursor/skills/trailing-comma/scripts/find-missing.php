@@ -25,7 +25,10 @@ $skip_dir = [
 foreach ( $args as $path ) {
 	if ( is_dir( $path ) ) {
 		$it = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS )
+			new RecursiveDirectoryIterator(
+				$path,
+				FilesystemIterator::SKIP_DOTS,
+			),
 		);
 		foreach ( $it as $fileinfo ) {
 			$parts = explode( DIRECTORY_SEPARATOR, $fileinfo->getPathname() );
@@ -36,9 +39,8 @@ foreach ( $args as $path ) {
 					break;
 				}
 			}
-			if ( $skip || 'php' !== $fileinfo->getExtension() ) {
-				continue;
-			}
+			if ( $skip || 'php' !== $fileinfo->getExtension() ) continue;
+
 			$files[] = $fileinfo->getPathname();
 		}
 	} elseif ( is_readable( $path ) ) {
@@ -64,9 +66,8 @@ $ignore_paren_prev = [
 	T_USE      => true,
 ];
 
-if ( \defined( 'T_MATCH' ) ) {
+if ( \defined( 'T_MATCH' ) )
 	$ignore_paren_prev[ T_MATCH ] = true;
-}
 
 $call_prev = [
 	T_STRING       => true,
@@ -80,8 +81,6 @@ $call_prev = [
 	T_INCLUDE_ONCE => true,
 	T_REQUIRE      => true,
 	T_REQUIRE_ONCE => true,
-	T_PRINT        => true,
-	T_ECHO         => true,
 	T_LIST         => true,
 	T_ARRAY        => true,
 	']'            => true,
@@ -100,10 +99,10 @@ $index_prev = [
 	')'                        => true,
 ];
 
-foreach ( [ 'T_NAME_FULLY_QUALIFIED', 'T_NAME_QUALIFIED', 'T_NAME_RELATIVE' ] as $tsf_tok ) {
-	if ( \defined( $tsf_tok ) ) {
-		$call_prev[ \constant( $tsf_tok ) ]  = true;
-		$index_prev[ \constant( $tsf_tok ) ] = true;
+foreach ( [ 'T_NAME_FULLY_QUALIFIED', 'T_NAME_QUALIFIED', 'T_NAME_RELATIVE' ] as $tok_name ) {
+	if ( \defined( $tok_name ) ) {
+		$call_prev[ \constant( $tok_name ) ]  = true;
+		$index_prev[ \constant( $tok_name ) ] = true;
 	}
 }
 
@@ -111,7 +110,7 @@ foreach ( [ 'T_NAME_FULLY_QUALIFIED', 'T_NAME_QUALIFIED', 'T_NAME_RELATIVE' ] as
  * @param array $tok Token row.
  * @return bool
  */
-function tsf_is_trivia( $tok ) {
+function is_trivia( $tok ) {
 	return T_WHITESPACE === $tok['id']
 		|| T_COMMENT === $tok['id']
 		|| T_DOC_COMMENT === $tok['id'];
@@ -122,12 +121,10 @@ function tsf_is_trivia( $tok ) {
  * @param int     $i
  * @return array{0:int,1:array}|null
  */
-function tsf_prev_sig( $tokens, $i ) {
+function prev_sig( $tokens, $i ) {
 
 	for ( $j = $i - 1; $j >= 0; $j-- ) {
-		if ( tsf_is_trivia( $tokens[ $j ] ) ) {
-			continue;
-		}
+		if ( is_trivia( $tokens[ $j ] ) ) continue;
 
 		return [ $j, $tokens[ $j ] ];
 	}
@@ -139,7 +136,7 @@ function tsf_prev_sig( $tokens, $i ) {
  * @param string $code
  * @return array[]
  */
-function tsf_tokenize( $code ) {
+function tokenize( $code ) {
 
 	$line = 1;
 	$out  = [];
@@ -171,7 +168,7 @@ function tsf_tokenize( $code ) {
  * @param string  $close_ch
  * @return array{multiline:bool,last:?array,close:?array}
  */
-function tsf_scan_group( $tokens, $open, $close_ch ) {
+function scan_group( $tokens, $open, $close_ch ) {
 
 	$n         = \count( $tokens );
 	$depth     = 0;
@@ -182,25 +179,26 @@ function tsf_scan_group( $tokens, $open, $close_ch ) {
 	for ( $j = $open; $j < $n; $j++ ) {
 		$tok  = $tokens[ $j ];
 		$text = $tok['text'];
-		$id   = $tok['id'];
 
-		if ( '(' === $text || '[' === $text ) {
-			$depth++;
-		} elseif ( ')' === $text || ']' === $text ) {
-			if ( 1 === $depth && $close_ch === $text ) {
-				$close_tok = $tok;
-				break;
+		// Character tokens only. Interpolated-string T_ENCAPSED_AND_WHITESPACE
+		// can be exactly `)` / `(` / `[` / `]`.
+		if ( $tok['id'] === $text ) {
+			if ( '(' === $text || '[' === $text ) {
+				$depth++;
+			} elseif ( ')' === $text || ']' === $text ) {
+				if ( 1 === $depth && $close_ch === $text ) {
+					$close_tok = $tok;
+					break;
+				}
+				$depth--;
 			}
-			$depth--;
 		}
 
-		if ( 1 === $depth && T_WHITESPACE === $id && false !== strpos( $text, "\n" ) ) {
+		if ( 1 === $depth && is_trivia( $tok ) && false !== strpos( $text, "\n" ) )
 			$saw_nl = true;
-		}
 
-		if ( 1 === $depth && $j !== $open && ! tsf_is_trivia( $tok ) ) {
+		if ( 1 === $depth && $j !== $open && ! is_trivia( $tok ) )
 			$last = $tok;
-		}
 	}
 
 	return [
@@ -214,41 +212,59 @@ $had_hit = false;
 
 foreach ( $files as $file ) {
 	$code    = file_get_contents( $file );
-	$tokens  = tsf_tokenize( $code );
+	$tokens  = tokenize( $code );
 	$n       = \count( $tokens );
 	$display = str_replace( '\\', '/', $file );
 
 	for ( $i = 0; $i < $n; $i++ ) {
 		$ch = $tokens[ $i ]['text'];
 
-		if ( '(' !== $ch && '[' !== $ch ) {
-			continue;
-		}
+		if ( '(' !== $ch && '[' !== $ch ) continue;
 
-		$prev = tsf_prev_sig( $tokens, $i );
+		$prev = prev_sig( $tokens, $i );
 
 		if ( '(' === $ch ) {
-			if ( $prev && isset( $ignore_paren_prev[ $prev[1]['id'] ] ) ) {
+			if (
+				   $prev
+				&& isset( $ignore_paren_prev[ $prev[1]['id'] ] )
+			) {
 				continue;
 			}
-			if ( ! $prev || ! isset( $call_prev[ $prev[1]['id'] ] ) ) {
-				continue;
+
+			// `function name(` / `function &name(` — prev is the name, not T_FUNCTION.
+			if ( $prev && T_STRING === $prev[1]['id'] ) {
+				$before = prev_sig( $tokens, $prev[0] );
+
+				if ( $before && '&' === $before[1]['text'] )
+					$before = prev_sig( $tokens, $before[0] );
+
+				if ( $before && T_FUNCTION === $before[1]['id'] )
+					continue;
 			}
+
+			if ( ! $prev || ! isset( $call_prev[ $prev[1]['id'] ] ) ) continue;
+
 			$close_ch = ')';
 		} else {
-			if ( $prev && isset( $index_prev[ $prev[1]['id'] ] ) ) {
-				continue;
-			}
+			if ( $prev && isset( $index_prev[ $prev[1]['id'] ] ) ) continue;
+
 			$close_ch = ']';
 		}
 
-		$scan = tsf_scan_group( $tokens, $i, $close_ch );
+		$scan = scan_group( $tokens, $i, $close_ch );
 
-		if ( ! $scan['multiline'] || ! $scan['last'] || ! $scan['close'] ) {
+		if (
+			   ! $scan['multiline']
+			|| ! $scan['last']
+			|| ! $scan['close']
+		) {
 			continue;
 		}
 
-		if ( ',' === $scan['last']['text'] || ';' === $scan['last']['text'] ) {
+		if (
+			   ',' === $scan['last']['text']
+			|| ';' === $scan['last']['text']
+		) {
 			continue;
 		}
 
@@ -257,7 +273,7 @@ foreach ( $files as $file ) {
 			"%s:%d: missing trailing comma before %s\n",
 			$display,
 			$scan['last']['line'],
-			$close_ch
+			$close_ch,
 		);
 	}
 }

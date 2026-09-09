@@ -13,10 +13,10 @@ use function The_SEO_Framework\{
 	normalize_generation_args,
 };
 
-use The_SEO_Framework\{
-	Data,
-	Helper\Format\Arrays,
-	Helper\Query,
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
+	Format\Arrays,
+	Query,
 };
 
 /**

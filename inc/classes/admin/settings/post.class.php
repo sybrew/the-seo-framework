@@ -10,12 +10,11 @@ namespace The_SEO_Framework\Admin\Settings;
 
 use function The_SEO_Framework\is_headless;
 
-use The_SEO_Framework\{
-	Admin,
-	Data,
-	Helper\Post_Type,
-	Helper\Query,
-	Helper\Template,
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
+	Post_Type,
+	Query,
+	Template,
 };
 
 /**
@@ -65,14 +64,16 @@ final class Post {
 	 */
 	public static function prepare_meta_box( $post_type ) {
 
-		/**
-		 * @since 2.0.0
-		 * @param bool $show_seobox Whether to show the SEO meta box.
-		 */
 		if (
 			   ! Query::is_post_edit()
 			|| ! Post_Type::is_supported( $post_type )
-			|| ! \apply_filters( 'the_seo_framework_seobox_output', true )
+			|| ! (
+				/**
+				 * @since 2.0.0
+				 * @param bool $show_seobox Whether to show the SEO meta box.
+				 */
+				\apply_filters( 'the_seo_framework_seobox_output', true )
+			)
 		) {
 			return;
 		}
@@ -210,7 +211,9 @@ final class Post {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_general_tab' );
+
 		Template::output_view( 'post/settings', 'general' );
+
 		/**
 		 * @since 2.9.0
 		 */
@@ -230,7 +233,9 @@ final class Post {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_visibility_tab' );
+
 		Template::output_view( 'post/settings', 'visibility' );
+
 		/**
 		 * @since 2.9.0
 		 */
@@ -250,7 +255,9 @@ final class Post {
 		 * @since 2.9.0
 		 */
 		\do_action( 'the_seo_framework_pre_page_inpost_social_tab' );
+
 		Template::output_view( 'post/settings', 'social' );
+
 		/**
 		 * @since 2.9.0
 		 */

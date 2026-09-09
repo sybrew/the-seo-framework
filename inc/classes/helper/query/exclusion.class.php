@@ -10,10 +10,9 @@ namespace The_SEO_Framework\Helper\Query;
 
 use function The_SEO_Framework\is_headless;
 
-use The_SEO_Framework\Data;
-use The_SEO_Framework\Helper\{
-	Post_Type,
-	Taxonomy,
+use The_SEO_Framework\{
+	Data,
+	Helper\Post_Type,
 };
 
 /**
@@ -125,7 +124,7 @@ class Exclusion {
 					} else {
 						$v = false;
 					}
-				}
+				},
 			);
 			$cache[ $type ] = array_filter( $cache[ $type ] );
 		}

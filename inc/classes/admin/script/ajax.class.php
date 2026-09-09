@@ -14,9 +14,11 @@ use The_SEO_Framework\{
 	Admin,
 	Data,
 	Data\Filter\Sanitize,
-	Helper,
-	Helper\Query,
 	Meta,
+};
+use The_SEO_Framework\Helper\{
+	Headers,
+	Query,
 };
 
 /**
@@ -59,7 +61,7 @@ final class AJAX {
 	 */
 	public static function dismiss_notice() {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- We require the POST data to find locally stored nonces.
 		$key = $_POST['tsf_dismiss_key'] ?? '';
@@ -98,7 +100,7 @@ final class AJAX {
 	 */
 	public static function update_counter_type() {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
@@ -150,7 +152,7 @@ final class AJAX {
 	 */
 	public static function crop_image() {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer does this.
 		Utils::check_ajax_capability_referer( 'upload_files' );
@@ -237,6 +239,7 @@ final class AJAX {
 				 * @param array $metadata Attachment metadata.
 				 */
 				$metadata = \apply_filters( 'wp_ajax_cropped_attachment_metadata', $metadata );
+
 				\wp_update_attachment_metadata( $attachment_id, $metadata );
 
 				/**
@@ -269,7 +272,7 @@ final class AJAX {
 	 */
 	public static function get_post_data() {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		$post_id = \absint( $_POST['post_id'] ?? 0 );
@@ -372,7 +375,7 @@ final class AJAX {
 	 */
 	public static function get_term_parent_slugs() {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
@@ -415,7 +418,7 @@ final class AJAX {
 	 */
 	public static function get_post_parent_slugs() {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );
@@ -465,7 +468,7 @@ final class AJAX {
 	 */
 	public static function get_author_slug() {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		// phpcs:disable WordPress.Security.NonceVerification -- check_ajax_capability_referer() does this.
 		Utils::check_ajax_capability_referer( 'edit_posts' );

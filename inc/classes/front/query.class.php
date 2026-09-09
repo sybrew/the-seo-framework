@@ -11,7 +11,10 @@ namespace The_SEO_Framework\Front;
 use The_SEO_Framework\{
 	Data,
 	Helper,
-	Helper\Query\Exclusion,
+};
+use The_SEO_Framework\Helper\{
+	Query\Exclusion,
+	Taxonomy,
 };
 
 /**
@@ -225,16 +228,18 @@ final class Query {
 
 		$has_filter ??= \has_filter( 'the_seo_framework_do_adjust_archive_query' );
 
-		/**
-		 * This filter affects both 'search-"archives"' and terms/taxonomies.
-		 *
-		 * @since 2.9.4
-		 * @param bool      $adjust   True is unblocked (do adjustment), false is blocked (don't do adjustment).
-		 * @param \WP_Query $wp_query The current query.
-		 */
 		if (
 			   $has_filter
-			&& ! \apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query )
+			&& ! (
+				/**
+				 * This filter affects both 'search-"archives"' and terms/taxonomies.
+				 *
+				 * @since 2.9.4
+				 * @param bool      $adjust   True is unblocked (do adjustment), false is blocked (don't do adjustment).
+				 * @param \WP_Query $wp_query The current query.
+				 */
+				\apply_filters( 'the_seo_framework_do_adjust_archive_query', true, $wp_query )
+			)
 		) {
 			return true;
 		}
@@ -268,7 +273,7 @@ final class Query {
 
 			foreach ( $wp_query->tax_query->queries as $_query ) {
 				if ( isset( $_query['taxonomy'] ) ) {
-					$supported = Helper\Taxonomy::is_supported( $_query['taxonomy'] );
+					$supported = Taxonomy::is_supported( $_query['taxonomy'] );
 					// If just one tax is supported for this query, greenlight it: all must be blocking.
 					if ( $supported ) break;
 				}

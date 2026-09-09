@@ -373,7 +373,7 @@ namespace The_SEO_Framework {
 	 * Example usage:
 	 * ```
 	 * function expensive_call( $arg ) {
-	 *     print( "expensive $arg!" );
+	 *     print "expensive $arg!";
 	 *     return $arg * 2;
 	 * }
 	 * function my_function( $arg ) {
@@ -432,7 +432,7 @@ namespace The_SEO_Framework {
 	 * Example usage:
 	 * ```
 	 * function expensive_call( $arg ) {
-	 *     print( "expensive $arg!" );
+	 *     print "expensive $arg!";
 	 *     return $arg * 2;
 	 * }
 	 * function my_function( $arg ) {
@@ -479,7 +479,7 @@ namespace The_SEO_Framework {
 	 *
 	 * Example usage, PHP7.4+:
 	 * ```
-	 * function my_function( $arg ) { return fmemo( fn() => print( $arg ) + 5 ); }
+	 * function my_function( $arg ) { return fmemo( fn() => print $arg + 5 ); }
 	 * my_function( 1 ); // prints '1', returns 6.
 	 * my_function( 1 ); // does not print, returns 6.
 	 * ```
@@ -487,7 +487,7 @@ namespace The_SEO_Framework {
 	 * This way, callers of my_function() won't bust the cache by sending unregistered superfluous arguments.
 	 *
 	 * ```
-	 * function printer() { print( 69 ); }
+	 * function printer() { print 69; }
 	 * function print_once() { fmemo( 'printer' ); }
 	 * print_once(); // 69
 	 * print_once(); // *cricket noises*

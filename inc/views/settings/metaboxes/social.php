@@ -76,7 +76,7 @@ switch ( $instance ) :
 			 * @since 2.2.2
 			 * @param array $defaults The default tabs.
 			 */
-			(array) \apply_filters( 'the_seo_framework_social_settings_tabs', $tabs )
+			(array) \apply_filters( 'the_seo_framework_social_settings_tabs', $tabs ),
 		);
 		break;
 
@@ -296,10 +296,10 @@ switch ( $instance ) :
 			</legend>
 			<?php
 			HTML::description(
-				\__( 'When you share a link on X, the summary card type shows a small thumbnail beside truncated title and description; the summary large image card type shows a large image with the title overlaid on it and no description.', 'autodescription' )
+				\__( 'When you share a link on X, the summary card type shows a small thumbnail beside truncated title and description; the summary large image card type shows a large image with the title overlaid on it and no description.', 'autodescription' ),
 			);
 			HTML::description(
-				\__( 'On Discord, the image appears as a small thumbnail at the side or large below the text; both card types still show the description.', 'autodescription' )
+				\__( 'On Discord, the image appears as a small thumbnail at the side or large below the text; both card types still show the description.', 'autodescription' ),
 			);
 			?>
 

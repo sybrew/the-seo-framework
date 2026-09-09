@@ -238,7 +238,7 @@ class HTML {
 								implode( '|', $elements ),
 							),
 							'phrase' === $flow_type ? '' : ' ', // Add space if block, otherwise clear.
-							$input
+							$input,
 						) ?? '';
 						break;
 
@@ -355,20 +355,23 @@ class HTML {
 				'clear'  =>
 					[ 'address', 'area', 'aside', 'audio', 'blockquote', 'button', 'canvas', 'code', 'datalist', 'del', 'dialog', 'dl', 'fieldset', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'iframe', 'input', 'label', 'map', 'menu', 'meter', 'nav', 'noscript', 'ol', 'object', 'output', 'pre', 'progress', 's', 'script', 'select', 'style', 'svg', 'table', 'template', 'textarea', 'ul', 'video' ],
 				'passes' => $passes,
-			]
+			],
 		);
 
-		/**
-		 * Always strip shortcodes unless specifically allowed via the filter.
-		 * Always strip shortcodes if not allowed by the arguments, ignoring the filter.
-		 *
-		 * @since 2.6.6.1
-		 * @since 5.0.0 Added the third `$args` parameter.
-		 * @param bool $allow_shortcodes Whether to allow shortcodes.
-		 * @param array $args The extraction parameters.
-		 */
-		if ( ! $args['allow_shortcodes'] || ! \apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false, $args ) )
+		// Always strip shortcodes if not allowed by the arguments, ignoring the filter.
+		if ( ! $args['allow_shortcodes'] || ! (
+			/**
+			 * Always strip shortcodes unless specifically allowed via the filter.
+			 *
+			 * @since 2.6.6.1
+			 * @since 5.0.0 Added the third `$args` parameter.
+			 * @param bool $allow_shortcodes Whether to allow shortcodes.
+			 * @param array $args The extraction parameters.
+			 */
+			\apply_filters( 'the_seo_framework_allow_excerpt_shortcode_tags', false, $args )
+		) ) {
 			$html = \strip_shortcodes( $html );
+		}
 
 		$html = self::strip_tags_cs( $html, $strip_args );
 

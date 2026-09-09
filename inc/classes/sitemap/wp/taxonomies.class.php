@@ -123,7 +123,8 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			 * @param WP_Term $term          Term object.
 			 */
 			$sitemap_entry = \apply_filters( 'wp_sitemaps_taxonomies_entry', $sitemap_entry, $term->term_id, $taxonomy, $term );
-			$url_list[]    = $sitemap_entry;
+
+			$url_list[] = $sitemap_entry;
 		}
 
 		return $url_list;

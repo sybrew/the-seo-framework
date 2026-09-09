@@ -11,7 +11,6 @@ namespace The_SEO_Framework\RobotsTXT;
 use The_SEO_Framework\{
 	Data,
 	Helper\Compatibility,
-	Helper\Query,
 	Meta,
 	RobotsTXT, // Yes, it is legal to import the same namespace.
 	Sitemap,
@@ -74,7 +73,7 @@ class Main {
 		if ( strrpos( rawurldecode( stripslashes( $_SERVER['REQUEST_URI'] ) ), '/' ) > 0 ) {
 			$correct_location = \esc_url(
 				\trailingslashit( Meta\URI\Utils::set_preferred_url_scheme(
-					Meta\URI\Utils::get_site_host()
+					Meta\URI\Utils::get_site_host(),
 				) ) . 'robots.txt',
 			);
 

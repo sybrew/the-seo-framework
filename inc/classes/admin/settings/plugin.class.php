@@ -8,10 +8,10 @@ namespace The_SEO_Framework\Admin\Settings;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\{
-	Admin,
-	Helper\Post_Type,
-	Helper\Template,
+use The_SEO_Framework\Admin;
+use The_SEO_Framework\Helper\{
+	Post_Type,
+	Template,
 };
 
 /**
@@ -218,7 +218,9 @@ final class Plugin {
 		 * @since 3.0.0
 		 */
 		\do_action( 'the_seo_framework_pre_seo_settings' );
+
 		Template::output_view( 'settings/wrap' );
+
 		/**
 		 * @since 3.0.0
 		 */
@@ -286,7 +288,9 @@ final class Plugin {
 		 * @since 2.8.0
 		 */
 		\do_action( 'the_seo_framework_general_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/general', 'main' );
+
 		/**
 		 * @since 2.8.0
 		 */
@@ -364,7 +368,9 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_title_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/title', 'main' );
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -414,7 +420,9 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_description_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/description', 'main' );
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -432,7 +440,9 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_robots_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/robots', 'main' );
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -481,7 +491,9 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_homepage_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/homepage', 'main' );
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -539,7 +551,9 @@ final class Plugin {
 		 * @since 4.2.0
 		 */
 		\do_action( 'the_seo_framework_post_type_archive_before' );
+
 		Template::output_view( 'settings/metaboxes/post-type-archive', 'main' );
+
 		/**
 		 * @since 4.2.0
 		 */
@@ -590,7 +604,9 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_social_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/social', 'main' );
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -658,7 +674,9 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_webmaster_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/webmaster', 'main' );
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -677,7 +695,9 @@ final class Plugin {
 		 * @since 2.5.0 or earlier.
 		 */
 		\do_action( 'the_seo_framework_sitemaps_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/sitemaps', 'main' );
+
 		/**
 		 * @since 2.5.0 or earlier.
 		 */
@@ -735,7 +755,9 @@ final class Plugin {
 		 * @since 2.5.2
 		 */
 		\do_action( 'the_seo_framework_feed_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/feed', 'main' );
+
 		/**
 		 * @since 2.5.2
 		 */
@@ -753,7 +775,9 @@ final class Plugin {
 		 * @since 2.6.0
 		 */
 		\do_action( 'the_seo_framework_schema_metabox_before' );
+
 		Template::output_view( 'settings/metaboxes/schema', 'main' );
+
 		/**
 		 * @since 2.6.0
 		 */

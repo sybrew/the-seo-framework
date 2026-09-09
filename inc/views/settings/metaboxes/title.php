@@ -53,7 +53,7 @@ switch ( $instance ) :
 
 		$post_title = \esc_html( Strings::hellip_if_over(
 			Meta\Title::get_post_title( $latest_post_id ) ?: \__( 'Example Post', 'autodescription' ),
-			60
+			60,
 		) );
 
 		$cat_prefix = \esc_html( \_x( 'Category:', 'category archive title prefix', 'default' ) );
@@ -190,7 +190,7 @@ switch ( $instance ) :
 			 * @since 2.6.0
 			 * @param array $tabs The default tabs.
 			 */
-			(array) \apply_filters( 'the_seo_framework_title_settings_tabs', $tabs )
+			(array) \apply_filters( 'the_seo_framework_title_settings_tabs', $tabs ),
 		);
 		break;
 
@@ -234,7 +234,7 @@ switch ( $instance ) :
 			\sprintf(
 				/* translators: %s = HTML tag example */
 				\__( 'This strips HTML tags, like %s, from the title. Disable this option to display generated HTML tags as plain text in meta titles.', 'autodescription' ),
-				'<code>&amp;lt;strong&amp;gt;</code>' // Double escaped HTML (&amp;) for attribute display.
+				'<code>&amp;lt;strong&amp;gt;</code>', // Double escaped HTML (&amp;) for attribute display.
 			),
 			'',
 			false,

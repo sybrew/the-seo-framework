@@ -8,8 +8,6 @@ namespace The_SEO_Framework;
 
 ( \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and Helper\Template::verify_secret( $secret ) ) or die;
 
-use The_SEO_Framework\Admin\Settings\Layout\HTML;
-
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 ?>

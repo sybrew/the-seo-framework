@@ -48,11 +48,13 @@ final class Title {
 
 		if (
 			   ! Query\Utils::query_supports_seo()
-			/**
-			 * @since 2.9.3
-			 * @param bool $overwrite_titles Whether to enable title overwriting.
-			 */
-			|| ! \apply_filters( 'the_seo_framework_overwrite_titles', true )
+			|| ! (
+				/**
+				 * @since 2.9.3
+				 * @param bool $overwrite_titles Whether to enable title overwriting.
+				 */
+				\apply_filters( 'the_seo_framework_overwrite_titles', true )
+			)
 		) {
 			return;
 		}

@@ -11,10 +11,12 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 use function The_SEO_Framework\normalize_generation_args;
 
 use The_SEO_Framework\{
-	Meta,
 	Data,
-	Helper\Query,
-	Helper\Format\Strings,
+	Meta,
+};
+use The_SEO_Framework\Helper\{
+	Format\Strings,
+	Query,
 };
 
 /**

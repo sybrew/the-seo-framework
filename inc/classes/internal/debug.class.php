@@ -10,10 +10,7 @@ namespace The_SEO_Framework\Internal;
 
 use function The_SEO_Framework\memo;
 
-use The_SEO_Framework\{
-	Data,
-	Front,
-};
+use The_SEO_Framework\Data;
 use The_SEO_Framework\Helper\{
 	Post_Type,
 	Query,
@@ -83,14 +80,16 @@ final class Debug {
 		 */
 		\do_action( 'deprecated_function_run', $function, $replacement, $version );
 
-		/**
-		 * Filter whether to trigger an error for deprecated functions.
-		 *
-		 * @since WP Core 2.5.0
-		 *
-		 * @param bool $trigger Whether to trigger the error for deprecated functions. Default true.
-		 */
-		if ( \WP_DEBUG && \apply_filters( 'deprecated_function_trigger_error', true ) ) {
+		if ( \WP_DEBUG && (
+			/**
+			 * Filter whether to trigger an error for deprecated functions.
+			 *
+			 * @since WP Core 2.5.0
+			 *
+			 * @param bool $trigger Whether to trigger the error for deprecated functions. Default true.
+			 */
+			\apply_filters( 'deprecated_function_trigger_error', true )
+		) ) {
 
 			if ( isset( $replacement ) ) {
 				$message = \sprintf(
@@ -148,11 +147,13 @@ final class Debug {
 		 */
 		\do_action( 'doing_it_wrong_run', $function, $message, $version );
 
-		/**
-		 * @since WP Core 3.1.0
-		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
-		 */
-		if ( \WP_DEBUG && \apply_filters( 'doing_it_wrong_trigger_error', true ) ) {
+		if ( \WP_DEBUG && (
+			/**
+			 * @since WP Core 3.1.0
+			 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
+			 */
+			\apply_filters( 'doing_it_wrong_trigger_error', true )
+		) ) {
 
 			$ver_message = $version
 				/* translators: 1: plugin version */
@@ -203,14 +204,16 @@ final class Debug {
 		 */
 		\do_action( 'the_seo_framework_inaccessible_p_or_m_run', $p_or_m, $message );
 
-		/**
-		 * Filter whether to trigger an error for _doing_it_wrong() calls.
-		 *
-		 * @since WP Core 3.1.0
-		 *
-		 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
-		 */
-		if ( \WP_DEBUG && \apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true ) ) {
+		if ( \WP_DEBUG && (
+			/**
+			 * Filter whether to trigger an error for _doing_it_wrong() calls.
+			 *
+			 * @since WP Core 3.1.0
+			 *
+			 * @param bool $trigger Whether to trigger the error for _doing_it_wrong() calls. Default true.
+			 */
+			\apply_filters( 'the_seo_framework_inaccessible_p_or_m_trigger_error', true )
+		) ) {
 			$message = \sprintf(
 				/* translators: 1: Method or Property name, 2: "inaccessible", 3: Class name. 4: Message */
 				\esc_html__( '%1$s is %2$s in %3$s. %4$s', 'autodescription' ),

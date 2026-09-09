@@ -136,7 +136,7 @@ switch ( $instance ) :
 			 * @since 2.2.4
 			 * @param array $tabs The default tabs.
 			 */
-			(array) \apply_filters( 'the_seo_framework_robots_settings_tabs', $tabs )
+			(array) \apply_filters( 'the_seo_framework_robots_settings_tabs', $tabs ),
 		);
 		break;
 
@@ -420,7 +420,7 @@ switch ( $instance ) :
 			$label = \sprintf(
 				'singular' === $data['i18ntype'] ? $apply_x_to_y_i18n_singular : $apply_x_to_y_i18n_plural,
 				$ro_name_wrapped,
-				\esc_html( $data['i18n'] )
+				\esc_html( $data['i18n'] ),
 			);
 
 			// Legacy.
@@ -433,7 +433,7 @@ switch ( $instance ) :
 				if ( \in_array( $ro_value, [ 'noindex', 'nofollow' ], true ) )
 					$checkboxes .= \sprintf(
 						'<p><span class="description attention">%s</span></p>',
-						\esc_html__( 'Warning: No public site should ever enable this option.', 'autodescription' )
+						\esc_html__( 'Warning: No public site should ever enable this option.', 'autodescription' ),
 					);
 			}
 
@@ -469,18 +469,18 @@ switch ( $instance ) :
 
 		if ( RobotsTXT\Utils::has_root_robots_txt() ) {
 			HTML::attention_description(
-				\__( 'Note: A robots.txt file has been detected in the root folder of your website, so these settings have no effect.', 'autodescription' )
+				\__( 'Note: A robots.txt file has been detected in the root folder of your website, so these settings have no effect.', 'autodescription' ),
 			);
 			echo '<hr>';
 		} elseif ( ! $robots_url ) {
 			if ( Data\Blog::is_subdirectory_installation() ) {
 				HTML::attention_description(
-					\__( 'Note: This site is installed in a subdirectory, so robots.txt files cannot be generated or used.', 'autodescription' )
+					\__( 'Note: This site is installed in a subdirectory, so robots.txt files cannot be generated or used.', 'autodescription' ),
 				);
 				echo '<hr>';
 			} elseif ( ! Query\Utils::using_pretty_permalinks() ) {
 				HTML::attention_description(
-					\__( 'Note: This site is using the plain permalink structure, so no robots.txt file can be generated.', 'autodescription' )
+					\__( 'Note: This site is using the plain permalink structure, so no robots.txt file can be generated.', 'autodescription' ),
 				);
 				HTML::description_noesc(
 					Markdown::convert(
@@ -492,7 +492,7 @@ switch ( $instance ) :
 						),
 						[ 'code', 'a' ],
 						[ 'a_internal' => false ], // open in new window.
-					)
+					),
 				);
 				echo '<hr>';
 			}

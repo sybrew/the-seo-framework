@@ -8,11 +8,11 @@ namespace The_SEO_Framework\Data\Filter;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\{
-	Helper,
-	Helper\Format\Strings,
-	Meta,
+use The_SEO_Framework\Helper\{
+	Format\Strings,
+	Redirect,
 };
+use The_SEO_Framework\Meta;
 
 /**
  * The SEO Framework plugin
@@ -146,6 +146,7 @@ class Sanitize {
 		if ( ! \is_scalar( $text ) || ! \strlen( $text ) )
 			return '';
 
+		// PHP 8.5+: pipe operator?
 		return html_entity_decode(
 			\wptexturize(
 				\capital_P_dangit(
@@ -362,7 +363,7 @@ class Sanitize {
 			return '';
 
 		// This is also checked when performing a redirect.
-		if ( ! Helper\Redirect::allow_external_redirect() ) {
+		if ( ! Redirect::allow_external_redirect() ) {
 			$url = Meta\URI\Utils::set_url_scheme( Meta\URI\Utils::convert_path_to_url(
 				Meta\URI\Utils::set_url_scheme( $url, 'relative' ),
 			) );

@@ -27,6 +27,8 @@ CSS=True|False
 - If a flag is `False`, do not prompt again, and do not clone or minify that type.
 - If a flag is `True`, proceed. After a permitted import, keep that flag `True`.
 
+The minify script reads this file. A missing file is a hard stop. A `False` flag skips that type even if the engine is already cloned.
+
 ## Engines
 
 Public source of truth:

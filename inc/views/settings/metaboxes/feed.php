@@ -85,8 +85,8 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 						\esc_url( \admin_url( 'options-reading.php' ) ),
 					),
 					[ 'a' ],
-					[ 'a_internal' => false ] // open in new window, although it's internal.
-				)
+					[ 'a_internal' => false ], // open in new window, although it's internal.
+				),
 			);
 		}
 

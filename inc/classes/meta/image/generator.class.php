@@ -8,10 +8,10 @@ namespace The_SEO_Framework\Meta\Image;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\{
-	Data,
-	Helper\Query,
-	Helper\Format,
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
+	Format\HTML,
+	Query,
 };
 
 /**
@@ -143,7 +143,7 @@ final class Generator {
 		// \strlen( '<img src=a>' ) === 11; yes, that's a valid self-closing tag with a relative source.
 		if ( \strlen( $content ) > 10 && false !== stripos( $content, '<img ' ) ) {
 			// Clear what might have unfavorable images.
-			$content = Format\HTML::strip_tags_cs(
+			$content = HTML::strip_tags_cs(
 				$content,
 				[
 					'space' => [],

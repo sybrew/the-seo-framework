@@ -18,12 +18,11 @@ use function The_SEO_Framework\{
 use The_SEO_Framework\{
 	Data,
 	Data\Filter\Sanitize,
-	Meta,
 };
 use The_SEO_Framework\Helper\{
+	Format\Strings,
 	Guidelines,
 	Query,
-	Format\Strings,
 };
 
 /**

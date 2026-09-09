@@ -266,7 +266,7 @@ class Utils {
 							// No need to test other 'not_home_as_page' types. Go to next type (if any).
 							continue 3; // 1: switch, 2: loop $qvs, 3: loop $exploitables.
 						}
-						break; // unreachable?
+						break; // Unreachable. Keep to prevent mistakes.
 
 					case 'should_be_404':
 						// isset($query[$qv]) is already executed. Just test if we're also on a 404 page.

@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use The_SEO_Framework\{
-	Helper\Query,
+	Helper\Compatibility,
 	Meta\URI,
 };
 
@@ -59,7 +59,7 @@ function _wpml_register_sitemap_languages( $list ) {
 
 	if (
 		   empty( $sitepress )
-		|| ! Helper\Compatibility::can_i_use(
+		|| ! Compatibility::can_i_use(
 			[
 				'methods'   => [
 					[ $sitepress, 'get_default_language' ],
@@ -137,7 +137,7 @@ function _wpml_sitemap_language_endpoints( $endpoints ) {
 
 	if (
 		   empty( $sitepress )
-		|| ! Helper\Compatibility::can_i_use(
+		|| ! Compatibility::can_i_use(
 			[
 				'methods'   => [
 					[ $sitepress, 'get_default_language' ],
@@ -259,7 +259,7 @@ function _wpml_sitemap_filter_non_translatables( $args ) {
 
 	if (
 		   empty( $sitepress )
-		|| ! Helper\Compatibility::can_i_use(
+		|| ! Compatibility::can_i_use(
 			[
 				'methods' => [
 					[ $sitepress, 'get_default_language' ],

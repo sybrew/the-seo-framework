@@ -33,7 +33,7 @@ for ( $i = 0, $n = \count( $args ); $i < $n; $i++ ) {
 		continue;
 	}
 
-	if ( '-' === $arg[0] && '-' !== $arg ) {
+	if ( $arg && '-' === $arg[0] && '-' !== $arg ) {
 		fwrite( STDERR, "Unknown option: $arg\n" );
 		exit( 1 );
 	}
@@ -41,16 +41,15 @@ for ( $i = 0, $n = \count( $args ); $i < $n; $i++ ) {
 	$files[] = $arg;
 }
 
-if ( ! $files ) {
+if ( ! $files )
 	$files[] = '-';
-}
 
 /**
  * @param string $line Raw line.
  * @param int    $tab  Tab width.
  * @return int Visual columns.
  */
-function tsf_visual_width( $line, $tab ) {
+function visual_width( $line, $tab ) {
 
 	$line     = rtrim( $line, "\n\r" );
 	$expanded = str_replace( "\t", str_repeat( ' ', $tab ), $line );
@@ -64,9 +63,9 @@ function tsf_visual_width( $line, $tab ) {
  * @param string $line Raw line.
  * @return bool
  */
-function tsf_is_compact_if_terminator( $line ) {
+function is_compact_if_terminator( $line ) {
 	return (bool) preg_match(
-		'/^\s*if\s*\(.*\)\s*(?:return|continue|break)\b/s',
+		'/^\s*(?:else\s+if|elseif|if)\s*\(.*\)\s*(?:return|continue|break)\s*;/',
 		rtrim( $line, "\n\r" ),
 	);
 }
@@ -77,7 +76,7 @@ foreach ( $files as $file ) {
 	if ( '-' === $file ) {
 		$lines = file( 'php://stdin' );
 		$label = '-';
-	} elseif ( is_readable( $file ) ) {
+	} elseif ( is_file( $file ) && is_readable( $file ) ) {
 		$lines = file( $file );
 		$label = $file;
 	} else {
@@ -95,19 +94,13 @@ foreach ( $files as $file ) {
 	foreach ( $lines as $i => $line ) {
 		$num = $i + 1;
 
-		if ( $only_line && $num !== $only_line ) {
-			continue;
-		}
+		if ( $only_line && $num !== $only_line ) continue;
 
-		if ( $compact_if && ! tsf_is_compact_if_terminator( $line ) ) {
-			continue;
-		}
+		if ( $compact_if && ! is_compact_if_terminator( $line ) ) continue;
 
-		$width = tsf_visual_width( $line, $tab );
+		$width = visual_width( $line, $tab );
 
-		if ( $min_width && $width <= $min_width ) {
-			continue;
-		}
+		if ( $min_width && $width <= $min_width ) continue;
 
 		printf( "%s:%d:%d\n", $label, $num, $width );
 	}

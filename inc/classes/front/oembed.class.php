@@ -68,7 +68,7 @@ final class OEmbed {
 			$image_details = current( Meta\Image::get_image_details(
 				[ 'id' => $post->ID ],
 				true,
-				'oembed'
+				'oembed',
 			) );
 
 			if ( $image_details && $image_details['url'] && $image_details['width'] && $image_details['height'] ) {

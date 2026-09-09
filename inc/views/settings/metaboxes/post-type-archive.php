@@ -13,10 +13,10 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 	HTML,
 	Input,
 };
-use The_SEO_Framework\{
-	Data\Filter\Sanitize,
-	Helper\Compatibility,
-	Helper\Post_Type,
+use The_SEO_Framework\Data\Filter\Sanitize;
+use The_SEO_Framework\Helper\{
+	Compatibility,
+	Post_Type,
 };
 
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -45,7 +45,7 @@ use The_SEO_Framework\{
 switch ( $instance ) :
 	case 'main':
 		HTML::description(
-			\__( 'Post type archives (PTA) are unique archives displaying all pages for a post type. Since PTAs lack an administrative interface, their SEO settings are displayed here.', 'autodescription' )
+			\__( 'Post type archives (PTA) are unique archives displaying all pages for a post type. Since PTAs lack an administrative interface, their SEO settings are displayed here.', 'autodescription' ),
 		);
 
 		?>
@@ -67,7 +67,7 @@ switch ( $instance ) :
 		printf(
 			'<span class=hidden id=tsf-post-type-archive-data %s></span>',
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
-			HTML::make_data_attributes( [ 'postTypes' => $post_types_data ] )
+			HTML::make_data_attributes( [ 'postTypes' => $post_types_data ] ),
 		);
 
 		?>
@@ -120,7 +120,7 @@ switch ( $instance ) :
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Shut it, noob.
 				$post_type_index ? ' hide-if-tsf-js' : '',
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- This escapes.
-				HTML::make_data_attributes( [ 'postType' => $post_type ] )
+				HTML::make_data_attributes( [ 'postType' => $post_type ] ),
 			);
 			?>
 				<div class=tsf-post-type-header>
@@ -147,7 +147,7 @@ switch ( $instance ) :
 				<div class="tsf-post-type-archive-if-excluded hidden">
 					<?php
 					HTML::attention_description(
-						\__( "This post type is excluded, so settings won't have any effect.", 'autodescription' )
+						\__( "This post type is excluded, so settings won't have any effect.", 'autodescription' ),
 					)
 					?>
 				</div>
@@ -155,7 +155,7 @@ switch ( $instance ) :
 					<?php
 					if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
 						HTML::attention(
-							\__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' )
+							\__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' ),
 						);
 					}
 
@@ -170,14 +170,14 @@ switch ( $instance ) :
 							'the_seo_framework_post_type_archive_settings_tabs',
 							$tabs,
 							$post_type,
-						)
+						),
 					);
 					?>
 				</div>
 			</div>
 			<?php
 			// Output only the first time.
-			$post_type_index++ or print( '<hr class=hide-if-tsf-js>' );
+			$post_type_index++ or print '<hr class=hide-if-tsf-js>';
 		}
 		break;
 
@@ -205,7 +205,7 @@ switch ( $instance ) :
 		Form::output_pixel_counter_wrap(
 			Input::get_field_id( $args['options']['doctitle'] ),
 			'title',
-			(bool) Data\Plugin::get_option( 'display_pixel_counter' )
+			(bool) Data\Plugin::get_option( 'display_pixel_counter' ),
 		);
 		?>
 		<p class=tsf-title-wrap>
@@ -288,7 +288,7 @@ switch ( $instance ) :
 				[
 					'state' => [
 						'defaultDescription' => \esc_html(
-							Meta\Description::get_generated_description( $args['generator_args'] )
+							Meta\Description::get_generated_description( $args['generator_args'] ),
 						),
 					],
 				],

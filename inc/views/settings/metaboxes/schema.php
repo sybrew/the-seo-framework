@@ -196,7 +196,8 @@ switch ( $instance ) :
 					'label'  => \esc_html__( 'Add logo?', 'autodescription' ) . " $info",
 					'escape' => false,
 				] ),
-			true );
+				true,
+			);
 
 			$logo_placeholder = Meta\Image::get_first_generated_image_url( [ 'id' => 0 ], 'organization' );
 			?>

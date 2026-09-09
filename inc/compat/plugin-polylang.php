@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use The_SEO_Framework\{
-	Helper\Query,
+	Helper\Compatibility,
 	Meta\URI,
 };
 
@@ -65,7 +65,7 @@ function _polylang_register_sitemap_languages( $list ) {
 	if ( empty( $list['base'] ) )
 		return $list;
 
-	if ( ! Helper\Compatibility::can_i_use( [
+	if ( ! Compatibility::can_i_use( [
 		'functions' => [
 			'pll_languages_list',
 			'pll_default_language',
@@ -138,7 +138,7 @@ function _polylang_register_sitemap_languages( $list ) {
  */
 function _polylang_sitemap_language_endpoints( $endpoints ) {
 
-	if ( ! Helper\Compatibility::can_i_use( [
+	if ( ! Compatibility::can_i_use( [
 		'functions' => [
 			'PLL',
 			'pll_languages_list',
@@ -217,6 +217,7 @@ function _polylang_fix_sitemap_base_path( $path ) {
  * @since 5.1.5 1. Now accepts the sitemap ID from the hook.
  *              2. Now forces the default language for the unprefixed directory sitemap, so cookie or
  *                 browser detection cannot hijack `/sitemap.xml` when the default language slug is shown.
+ *              3. Now treats the CSS stylesheet endpoint like the XSL stylesheet for default-language detection.
  *
  * @param string $sitemap_id The sitemap ID.
  */
@@ -247,11 +248,8 @@ function _polylang_set_sitemap_language( $sitemap_id = '' ) {
 					break;
 				case 1:
 					// Directory: the unprefixed sitemap is the default language, even when hide_default is off.
-					if (
-						   ! \in_array( $sitemap_id, [ 'base', 'index', 'xsl-stylesheet' ], true )
-					) {
+					if ( ! \in_array( $sitemap_id, [ 'base', 'index', 'xsl-stylesheet', 'css' ], true ) )
 						return;
-					}
 
 					$lang = \function_exists( 'pll_default_language' ) ? \pll_default_language() : $lang;
 					break;
@@ -293,7 +291,7 @@ function _polylang_set_sitemap_language( $sitemap_id = '' ) {
  */
 function _polylang_sitemap_append_non_translatables( $args ) {
 
-	if ( ! Helper\Compatibility::can_i_use( [
+	if ( ! Compatibility::can_i_use( [
 		'functions' => [
 			'PLL',
 			'pll_languages_list',

@@ -26,10 +26,11 @@ security.txt                    Security disclosure info pointing to GitHub Secu
 wpml-config.xml                 WPML/Polylang config declaring translatable custom fields and settings
 
 .cursor/
-	rules/                        Cursor rule files mirroring the Copilot instruction files via @file references
+	rules/                        Cursor rule files. Most attach Copilot instruction files via @file references; git.mdc is Cursor-only
 		core.mdc                    Always-applied rule attaching .github/copilot-instructions.md
 		css.mdc                     CSS-scoped rule attaching css.instructions.md
 		docs.mdc                    Readme-scoped rule attaching docs.instructions.md
+		git.mdc                     Always-applied: refuse git/GitHub state mutations; Cursor-only
 		javascript.mdc              JavaScript-scoped rule attaching javascript.instructions.md
 		local.mdc                   Always-applied: gitignored .local search workaround; attaches local.instructions.md
 		php.mdc                     PHP-scoped rule attaching php.instructions.md
@@ -41,7 +42,7 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 		wrap/                       Visual line width (tab = 4) and TSF wrap-rule decision tree
 			SKILL.md                When 80 columns applies; compact-if vs assignment/ternary
 			scripts/
-				visual-width.php    Prints path:line:width; --line, --gt, --compact-if
+				visual-width.php    Prints path:line:width; --line, --gt, --compact-if (void if/elseif/else if)
 		trailing-comma/             Multiline trailing commas on PHP/JS calls and arrays
 			SKILL.md                PHP 7.4 call/array commas; no commas on parameter lists
 			scripts/

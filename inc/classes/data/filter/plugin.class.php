@@ -12,9 +12,11 @@ use function The_SEO_Framework\has_run;
 
 use The_SEO_Framework\{
 	Data,
-	Helper\Taxonomy,
-	Helper\Post_Type,
 	Meta,
+};
+use The_SEO_Framework\Helper\{
+	Post_Type,
+	Taxonomy,
 };
 
 /**

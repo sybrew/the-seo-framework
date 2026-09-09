@@ -15,16 +15,16 @@ use const The_SEO_Framework\{
 
 use function The_SEO_Framework\coalesce_strlen;
 
-use The_SEO_Framework\{
-	Data\Filter\Sanitize,
-	Helper\Post_Type,
-	Helper\Query,
-	Helper\Taxonomy,
-};
 use The_SEO_Framework\Admin\Settings\Layout\{
 	Form,
 	HTML,
 	Input,
+};
+use The_SEO_Framework\Data\Filter\Sanitize;
+use The_SEO_Framework\Helper\{
+	Post_Type,
+	Query,
+	Taxonomy,
 };
 
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.

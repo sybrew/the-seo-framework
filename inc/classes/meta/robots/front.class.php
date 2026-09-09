@@ -13,8 +13,10 @@ use const The_SEO_Framework\{
 	ROBOTS_IGNORE_PROTECTION,
 };
 
-use The_SEO_Framework\Data;
-use The_SEO_Framework\Meta\Robots; // Yes, it is legal to share class and namespaces.
+use The_SEO_Framework\{
+	Data,
+	Meta\Robots, // Yes, it is legal to share class and namespaces.
+};
 use The_SEO_Framework\Helper\{
 	Query,
 	Taxonomy,

@@ -29,6 +29,9 @@
 	<!-- Exclude index.php files. They are inert in (our) plugins unless directly included/called. -->
 	<exclude-pattern>index.php</exclude-pattern>
 
+	<!-- Cursor skills and rules are not plugin code. -->
+	<exclude-pattern>/\.cursor/</exclude-pattern>
+
 	<!-- Check all PHP files in directory tree by default. -->
 	<arg name="extensions" value="php"/>
 	<file>.</file>

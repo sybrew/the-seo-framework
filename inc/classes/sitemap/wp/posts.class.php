@@ -10,8 +10,8 @@ namespace The_SEO_Framework\Sitemap\WP;
 
 use The_SEO_Framework\{
 	Data,
-	Sitemap,
 	Helper\Format\Time,
+	Sitemap,
 };
 
 /**
@@ -157,7 +157,8 @@ class Posts extends \WP_Sitemaps_Posts {
 				 * @param array $sitemap_entry Sitemap entry for the home page.
 				 */
 				$sitemap_entry = \apply_filters( 'wp_sitemaps_posts_show_on_front_entry', $sitemap_entry );
-				$url_list[]    = $sitemap_entry;
+
+				$url_list[] = $sitemap_entry;
 			}
 		}
 
@@ -194,7 +195,8 @@ class Posts extends \WP_Sitemaps_Posts {
 			 * @param string  $post_type     Name of the post_type.
 			 */
 			$sitemap_entry = \apply_filters( 'wp_sitemaps_posts_entry', $sitemap_entry, $post, $post_type );
-			$url_list[]    = $sitemap_entry;
+
+			$url_list[] = $sitemap_entry;
 		}
 
 		return $url_list;

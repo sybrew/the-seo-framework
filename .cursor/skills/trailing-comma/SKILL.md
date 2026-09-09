@@ -9,10 +9,6 @@ description: >-
 
 Source of truth: `.github/copilot-instructions.md` — trailing commas at the end of multiline object/array properties and function arguments when the language supports it.
 
-## Hold
-
-Do not scan or rewrite the repo for this skill until the user says **go**.
-
 ## PHP 7.4
 
 Put a trailing comma on multiline:
@@ -81,6 +77,6 @@ php .cursor/skills/trailing-comma/scripts/find-missing.php path/to/file.php
 php .cursor/skills/trailing-comma/scripts/find-missing.php inc
 ```
 
-Output: `path:line: missing trailing comma before )` (or `]`). Line is the last argument. Exit 1 if any hit.
+Output: `path:line: missing trailing comma before )` (or `]`). Line is the last argument. Exit 1 if any hit. A docblock or comment with a newline after `(` counts as multiline.
 
-When the user says **go**, scan tracked PHP (not `.git`, `.local`, `vendor`, `node_modules`), then fix. Leave JS to the same rule while editing; the finder does not parse JS.
+Scan tracked PHP (not `.git`, `.local`, `vendor`, `node_modules`), then fix. Leave JS to the same rule while editing; the finder does not parse JS.

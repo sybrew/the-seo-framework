@@ -15,10 +15,12 @@ use function The_SEO_Framework\{
 
 use The_SEO_Framework\{
 	Data,
-	Helper,
-	Helper\Query,
-	Helper\Template,
 	Meta,
+};
+use The_SEO_Framework\Helper\{
+	Headers,
+	Query,
+	Template,
 };
 
 /**
@@ -349,7 +351,7 @@ class Registry {
 			exit;
 		}
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
@@ -381,7 +383,7 @@ class Registry {
 	 */
 	public static function output_stylesheet( $sitemap_id = 'xsl-stylesheet' ) {
 
-		Helper\Headers::clean_response_header();
+		Headers::clean_response_header();
 
 		$is_css       = 'css' === $sitemap_id;
 		$content_type = $is_css ? 'text/css' : 'text/xsl';
@@ -457,7 +459,7 @@ class Registry {
 			$schemas,
 			function ( &$schema, $key ) {
 				$schema = \sprintf( '%s="%s"', $key, implode( ' ', (array) $schema ) );
-			}
+			},
 		);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput -- Output is expected to be escaped.

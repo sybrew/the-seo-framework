@@ -16,7 +16,7 @@ use function The_SEO_Framework\{
 
 use The_SEO_Framework\Data;
 use The_SEO_Framework\Helper\{
-	Format,
+	Format\Color,
 	Post_Type,
 	Query,
 	Taxonomy,
@@ -545,13 +545,13 @@ final class Registry {
 
 			$_conversion_table = [
 				'{{$bg}}'               => $_colors[0],
-				'{{$rel_bg}}'           => '#' . Format\Color::get_relative_fontcolor( $_colors[0] ),
+				'{{$rel_bg}}'           => '#' . Color::get_relative_fontcolor( $_colors[0] ),
 				'{{$bg_accent}}'        => $_colors[1],
-				'{{$rel_bg_accent}}'    => '#' . Format\Color::get_relative_fontcolor( $_colors[1] ),
+				'{{$rel_bg_accent}}'    => '#' . Color::get_relative_fontcolor( $_colors[1] ),
 				'{{$color}}'            => $_colors[2],
-				'{{$rel_color}}'        => '#' . Format\Color::get_relative_fontcolor( $_colors[2] ),
+				'{{$rel_color}}'        => '#' . Color::get_relative_fontcolor( $_colors[2] ),
 				'{{$color_accent}}'     => $_colors[3],
-				'{{$rel_color_accent}}' => '#' . Format\Color::get_relative_fontcolor( $_colors[3] ),
+				'{{$rel_color_accent}}' => '#' . Color::get_relative_fontcolor( $_colors[3] ),
 			];
 
 			$conversions = umemo(

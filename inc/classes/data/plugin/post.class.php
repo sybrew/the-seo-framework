@@ -12,9 +12,11 @@ use function The_SEO_Framework\is_headless;
 
 use The_SEO_Framework\{
 	Data,
-	Helper\Post_Type,
-	Helper\Query,
 	Traits\Property_Refresher,
+};
+use The_SEO_Framework\Helper\{
+	Post_Type,
+	Query,
 };
 
 /**
