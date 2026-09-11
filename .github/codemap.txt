@@ -47,6 +47,10 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 			SKILL.md                PHP 7.4 call/array commas; no commas on parameter lists
 			scripts/
 				find-missing.php    Reports missing trailing commas in PHP files
+		makepot/                    Regenerates language/autodescription.pot via makepot-tsf (user request only)
+			SKILL.md                User-request POT generation: permission, engine clone, command
+			scripts/
+				makepot.php         Runs makepot-tsf against language/autodescription.pot
 
 .github/
 	codemap.txt                   This file
