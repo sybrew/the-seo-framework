@@ -51,6 +51,13 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 			SKILL.md                User-request POT generation: permission, engine clone, command
 			scripts/
 				makepot.php         Runs makepot-tsf against language/autodescription.pot
+		playground/                 Local WordPress Playground regression via wp-plugin-regression
+			SKILL.md                Permission, engine clone, launch/capture/compare, when to run
+			plugin.json             TSF slug, mounts, wporg slug, head markers, default paths
+			scripts/
+				playground.js       Runs wp-plugin-regression against this repo
+			mu-plugin/
+				tsf-option-shim.php Routes site settings and post/term meta through Data\Plugin APIs
 
 .github/
 	codemap.txt                   This file

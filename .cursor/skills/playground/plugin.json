@@ -1,0 +1,37 @@
+{
+	"slug": "autodescription",
+	"wporgSlug": "autodescription",
+	"mainFile": "autodescription.php",
+	"shim": ".cursor/skills/playground/mu-plugin/tsf-option-shim.php",
+	"mounts": [
+		"autodescription.php",
+		"index.php",
+		"bootstrap",
+		"inc",
+		"lib",
+		"language",
+		"readme.txt",
+		"wpml-config.xml",
+		"license.txt"
+	],
+	"headMarkers": {
+		"start": "<!-- The SEO Framework",
+		"end": "<!-- / The SEO Framework",
+		"timingStrip": " \\| [^|]+ms meta \\| [^|]+ms boot"
+	},
+	"strips": [
+		"<!-- Sitemap is generated on [^\\n<]+ -->\\n?",
+		"<!-- Sitemap is (?:generated for this view|served from cache) -->\\n?"
+	],
+	"paths": [
+		"/",
+		"/hello-world/",
+		"/sample-page/",
+		"/category/uncategorized/",
+		"/author/admin/",
+		"/?s=test",
+		"/this-does-not-exist-tsf/",
+		"/sitemap.xml",
+		"/robots.txt"
+	]
+}
