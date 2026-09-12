@@ -29,6 +29,12 @@ Try The SEO Framework for free directly in your browser with WordPress Playgroun
 
 [![WordPress Playground Demo](https://img.shields.io/wordpress/plugin/v/autodescription?logo=wordpress&logoColor=FFFFFF&label=Live%20Demo&labelColor=3858E9&color=3858E9)](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)
 
-## GitHub master version ##
+## Changelog ##
+
+See the [latest changes in the plugin changelog](readme.txt#changelog) or browse the [full changelog online](https://theseoframework.com/release-notes/).
+
+## Download the development version ##
+
+Download the latest development version of The SEO Framework, a free and privacy-friendly WordPress SEO plugin, directly from GitHub.
 
 [Download ZIP](https://github.com/sybrew/the-seo-framework/archive/master.zip)
