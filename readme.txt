@@ -274,14 +274,14 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Improved:**
 	* **Tooltips:**
 		* Tooltips now aim to be a little wider to ease reading.
-		* Tooltips now properly dismiss when tapping elsewhere on touch devices. Particularily, added improved support for iOS.
+		* Tooltips now properly dismiss when tapping elsewhere on touch devices. Particularly, added improved support for iOS.
 		* Tooltips now spawn correctly on Android when tapping child elements within tooltip items.
 		* Added `touchcancel` event handling for multi-finger gesture support -- it won't invoke multiple tooltips anymore.
 		* Tooltips now stay when invoking a scroll or pan on touch devices.
 		* SEO Bar focus styles now use `:focus-visible` instead of `:focus`, preventing focus rings on touch taps, but still showing them for keyboard navigation.
 	* **Styling:**
 		* The default admin style for WordPress 7.0 is now assumed to be `'modern'` instead of `'fresh'`.
-		* Updated radio buttons and checkboxes to accomodate for WordPress 7.0.
+		* Updated radio buttons and checkboxes to accommodate for WordPress 7.0.
 		* Fixed a layout issue where hovering title prefix and addition overlays were misaligned in WordPress 7.0 admin input fields. Remains compatible with WordPress 6.8 and 6.9.
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
@@ -333,7 +333,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar explainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
 		* Method `The_SEO_Framework\Data\Filter\Escape::css_content()` (`tsf()->escape()->css_content()`) escapes a string as a CSS `<string>` (using in `content` and quoted `url()` arguments).
 	* **Removed:**
-		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private and this pool pointed at a class that never existed.
+		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private, and this pool pointed at a class that never existed.
 	* **Changed:**
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object.
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):

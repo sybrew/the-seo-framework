@@ -30,3 +30,6 @@ Thumbs.db
 ## Local folder (track folder, ignore contents)
 /.local/*
 !/.local/.gitkeep
+
+## Cursor Auto-review
+/.cursor/permissions.json
