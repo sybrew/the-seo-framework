@@ -23,6 +23,12 @@ It’s easy to get started. Activate this plugin, and your site’s instantly pr
 
 > A free WordPress SEO plugin by Sybre Waaijer. [Learn more and get it at WordPress.org](https://wordpress.org/plugins/autodescription/).
 
+## Test on WordPress Playground ##
+
+Try The SEO Framework for free directly in your browser with WordPress Playground. No installation required.
+
+[![WordPress Playground Demo](https://img.shields.io/wordpress/plugin/v/autodescription?logo=wordpress&logoColor=FFFFFF&label=Live%20Demo&labelColor=3858E9&color=3858E9)](https://playground.wordpress.net/?plugin=autodescription&login=1&url=/wp-admin/edit.php)
+
 ## GitHub master version ##
 
 [Download ZIP](https://github.com/sybrew/the-seo-framework/archive/master.zip)
