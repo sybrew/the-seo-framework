@@ -1,5 +1,5 @@
 # The SEO Framework – Fast, Automated, Effortless. #
-![The SEO Framework Banner](.github/banner-1544x500.png)
+![The SEO Framework Banner](.github/assets/banner-1544x500.png)
 
 [![The SEO Framework Plugin](https://img.shields.io/wordpress/plugin/v/autodescription.svg)](https://wordpress.org/plugins/autodescription/)
 [![The SEO Framework Stats](https://img.shields.io/wordpress/plugin/dt/autodescription.svg)](https://wordpress.org/plugins/autodescription/advanced/)
@@ -28,7 +28,7 @@ The SEO Framework is privacy-friendly and automatically handles essential SEO me
 
 Add more functionality with the free [Extension Manager](https://theseoframework.com/?p=2760) and its collection of free and premium extensions.
 
-Need more for professional use? [Pro](https://theseoframework.com/pricing/) supports public and private sites with developer-oriented support. [Agency](https://theseoframework.com/pricing/) is designed for agencies managing public sites and includes priority support for private sites.
+The free plugin is fully featured for professional use. [Pro](https://theseoframework.com/pricing/) adds all extensions for 2 sites, 5,000 API requests per month (for SEO checkups, content validation, and location services), and private level-1 support for billing and installation. Level-2 developer support is public on Free, private on Business, and priority-private on Agency. All plans work on public and private sites. Explore the available [extensions](https://theseoframework.com/extensions/) and [business and agency plans](https://theseoframework.com/pricing/).
 
 ## Test on WordPress Playground ##
 
