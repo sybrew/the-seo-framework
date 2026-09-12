@@ -524,6 +524,8 @@ class Utils {
 	 *                 `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks.
 	 *              2. Now uses the extra permastruct for hierarchical custom post types, matching
 	 *                 `get_post_permalink()`, instead of the page permastruct.
+	 *              3. Now returns the site root for the static front page and the blog-on-front homepage,
+	 *                 matching `get_page_link()` / `home_url( '/' )`, instead of `$wp_rewrite->front`.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The URL permastructure for the given query.
@@ -537,7 +539,8 @@ class Utils {
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
 				if ( Query::is_static_front_page( $args['id'] ) ) {
-					$permastruct = $wp_rewrite->front;
+					// Site root. `$wp_rewrite->front` is the post permalink prefix (e.g. `/blog/`).
+					$permastruct = '';
 				} else {
 					$post_type = Query::get_post_type_real_id( $args['id'] );
 
@@ -605,7 +608,8 @@ class Utils {
 				}
 				break;
 			case 'homeblog':
-				$permastruct = $wp_rewrite->front;
+				// Same as the static front page: site root, not `$wp_rewrite->front`.
+				$permastruct = '';
 				break;
 			case 'term':
 				$permastruct = $wp_rewrite->get_extra_permastruct( $args['tax'] );

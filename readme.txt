@@ -305,6 +305,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Fixed:**
 	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the homepage URL for hierarchical custom post types, and for post types with rewrite disabled.
+	* Resolved an issue where the Canonical URL Notation Tracker showed the posts permalink prefix as the homepage placeholder when the permalink structure had a static front such as `/blog/%postname%/`.
 	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
@@ -355,7 +356,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 	* **Fixed:**
 		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin.
-		* Method `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`) now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks or rewrite disabled), matching WordPress's `get_permalink()`, `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`, `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks. Hierarchical custom post types now use the extra permastruct, matching `get_post_permalink()`, instead of the page permastruct.
+		* Method `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`):
+			1. Now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks or rewrite disabled), matching WordPress's `get_permalink()`, `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`, `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks.
+			2. Hierarchical custom post types now use the extra permastruct, matching `get_post_permalink()`, instead of the page permastruct.
+			3. The static front page and the blog-on-front homepage now return `/`, matching `get_page_link()` / `home_url( '/' )`, instead of `$wp_rewrite->front`.
 	* **Other:**
 		* Class `The_SEO_Framework\Pool` (`tsf()->pool()`) now stores cache keys by function name, instead of hardcoded strings, reducing duplication and the risk of mismatched keys. This was initiated after we found a typo in a string key.
 * **JavaScript API notes:**
