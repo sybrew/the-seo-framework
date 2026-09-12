@@ -1,6 +1,15 @@
-# [The SEO Framework](https://theseoframework.com) #
+# The SEO Framework – Fast, Automated, Effortless. #
+![The SEO Framework Banner](lib/img/banner-1544x500.png)
 
-## WordPress.org trunk ##
+The fastest and only feature-complete SEO plugin that follows the guidelines and rules imposed by WordPress and search engines.
+
+Start using proven SEO tactics to improve your website’s ranking. Clean, dedicated, extensible, unrestricted, ad-free, and no strings attached.
+
+To top it off, this is the fastest full-featured SEO plugin, and it blends right into your WordPress website, without leaving you in the dark.
+
+It’s easy to get started. Activate this plugin, and your site’s instantly protected against prominent SEO attacks. The SEO Framework will also prefill all critical meta tags for you. A real time-saver. Ingenious.
+
+## WordPress.org ##
 
 [![The SEO Framework Plugin](https://img.shields.io/wordpress/plugin/v/autodescription.svg)](https://wordpress.org/plugins/autodescription/)
 [![The SEO Framework Stats](https://img.shields.io/wordpress/plugin/dt/autodescription.svg)](https://wordpress.org/plugins/autodescription/advanced/)
