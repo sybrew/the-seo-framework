@@ -45,6 +45,6 @@ The pre-release changelog lives in [readme.txt](readme.txt#changelog). The [rele
 
 Ask usage questions on the [WordPress.org support forum](https://wordpress.org/support/plugin/autodescription/) or the [support center](https://theseoframework.com/support/).
 
-File bugs, ideas, and pull requests here. See the [contribution guide](https://tsf.fyi/contributing).
+File bugs, ideas, and pull requests here on GitHub. See the [contribution guide](https://tsf.fyi/contributing).
 
 The SEO Framework sends us no information and does not create cookies. Read the [privacy policy](https://theseoframework.com/?p=1701#pluginprivacyinformation). The plugin is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
