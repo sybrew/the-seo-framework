@@ -52,12 +52,15 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 			scripts/
 				makepot.php         Runs makepot-tsf against language/autodescription.pot
 		playground/                 Local WordPress Playground regression via wp-plugin-regression
-			SKILL.md                Permission, engine clone, launch/capture/compare, when to run
-			plugin.json             TSF slug, mounts, wporg slug, head markers, default paths
+			SKILL.md                Permission, engine clone, launch/capture/compare, WP versions, A/B, Playwright for admin/REST
+			plugin.json             TSF slug, mounts, head markers, entries, surfaces
+			playwright.mcp.json     Playwright MCP: drop AutomationControlled flag; send admin header
 			scripts/
 				playground.js       Runs wp-plugin-regression against this repo
 			mu-plugin/
 				tsf-option-shim.php Routes site settings and post/term meta through Data\Plugin APIs
+				tsf-baseline-seed.php Registers CPTs/taxes and seeds baseline content/frames
+				tsf-playwright-admin.php Logs in admin when Playwright sends X-TSF-Playground-Admin
 
 .github/
 	codemap.txt                   This file

@@ -274,14 +274,14 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Improved:**
 	* **Tooltips:**
 		* Tooltips now aim to be a little wider to ease reading.
-		* Tooltips now properly dismiss when tapping elsewhere on touch devices. Particularily, added improved support for iOS.
+		* Tooltips now properly dismiss when tapping elsewhere on touch devices. Particularly, added improved support for iOS.
 		* Tooltips now spawn correctly on Android when tapping child elements within tooltip items.
 		* Added `touchcancel` event handling for multi-finger gesture support -- it won't invoke multiple tooltips anymore.
 		* Tooltips now stay when invoking a scroll or pan on touch devices.
 		* SEO Bar focus styles now use `:focus-visible` instead of `:focus`, preventing focus rings on touch taps, but still showing them for keyboard navigation.
 	* **Styling:**
 		* The default admin style for WordPress 7.0 is now assumed to be `'modern'` instead of `'fresh'`.
-		* Updated radio buttons and checkboxes to accomodate for WordPress 7.0.
+		* Updated radio buttons and checkboxes to accommodate for WordPress 7.0.
 		* Fixed a layout issue where hovering title prefix and addition overlays were misaligned in WordPress 7.0 admin input fields. Remains compatible with WordPress 6.8 and 6.9.
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
@@ -305,6 +305,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Fixed:**
 	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the homepage URL for hierarchical custom post types, and for post types with rewrite disabled.
+	* Resolved an issue where the Canonical URL Notation Tracker showed the posts permalink prefix as the homepage placeholder when the permalink structure had a static front such as `/blog/%postname%/`.
 	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
@@ -332,7 +333,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar explainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
 		* Method `The_SEO_Framework\Data\Filter\Escape::css_content()` (`tsf()->escape()->css_content()`) escapes a string as a CSS `<string>` (using in `content` and quoted `url()` arguments).
 	* **Removed:**
-		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private and this pool pointed at a class that never existed.
+		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private, and this pool pointed at a class that never existed.
 	* **Changed:**
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object.
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):
@@ -355,7 +356,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 	* **Fixed:**
 		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin.
-		* Method `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`) now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks or rewrite disabled), matching WordPress's `get_permalink()`, `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`, `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks. Hierarchical custom post types now use the extra permastruct, matching `get_post_permalink()`, instead of the page permastruct.
+		* Method `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`):
+			1. Now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks or rewrite disabled), matching WordPress's `get_permalink()`, `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`, `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks.
+			2. Hierarchical custom post types now use the extra permastruct, matching `get_post_permalink()`, instead of the page permastruct.
+			3. The static front page and the blog-on-front homepage now return `/`, matching `get_page_link()` / `home_url( '/' )`, instead of `$wp_rewrite->front`.
 	* **Other:**
 		* Class `The_SEO_Framework\Pool` (`tsf()->pool()`) now stores cache keys by function name, instead of hardcoded strings, reducing duplication and the risk of mismatched keys. This was initiated after we found a typo in a string key.
 * **JavaScript API notes:**
