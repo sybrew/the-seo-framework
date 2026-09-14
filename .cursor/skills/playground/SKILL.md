@@ -21,7 +21,7 @@ When to run:
 - Support reproduction
 - Before calling the work done
 
-Keep one server per session. PHP edits apply on the next request. Restart only for `--wp` / `--php`, a different `--site`, or `--plugin=wporg` vs `working`.
+PHP edits on the working-tree mount apply on the next request. Launch takes the next free port in `9001`–`9099`. `launch --pair` takes the next two consecutive ports (wordpress.org `--site=before`, working tree `--site=after`). Read the URL from launch output or `~/.wordpress-playground/tests/runs.json`. Do not assume port `9400` or that pair is always `9001`/`9002`. Restart a side after `--wp` / `--php` changes. Do not reuse persist across majors or `latest` vs `trunk`.
 
 Captures are logged-out. Launch does not pass `--login`.
 
@@ -29,7 +29,7 @@ Do not `flush_rewrite_rules()` in a blueprint `runPHP` step. That writes incompl
 
 Playground 301s `/sitemap.xml` via a VFS mu-plugin (`sitemap-redirect.php`). The engine overwrites that file with a no-op until https://github.com/WordPress/wordpress-playground/issues/4325 is patched. Drop the overwrite when that issue lands. If every request 500s with a parse error in that file, the no-op was invalid PHP. Fix `lib/launch.js` in wp-plugin-regression; do not change the plugin.
 
-If `.local/playground/run.json` points at a live pid, reuse it.
+If `~/.wordpress-playground/tests/runs.json` lists a live pid for that port, reuse it.
 
 ## Permission
 
@@ -66,7 +66,9 @@ From the repo root:
 
 ```
 node .cursor/skills/playground/scripts/playground.js launch
+node .cursor/skills/playground/scripts/playground.js launch --pair
 node .cursor/skills/playground/scripts/playground.js stop
+node .cursor/skills/playground/scripts/playground.js stop --port=9001
 node .cursor/skills/playground/scripts/playground.js capture --label before
 node .cursor/skills/playground/scripts/playground.js capture --label after --feature=title
 node .cursor/skills/playground/scripts/playground.js compare --before before --after after --feature=title
@@ -75,13 +77,19 @@ node .cursor/skills/playground/scripts/playground.js harness --action ping
 node .cursor/skills/playground/scripts/playground.js harness --json-file .local/playground/payload.json
 ```
 
-Optional launch flags: `--wp=latest`, `--php=8.3`, `--site=default`, `--plugin=working|wporg`, `--port=9400`.
+Optional launch flags: `--wp=latest`, `--php=8.3`, `--site=default`, `--plugin=working|wporg`, `--port`, `--port-before`, `--port-after`, `--pair`, `--keep`. Launch picks the next free port in `9001`–`9099`. `--pair` picks the next two consecutive ports (`before` / `after`). Pin with `--port` or `--port-before` / `--port-after`. `--keep` reuses persist instead of wiping.
 
 ## WordPress and PHP versions
 
-`--wp` is a Playground **build slug**, not a path to Core. `stop` first, then launch with a **new `--site`**. Do not reuse a site SQLite across majors or `latest` vs `trunk`.
+`--wp` is a Playground **build slug**, not a path to Core. Do not reuse persist across majors or `latest` vs `trunk`.
 
 Slugs the CLI accepts: `latest` (default gold), `beta`, `trunk` (`nightly` is the same), a hosted major/minor (`7.0`, `6.9`, `6.9.1`), a beta/RC (`6.8-RC1`), or a zip URL. PHP is `--php` (`7.4`–`8.5`, default `8.3`).
+
+`@wp-playground/wordpress` `resolveWordPressRelease()` turns the slug into `{ version, releaseUrl }` (`latest` → `7.1` plus the zip URL). Playground stores the zip as `~/.wordpress-playground/<version>.zip`. The engine unpacks a slim tree at `~/.wordpress-playground/wp/<version>/` (same version token), keeps `WP_DEFAULT_THEME`, strips other bundled Twenty* themes, and mounts with `install-from-existing-files`.
+
+Do not write sites under `.local/playground/sites` (that tree is inside the synced repo). Persist is `~/.wordpress-playground/tests/autodescription/<version>/<site>/`. Launch wipes that folder unless `--keep`. Captures stay in `.local/playground/captures/`. Old folders under `.local/playground/sites/` are unused; delete them locally if they are still syncing.
+
+This consumer is a single-plugin repo. `plugin.json` omits `dir`, `activate`, `extraPlugins`, and `extraMounts`. Do not add them here.
 
 `--wp=trunk` is the prebuilt WordPress/WordPress nightly. It is not `wordpress-develop` and not `--wp=7.2`. `--wp=7.2` only works if Playground hosts a 7.2 release or beta zip. Do not mount `wordpress-develop/src` (or its `build/`) as `/wordpress`. That is not implemented.
 
@@ -91,17 +99,17 @@ Use `--wp` / `--php` only when the change can be version-sensitive. Not a full m
 
 The working tree is mounted live. PHP edits apply on the next request. There is no “previous plugin” left on disk after you edit. Pick one previous:
 
-1. **This session, not yet edited.** `capture --label before --feature=<name>`, edit, `capture --label after --feature=<name>`, `compare --before before --after after --feature=<name>`.
-2. **Already edited, or vs gold.** `capture --label after --feature=<name>`, `compare --before baseline --after after --feature=<name>`. Requires `.local/playground/captures/baseline.json` from the same catalog/seed on `latest`. If that file is missing or the catalog changed, say so. Do not capture `before` from the dirty tree and call it previous.
-3. **wordpress.org release vs this tree.** `launch --plugin=wporg`, `capture --label before --feature=<name>`, `stop`, `launch --plugin=working` with the **same** `--site`, `capture --label after --feature=<name>`, `compare`.
+1. **Live side-by-side (preferred).** `launch --pair`. wordpress.org is `--site=before`, working tree is `--site=after`, on the next two free consecutive ports. `capture --label before --feature=<name>` and `capture --label after --feature=<name>` pick those sites. `compare` diffs the JSON bundles and does not need a live server. Open the URLs from launch output or `runs.json`. `stop` kills both; `stop --port=<port>` kills one.
+2. **This session, one server, not yet edited.** `launch`, `capture --label before --feature=<name>`, edit, `capture --label after --feature=<name>`, `compare`.
+3. **Already edited, or vs gold.** `capture --label after --feature=<name>`, `compare --before baseline --after after --feature=<name>`. Requires `.local/playground/captures/baseline.json` from the same catalog/seed on `latest`. If that file is missing or the catalog changed, say so. Do not capture `before` from the dirty tree and call it previous.
 
 Same `--feature` (or `--types`) on both captures. `surfaces` first. Do not git checkout, stash, or mount another Core tree to fake previous. Unminified `lib/js` / `lib/css` edits need the minify skill before capture.
 
 Front-end SEO A/B is HTTP `capture` / `compare`. Admin SEO UI, settings, and REST-from-the-browser A/B is Playwright MCP against the live Playground URL after `launch`. The engine does not drive a browser. `playwright.env` in Cursor settings is the Test extension, not the agent. Cursor’s built-in Browser Automation conflicts with Playwright MCP; use the MCP. Default captures stay logged-out.
 
-Playwright MCP must load `.cursor/skills/playground/playwright.mcp.json` (`--config` in `%USERPROFILE%\.cursor\mcp.json`). That file strips Chrome's `--disable-blink-features=AutomationControlled` flag and sends `X-TSF-Playground-Admin: 1`. For admin/REST, navigate to `http://127.0.0.1:9400/wp-admin/` (or `/wp-json/`). Do not fill `admin` / `password` — Cursor Auto-review blocks that. `tsf-playwright-admin.php` calls `wp_set_auth_cookie()` when the header is present. That is the login. Do not add `.cursor/permissions.json`. Do not pass Playground `--login` or a blueprint `login` step (HTTP capture would share that session). Front-end HTML stays logged-out. Restart the Playwright MCP server after changing `mcp.json` or the config.
+Playwright MCP must load `.cursor/skills/playground/playwright.mcp.json` (`--config` in `%USERPROFILE%\.cursor\mcp.json`). That file strips Chrome's `--disable-blink-features=AutomationControlled` flag and sends `X-TSF-Playground-Admin: 1`. For admin/REST, navigate to the live origin from launch or `runs.json` (`http://127.0.0.1:<port>/wp-admin/` or `/wp-json/`). Do not fill `admin` / `password` — Cursor Auto-review blocks that. `tsf-playwright-admin.php` calls `wp_set_auth_cookie()` when the header is present. That is the login. Do not add `.cursor/permissions.json`. Do not pass Playground `--login` or a blueprint `login` step (HTTP capture would share that session). Front-end HTML stays logged-out. Restart the Playwright MCP server after changing `mcp.json` or the config.
 
-Mutate the live site by writing mu-plugins under `.local/playground/sites/{id}/mu-plugins/`, or `harness --json-file <path>`. Do not pass `--json "{...}"` from PowerShell; it strips the quotes. Do not add `eval`.
+Mutate the live site by writing mu-plugins under `~/.wordpress-playground/tests/autodescription/<version>/<site>/mu-plugins/`, or `harness --json-file <path>`. Do not pass `--json "{...}"` from PowerShell; it strips the quotes. Do not add `eval`.
 
 The catalog is `plugin.json` `entries`, `surfaces`, and `surfaceLines`. One capture writes `.local/playground/captures/<label>.json` — the full walkable dump (status, headers, marker block, plus `headTags`). It is a local gold file, not a CI gate. Do not hand-edit it. Regenerate when the seed or catalog changes. `compare --feature` needs those entries in both bundles; recapture with the same `--feature`.
 
@@ -111,7 +119,7 @@ On output-affecting work:
 2. Pick the feature you touched (`title`, `description`, `robots`, `canonical`, `schema`, `og`, `twitter`, `sitemap`, `robots-txt`, `feed`, `redirect`, `oembed`).
 3. `capture --label after --feature=<name>` and `compare --before baseline --after after --feature=<name>`. The command prints that list, then diffs only those pages and only the lines for that feature (`surfaceLines`), plus status/location.
 
-`--types=post,page` narrows to page types. `--paths` still appends extra URLs. A full compare (no `--feature`) diffs the whole extracted block.
+`--types=post,page` narrows to page types. `--paths` still appends extra URLs to capture and compare. A full compare (no `--feature`) diffs the whole extracted block.
 
 Seeded types: front as blog, static front, posts page, post, page, `?p=` query, category, empty category, tag, date (day/month/year), author, search, 404, paged blog / posts page / category, multipage post, hierarchical CPT + child, non-hierarchical CPT, both CPT archives, a taxonomy on two CPTs, a taxonomy on one CPT, sitemap, robots.txt, site/post/category/author/CPT/comments feeds, post/term redirects, oEmbed. Attachment, preview, comment-paged, and WooCommerce shop/product are not seeded.
 
@@ -130,6 +138,6 @@ To test other posts or terms, create or update them with harness, then recapture
 
 Post meta keys are TSF’s per-post fields (`_genesis_title`, `_genesis_description`, `_genesis_noindex`, …). Term meta is the `autodescription-term-settings` bag (`doctitle`, `description`, `noindex`, …), or that bag name with an object value.
 
-`stop` waits for the site SQLite file to unlock. If launch still dies with a SQLite error, use `--site` with a new id or delete `sites/<id>/database/.ht.sqlite`.
+`stop` waits for the site SQLite file to unlock. Default launch wipes persist (`--keep` to reuse). If SQLite stays locked, retry stop, then launch.
 
 If the script exits non-zero, fix the failure.

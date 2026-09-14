@@ -81,7 +81,7 @@ function main() {
 	const extra = process.argv.slice( 2 );
 
 	if ( ! extra.length )
-		throw new Error( 'Usage: node playground.js <launch|stop|capture|compare|harness> [flags]' );
+		throw new Error( 'Usage: node playground.js <launch|stop|capture|compare|harness|surfaces> [flags]' );
 
 	if ( ! hasFlag( extra, 'root' ) )
 		extra.push( '--root', ROOT );
