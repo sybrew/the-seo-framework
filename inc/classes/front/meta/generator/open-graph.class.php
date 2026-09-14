@@ -159,6 +159,7 @@ final class Open_Graph {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.1.5 Now percent-encodes non-ASCII octets in the image URL.
 	 * @generator
 	 */
 	public static function generate_open_graph_image() {
@@ -172,7 +173,7 @@ final class Open_Graph {
 			yield "og:image:$i" => [
 				'attributes' => [
 					'property' => 'og:image',
-					'content'  => $image['url'],
+					'content'  => Meta\URI\Utils::encode_url( $image['url'] ),
 				],
 			];
 

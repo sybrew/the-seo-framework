@@ -287,6 +287,26 @@ class Utils {
 	}
 
 	/**
+	 * Percent-encodes non-ASCII octets so the URL is a valid RFC 3986 URI.
+	 *
+	 * WordPress's `sanitize_url()` keeps UTF-8 bytes. Consumers that require an
+	 * ASCII URI, such as Facebook's `og:image` crawler, then ignore the tag.
+	 * Already-percent-encoded sequences and reserved ASCII characters are left intact.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param string $url The URL to encode.
+	 * @return string The URL with non-ASCII octets percent-encoded.
+	 */
+	public static function encode_url( $url ) {
+		return preg_replace_callback(
+			'/[^\x21-\x7E]+/',
+			fn( $matches ) => rawurlencode( $matches[0] ),
+			$url,
+		);
+	}
+
+	/**
 	 * Tests if input URL matches current domain.
 	 *
 	 * @since 5.0.0

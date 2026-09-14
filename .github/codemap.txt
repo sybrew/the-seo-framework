@@ -290,7 +290,7 @@ title/
 	utils.class.php               Title utility helpers: separator list, separator retrieval, tagline resolution
 
 uri/
-	utils.class.php               URI utilities: scheme detection, URL appending/prepending, slash handling, permalink checks
+	utils.class.php               URI utilities: scheme detection, RFC 3986 URL encoding, URL appending/prepending, slash handling, permalink checks
 
 
 Robots.txt (inc/classes/robotstxt/)

@@ -310,6 +310,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
 	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content.
+	* Resolved an issue where social image URLs with non-ASCII characters in the filename were not percent-encoded, causing Facebook to ignore the `og:image` tag.
 * **Notes:**
 	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
@@ -332,6 +333,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* Internally known as `The_SEO_Framework\Admin\Script\Loader`.
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar explainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
 		* Method `The_SEO_Framework\Data\Filter\Escape::css_content()` (`tsf()->escape()->css_content()`) escapes a string as a CSS `<string>` (using in `content` and quoted `url()` arguments).
+		* Method `The_SEO_Framework\Meta\URI\Utils::encode_url()` (`tsf()->uri()->utils()->encode_url()`) percent-encodes non-ASCII octets in a URL so the result is an RFC 3986 URI. Already-encoded sequences are left intact.
 	* **Removed:**
 		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private, and this pool pointed at a class that never existed.
 	* **Changed:**
