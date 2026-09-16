@@ -77,7 +77,7 @@ node .cursor/skills/playground/scripts/playground.js harness --action ping
 node .cursor/skills/playground/scripts/playground.js harness --json-file .local/playground/payload.json
 ```
 
-Optional launch flags: `--wp=latest`, `--php=8.3`, `--site=default`, `--plugin=working|wporg`, `--port`, `--port-before`, `--port-after`, `--pair`, `--keep`. Launch picks the next free port in `9001`–`9099`. `--pair` picks the next two consecutive ports (`before` / `after`). Pin with `--port` or `--port-before` / `--port-after`. `--keep` reuses persist instead of wiping.
+Optional launch flags: `--wp=latest`, `--php=8.3`, `--site=default`, `--plugin=working|wporg`, `--port`, `--port-before`, `--port-after`, `--pair`, `--keep`, `--workers=<n|auto>`, `--extra-plugin-zip=<path>`. Launch picks the next free port in `9001`–`9099`. `--pair` picks the next two consecutive ports (`before` / `after`). Pin with `--port` or `--port-before` / `--port-after`. `--keep` reuses persist instead of wiping. `--workers` defaults to `max(6, os.cpus().length - 1)`. `--extra-plugin-zip` is repeatable. Extracts land in `~/.wordpress-playground/extra-plugins/`, never under this repo. Use `WP_PLUGIN_REGRESSION_DIR` when the engine clone that has this flag is not the `.local` checkout.
 
 ## WordPress and PHP versions
 
@@ -87,9 +87,9 @@ Slugs the CLI accepts: `latest` (default gold), `beta`, `trunk` (`nightly` is th
 
 `@wp-playground/wordpress` `resolveWordPressRelease()` turns the slug into `{ version, releaseUrl }` (`latest` → `7.1` plus the zip URL). Playground stores the zip as `~/.wordpress-playground/<version>.zip`. The engine unpacks a slim tree at `~/.wordpress-playground/wp/<version>/` (same version token), keeps `WP_DEFAULT_THEME`, strips other bundled Twenty* themes, and mounts with `install-from-existing-files`.
 
-Do not write sites under `.local/playground/sites` (that tree is inside the synced repo). Persist is `~/.wordpress-playground/tests/autodescription/<version>/<site>/`. Launch wipes that folder unless `--keep`. Captures stay in `.local/playground/captures/`. Old folders under `.local/playground/sites/` are unused; delete them locally if they are still syncing.
+Do not write sites, extra-plugin extracts, or plugin zips under `.local/playground/` (that tree is inside the synced repo). Persist is `~/.wordpress-playground/tests/autodescription/<version>/<site>/`. Off-site plugin zips extract to `~/.wordpress-playground/extra-plugins/`. Launch wipes the site folder unless `--keep`. Captures stay in `.local/playground/captures/`. Old folders under `.local/playground/sites/` are unused; delete them locally if they are still syncing.
 
-This consumer is a single-plugin repo. `plugin.json` omits `dir`, `activate`, `extraPlugins`, and `extraMounts`. Do not add them here.
+This consumer is a single-plugin repo. `plugin.json` omits `dir`, `activate`, `extraPlugins`, and `extraMounts`. Do not add them here. Mount another plugin with `launch --extra-plugin-zip`.
 
 `--wp=trunk` is the prebuilt WordPress/WordPress nightly. It is not `wordpress-develop` and not `--wp=7.2`. `--wp=7.2` only works if Playground hosts a 7.2 release or beta zip. Do not mount `wordpress-develop/src` (or its `build/`) as `/wordpress`. That is not implemented.
 

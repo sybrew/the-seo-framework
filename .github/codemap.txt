@@ -354,7 +354,7 @@ plugin-polylang.php             Polylang: per-language sitemaps, pll__ string tr
 plugin-ultimatemember.php       Ultimate Member: reinstates title support, conditionally disables SEO on profile pages
 plugin-woocommerce.php          WooCommerce: shop page ID, product detection, noindex cart/checkout, primary term links, image params
 plugin-wpforo.php               wpForo: page detection; defers to wpForo SEO when enabled or overrides with TSF's output
-plugin-wpml.php                 WPML: per-language sitemaps, sitemap cache flushing, translatable post filtering
+plugin-wpml.php                 WPML: per-language sitemaps, sitemap cache flushing, translatable post filtering, SEO field purpose for ATE character limits
 theme-avada.php                 Avada: disables conflicting Open Graph, rich snippets, and hides its SEO meta box tab
 theme-bricks.php                Bricks Builder: removes non-public template post types/taxonomies from TSF's public lists
 theme-genesis.php               Genesis: disables Genesis SEO features, migrates Genesis term meta into TSF's defaults

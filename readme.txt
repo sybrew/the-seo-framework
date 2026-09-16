@@ -302,6 +302,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory or the static front-page slug, so advertised sitemaps 404'd or redirected to WordPress's sitemap.
 	* **Plugin: WPML:**
 		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory twice, including when "Use directory for default language" is enabled, so advertised sitemaps 404'd.
+		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
 	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the homepage URL for hierarchical custom post types, and for post types with rewrite disabled.

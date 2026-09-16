@@ -21,6 +21,7 @@ use The_SEO_Framework\{
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\_wpml_sitemap_filter_display_translatables' );
 \add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
 \add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
+\add_filter( 'wpml_tm_adjust_translation_fields', __NAMESPACE__ . '\_wpml_adjust_translation_fields' );
 
 /**
  * Registers per-language sitemaps for robots.txt and request matching.
@@ -279,4 +280,47 @@ function _wpml_sitemap_filter_non_translatables( $args ) {
 	$args['post_type'] = array_filter( (array) $args['post_type'], [ $sitepress, 'is_translated_post_type' ] );
 
 	return $args;
+}
+
+/**
+ * Marks TSF SEO title and meta description fields for WPML character limits.
+ *
+ * WPML automatic translation reads `purpose` to keep those fields within
+ * recommended character counts. Pixel counting is not available.
+ *
+ * @hook wpml_tm_adjust_translation_fields 10
+ * @since 5.1.5
+ *
+ * @param array[] $fields {
+ *     Translation fields.
+ *
+ *     @type string $field_type The WPML field type, such as `field-_genesis_title-0`
+ *                              or `tfield-_genesis_title-{term_id}`.
+ *     @type string $purpose    Optional. Set to `seo_title` or `seo_meta_description`.
+ * }
+ * @return array[]
+ */
+function _wpml_adjust_translation_fields( $fields ) {
+
+	$purposes = [
+		'_genesis_title'       => 'seo_title',
+		'_genesis_description' => 'seo_meta_description',
+	];
+
+	foreach ( $fields as &$field ) {
+		$field_type = $field['field_type'] ?? '';
+
+		if ( ! \is_string( $field_type ) ) continue;
+
+		$field_key = preg_replace(
+			'/^t?field-(.+)-\d+$/',
+			'$1',
+			$field_type,
+		);
+
+		if ( isset( $purposes[ $field_key ] ) )
+			$field['purpose'] = $purposes[ $field_key ];
+	}
+
+	return $fields;
 }
