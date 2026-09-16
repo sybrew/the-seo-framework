@@ -308,14 +308,12 @@ function _wpml_adjust_translation_fields( $fields ) {
 	];
 
 	foreach ( $fields as &$field ) {
-		$field_type = $field['field_type'] ?? '';
-
-		if ( ! \is_string( $field_type ) ) continue;
+		if ( empty( $field['field_type'] ) ) continue;
 
 		$field_key = preg_replace(
 			'/^t?field-(.+)-\d+$/',
 			'$1',
-			$field_type,
+			$field['field_type'],
 		);
 
 		if ( isset( $purposes[ $field_key ] ) )

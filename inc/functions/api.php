@@ -96,6 +96,7 @@ namespace {
 	 *
 	 * @since 5.0.0
 	 * @since 5.1.4 Added the `title` attribute.
+	 * @since 5.1.5 Now omits the `<style>` element when `the_seo_framework_breadcrumb_shortcode_css` returns no rules.
 	 * @link <https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/examples/breadcrumb/>
 	 *
 	 * @param array $atts The shortcode attributes.
@@ -161,7 +162,8 @@ namespace {
 
 		/**
 		 * @since 5.0.0
-		 * @since 5.1.5 Added `padding-inline-start:0` to `nav.$class ol`.
+		 * @since 5.1.5 1. Added `padding-inline-start:0` to `nav.$class ol`.
+		 *              2. Now omits the `<style>` element when this filter returns no rules.
 		 * @param array  $css   The CSS selectors and their attributes.
 		 * @param string $class The class name of the breadcrumb wrapper.
 		 */
@@ -195,17 +197,18 @@ namespace {
 				implode( ';', $declaration ),
 			);
 
-		$style = "<style>$styles</style>";
+		$style = $styles ? "<style>$styles</style>" : '';
 		$nav   = <<<HTML
 			<nav aria-label="Breadcrumb" class="$class"><ol>$html</ol></nav>
 			HTML;
 
 		/**
 		 * @since 5.0.0
+		 * @since 5.1.5 `$style` is now an empty string when the CSS filter returns no rules.
 		 * @param string $output The entire breadcrumb navigation element output.
 		 * @param array  $crumbs The breadcrumbs found.
 		 * @param string $nav    The breadcrumb navigation element.
-		 * @param string $style  The CSS style element appended.
+		 * @param string $style  The CSS style element appended. Empty when no CSS rules remain.
 		 */
 		return apply_filters(
 			'the_seo_framework_breadcrumb_shortcode_output',

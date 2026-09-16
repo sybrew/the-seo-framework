@@ -309,6 +309,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where the Canonical URL Notation Tracker showed the posts permalink prefix as the homepage placeholder when the permalink structure had a static front such as `/blog/%postname%/`.
 	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
+	* Resolved an issue where the `[tsf_breadcrumb]` shortcode still output empty `<style></style>` tags when its CSS was filtered away.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
 	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content.
 	* Resolved an issue where social image URLs with non-ASCII characters in the filename were not percent-encoded, causing Facebook to ignore the `og:image` tag.
@@ -352,6 +353,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now accepts `$sitemap_id` (`xsl-stylesheet` or `css`) and outputs the CSS when that ID is `css`.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_sitemap_header()` (`tsf()->sitemap()->registry()->output_sitemap_header()`) now also emits a CSS xml-stylesheet processing instruction after the XSL one.
+		* Function `tsf_breadcrumb()` now omits the `<style>` element when `the_seo_framework_breadcrumb_shortcode_css` returns no rules.
 	* **Improved:**
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_locale()` (`tsf()->open_graph()->get_locale()`) now derives the Open Graph locale from `The_SEO_Framework\Data\Blog::get_language()` (`tsf()->data()->blog()->get_language()`) instead of calling `get_locale()` directly. Because `get_language()` is memoized, repeated locale filter callbacks on multilingual sites (Polylang, WPML) are avoided.
 		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
@@ -378,7 +380,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Added:**
 		* `the_seo_framework_sitemap_settings_language_endpoints` returns administrative language names keyed by sitemap endpoint ID, used for translated sitemap links in SEO Settings.
 	* **Changed:**
-		* `the_seo_framework_breadcrumb_shortcode_css`, the default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
+		* `the_seo_framework_breadcrumb_shortcode_css`:
+			1. The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
+			2. Returning no rules no longer yields a `<style>` element.
+		* `the_seo_framework_breadcrumb_shortcode_output` `$style` is now an empty string when the CSS filter returns no rules.
 		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`) in the default list.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation` now passes through `0` instead of the untitled fallback.
