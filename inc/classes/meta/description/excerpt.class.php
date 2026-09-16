@@ -50,6 +50,7 @@ class Excerpt {
 	 * Returns a description excerpt.
 	 *
 	 * @since 5.1.0
+	 * @since 5.1.5 Now falls back to the post content when a singular excerpt is unusable after HTML extraction.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -254,8 +255,11 @@ class Excerpt {
 
 	/**
 	 * Returns a description excerpt for singular post types.
+	 * Falls back to the post content when the excerpt is unusable after HTML extraction.
+	 * The excerpt and content are not concatenated.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now falls back to the post content when the excerpt is unusable after HTML extraction.
 	 * NOTE: Don't add memo; large memory heaps can occur.
 	 *       It only runs twice on the post edit screen (post.php).
 	 *       Front-end caller get_excerpt_from_query() uses memo.
@@ -271,19 +275,20 @@ class Excerpt {
 		if ( ! $post || Data\Post::is_protected( $post ) )
 			return '';
 
-		$excerpt = Data\Post::get_excerpt( $post );
+		$excerpt = HTML::extract_content( Data\Post::get_excerpt( $post ) );
 
-		if ( empty( $excerpt ) && ! Data\Post::uses_non_html_page_builder( $post->ID ) ) {
-			// We should actually get the parsed content here... but that can be heavy on the server.
-			// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
-			$excerpt = Data\Post::get_content( $post );
+		if ( \strlen( $excerpt ) )
+			return $excerpt;
 
-			if ( $excerpt )
-				$excerpt = HTML::strip_paragraph_urls( HTML::strip_newline_urls( $excerpt ) );
-		}
-
-		if ( empty( $excerpt ) )
+		if ( Data\Post::uses_non_html_page_builder( $post->ID ) )
 			return '';
+
+		// We should actually get the parsed content here... but that can be heavy on the server.
+		// We could cache that parsed content, but that'd be asinine for a plugin. WordPress should've done that.
+		$excerpt = Data\Post::get_content( $post );
+
+		if ( $excerpt )
+			$excerpt = HTML::strip_paragraph_urls( HTML::strip_newline_urls( $excerpt ) );
 
 		return HTML::extract_content( $excerpt );
 	}

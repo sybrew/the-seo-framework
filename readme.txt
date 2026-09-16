@@ -291,6 +291,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Toggling the optimized sitemap now warns that the sitemap links still reflect the saved setting until you save.
 	* **Head tags:**
 		* The metatag generator now always outputs in HTML5 syntax, dropping XHTML support.
+	* **Descriptions:**
+		* Generated descriptions now fall back to the post content when the excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated.
 * **Compatibility:**
 	* **Plugins: Cachify, LiteSpeed Cache, SpeedyCache, Surge, W3 Total Cache, etc.:**
 		* Resolved an issue where cache plugins that do not have specific exclusion rules for sitemap or sitemap stylesheet endpoints could serve an empty sitemap or stylesheet on later visits.
@@ -346,6 +348,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
 			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
+		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
 		* Method `The_SEO_Framework\Meta\Title::get_bare_generated_title()` (`tsf()->title()->get_bare_generated_title()`) can now return `0` instead of an untitled fallback.
 		* Method `The_SEO_Framework\Meta\Title::get_search_query_title()` (`tsf()->title()->get_search_query_title()`) now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
 		* Methods `The_SEO_Framework\Meta\Title::get_archive_title_from_query()` (`tsf()->title()->get_archive_title_from_query()`) and `The_SEO_Framework\Meta\Title::get_archive_title_from_object()` (`tsf()->title()->get_archive_title_from_object()`) now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.
