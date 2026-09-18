@@ -39,7 +39,8 @@
 		"canonical": [ "rel=\"canonical\"", "og:url" ],
 		"schema": [ "application/ld+json", "@context", "@graph", "@type" ],
 		"og": [ "property=\"og:" ],
-		"twitter": [ "name=\"twitter:", "property=\"twitter:" ]
+		"twitter": [ "name=\"twitter:", "property=\"twitter:" ],
+		"fediverse": [ "name=\"fediverse:creator\"", "rel=\"me\"" ]
 	},
 	"surfaces": {
 		"title": [
@@ -178,6 +179,24 @@
 			"date",
 			"author",
 			"search",
+			"cpt-nonhier",
+			"cpt-hier",
+			"cpt-archive",
+			"tax-shared",
+			"tax-cpt",
+			"empty-archive",
+			"multipage"
+		],
+		"fediverse": [
+			"front-blog",
+			"front-page",
+			"posts-page",
+			"post",
+			"page",
+			"category",
+			"tag",
+			"date",
+			"author",
 			"cpt-nonhier",
 			"cpt-hier",
 			"cpt-archive",

@@ -212,6 +212,7 @@ class User {
 	 * @since 4.1.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_user_meta_defaults`.
+	 * @since 5.1.5 Added `fediverse_page` and `fediverse_page_url`.
 	 *
 	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
 	 * @return array The user meta defaults.
@@ -225,9 +226,11 @@ class User {
 		return (array) \apply_filters(
 			'the_seo_framework_user_meta_defaults',
 			[
-				'counter_type'  => 3,
-				'facebook_page' => '',
-				'twitter_page'  => '',
+				'counter_type'       => 3,
+				'facebook_page'      => '',
+				'fediverse_page'     => '',
+				'fediverse_page_url' => '',
+				'twitter_page'       => '',
 			],
 			$user_id ?: Query::get_current_user_id(),
 		);

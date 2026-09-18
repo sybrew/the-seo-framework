@@ -82,7 +82,8 @@ class Loader {
 	 *
 	 * @hook admin_enqueue_scripts 0
 	 * @since 5.0.0
-	 * @since 5.1.5 Prevents multiple runs.
+	 * @since 5.1.5 1. Prevents multiple runs.
+	 *              2. Now also loads author profile scripts.
 	 */
 	public static function init() {
 
@@ -165,6 +166,9 @@ class Loader {
 
 			// Always load unconditionally, options may enable the counters dynamically.
 			$scripts[] = self::get_counter_scripts();
+		} elseif ( Query::is_profile_edit() ) {
+			if ( Data\Plugin::get_option( 'display_user_edit_options' ) )
+				$scripts[] = self::get_author_edit_scripts();
 		}
 
 		/**
@@ -572,6 +576,27 @@ class Loader {
 						],
 					],
 				],
+			],
+		];
+	}
+
+	/**
+	 * Returns Author profile scripts params.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_author_edit_scripts() {
+		return [
+			[
+				'id'       => 'tsf-author',
+				'type'     => 'js',
+				'deps'     => [ 'tsf' ],
+				'autoload' => true,
+				'name'     => 'author',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
 			],
 		];
 	}

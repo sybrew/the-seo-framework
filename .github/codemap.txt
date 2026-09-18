@@ -198,6 +198,7 @@ meta/
 		advanced-query-protection.class.php   Generates the tsf:aqp meta tag for advanced query protection detection
 		description.class.php                 Generates the <meta name="description"> tag
 		facebook.class.php                    Generates Facebook article:author and article:publisher meta tags
+		fediverse.class.php                   Generates fediverse:creator and rel=me profile link tags
 		open-graph.class.php                  Generates Open Graph meta tags (type, locale, title, description, URL, image, times)
 		robots.class.php                      Generates the <meta name="robots"> tag with computed directives
 		schema.class.php                      Generates the JSON-LD Schema.org structured data script block
@@ -254,6 +255,7 @@ These classes compute values; front/meta/generator/ classes render them into HTM
 breadcrumbs.class.php           Generates breadcrumb lists (URL + name pairs) for posts, terms, and post type archives
 description.class.php           Builds meta description output from custom fields or auto-generated excerpts
 facebook.class.php              Provides Facebook-specific meta values (author, publisher, app ID) for article pages
+fediverse.class.php             Provides Fediverse handles and stored or derived profile URLs (creator, site, rel=me)
 image.class.php                 Retrieves and manages SEO image URLs (custom and generated) for social/oembed
 open-graph.class.php            Builds Open Graph meta tag values (type, title, description, URL, images, locale, site name)
 robots.class.php                Public API for generating robots meta tag values and collecting assertions
@@ -384,7 +386,7 @@ post/
 	wrap-nav.php                  Tab radio buttons/labels for the flex-tab navigation in the post edit metabox
 
 profile/
-	settings.php                  User profile SEO fields (Facebook URL, X/Twitter handle, author robots noindex/nofollow)
+	settings.php                  User profile SEO fields (Facebook URL, Fediverse handle, X/Twitter handle, author robots noindex/nofollow)
 
 settings/
 	columns.php                   Two-column metabox layout container for the main SEO Settings page
@@ -401,7 +403,7 @@ settings/
 		robots.php                Settings metabox: global robots/indexing directives per post type, taxonomy, archive type
 		schema.php                Settings metabox: Schema.org structured data output (presence, sitelinks)
 		sitemaps.php              Settings metabox: XML sitemap configuration (general, robots.txt, metadata, style)
-		social.php                Settings metabox: social meta tags (Open Graph, Twitter Cards, oEmbed, profiles)
+		social.php                Settings metabox: social meta tags (Open Graph, Twitter Cards, Fediverse, oEmbed, profiles)
 		title.php                 Settings metabox: title tag behavior (additions, separator, prefix, capitalization)
 		webmaster.php             Settings metabox: webmaster verification codes (Google, Bing, Yandex, Baidu, Pinterest, Facebook)
 
@@ -434,6 +436,7 @@ JavaScript (lib/js/)
 --------------------
 Client-side scripts for admin interfaces. Each .js file has a corresponding .min.js minified version.
 
+author.js                       Author (user profile) SEO settings logic
 authorslugs.js                  Author slug fetching and caching via REST API
 ays.js                          "Are You Sure" unsaved-changes detection for settings pages
 c.js                            Pixel and character counters for SEO input fields

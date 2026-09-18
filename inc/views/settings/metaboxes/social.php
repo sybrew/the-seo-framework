@@ -58,6 +58,11 @@ switch ( $instance ) :
 				'callback' => [ Admin\Settings\Plugin::class, '_social_metabox_twitter_tab' ],
 				'dashicon' => 'twitter',
 			],
+			'fediverse' => [
+				'name'     => 'Fediverse',
+				'callback' => [ Admin\Settings\Plugin::class, '_social_metabox_fediverse_tab' ],
+				'dashicon' => 'share',
+			],
 			'oembed'    => [
 				'name'     => 'oEmbed',
 				'callback' => [ Admin\Settings\Plugin::class, '_social_metabox_oembed_tab' ],
@@ -362,6 +367,105 @@ switch ( $instance ) :
 		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
 			<input type=text name="<?php Input::field_name( 'twitter_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_creator' ); ?>" placeholder="<?= \esc_attr( $tw_creator_placeholder ) ?>" value="<?= \esc_attr( $tw_creator ) ?>">
+		</p>
+		<?php
+		break;
+
+	case 'fediverse':
+		$fv_site             = Data\Plugin::get_option( 'fediverse_site' );
+		$fv_site_placeholder = \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' );
+
+		$fv_site_url             = Data\Plugin::get_option( 'fediverse_site_url' );
+		$fv_site_url_placeholder = \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' );
+
+		$fv_creator             = Data\Plugin::get_option( 'fediverse_creator' );
+		$fv_creator_placeholder = $fv_site;
+
+		$fv_creator_url             = Data\Plugin::get_option( 'fediverse_creator_url' );
+		$fv_creator_url_placeholder = $fv_site_url;
+
+		HTML::header_title( \__( 'Fediverse Integration Settings', 'autodescription' ) );
+		HTML::description( \__( 'Mastodon and other Fediverse platforms can credit a profile when a link to your website is shared, and can verify that you own this website.', 'autodescription' ) );
+		HTML::description_noesc( Markdown::convert(
+			/* translators: the backticks are Markdown! Preserve them as-is! */
+			\esc_html__( 'When these options are filled in, a `fediverse:creator` meta tag and a `rel=me` profile link are added to your pages.', 'autodescription' ),
+			[ 'code' ],
+		) );
+		/* See: https://kb.theseoframework.com/?p=484 */
+		HTML::description_noesc( Markdown::convert(
+			\sprintf(
+				/* translators: %s = Documentation URL. Markdown! */
+				\esc_html__( 'On the credited profile, open Preferences -> Public profile -> Verification. Add this website\'s domain under Author attribution, and add this website as a website field for the green checkmark. [Learn more](%s).', 'autodescription' ),
+				'https://kb.theseoframework.com/?p=484',
+			),
+			[ 'a' ],
+			[ 'a_internal' => false ],
+		) );
+		HTML::description( \__( 'Enter the @username@domain handle from Author attribution. A pasted profile URL fills both fields; correct the handle if the guessed domain is wrong.', 'autodescription' ) );
+		?>
+		<hr>
+
+		<p>
+			<label for="<?php Input::field_id( 'fediverse_site' ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Website Fediverse Profile', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				HTML::make_info(
+					\__( 'Copy the handle from Preferences -> Public profile -> Verification -> Author attribution.', 'autodescription' ),
+					'https://kb.theseoframework.com/?p=484#author-attribution',
+				);
+				?>
+			</label>
+		</p>
+		<p>
+			<input type=text name="<?php Input::field_name( 'fediverse_site' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site' ); ?>" placeholder="<?= \esc_attr( $fv_site_placeholder ) ?>" value="<?= \esc_attr( $fv_site ) ?>">
+		</p>
+		<p>
+			<label for="<?php Input::field_id( 'fediverse_site_url' ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Website Fediverse Profile URL', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				HTML::make_info(
+					\__( 'The public profile URL. Fill this when it differs from the handle domain.', 'autodescription' ),
+					'https://kb.theseoframework.com/?p=484#website-verification',
+				);
+				?>
+			</label>
+		</p>
+		<p>
+			<input type=url name="<?php Input::field_name( 'fediverse_site_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site_url' ); ?>" placeholder="<?= \esc_attr( $fv_site_url_placeholder ) ?>" value="<?= \esc_attr( $fv_site_url ) ?>">
+		</p>
+
+		<p>
+			<label for="<?php Input::field_id( 'fediverse_creator' ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Fediverse Author Fallback Profile', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				HTML::make_info(
+					\__( 'Copy the handle from Preferences -> Public profile -> Verification -> Author attribution.', 'autodescription' ),
+					'https://kb.theseoframework.com/?p=484#author-attribution',
+				);
+				?>
+			</label>
+		</p>
+		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
+		<p>
+			<input type=text name="<?php Input::field_name( 'fediverse_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator' ); ?>" placeholder="<?= \esc_attr( $fv_creator_placeholder ) ?>" value="<?= \esc_attr( $fv_creator ) ?>">
+		</p>
+		<p>
+			<label for="<?php Input::field_id( 'fediverse_creator_url' ); ?>" class=tsf-toblock>
+				<strong><?php \esc_html_e( 'Fediverse Author Fallback Profile URL', 'autodescription' ); ?></strong>
+				<?php
+				echo ' ';
+				HTML::make_info(
+					\__( 'The public profile URL. Fill this when it differs from the handle domain.', 'autodescription' ),
+					'https://kb.theseoframework.com/?p=484#website-verification',
+				);
+				?>
+			</label>
+		</p>
+		<p>
+			<input type=url name="<?php Input::field_name( 'fediverse_creator_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator_url' ); ?>" placeholder="<?= \esc_attr( $fv_creator_url_placeholder ) ?>" value="<?= \esc_attr( $fv_creator_url ) ?>">
 		</p>
 		<?php
 		break;

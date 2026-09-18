@@ -124,6 +124,7 @@ class Setup {
 	 * @since 4.0.0 `home_title_location` is now switched from right to left, or vice-versa.
 	 * @since 4.2.4 `max_image_preview` now defaults to `large`, from `standard`, matching WordPress's default.
 	 * @since 4.2.7 Added `auto_description_html_method`, defaults to `fast`.
+	 * @since 5.1.5 Added `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, and `fediverse_creator_url`.
 	 *
 	 * @return array Default site options.
 	 */
@@ -277,6 +278,12 @@ class Setup {
 				'twitter_card'    => 'summary_large_image', // Twitter Card layout. If no twitter:image image is found, it'll change to 'summary', radio
 				'twitter_site'    => '', // Twitter business @username.
 				'twitter_creator' => '', // Twitter user @username.
+
+				// Fediverse.
+				'fediverse_site'         => '', // Fediverse @user@domain.
+				'fediverse_site_url'     => '', // Fediverse profile URL.
+				'fediverse_creator'      => '', // Fediverse author fallback @user@domain.
+				'fediverse_creator_url'  => '', // Fediverse author fallback profile URL.
 
 				// oEmbed.
 				'oembed_use_og_title'     => 0, // Use custom meta titles in oEmbeds.

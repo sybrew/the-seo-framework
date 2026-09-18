@@ -33,14 +33,32 @@ use const The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 [ $user ] = $view_args;
 
 $fields = [
-	'tsf-user-meta[facebook_page]' => [
+	'tsf-user-meta[facebook_page]'      => [
 		'name'        => \__( 'Facebook profile page', 'autodescription' ),
 		'type'        => 'url',
 		'placeholder' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
 		'value'       => Data\Plugin\User::get_meta_item( 'facebook_page', $user->ID ),
 		'class'       => '',
 	],
-	'tsf-user-meta[twitter_page]'  => [
+	'tsf-user-meta[fediverse_page]'     => [
+		'name'        => \__( 'Fediverse profile', 'autodescription' ),
+		'type'        => 'text',
+		'placeholder' =>
+			   Data\Plugin::get_option( 'fediverse_creator' )
+			?: Data\Plugin::get_option( 'fediverse_site' ),
+		'value'       => Data\Plugin\User::get_meta_item( 'fediverse_page', $user->ID ),
+		'class'       => 'ltr',
+	],
+	'tsf-user-meta[fediverse_page_url]' => [
+		'name'        => \__( 'Fediverse profile URL', 'autodescription' ),
+		'type'        => 'url',
+		'placeholder' =>
+			   Data\Plugin::get_option( 'fediverse_creator_url' )
+			?: Data\Plugin::get_option( 'fediverse_site_url' ),
+		'value'       => Data\Plugin\User::get_meta_item( 'fediverse_page_url', $user->ID ),
+		'class'       => 'ltr',
+	],
+	'tsf-user-meta[twitter_page]'       => [
 		'name'        => \__( 'X profile handle', 'autodescription' ),
 		'type'        => 'text',
 		'placeholder' => \_x( '@your-personal-username', 'X @username', 'autodescription' ),

@@ -49,6 +49,14 @@ final class User {
 					$value = Sanitize::facebook_profile_link( $value );
 					break;
 
+				case 'fediverse_page':
+					$value = Sanitize::fediverse_profile_handle( $value );
+					break;
+
+				case 'fediverse_page_url':
+					$value = Sanitize::fediverse_profile_url( $value );
+					break;
+
 				case 'twitter_page':
 					$value = Sanitize::twitter_profile_handle( $value );
 					break;

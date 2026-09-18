@@ -16,6 +16,7 @@ namespace The_SEO_Framework;
  *
  * @hook the_seo_framework_meta_generator_pools 10
  * @since 5.0.0
+ * @since 5.1.5 Now also removes the Fediverse tag pool.
  *
  * @param string[] $generator_pools A list of tag pools requested for the current query.
  *                                  The tag pool names correspond directly to the classes'.
@@ -27,7 +28,7 @@ function _buddypress_filter_generator_pools( $generator_pools ) {
 	if ( \function_exists( 'is_buddypress' ) && \is_buddypress() ) {
 		$generator_pools = array_diff(
 			$generator_pools,
-			[ 'Robots', 'URI', 'Open_Graph', 'Twitter', 'Schema' ],
+			[ 'Robots', 'URI', 'Open_Graph', 'Twitter', 'Fediverse', 'Schema' ],
 		);
 	}
 

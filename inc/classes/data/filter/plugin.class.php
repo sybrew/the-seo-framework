@@ -183,6 +183,10 @@ final class Plugin {
 			'facebook_publisher'           => 'facebook_profile_link',
 			'facebook_tags'                => 'checkbox',
 			'facebook_verification'        => 'verification_code',
+			'fediverse_creator'            => 'fediverse_profile_handle',
+			'fediverse_creator_url'        => 'fediverse_profile_url',
+			'fediverse_site'               => 'fediverse_profile_handle',
+			'fediverse_site_url'           => 'fediverse_profile_url',
 			'google_verification'          => 'verification_code',
 			'home_paged_noindex'           => 'checkbox',
 			'home_title_location'          => 'title_location',
@@ -451,6 +455,26 @@ final class Plugin {
 	 */
 	public static function facebook_profile_link( $value ) {
 		return Sanitize::facebook_profile_link( $value );
+	}
+
+	/**
+	 * @since 5.1.5
+	 *
+	 * @param mixed $value An unsanitized value.
+	 * @return string A sanitized Fediverse profile handle.
+	 */
+	public static function fediverse_profile_handle( $value ) {
+		return Sanitize::fediverse_profile_handle( $value );
+	}
+
+	/**
+	 * @since 5.1.5
+	 *
+	 * @param mixed $value An unsanitized value.
+	 * @return string A sanitized Fediverse profile URL.
+	 */
+	public static function fediverse_profile_url( $value ) {
+		return Sanitize::fediverse_profile_url( $value );
 	}
 
 	/**

@@ -92,6 +92,7 @@ final class Head {
 	 * Adds various action hooks for around the tags.
 	 *
 	 * @since 5.0.0
+	 * @since 5.1.5 Now also queues the Fediverse tag pool.
 	 */
 	public static function print_tags() {
 
@@ -122,6 +123,7 @@ final class Head {
 					'Open_Graph',
 					'Facebook',
 					'Twitter',
+					'Fediverse',
 					'Webmasters',
 					'Schema',
 				];

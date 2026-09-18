@@ -75,7 +75,7 @@ function wpr_tsf_playwright_request_path() {
 
 	$uri = $_SERVER['REQUEST_URI'] ?? '';
 
-	return (string) wp_parse_url( $uri, PHP_URL_PATH );
+	return (string) parse_url( $uri, PHP_URL_PATH );
 }
 
 /**

@@ -96,6 +96,7 @@ final class Author extends Reference {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.1.5 Now adds the author's Fediverse profile to `sameAs`.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -121,6 +122,13 @@ final class Author extends Reference {
 
 		if ( $user_meta['facebook_page'] )
 			$entity['sameAs'][] = \sanitize_url( $user_meta['facebook_page'], [ 'https', 'http' ] );
+
+		if ( $user_meta['fediverse_page'] || $user_meta['fediverse_page_url'] )
+			$entity['sameAs'][] = Meta\Fediverse::get_profile_url(
+				$user_meta['fediverse_page'],
+				$user_meta['fediverse_page_url'],
+			);
+
 		if ( $user_meta['twitter_page'] )
 			$entity['sameAs'][] = \sanitize_url( 'https://twitter.com/' . ltrim( $user_meta['twitter_page'], '@' ) );
 

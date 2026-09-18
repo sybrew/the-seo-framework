@@ -29,7 +29,7 @@ Do not `flush_rewrite_rules()` in a blueprint `runPHP` step. That writes incompl
 
 Playground 301s `/sitemap.xml` via a VFS mu-plugin (`sitemap-redirect.php`). The engine overwrites that file with a no-op until https://github.com/WordPress/wordpress-playground/issues/4325 is patched. Drop the overwrite when that issue lands. If every request 500s with a parse error in that file, the no-op was invalid PHP. Fix `lib/launch.js` in wp-plugin-regression; do not change the plugin.
 
-If `~/.wordpress-playground/tests/runs.json` lists a live pid for that port, reuse it.
+Do not reuse a live Playground another chat started. `runs.json` may list a live pid that still belongs to that chat (extra plugins, harness mutations, leftover persist). Launch a fresh wipe on the next free port. `--keep` only for persist this chat created. Do not assume the pair is `9001`/`9002`.
 
 ## Permission
 

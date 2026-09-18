@@ -480,6 +480,25 @@ class Pool extends Legacy_API {
 	}
 
 	/**
+	 * Returns the Fediverse API class as instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 5.1.5
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Meta\Fediverse
+	 */
+	public static function fediverse() {
+		return static::$pool[ __FUNCTION__ ] ??= new class extends Meta\Fediverse {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->fediverse()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
+
+	/**
 	 * Returns a pool of Format classes as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *

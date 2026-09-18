@@ -564,4 +564,180 @@ class Sanitize {
 
 		return "@$handle";
 	}
+
+	/**
+	 * Sanitizes a Fediverse profile handle.
+	 *
+	 * Accepts a WebFinger handle or a profile URL and returns `@user@domain`.
+	 * URLs are never kept: Mastodon treats a URL-shaped `fediverse:creator`
+	 * value as a handle and can fail the entire link preview. A guessed handle
+	 * from a URL host can be wrong; store the profile URL in the companion field.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param string $value An unsanitized handle or profile URL.
+	 * @return string A sanitized `@user@domain` handle, or an empty string.
+	 */
+	public static function fediverse_profile_handle( $value ) {
+
+		$value = trim( $value );
+
+		if ( ! \strlen( $value ) )
+			return '';
+
+		if ( str_starts_with( $value, 'acct:' ) )
+			$value = substr( $value, 5 );
+
+		if ( str_contains( $value, '/' ) ) {
+			$parts = parse_url( \sanitize_url(
+				$value,
+				[ 'https', 'http' ],
+			) );
+			$host  = $parts['host'] ?? '';
+			$user  = self::fediverse_path_user( $parts['path'] ?? '' );
+
+			if ( ! \strlen( $host ) || ! \strlen( $user ) )
+				return '';
+
+			if ( str_contains( $user, '@' ) )
+				return self::normalize_fediverse_handle( $user );
+
+			return self::normalize_fediverse_handle( "$user@$host" );
+		}
+
+		return self::normalize_fediverse_handle( $value );
+	}
+
+	/**
+	 * Normalizes a WebFinger-like handle to `@user@domain`.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param string $handle A handle such as `user@domain` or `@user@domain`.
+	 * @return string A sanitized `@user@domain` handle, or an empty string.
+	 */
+	private static function normalize_fediverse_handle( $handle ) {
+
+		$handle = trim( $handle, " \t@" );
+
+		if ( ! preg_match( '/^([^@]+)@([^@]+)$/', $handle, $matches ) )
+			return '';
+
+		$user = strtolower( rawurldecode( $matches[1] ) );
+		$host = strtolower( rawurldecode( $matches[2] ) );
+
+		// Strip the www subdomain from the handle; keep two-label hosts such as "www.fyi".
+		if (
+			   str_starts_with( $host, 'www.' )
+			&& substr_count( $host, '.' ) > 1
+		) {
+			$host = substr( $host, 4 );
+		}
+
+		if (
+			   \strlen( $user ) > 64
+			|| ! str_contains( $host, '.' )
+			|| ! preg_match( '/^[a-z0-9._-]+$/', $user )
+			|| ! preg_match( '/^[a-z0-9.-]+$/', $host )
+		) {
+			return '';
+		}
+
+		return "@$user@$host";
+	}
+
+	/**
+	 * Extracts a username from a Fediverse profile URL path.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param string $path A URL path such as `/@user` or `/users/user`.
+	 * @return string The path username, a `user@other.host` remote path, or empty.
+	 */
+	private static function fediverse_path_user( $path ) {
+
+		$segments = explode( '/', trim( $path, '/' ) );
+
+		switch ( strtolower( $segments[0] ) ) {
+			case 'users':
+			case 'user':
+			case 'u':
+				$segment = $segments[1] ?? '';
+				break;
+			default:
+				if ( ! str_starts_with( $segments[0], '@' ) )
+					return '';
+
+				$segment = $segments[0];
+		}
+
+		return ltrim( rawurldecode( $segment ), '@' );
+	}
+
+	/**
+	 * Sanitizes a Fediverse profile URL.
+	 *
+	 * Accepts an HTTPS (or HTTP) profile URL. A handle is rejected. HTTP is
+	 * upgraded to HTTPS. The host is not rewritten from the companion handle.
+	 *
+	 * @since 5.1.5
+	 *
+	 * @param string $value An unsanitized profile URL.
+	 * @return string A sanitized HTTPS profile URL, or an empty string.
+	 */
+	public static function fediverse_profile_url( $value ) {
+
+		$value = trim( $value );
+
+		if ( ! \strlen( $value ) )
+			return '';
+
+		// A handle is not a profile URL.
+		if ( ! str_contains( $value, '/' ) )
+			return '';
+
+		if ( preg_match( '/^([a-z][a-z0-9+.-]*):/i', $value, $matches ) ) {
+			if ( ! \in_array(
+				strtolower( $matches[1] ),
+				[ 'http', 'https' ],
+				true,
+			) ) {
+				return '';
+			}
+		} else {
+			$value = "https://$value";
+		}
+
+		$value = \sanitize_url(
+			preg_replace( '/^http:\/\//i', 'https://', $value, 1 ),
+			[ 'https' ]
+		);
+
+		if ( ! \strlen( $value ) )
+			return '';
+
+		$parts = parse_url( $value );
+		$host  = strtolower( $parts['host'] ?? '' );
+		$user  = self::fediverse_path_user( $parts['path'] ?? '' );
+
+		if (
+			   ! str_contains( $host, '.' )
+			|| ! preg_match( '/^[a-z0-9.-]+$/', $host )
+			|| ! \strlen( $user )
+		) {
+			return '';
+		}
+
+		if ( str_contains( $user, '@' ) ) {
+			if ( ! self::normalize_fediverse_handle( $user ) )
+				return '';
+		} elseif (
+			   \strlen( $user ) > 64
+			|| ! preg_match( '/^[a-z0-9._-]+$/', strtolower( $user ) )
+		) {
+			return '';
+		}
+
+		return $value;
+	}
 }

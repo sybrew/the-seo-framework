@@ -19,6 +19,7 @@ applyTo: "**/*.php"
 - Do not mark anonymous functions or arrow functions `static` except in instance methods. `static` only prevents binding `$this`.
 - Do not create `validate_callbacks` for REST routes. Validate and sanitize parameters directly in the route callback.
 - Use short array syntax.
+- Always delimit regular expressions with `/`. Escape slashes in the pattern. Do not use `#` or other preg delimiters.
 - Add trailing commas on multiline array items and function calls. Do not add them on function, method, closure, or `fn()` parameter lists, closure `use (` lists, or control-structure conditions (PHP 8.0).
 - Never use strict typing unless required.
 - Short Echo Tags, HereDoc, and NowDoc are permitted.

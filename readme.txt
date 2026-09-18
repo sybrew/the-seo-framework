@@ -52,7 +52,7 @@ We built The SEO Framework for small to large corporations and enterprises. The 
 The SEO Framework ranks your website distinctively by enabling breadcrumbs for Google Search via structured data. It also automatically generates titles and descriptions according to Google's guidelines and quickly helps search engines find the website's latest changes via the built-in optimized sitemap.
 
 * **It makes social sharing easy.**
-The SEO Framework automatically supports and allows you to further tailor the Open Graph, Facebook, and Twitter Cards protocols. It helps your posts stand out when they're shared on various social networks, including Pinterest, Discord, and WhatsApp.
+The SEO Framework automatically supports and allows you to further tailor the Open Graph, Facebook, Twitter Cards, and Fediverse protocols. It helps your posts stand out when they're shared on various social networks, including Pinterest, Discord, WhatsApp, and Mastodon.
 
 * **It feels more than accessible.**
 We handpicked our color scheme so that people with any medically recognized color-vision deficiency can distinguish the guidelines set by search engines. We also implemented full keyboard-navigation and screen-reader support.
@@ -247,8 +247,14 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ## For everyone
 
-* **Upgraded:** Now uses TSF database version 5150.
+* **Upgraded:** Now uses TSF database version 5151.
 * **Added:**
+	* Support for Mastodon and other Fediverse platforms via the `fediverse:creator` meta tag and `rel=me` profile links.
+		* You can set a site profile and an author fallback under Social Meta Settings. Authors can override the fallback on their profile page.
+		* Each profile has a handle and a profile URL. Enter the @username@domain handle from Author attribution. A pasted profile URL fills both fields; correct the handle if the guessed domain is wrong.
+		* The author fallback field shows the website profile as its placeholder.
+		* On the credited profile, open Preferences -> Public profile -> Verification. Add this website's domain under Author attribution, and add this website as a website field for the green checkmark.
+		* The author's Fediverse profile is also added to Schema.org `sameAs`.
 	* You can now enter a Facebook domain verification code in Webmaster Integration Settings.
 	* Plain permalink support to the Canonical URL Notation Tracker.
 	* A CSS stylesheet for the optimized sitemap, so browsers that no longer apply XSLT still show a styled, human-readable sitemap.
@@ -294,6 +300,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Descriptions:**
 		* Generated descriptions now fall back to the post content when the excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated.
 * **Compatibility:**
+	* **Plugin: BuddyPress:**
+		* The Fediverse tag pool is now also removed on BuddyPress pages.
 	* **Plugins: Cachify, LiteSpeed Cache, SpeedyCache, Surge, W3 Total Cache, etc.:**
 		* Resolved an issue where cache plugins that do not have specific exclusion rules for sitemap or sitemap stylesheet endpoints could serve an empty sitemap or stylesheet on later visits.
 			* You must flush the entire cache for these plugins in order to make this effective. This update prevents new empty sitemap or stylesheet responses from being stored, but it cannot replace a broken response already written to a page cache, reverse proxy, CDN, or host-level cache before WordPress loads.
@@ -326,8 +334,15 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
 		* Added index `facebook_verification`. Default `''`.
+		* Added index `fediverse_site`. Default `''`.
+		* Added index `fediverse_site_url`. Default `''`.
+		* Added index `fediverse_creator`. Default `''`.
+		* Added index `fediverse_creator_url`. Default `''`.
 * **PHP API notes:**
 	* **Added:**
+		* Pool `tsf()->fediverse()` is now available.
+			* It contains public methods `get_creator()`, `get_creator_url()`, `get_site()`, `get_site_url()`, `get_profile_url()`, and `get_profile_urls()`.
+			* Internally known as `The_SEO_Framework\Meta\Fediverse`.
 		* Pool `tsf()->admin()->seobar()` is now available.
 			* It contains public methods `generate_bar()`, `collect_seo_bar_items()`, `register_seo_bar_item()`, and `edit_seo_bar_item()`.
 			* It contains public constants `STATE_UNDEFINED`, `STATE_UNKNOWN`, `STATE_BAD`, `STATE_OKAY`, and `STATE_GOOD`.
@@ -336,6 +351,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* It contains public methods `mount()` and `init()`, among many script setup methods.
 			* Internally known as `The_SEO_Framework\Admin\Script\Loader`.
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar explainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
+		* Method `The_SEO_Framework\Data\Filter\Sanitize::fediverse_profile_handle()` (`tsf()->sanitize()->fediverse_profile_handle()`) accepts a WebFinger handle or profile URL and returns `@user@domain`. URLs are never kept.
+		* Method `The_SEO_Framework\Data\Filter\Sanitize::fediverse_profile_url()` (`tsf()->sanitize()->fediverse_profile_url()`) accepts an HTTP or HTTPS profile URL and returns HTTPS. A handle is rejected. The host is not rewritten from the companion handle.
+		* Method `The_SEO_Framework\Admin\Script\Loader::get_author_edit_scripts()` (`tsf()->admin()->scripts()->loader()->get_author_edit_scripts()`) now exists.
 		* Method `The_SEO_Framework\Data\Filter\Escape::css_content()` (`tsf()->escape()->css_content()`) escapes a string as a CSS `<string>` (using in `content` and quoted `url()` arguments).
 		* Method `The_SEO_Framework\Meta\URI\Utils::encode_url()` (`tsf()->uri()->utils()->encode_url()`) percent-encodes non-ASCII octets in a URL so the result is an RFC 3986 URI. Already-encoded sequences are left intact.
 	* **Removed:**
@@ -348,6 +366,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
 			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
+		* Method `The_SEO_Framework\Data\Plugin\User::get_default_meta()` (`tsf()->data()->plugin()->user()->get_default_meta()`) now includes `fediverse_page` and `fediverse_page_url`.
+		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
+		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs`.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
 		* Method `The_SEO_Framework\Meta\Title::get_bare_generated_title()` (`tsf()->title()->get_bare_generated_title()`) can now return `0` instead of an untitled fallback.
 		* Method `The_SEO_Framework\Meta\Title::get_search_query_title()` (`tsf()->title()->get_search_query_title()`) now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
@@ -383,6 +404,11 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Added:**
 		* `the_seo_framework_sitemap_settings_language_endpoints` returns administrative language names keyed by sitemap endpoint ID, used for translated sitemap links in SEO Settings.
 	* **Changed:**
+		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
+		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.
+		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, and `fediverse_creator_url`.
+		* `the_seo_framework_user_meta_defaults` now includes `fediverse_page` and `fediverse_page_url`.
+		* `the_seo_framework_scripts` now includes the author profile script on user profile screens when user-edit fields are enabled.
 		* `the_seo_framework_breadcrumb_shortcode_css`:
 			1. The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
 			2. Returning no rules no longer yields a `<style>` element.
