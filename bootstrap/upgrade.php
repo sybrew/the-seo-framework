@@ -216,7 +216,7 @@ function _upgrade( $previous_version ) {
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5100', '5130', '5140', '5151',
+		'5001', '5050', '5100', '5130', '5140', '5200',
 	];
 	// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
@@ -1015,18 +1015,21 @@ function _do_upgrade_5140() {
 
 /**
  * Registers new options 'facebook_verification', 'fediverse_site',
- * 'fediverse_site_url', 'fediverse_creator', and 'fediverse_creator_url'.
+ * 'fediverse_site_url', 'fediverse_creator', 'fediverse_creator_url',
+ * 'breadcrumb_archive', and 'breadcrumb_taxonomy'.
  *
- * @since 5.1.5
+ * @since 5.2.0
  */
-function _do_upgrade_5151() {
+function _do_upgrade_5200() {
 
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5151' )
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5200' )
 		Data\Plugin::update_option( [
 			'facebook_verification' => '',
 			'fediverse_site'        => '',
 			'fediverse_site_url'    => '',
 			'fediverse_creator'     => '',
 			'fediverse_creator_url' => '',
+			'breadcrumb_archive'    => [],
+			'breadcrumb_taxonomy'   => [],
 		] );
 }

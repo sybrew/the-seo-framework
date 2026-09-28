@@ -247,29 +247,36 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ## For everyone
 
-* **Upgraded:** Now uses TSF database version 5151.
+* **Upgraded:** Now uses TSF database version 5200.
 * **Added:**
-	* Support for Mastodon and other Fediverse platforms via the `fediverse:creator` meta tag and `rel=me` profile links.
-		* You can set a site profile and an author fallback under Social Meta Settings. Authors can override the fallback on their profile page.
-		* Each profile has a handle and a profile URL. Enter the @username@domain handle from Author attribution. A pasted profile URL fills both fields; correct the handle if the guessed domain is wrong.
-		* The author fallback field shows the website profile as its placeholder.
-		* On the credited profile, open Preferences -> Public profile -> Verification. Add this website's domain under Author attribution, and add this website as a website field for the green checkmark.
-		* The author's Fediverse profile is also added to Schema.org `sameAs`.
-	* You can now enter a Facebook domain verification code in Webmaster Integration Settings.
-	* Plain permalink support to the Canonical URL Notation Tracker.
-	* A CSS stylesheet for the optimized sitemap, so browsers that no longer apply XSLT still show a styled, human-readable sitemap.
-		* We are forced to use CSS because all major browsers will soon no longer apply XSLT by default.
-		* As long as browsers still apply XSLT, the XSL view is still the preferred way to display the sitemap.
-		* Differences from the XSL view -- these are all cosmetic regressions and do not affect the XML output:
-			1. URLs are not clickable
-			2. The title and logo are not a homepage link
-			3. Intro and footer links are plain text
-			4. Last Updated stays in W3C datetime form
-			5. Phones do not get a mobile viewport
-			6. Long URLs clip with an ellipsis
-			7. The browser tab has no document title
-			8. The page is not HTML for assistive technology.
-		* To learn more, see our knowledge base article on [sitemap styling](https://kb.theseoframework.com/?p=119#tsf-sitemap-styling).
+	* **New social sharing features:**
+		* We added support for Mastodon and other Fediverse platforms via the `fediverse:creator` meta tag and `rel=me` profile links.
+			* You can set a site profile and an author fallback under Social Meta Settings. Authors can override the fallback on their profile page.
+			* Each profile has a handle and a profile URL. Enter the @username@domain handle from Author attribution. A pasted profile URL fills both fields; correct the handle if the guessed domain is wrong.
+			* The author fallback field shows the website profile as its placeholder.
+			* On the credited profile, open Preferences -> Public profile -> Verification. Add this website's domain under Author attribution, and add this website as a website field for the green checkmark.
+			* The author's Fediverse profile is also added to Schema.org `sameAs`.
+		* You can now enter a Facebook domain verification code in Webmaster Integration Settings.
+	* **Sitemap styling ported from XSL to CSS:**
+		* A CSS stylesheet for the optimized sitemap has been added, so browsers that no longer apply XSLT still show a styled, human-readable sitemap.
+			* We are forced to use CSS because all major browsers will soon no longer apply XSLT by default.
+			* As long as browsers still apply XSLT, the XSL view is still the preferred way to display the sitemap.
+			* Differences from the XSL view -- these are all cosmetic regressions and do not affect the XML output:
+				1. URLs are not clickable.
+				2. The title and logo are not a homepage link.
+				3. Intro and footer links are plain text.
+				4. Last Updated stays in W3C datetime form.
+				5. Phones do not get a mobile viewport.
+				6. Long URLs clip with an ellipsis.
+				7. The browser tab has no document title.
+				8. The page is not HTML for assistive technology.
+			* To learn more, see our knowledge base article on [sitemap styling](https://kb.theseoframework.com/?p=119#tsf-sitemap-styling).
+	* **More breadcrumb settings:**
+		* Singular breadcrumbs can use a chosen taxonomy for each post type. Default keeps the current trail, so products keep using Brands until you select Product categories. Exclude taxonomy crumb removes the term trail.
+		* Singular breadcrumbs can omit the post type archive. For products, that archive is the shop page. Until you change these settings, the output matches the previous trail.
+		* The breadcrumb shortcode now omits the Home crumb when the `home` attribute is empty, and its new `max` attribute collapses a longer trail. A `max` below 3 is treated as 3.
+		* Breadcrumbs no longer prefix archive names, such as "Category:", "Archives:", or "Author:". Custom meta titles appear as written. This affects structured data and the shortcode alike.
+		* Breadcrumb shortcode crumbs now wrap as a whole instead of breaking mid-word.
 * **Changed:**
 	* **Open Graph locales:** We couldn't find any documentation on the languages Facebook supports for Open Graph, so we resorted to scraping their network, testing all 46500 possible locale combinations, and adjusted support accordingly:
 		* **These WordPress locales are no longer supported by Facebook:** Cebuano, Esperanto, Spanish (Chile, Colombia, Mexico, Venezuela), Igbo, Limburgish, Lingala, Luganda, Māori, Romansh, Sanskrit, Silesian, Syriac, Tamazight, Wolof, Xhosa, Yoruba, Zulu.
@@ -326,6 +333,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode's `<ol>` element could inherit inline-start padding from the active theme, causing misaligned breadcrumb display.
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode still output empty `<style></style>` tags when its CSS was filtered away.
+	* Resolved an issue where breadcrumbs included parent pages that visitors cannot view, such as drafts or private pages. Their crumbs linked to a page that returned 404.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
 	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content.
 	* Resolved an issue where social image URLs with non-ASCII characters in the filename were not percent-encoded, causing Facebook to ignore the `og:image` tag.
@@ -350,6 +358,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Added index `fediverse_site_url`. Default `''`.
 		* Added index `fediverse_creator`. Default `''`.
 		* Added index `fediverse_creator_url`. Default `''`.
+		* Added index `breadcrumb_archive`. Default `[]`. `0` omits that post type's archive crumb from singular breadcrumbs. A missing post type includes the archive when the post type has one.
+		* Added index `breadcrumb_taxonomy`. Default `[]`. A taxonomy slug selects that singular trail, and `-1` removes it. A missing post type uses the first public hierarchical taxonomy, per `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`).
 * **PHP API notes:**
 	* **Added:**
 		* Pool `tsf()->fediverse()` is now available.
@@ -390,7 +400,17 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now accepts `$sitemap_id` (`xsl-stylesheet` or `css`) and outputs the CSS when that ID is `css`.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_sitemap_header()` (`tsf()->sitemap()->registry()->output_sitemap_header()`) now also emits a CSS xml-stylesheet processing instruction after the XSL one.
-		* Function `tsf_breadcrumb()` now omits the `<style>` element when `the_seo_framework_breadcrumb_shortcode_css` returns no rules.
+		* Function `tsf_breadcrumb()`:
+			1. Now omits the `<style>` element when `the_seo_framework_breadcrumb_shortcode_css` returns no rules.
+			2. Now omits the crumb with role `home` when the `home` attribute is empty.
+			3. Added the `max` attribute, which collapses the trail. A `max` below 3 is treated as 3. The collapsed middle is `<li class="breadcrumb-item breadcrumb-ellipsis" aria-hidden="true">`. Structured data keeps the full trail.
+			4. The `home` label and `aria-current` now follow each crumb's `role` instead of its position. Each crumb must have a `role`.
+			5. A crumb without a URL now renders as `<span>` instead of an empty link.
+		* Method `The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list()` (`tsf()->breadcrumbs()->get_breadcrumb_list()`):
+			1. Singular trails now follow the `breadcrumb_taxonomy` and `breadcrumb_archive` options.
+			2. Added `role` to each crumb: `home`, `pta`, `archive-N` (terms, outermost first), `page-N` (post ancestors), `current`, or `current-home` (the front page's only crumb).
+			3. Singular trails now omit post ancestors that aren't publicly viewable.
+			4. Generated archive crumb names now drop their archive title prefix when the generated title still starts with it.
 		* Method `The_SEO_Framework\Admin\Settings\Layout\Form::make_single_select_form()` (`tsf()->admin()->layout()->form()->make_single_select_form()`):
 			1. No longer wraps the select in a `div`.
 			2. Removed the `class` argument.
@@ -422,13 +442,18 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Changed:**
 		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
 		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.
-		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, and `fediverse_creator_url`.
+		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, `fediverse_creator_url`, `breadcrumb_archive`, and `breadcrumb_taxonomy`.
 		* `the_seo_framework_user_meta_defaults` now includes `fediverse_page` and `fediverse_page_url`.
 		* `the_seo_framework_scripts` now includes the author profile script on user profile screens when user-edit fields are enabled.
+		* `the_seo_framework_breadcrumb_list` now includes `role` on each crumb. Crumbs you add or replace must include `role`, or `tsf_breadcrumb()` causes a PHP warning.
 		* `the_seo_framework_breadcrumb_shortcode_css`:
 			1. The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
 			2. Returning no rules no longer yields a `<style>` element.
-		* `the_seo_framework_breadcrumb_shortcode_output` `$style` is now an empty string when the CSS filter returns no rules.
+			3. `nav.$class ol` now uses `display:flex` and `flex-wrap:wrap`, and `nav.$class ol li` now uses `white-space:nowrap` instead of `display:inline`.
+		* `the_seo_framework_breadcrumb_shortcode_output`:
+			1. `$style` is now an empty string when the CSS filter returns no rules.
+			2. `$crumbs` may now omit the `home` crumb, rename it, and include an item with role `ellipsis` when `max` collapses the trail. It is still the list rendered in the shortcode.
+			3. Added `$trail`, the generated list before those changes.
 		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`) in the default list.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation` now passes through `0` instead of the untitled fallback.

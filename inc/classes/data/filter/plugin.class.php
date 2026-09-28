@@ -163,6 +163,8 @@ final class Plugin {
 			'auto_description'             => 'checkbox',
 			'baidu_verification'           => 'verification_code',
 			'bing_verification'            => 'verification_code',
+			'breadcrumb_archive'           => 'checkbox_array',
+			'breadcrumb_taxonomy'          => 'breadcrumb_taxonomy',
 			'breadcrumb_use_meta_title'    => 'checkbox',
 			'cache_sitemap'                => 'checkbox',
 			'canonical_scheme'             => 'canonical_scheme',
@@ -443,6 +445,29 @@ final class Plugin {
 
 		foreach ( $value as &$val )
 			$val = Sanitize::boolean_integer( $val );
+
+		return $value;
+	}
+
+	/**
+	 * @since 5.2.0
+	 *
+	 * @param mixed $value An unsanitized value.
+	 * @return array<string,string> {
+	 *     The taxonomy crumb settings, keyed by post type name.
+	 *
+	 *     @type string {$post_type} A taxonomy name, or `-1` to exclude the taxonomy crumb.
+	 *                               Empty uses the post type's first public hierarchical taxonomy.
+	 * }
+	 */
+	public static function breadcrumb_taxonomy( $value ) {
+
+		if ( empty( $value ) || ! \is_array( $value ) )
+			return [];
+
+		// Do NOT test for post type or taxonomy existence -- it might be registered too late (incorrectly).
+		foreach ( $value as &$taxonomy )
+			$taxonomy = \is_scalar( $taxonomy ) ? (string) $taxonomy : '';
 
 		return $value;
 	}

@@ -46,8 +46,10 @@ class Utils {
 	/**
 	 * Determines whether pretty permalinks are enabled.
 	 *
+	 * NOTE: This is a sitewide test, not a per-post test.
+	 *
 	 * @since 5.0.0
-	 * @todo consider wp_force_plain_post_permalink()
+	 * @see `wp_force_plain_post_permalink()`
 	 *
 	 * @return bool
 	 */

@@ -16,6 +16,8 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 use The_SEO_Framework\Helper\{
 	Compatibility,
 	Format\Markdown,
+	Post_Type,
+	Taxonomy,
 };
 
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
@@ -341,6 +343,89 @@ switch ( $instance ) :
 			true,
 		);
 
+		$taxonomy_fields = [];
+		$archive_fields  = [];
+
+		foreach ( Post_Type::get_all_public() as $post_type ) {
+			$pt_taxonomies = array_values( array_intersect(
+				Taxonomy::get_hierarchical( 'names', $post_type ),
+				Taxonomy::get_all_public(),
+			) );
+
+			if ( $pt_taxonomies ) {
+				$options = [
+					'' => \sprintf(
+						/* translators: %s = taxonomy name */
+						\__( 'Default (%s)', 'autodescription' ),
+						Taxonomy::get_label( $pt_taxonomies[0], false ) ?: $pt_taxonomies[0],
+					),
+					-1 => \__( '— Exclude taxonomy crumb —', 'autodescription' ),
+				];
+
+				foreach ( $pt_taxonomies as $taxonomy )
+					$options[ $taxonomy ] = Taxonomy::get_label( $taxonomy, false ) ?: $taxonomy;
+
+				$field_id = Input::get_field_id( [
+					'breadcrumb_taxonomy',
+					$post_type,
+				] );
+
+				$taxonomy_fields[] = \sprintf(
+					'<p><div class=tsf-select-block><label for="%1$s">%2$s &ndash; <code>%3$s</code></label> %4$s</div></p>',
+					\esc_attr( $field_id ),
+					\esc_html( Post_Type::get_label( $post_type, false ) ),
+					\esc_html( $post_type ),
+					Form::make_single_select_form( [
+						'id'       => $field_id,
+						'name'     => Input::get_field_name( [
+							'breadcrumb_taxonomy',
+							$post_type,
+						] ),
+						'selected' => Data\Plugin::get_option( 'breadcrumb_taxonomy', $post_type ) ?? '',
+						'options'  => $options,
+					] ),
+				);
+			}
+
+			if ( \get_post_type_object( $post_type )->has_archive ?? false ) {
+				$archive_fields[] = \sprintf(
+					'<input type=hidden name="%s" value=0>',
+					\esc_attr( Input::get_field_name( [
+						'breadcrumb_archive',
+						$post_type,
+					] ) ),
+				) . Input::make_checkbox( [
+					'id'      => [
+						'breadcrumb_archive',
+						$post_type,
+					],
+					'label'   => \sprintf(
+						'%s &ndash; <code>%s</code>',
+						\esc_html( Post_Type::get_label( $post_type, false ) ),
+						\esc_html( $post_type ),
+					),
+					'escape'  => false,
+					// A missing key includes the archive.
+					'value'   => Data\Plugin::get_option( 'breadcrumb_archive', $post_type ) ?? 1,
+				] );
+			}
+		}
+
+		if ( $taxonomy_fields ) {
+			echo '<hr>';
+			HTML::header_title( \__( 'Taxonomy Crumb', 'autodescription' ) );
+			HTML::description( \__( 'The primary term trail on singular pages.', 'autodescription' ) );
+			HTML::wrap_fields( $taxonomy_fields, true );
+		}
+
+		if ( $archive_fields ) {
+			echo '<hr>';
+			HTML::header_title( \__( 'Post Type Archive Crumb', 'autodescription' ) );
+			HTML::description( \__( 'Clear a checkbox to omit that archive from singular breadcrumbs.', 'autodescription' ) );
+			HTML::wrap_fields( $archive_fields, true );
+		}
+
+		echo '<hr>';
 		HTML::description_noesc(
 			Markdown::convert(
 				\sprintf(
