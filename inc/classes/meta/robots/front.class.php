@@ -230,8 +230,7 @@ final class Front extends Factory {
 				break;
 
 			case 'protected':
-				// We get the "real ID" for WordPress might fault parsing a nefariously forged request.
-				yield 'protected' => Data\Post::is_protected( Query::get_the_real_id() );
+				yield 'protected' => Data\Post::is_protected();
 				break;
 
 			case 'cpage':

@@ -710,7 +710,7 @@ class Sanitize {
 
 		$value = \sanitize_url(
 			preg_replace( '/^http:\/\//i', 'https://', $value, 1 ),
-			[ 'https' ]
+			[ 'https' ],
 		);
 
 		if ( ! \strlen( $value ) )

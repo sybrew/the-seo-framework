@@ -73,6 +73,8 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		);
 
 		/**
+		 * Values other than `fast`, `accurate`, and `thorough` aren't saved.
+		 *
 		 * @since 5.0.0
 		 * @param array $html_passes_method The HTML pass option by [ 'option_value' => 'Name' ]
 		 */

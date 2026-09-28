@@ -156,6 +156,12 @@ switch ( $instance ) :
 			<label for="<?php Input::field_id( 'knowledge_type' ); ?>"><?= \esc_html_x( 'This website represents:', '...Organization or Person.', 'autodescription' ) ?></label>
 			<select name="<?php Input::field_name( 'knowledge_type' ); ?>" id="<?php Input::field_id( 'knowledge_type' ); ?>">
 				<?php
+				/**
+				 * Values other than `organization` and `person` aren't saved.
+				 *
+				 * @since 2.4.3
+				 * @param array $types The knowledge type options as option value => label.
+				 */
 				$knowledge_type = (array) \apply_filters(
 					'the_seo_framework_knowledge_types',
 					[
@@ -395,18 +401,18 @@ switch ( $instance ) :
 						$post_type,
 					] ) ),
 				) . Input::make_checkbox( [
-					'id'      => [
+					'id'     => [
 						'breadcrumb_archive',
 						$post_type,
 					],
-					'label'   => \sprintf(
+					'label'  => \sprintf(
 						'%s &ndash; <code>%s</code>',
 						\esc_html( Post_Type::get_label( $post_type, false ) ),
 						\esc_html( $post_type ),
 					),
-					'escape'  => false,
+					'escape' => false,
 					// A missing key includes the archive.
-					'value'   => Data\Plugin::get_option( 'breadcrumb_archive', $post_type ) ?? 1,
+					'value'  => Data\Plugin::get_option( 'breadcrumb_archive', $post_type ) ?? 1,
 				] );
 			}
 		}

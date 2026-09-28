@@ -207,11 +207,10 @@ final class Generator {
 	/**
 	 * Generates image URLs and IDs from the theme header defaults or options.
 	 *
-	 * N.B. This output may be randomized.
-	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @since 5.0.1 No longer uses `get_custom_header()`, which tried to generate images.
+	 * @since 5.2.0 Now yields a header image when `header_image_data` is stored as an array.
 	 * @generator
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -231,26 +230,29 @@ final class Generator {
 			\get_theme_support( 'custom-header', 'default-image' ),
 		);
 
-		if ( \is_string( $image ) && $image ) {
+		if ( ! $image ) return;
+
+		if ( \is_string( $image ) ) {
 			yield [
 				'url' => $image,
 				'id'  => 0,
 			];
-		} elseif ( \is_object( $image ) && ! empty( $image->url ) ) {
-			if ( empty( $image->attachment_id ) ) { // This property isn't stored by default.
-				yield [
-					'url' => $image->url,
-					'id'  => 0,
-				];
-			} else {
-				$url = \wp_get_attachment_image_url( $image->attachment_id, $size );
+		} else {
+			// A header picked from the uploaded or default list is stored as an array, others as an object. See WP's set_header_image().
+			$image    = (object) $image;
+			$image_id = $image->attachment_id ?? 0;
 
-				if ( $url )
-					yield [
-						'url' => $url,
-						'id'  => $image->attachment_id,
-					];
-			}
+			// attachment_id isn't stored by default.
+			$url =
+				   $image_id
+				? \wp_get_attachment_image_url( $image_id, $size )
+				: ( $image->url ?? '' );
+
+			if ( $url )
+				yield [
+					'url' => $url,
+					'id'  => $image_id,
+				];
 		}
 	}
 

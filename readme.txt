@@ -337,6 +337,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
 	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content.
 	* Resolved an issue where social image URLs with non-ASCII characters in the filename were not percent-encoded, causing Facebook to ignore the `og:image` tag.
+	* Resolved an issue where a password-protected post in the loop could hide the Schema.org WebPage on a blog page or shop page, or let a protected page still output one.
+	* Resolved an issue where a site set to represent a Person still output an Organization as the homepage's WebPage `about`.
+	* Resolved an issue where a header image chosen from the uploaded or default header list was not used as a social image fallback. WordPress stores that choice as an array.
 	* Resolved an issue where saving a pasted webmaster verification meta tag without the settings script stored the tag's letters and digits run together, instead of the verification code.
 	* Resolved an issue where term archive breadcrumbs omitted parent terms.
 	* Resolved an issue where the Schema.org Presence tab stayed selectable via keyboard navigation after its label was hidden.
@@ -430,6 +433,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Meta\Twitter::get_custom_description()` (`tsf()->twitter()->get_custom_description()`) no longer calls a missing method when Open Graph tags are disabled and the arguments path has no custom Twitter description. It falls back to the meta description.
 		* Method `The_SEO_Framework\Data\Filter\Plugin::verification_code()` now extracts the content attribute from a pasted verification meta tag.
 		* Method `The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list()` (`tsf()->breadcrumbs()->get_breadcrumb_list()`) includes ancestor terms on front-end term archives again.
+		* Methods `The_SEO_Framework\Data\Post::is_protected()` (`tsf()->data()->post()->is_protected()`), `The_SEO_Framework\Data\Post::is_password_protected()` (`tsf()->data()->post()->is_password_protected()`), `The_SEO_Framework\Data\Post::is_private()` (`tsf()->data()->post()->is_private()`), and `The_SEO_Framework\Data\Post::is_draft()` (`tsf()->data()->post()->is_draft()`) now use the queried post instead of the loop post when no post is given.
+		* Method `The_SEO_Framework\Meta\Schema\Entities\WebPage::build()` (`tsf()->schema()->entities['WebPage']`) now points the front page `about` reference at a Person when `knowledge_type` is not `organization`.
 		* Method `The_SEO_Framework\Meta\URI::get_generated_shortlink_url()` (`tsf()->uri()->get_generated_shortlink_url()`):
 			1. No longer appends a query key the shortlink already set.
 			2. Custom taxonomies now use the registered query variable, or `taxonomy` and `term` when that variable is off.

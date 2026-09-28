@@ -139,6 +139,7 @@ class Post {
 	 *                 This currently doesn't affect how it works.
 	 * @since 4.2.0 Added caching. Can be reversed if https://core.trac.wordpress.org/ticket/50567 is fixed.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now uses the queried post instead of the loop post when no post is given.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected or private, false otherwise.
@@ -146,7 +147,7 @@ class Post {
 	public static function is_protected( $post = null ) {
 
 		// This is here so we don't have to create another instance hereinafter.
-		$post = \get_post( $post );
+		$post = \get_post( $post ?: Query::get_the_real_id() );
 
 		return self::is_password_protected( $post ) || self::is_private( $post );
 	}
@@ -157,6 +158,7 @@ class Post {
 	 * @since 3.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.0.5 Now again assumes that `'0'` is an invalid password.
+	 * @since 5.2.0 Now uses the queried post instead of the loop post when no post is given.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if protected, false otherwise.
@@ -164,7 +166,11 @@ class Post {
 	public static function is_password_protected( $post = null ) {
 		// Don't get the post directly if it can be evaded, it's still quite slow.
 		// Assume '0' is an invalid password.
-		return ! empty( $post->post_password ?? \get_post( $post )->post_password ?? '' );
+		return ! empty(
+			   $post->post_password
+			?? \get_post( $post ?: Query::get_the_real_id() )->post_password
+			?? ''
+		);
 	}
 
 	/**
@@ -172,6 +178,7 @@ class Post {
 	 *
 	 * @since 3.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now uses the queried post instead of the loop post when no post is given.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if private, false otherwise.
@@ -179,7 +186,11 @@ class Post {
 	public static function is_private( $post = null ) {
 		// Don't get the post directly if it can be evaded, it's still quite slow.
 		// We cast type false for Zend tests strict type before identical-string-comparing.
-		return 'private' === ( $post->post_status ?? \get_post( $post )->post_status ?? false );
+		return 'private' === (
+			   $post->post_status
+			?? \get_post( $post ?: Query::get_the_real_id() )->post_status
+			?? false
+		);
 	}
 
 	/**
@@ -187,6 +198,7 @@ class Post {
 	 *
 	 * @since 3.1.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now uses the queried post instead of the loop post when no post is given.
 	 *
 	 * @param int|null|\WP_Post $post The post ID or WP Post object.
 	 * @return bool True if draft, false otherwise.
@@ -194,7 +206,11 @@ class Post {
 	public static function is_draft( $post = null ) {
 
 		// Don't get the post directly if it can be evaded, it's still quite slow.
-		switch ( $post->post_status ?? \get_post( $post )->post_status ?? '' ) {
+		switch (
+			   $post->post_status
+			?? \get_post( $post ?: Query::get_the_real_id() )->post_status
+			?? ''
+		) {
 			case 'draft':
 			case 'auto-draft':
 			case 'pending':

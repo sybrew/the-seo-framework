@@ -664,6 +664,7 @@ class URI {
 	 * @since 5.0.0 1. Removed memoization thanks to optimization.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Removed option checks (unintentionally)
+	 *              4. Now returns URLs when a custom canonical URL is set.
 	 * @since 5.0.5 Reinstated missing option checks.
 	 * @todo make this a getter via $args.
 	 *

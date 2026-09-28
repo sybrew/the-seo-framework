@@ -74,7 +74,6 @@ $call_prev = [
 	T_VARIABLE     => true,
 	T_ISSET        => true,
 	T_UNSET        => true,
-	T_EMPTY        => true,
 	T_EVAL         => true,
 	T_EXIT         => true,
 	T_INCLUDE      => true,

@@ -77,6 +77,7 @@ final class WebPage extends Reference {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 The front page `about` reference now follows `knowledge_type`.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -110,8 +111,16 @@ final class WebPage extends Reference {
 						'target' => Meta\URI::get_canonical_url( $args ),
 					];
 
-					if ( Data\Plugin::get_option( 'knowledge_output' ) && Query::is_static_front_page( $args['id'] ) )
-						$entity['about'] = &Organization::get_dynamic_ref(); // Organization doesn't use args.
+					if (
+						   Data\Plugin::get_option( 'knowledge_output' )
+						&& Query::is_static_front_page( $args['id'] )
+					) {
+						if ( 'organization' === Data\Plugin::get_option( 'knowledge_type' ) ) {
+							$entity['about'] = &Organization::get_dynamic_ref();
+						} else {
+							$entity['about'] = &Person::get_dynamic_ref();
+						}
+					}
 
 					if ( Query::is_single( $args['id'] ) ) {
 						$entity['datePublished'] = Data\Post::get_published_time( $args['id'] );
@@ -141,8 +150,16 @@ final class WebPage extends Reference {
 				}
 			}
 
-			if ( Data\Plugin::get_option( 'knowledge_output' ) && Query::is_real_front_page() )
-				$entity['about'] = &Organization::get_dynamic_ref();
+			if (
+				   Data\Plugin::get_option( 'knowledge_output' )
+				&& Query::is_real_front_page()
+			) {
+				if ( 'organization' === Data\Plugin::get_option( 'knowledge_type' ) ) {
+					$entity['about'] = &Organization::get_dynamic_ref();
+				} else {
+					$entity['about'] = &Person::get_dynamic_ref();
+				}
+			}
 
 			if ( Query::is_archive() || Query::is_singular_archive() ) {
 				static::$type = 'CollectionPage';
