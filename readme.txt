@@ -256,7 +256,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* The author fallback field shows the website profile as its placeholder.
 			* On the credited profile, open Preferences -> Public profile -> Verification. Add this website's domain under Author attribution, and add this website as a website field for the green checkmark.
 			* The author's Fediverse profile is also added to Schema.org `sameAs`.
-		* You can now enter a Facebook domain verification code in Webmaster Integration Settings.
+		* You can now enter a Facebook domain verification code in Webmaster Integration Settings. Props [Contributolo](https://github.com/Contributolo).
 	* **Sitemap styling ported from XSL to CSS:**
 		* A CSS stylesheet for the optimized sitemap has been added, so browsers that no longer apply XSLT still show a styled, human-readable sitemap.
 			* We are forced to use CSS because all major browsers will soon no longer apply XSLT by default.
@@ -301,7 +301,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Updated radio buttons and checkboxes to accommodate for WordPress 7.0.
 		* Fixed a layout issue where hovering title prefix and addition overlays were misaligned in WordPress 7.0 admin input fields. Remains compatible with WordPress 6.8 and 6.9.
 	* **Robots.txt:**
-		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled.
+		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled. Props [Contributolo](https://github.com/Contributolo).
 	* **Sitemap settings:**
 		* The Sitemap Styling Settings now link to the knowledge base article about sitemap styles.
 		* When a multilingual plugin is detected, language sitemap links are now listed under "View translated sitemaps," using the language name as the link text. A note that each language has its own sitemap is shown with those links.
@@ -309,7 +309,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Social images:**
 		* The social image preview no longer sends a Referer header when fetching the URL. This matches our policy of applying `rel=noreferrer` on external links.
 	* **Head tags:**
-		* The metatag generator now always outputs in HTML5 syntax, dropping XHTML support.
+		* The metatag generator now always outputs in HTML5 syntax, dropping XHTML support. Props [Ben Word](https://github.com/retlehs).
 	* **Descriptions:**
 		* Generated descriptions now fall back to the post content when the excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated.
 * **Compatibility:**
@@ -359,7 +359,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
-		* Added index `facebook_verification`. Default `''`.
+		* Added index `facebook_verification`. Default `''`. Props [Contributolo](https://github.com/Contributolo).
 		* Added index `fediverse_site`. Default `''`.
 		* Added index `fediverse_site_url`. Default `''`.
 		* Added index `fediverse_creator`. Default `''`.
@@ -388,7 +388,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private, and this pool pointed at a class that never existed.
 	* **Changed:**
 		* Method `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`) now strips HTML tags from tooltip title and reason. The title and reason were already considered trusted (hardcoded input), but this extra hardening mitigates potential oversights from custom integrations.
-		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object.
+		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object. Props [Contributolo](https://github.com/Contributolo).
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):
 			1. No longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`
 			2. No longer minifies spaces around `+`, to prevent breaking `calc()` addition.
@@ -426,7 +426,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Helper\Headers::clean_response_header()` (`tsf()->headers()->clean_response_header()`) now defines `DONOTCACHEPAGE` before clearing output buffers, so page caches can skip storing scrubbed responses.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 	* **Fixed:**
-		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin.
+		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin. Props [Ajay D'Souza](https://github.com/ajaydsouza).
 		* Method `The_SEO_Framework\Meta\Twitter::get_custom_description()` (`tsf()->twitter()->get_custom_description()`) no longer calls a missing method when Open Graph tags are disabled and the arguments path has no custom Twitter description. It falls back to the meta description.
 		* Method `The_SEO_Framework\Data\Filter\Plugin::verification_code()` now extracts the content attribute from a pasted verification meta tag.
 		* Method `The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list()` (`tsf()->breadcrumbs()->get_breadcrumb_list()`) includes ancestor terms on front-end term archives again.
