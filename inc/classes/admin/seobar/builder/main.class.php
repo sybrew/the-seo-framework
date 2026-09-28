@@ -138,6 +138,7 @@ abstract class Main {
 	 * @since 5.0.0 Renamed from `_run_all_tests`.
 	 * @access private
 	 * @generator
+	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
 	 *
 	 * @param array $query {
 	 *     The query parameters.
@@ -163,6 +164,7 @@ abstract class Main {
 	 * @since 5.0.0 Renamed from `_run_test`.
 	 * @access private
 	 * @generator
+	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
 	 *
 	 * @param string|string[] $tests The test(s) to perform.
 	 * @param array           $query {

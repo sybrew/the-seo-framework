@@ -61,6 +61,8 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 				tsf-option-shim.php Routes site settings and post/term meta through Data\Plugin APIs
 				tsf-baseline-seed.php Registers CPTs/taxes and seeds baseline content/frames
 				tsf-playwright-admin.php Logs in admin when Playwright sends X-TSF-Playground-Admin
+		instruction-trial/          Trials instruction wording on Composer 2.5 until terse text still scores
+			SKILL.md                Swarm, rubric, compress loop; write the file only after 3 of 4 pass
 
 .github/
 	codemap.txt                   This file

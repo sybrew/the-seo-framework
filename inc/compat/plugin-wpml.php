@@ -37,17 +37,22 @@ use The_SEO_Framework\{
  *                 when the sitemap base path is the unfiltered home.
  *              3. Now registers a non-advertised directory alias for the default language
  *                 when "Use directory for default language" is enabled.
+ * @example $list `[ 'base' => [ 'endpoint' => 'sitemap.xml', 'robots' => true ] ]`
  * @param array[] $list {
  *     A list of sitemap endpoints keyed by ID.
  *
- *     @type string|false $lock_id  Optional. The cache key to use for locking. Defaults to index 'id'.
- *                                  Set to false to disable locking.
- *     @type string|false $cache_id Optional. The cache key to use for storing. Defaults to index 'id'.
- *                                  Set to false to disable caching.
- *     @type string       $endpoint The expected "pretty" endpoint, meant for administrative display.
- *     @type string       $regex    The endpoint regex, following the home path regex.
- *     @type callable     $callback The callback for the sitemap output.
- *     @type bool         $robots   Whether the endpoint should be mentioned in the robots.txt file.
+ *     @type array {$id} {
+ *         The sitemap endpoint.
+ *
+ *         @type string|false $lock_id  Optional. The cache key to use for locking. Defaults to index 'id'.
+ *                                      Set to false to disable locking.
+ *         @type string|false $cache_id Optional. The cache key to use for storing. Defaults to index 'id'.
+ *                                      Set to false to disable caching.
+ *         @type string       $endpoint The expected "pretty" endpoint, meant for administrative display.
+ *         @type string       $regex    The endpoint regex, following the home path regex.
+ *         @type callable     $callback The callback for the sitemap output.
+ *         @type bool         $robots   Whether the endpoint should be mentioned in the robots.txt file.
+ *     }
  * }
  * @return array[]
  */

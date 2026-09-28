@@ -64,6 +64,7 @@ class Breadcrumbs {
 	 *              2. Added the role index to the return value.
 	 *              3. Singular trails now omit post ancestors that aren't publicly viewable.
 	 *              4. Generated archive crumb names now drop their archive title prefix.
+	 *              5. Front-end term archives now include ancestor terms again.
 	 *
 	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
@@ -412,7 +413,8 @@ class Breadcrumbs {
 	 * Gets a list of breadcrumbs for a term object.
 	 *
 	 * @since 5.0.0
-	 * @since 5.2.0 Added the role index to the return value.
+	 * @since 5.2.0 1. Added the role index to the return value.
+	 *              2. Front-end term archives now include ancestor terms again.
 	 *
 	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
 	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
@@ -432,17 +434,20 @@ class Breadcrumbs {
 		if ( isset( $term_id ) ) {
 			$taxonomy = $taxonomy ?: ( \get_term( $term_id )->taxonomy ?? '' );
 		} else {
-			// Always override taxonomy when term_id is null
+			// Always override taxonomy when term_id is null.
 			$taxonomy = Query::get_current_taxonomy();
 		}
 
 		$i = 0;
 
-		foreach ( Data\Term::get_term_parents(
-			$term_id,
-			$taxonomy,
-			false, // Exclude self, we add it below (current term is cached if $term_id is null).
-		) as $parent ) {
+		foreach (
+			Data\Term::get_term_parents(
+				$term_id ?? Query::get_the_real_id(),
+				$taxonomy,
+				false, // Exclude self. The current term is added below.
+			)
+			as $parent
+		) {
 			$crumbs[] = [
 				'url'  => Meta\URI::get_bare_term_url( $parent->term_id, $parent->taxonomy ),
 				'name' => self::get_breadcrumb_title( [

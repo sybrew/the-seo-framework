@@ -259,16 +259,21 @@ final class Plugin {
 	 * @since 4.0.0
 	 * @since 5.0.0 1. Removed third parameter: $use_tabs.
 	 *              2. Renamed from `_nav_tab_wrapper`.
+	 * @example $tabs `[ 'general' => [ 'name' => 'General', 'callback' => [ \The_SEO_Framework\Admin\Settings\Post::class, 'general_tab' ], 'dashicon' => 'admin-generic' ] ]`
 	 *
 	 * @param string $id   The nav-tab ID.
 	 * @param array  $tabs {
 	 *     The tab creation arguments keyed by tab name.
 	 *
-	 *     @type string   $name     Tab name.
-	 *     @type callable $callback Output function.
-	 *     @type string   $dashicon The dashicon to use.
-	 *     @type mixed    $args     Optional callback function args. These arguments
-	 *                              will be extracted to variables in scope of the view.
+	 *     @type array {$tab} {
+	 *         The tab creation arguments.
+	 *
+	 *         @type string   $name     Tab name.
+	 *         @type callable $callback Output function.
+	 *         @type string   $dashicon The dashicon to use.
+	 *         @type mixed    $args     Optional callback function args. These arguments
+	 *                                  will be extracted to variables in scope of the view.
+	 *     }
 	 * }
 	 */
 	public static function nav_tab_wrapper( $id, $tabs = [] ) {

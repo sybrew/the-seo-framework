@@ -80,6 +80,7 @@ final class Plugin {
 
 		/**
 		 * @since 5.0.0
+		 * @example $sanitizers `[ 'title_separator' => [ 'sanitize_text_field' ] ]`
 		 * @param array<string, callable[]> $sanitizers {
 		 *     A map of option sanitizers and their callbacks.
 		 *
@@ -116,6 +117,7 @@ final class Plugin {
 	 * `'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS`.
 	 *
 	 * @since 5.0.0
+	 * @example $filters `[ 'title_separator' => 'sanitize_text_field' ]`
 	 *
 	 * @param array $filters {
 	 *     A map of option filters and their callbacks.
@@ -358,6 +360,7 @@ final class Plugin {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 Now actually extracts the content attribute from a pasted verification meta tag.
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string A sanitized verification code value.
@@ -365,10 +368,10 @@ final class Plugin {
 	public static function verification_code( $value ) {
 
 		// Extract the content if it hasn't already in JS.
-		if ( str_contains( '<', $value ) ) {
-			$value = preg_match(
+		if ( str_contains( $value, '<' ) ) {
+			preg_match(
 				'/\bcontent=(?:([\'"])([^$]*?)\g{-2}|([^\s\/>]+))/i',
-				'$2',
+				$value,
 				$matches,
 			);
 
@@ -451,6 +454,7 @@ final class Plugin {
 
 	/**
 	 * @since 5.2.0
+	 * @example $value `[ 'post' => 'category', 'page' => '-1' ]`
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return array<string,string> {

@@ -45,12 +45,13 @@ class Utils {
 	 * Returns a list of filterable user-agents that can be blocked.
 	 *
 	 * @since 5.1.0
+	 * @example $agents `[ 'Amazonbot' => [ 'by' => 'Amazon', 'link' => 'https://developer.amazon.com/amazonbot' ] ]`
 	 *
 	 * @param string $type The type of user-agents to get. Accepts 'ai' and 'seo'.
 	 * @return array {
 	 *     A list of user-agents with extra info.
 	 *
-	 *     @type array $user_agent {
+	 *     @type array {$user_agent} {
 	 *         The user-agent's information.
 	 *
 	 *         @type string $by   The entity behind the user-agent.

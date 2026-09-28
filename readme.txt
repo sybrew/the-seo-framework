@@ -337,6 +337,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
 	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content.
 	* Resolved an issue where social image URLs with non-ASCII characters in the filename were not percent-encoded, causing Facebook to ignore the `og:image` tag.
+	* Resolved an issue where saving a pasted webmaster verification meta tag without the settings script stored the tag's letters and digits run together, instead of the verification code.
+	* Resolved an issue where term archive breadcrumbs omitted parent terms.
+	* Resolved an issue where the Schema.org Presence tab stayed selectable via keyboard navigation after its label was hidden.
+	* Resolved an issue where Open Graph output included a sixth content image while five is the intended limit.
+	* Resolved an issue where shortlinks on plain permalinks repeated their own query, such as `?p=123&p=123`.
+	* Resolved an issue where a custom taxonomy shortlink used the taxonomy name as its query key, so WordPress could not resolve the link when that taxonomy's query variable was different.
 	* Resolved an issue where Bulk Edit visibility selects wrapped below their labels instead of sitting beside them.
 * **Notes:**
 	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
@@ -421,6 +427,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 	* **Fixed:**
 		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin.
+		* Method `The_SEO_Framework\Meta\Twitter::get_custom_description()` (`tsf()->twitter()->get_custom_description()`) no longer calls a missing method when Open Graph tags are disabled and the arguments path has no custom Twitter description. It falls back to the meta description.
+		* Method `The_SEO_Framework\Data\Filter\Plugin::verification_code()` now extracts the content attribute from a pasted verification meta tag.
+		* Method `The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list()` (`tsf()->breadcrumbs()->get_breadcrumb_list()`) includes ancestor terms on front-end term archives again.
+		* Method `The_SEO_Framework\Meta\URI::get_generated_shortlink_url()` (`tsf()->uri()->get_generated_shortlink_url()`):
+			1. No longer appends a query key the shortlink already set.
+			2. Custom taxonomies now use the registered query variable, or `taxonomy` and `term` when that variable is off.
 		* Method `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`):
 			1. Now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks or rewrite disabled), matching WordPress's `get_permalink()`, `get_page_link()`, `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`, `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks.
 			2. Hierarchical custom post types now use the extra permastruct, matching `get_post_permalink()`, instead of the page permastruct.

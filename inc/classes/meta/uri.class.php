@@ -819,6 +819,8 @@ class URI {
 	 * Generates shortlink URL.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 1. Now drops a query key the shortlink already set.
+	 *              2. Custom taxonomies now use the registered query variable, or `taxonomy` and `term` when that variable is off.
 	 * @todo Append queries of other plugins for other pages as well?
 	 *
 	 * @return string The shortlink URL.
@@ -835,15 +837,25 @@ class URI {
 
 				if ( $slug )
 					$query = [ 'tag' => $slug ];
-			} elseif ( Query::is_tag() || Query::is_tax() ) {
+			} elseif ( Query::is_tax() ) {
 				// Generate shortlink for object type and slug.
 				$object = \get_queried_object();
 
 				$tax  = $object->taxonomy ?? '';
 				$slug = $object->slug ?? '';
 
-				if ( $tax && $slug )
-					$query = [ $tax => $slug ];
+				if ( $tax && $slug ) {
+					$tax_obj = \get_taxonomy( $tax );
+
+					if ( $tax_obj && $tax_obj->query_var ) {
+						$query = [ $tax_obj->query_var => $slug ];
+					} else {
+						$query = [
+							'taxonomy' => $tax,
+							'term'     => $slug,
+						];
+					}
+				}
 			} elseif ( \is_date() && isset( $GLOBALS['wp_query']->query ) ) {
 				// FIXME: Make Trac ticket: WP doesn't accept paged parameters w/ date parameters. It'll lead to the homepage.
 				$_query = $GLOBALS['wp_query']->query;
@@ -873,11 +885,16 @@ class URI {
 			$query += [ 'paged' => $paged ];
 		}
 
-		$query       = http_build_query( $query );
-		$extra_query = parse_url( self::get_generated_url( null ), \PHP_URL_QUERY );
+		$extra_query = parse_url( self::get_generated_url(), \PHP_URL_QUERY );
 
-		if ( $extra_query )
-			$query .= "&$extra_query";
+		if ( $extra_query ) {
+			parse_str( $extra_query, $extra );
+
+			// Drop keys the shortlink already set. Left-hand keys win.
+			$query += $extra;
+		}
+
+		$query = http_build_query( $query );
 
 		return \sanitize_url(
 			URI\Utils::append_query_to_url(

@@ -114,6 +114,7 @@ final class Generator {
 	 * @since 4.2.7 1. No longer accidentally matches `<imganything` or `<img notsrc="source">`.
 	 *              2. Can no longer use images from `datalist`, `dialog`, `hgroup`, `menu`, `ol`, `object`, `output`, and `template` elements.
 	 *              3. No longer expect images from `dd`, `dt`, `figcaption`, `li`, `tfoot`, `br`, `hr`, `link`, `meta`, `option`, `samp`.
+	 * @since 5.2.0 Now yields at most 5 content images instead of 6.
 	 * @generator
 	 * @TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
 	 *       Combine query, instead of using WP API? Only do that for the first image, instead?
@@ -174,7 +175,7 @@ final class Generator {
 				'id'  => 0,
 			];
 
-			if ( ++$yielded_images > self::MAX_CONTENT_IMAGES ) break;
+			if ( ++$yielded_images >= self::MAX_CONTENT_IMAGES ) break;
 		}
 	}
 

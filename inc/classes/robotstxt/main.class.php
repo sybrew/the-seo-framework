@@ -112,6 +112,7 @@ class Main {
 
 		/**
 		 * @since 5.1.0
+		 * @example $robots_sections `[ 'default' => [ 'user-agent' => [ '*' ], 'disallow' => [ '/wp-admin/' ] ] ]`
 		 * @param array  $robots_sections {
 		 *     The robots directives, associative by key.
 		 *     All input is expected to be escaped.

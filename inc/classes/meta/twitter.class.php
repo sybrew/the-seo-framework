@@ -402,9 +402,10 @@ class Twitter {
 
 	/**
 	 * Returns the Twitter meta description from custom field, based on arguments.
-	 * Falls back to Open Graph description.
+	 * Falls back to the Open Graph description, or the meta description when Open Graph tags are disabled.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 The arguments path now correctly falls back to the meta description when Open Graph tags are disabled.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Twitter description.
@@ -443,7 +444,7 @@ class Twitter {
 		// At least there was an attempt made to fetch a title when we reach this. Try harder.
 		return self::fallback_to_open_graph()
 			? Open_Graph::get_custom_description_from_args( $args )
-			: Title::get_custom_description( $args );
+			: Description::get_custom_description( $args );
 	}
 
 	/**

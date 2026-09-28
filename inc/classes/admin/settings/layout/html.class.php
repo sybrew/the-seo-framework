@@ -245,6 +245,7 @@ class HTML {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 No longer adds an extra space in front of the return value when no data is generated.
+	 * @example $data `[ 'postId' => 42 ]`
 	 *
 	 * @param iterable $data {
 	 *     The data attributes.

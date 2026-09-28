@@ -139,11 +139,12 @@ final class Tags {
 	 *
 	 * @since 5.0.0
 	 * @since 5.2.0 Removed XHTML support. The tags are now always rendered in HTML5 syntax.
+	 * @example $attributes `[ 'href' => 'https://example.com/' ]`
 	 *
 	 * @param array         $attributes {
 	 *                          Associative array of tag names and tag values.
 	 *
-	 *                          @type string $value The attributes's value, keyed by name.
+	 *                          @type string {$name} The attributes's value.
 	 *                      }
 	 * @param string        $tag        The element's tag-name.
 	 * @param ?string|array $content    The tag's content. Leave null to not render content.

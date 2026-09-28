@@ -595,11 +595,15 @@ class Base extends Main {
 		 * @since 3.2.2 Invalid URLs are now skipped.
 		 * @since 4.0.0 Added $args parameter.
 		 * @since 4.2.0 No longer forwards the 'show_priority' index in the second ($args) parameter.
-		 * @example return value: [ 'http://example.com' => [ 'lastmod' => '2024-04-10 14:52:06' ] ]
+		 * @example $custom_urls `[ 'http://example.com' => [ 'lastmod' => '2024-04-10 14:52:06' ] ]`
 		 * @param array $custom_urls {
 		 *     An array of custom URLs, keyed by the absolute url to the page.
 		 *
-		 *     @type string $lastmod UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
+		 *     @type array {$url} {
+		 *         The custom URL arguments.
+		 *
+		 *         @type string $lastmod UNIXTIME <GMT+0> Last modified date, e.g. "2016-01-26 13:04:55"
+		 *     }
 		 * }
 		 * @param array $args {
 		 *     The sitemap URL extension arguments.
