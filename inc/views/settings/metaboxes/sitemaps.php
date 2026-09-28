@@ -141,7 +141,7 @@ switch ( $instance ) :
 				);
 
 				/**
-				 * @since 5.1.5
+				 * @since 5.2.0
 				 * @param string[] $endpoints Administrative language names keyed by sitemap endpoint ID.
 				 *                            The ID must exist in `the_seo_framework_sitemap_endpoint_list`.
 				 */

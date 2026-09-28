@@ -32,7 +32,7 @@ use The_SEO_Framework\{
  *
  * @hook the_seo_framework_sitemap_endpoint_list 20
  * @since 5.0.5
- * @since 5.1.5 1. Now prefixes endpoint IDs with an underscore.
+ * @since 5.2.0 1. Now prefixes endpoint IDs with an underscore.
  *              2. Now sets a language-specific endpoint regex so directory sitemaps match
  *                 when the sitemap base path is the unfiltered home.
  *              3. Now registers a non-advertised directory alias for the default language
@@ -126,7 +126,7 @@ function _wpml_register_sitemap_languages( $list ) {
  * for robots.txt or sitemap matching.
  *
  * @hook the_seo_framework_sitemap_settings_language_endpoints 10
- * @since 5.1.5
+ * @since 5.2.0
  * @global \SitePress $sitepress
  *
  * @param string[] $endpoints Administrative language names keyed by sitemap endpoint ID.
@@ -185,7 +185,7 @@ function _wpml_sitemap_language_endpoints( $endpoints ) {
  * only rewrites theme-template backtraces. `home_url` would still be converted.
  *
  * @hook the_seo_framework_sitemap_base_path 10
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @param string $path The home path.
  * @return string The unfiltered home path.
@@ -289,7 +289,7 @@ function _wpml_sitemap_filter_non_translatables( $args ) {
  * recommended character counts. Pixel counting is not available.
  *
  * @hook wpml_tm_adjust_translation_fields 10
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @param array[] $fields {
  *     Translation fields.

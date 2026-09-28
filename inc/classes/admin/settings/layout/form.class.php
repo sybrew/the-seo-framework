@@ -50,7 +50,7 @@ class Form {
 	 *
 	 * @since 4.1.4
 	 * @since 5.0.0 'default' is now synonymous to 'selected'. 'default' is no longer promoted.
-	 * @since 5.1.5 1. No longer wraps the select in a `div`.
+	 * @since 5.2.0 1. No longer wraps the select in a `div`.
 	 *              2. Removed the `class` argument.
 	 *
 	 * @param array $args {

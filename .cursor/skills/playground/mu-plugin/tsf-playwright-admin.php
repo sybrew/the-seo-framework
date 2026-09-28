@@ -41,7 +41,7 @@ add_action(
 /**
  * Copies the auth cookie into $_COOKIE so auth_redirect() passes on this request.
  *
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @param string $cookie     Cookie value.
  * @param int    $expire     Cookie expire.
@@ -56,7 +56,7 @@ function wpr_tsf_playwright_sync_auth_cookie( $cookie, $expire, $expiration, $us
 /**
  * Copies the logged-in cookie into $_COOKIE for this request.
  *
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @param string $cookie Cookie value.
  */
@@ -67,7 +67,7 @@ function wpr_tsf_playwright_sync_logged_in_cookie( $cookie ) {
 /**
  * Returns the current request path.
  *
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @return string
  */
@@ -83,7 +83,7 @@ function wpr_tsf_playwright_request_path() {
  *
  * Front-end HTML stays logged-out. HTTP capture does not send the header.
  *
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @return bool
  */
@@ -103,7 +103,7 @@ function wpr_tsf_playwright_wants_admin() {
 /**
  * Logs in the Playground admin when Playwright sends the admin header.
  *
- * @since 5.1.5
+ * @since 5.2.0
  */
 function wpr_tsf_playwright_admin_login() {
 

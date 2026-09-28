@@ -43,7 +43,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 				<?php
 				/**
 				 * @since 3.1.0
-				 * @since 5.1.5 Removed first parameter.
+				 * @since 5.2.0 Removed first parameter.
 				 */
 				\do_action( 'the_seo_framework_xsl_head' );
 				?>
@@ -54,7 +54,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 						<?php
 						/**
 						 * @since 3.1.0
-						 * @since 5.1.5 Removed first parameter.
+						 * @since 5.2.0 Removed first parameter.
 						 */
 						\do_action( 'the_seo_framework_xsl_description' );
 						?>
@@ -65,7 +65,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 						<?php
 						/**
 						 * @since 3.1.0
-						 * @since 5.1.5 Removed first parameter.
+						 * @since 5.2.0 Removed first parameter.
 						 */
 						\do_action( 'the_seo_framework_xsl_content' );
 						?>
@@ -76,7 +76,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 						<?php
 						/**
 						 * @since 3.1.0
-						 * @since 5.1.5 Removed first parameter.
+						 * @since 5.2.0 Removed first parameter.
 						 */
 						\do_action( 'the_seo_framework_xsl_footer' );
 						?>

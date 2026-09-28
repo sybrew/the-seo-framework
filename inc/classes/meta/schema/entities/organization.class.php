@@ -50,7 +50,7 @@ final class Organization extends Reference {
 
 	/**
 	 * @since 5.0.0
-	 * @since 5.1.5 Now keeps a knowledge name of `0` instead of falling back to the public blog name.
+	 * @since 5.2.0 Now keeps a knowledge name of `0` instead of falling back to the public blog name.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.

@@ -508,7 +508,7 @@ final class Registry {
 	 * @since 3.1.0
 	 * @since 5.0.0 1. Is now static.
 	 *              2. Renamed from `convert_color_css`.
-	 * @since 5.1.5 1. Now registers the admin color scheme if not yet registered.
+	 * @since 5.2.0 1. Now registers the admin color scheme if not yet registered.
 	 *              2. Now uses cached user data for improved admin performance.
 	 *              3. Added support for WordPress 7.0 admin color schemes.
 	 * @link <https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/>

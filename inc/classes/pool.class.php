@@ -173,7 +173,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 5.1.5
+			 * @since 5.2.0
 			 * @return \The_SEO_Framework\Admin\SEOBar\Builder
 			 */
 			public static function seobar() {
@@ -187,7 +187,7 @@ class Pool extends Legacy_API {
 			}
 
 			/**
-			 * @since 5.1.5
+			 * @since 5.2.0
 			 * @return \Closure An anonymous class with subpools.
 			 */
 			public static function scripts() {
@@ -199,7 +199,7 @@ class Pool extends Legacy_API {
 					private $deprecated_properties = [];
 
 					/**
-					 * @since 5.1.5
+					 * @since 5.2.0
 					 * @return \The_SEO_Framework\Admin\Script\Loader
 					 */
 					public static function loader() {
@@ -483,7 +483,7 @@ class Pool extends Legacy_API {
 	 * Returns the Fediverse API class as instantiated object with deprecation capabilities.
 	 * This allows for easy API access, and it allows us to silence fatal errors.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @api Not used internally.
 	 *
 	 * @return \The_SEO_Framework\Meta\Fediverse

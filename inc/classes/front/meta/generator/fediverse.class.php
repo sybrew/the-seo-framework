@@ -30,13 +30,13 @@ use The_SEO_Framework\Meta;
 /**
  * Holds Fediverse generators for meta tag output.
  *
- * @since 5.1.5
+ * @since 5.2.0
  * @access private
  */
 final class Fediverse {
 
 	/**
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @var callable[] GENERATORS A list of auto-loaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -45,7 +45,7 @@ final class Fediverse {
 	];
 
 	/**
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @generator
 	 */
 	public static function generate_fediverse_creator() {
@@ -62,7 +62,7 @@ final class Fediverse {
 	}
 
 	/**
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @generator
 	 */
 	public static function generate_rel_me() {

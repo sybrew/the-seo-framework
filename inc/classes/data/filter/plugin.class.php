@@ -483,7 +483,7 @@ final class Plugin {
 	}
 
 	/**
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string A sanitized Fediverse profile handle.
@@ -493,7 +493,7 @@ final class Plugin {
 	}
 
 	/**
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return string A sanitized Fediverse profile URL.

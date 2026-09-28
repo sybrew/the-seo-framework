@@ -977,7 +977,7 @@ class Query {
 	 * @since 2.7.0 Added secure parameter.
 	 * @since 2.9.0 If $secure is false, the cache is no longer used.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @since 5.1.5 Replaced `$secure` with `'page_hook'` (default) and `'page_query'` (kept backward compatibility for a falsy value).
+	 * @since 5.2.0 Replaced `$secure` with `'page_hook'` (default) and `'page_query'` (kept backward compatibility for a falsy value).
 	 *              `$secure` was a misnomer that never checked capabilities.
 	 * @see self::is_menu_page() for the `$_GET['page']` tradeoff.
 	 *

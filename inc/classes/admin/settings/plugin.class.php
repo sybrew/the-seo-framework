@@ -646,7 +646,7 @@ final class Plugin {
 	/**
 	 * Social Meta Box Fediverse Tab output.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @see self::social_metabox() Callback for Social Settings box.
 	 */
 	public static function _social_metabox_fediverse_tab() {

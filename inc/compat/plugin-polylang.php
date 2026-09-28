@@ -40,7 +40,7 @@ use The_SEO_Framework\{
  *
  * @hook the_seo_framework_sitemap_endpoint_list 20
  * @since 5.0.5
- * @since 5.1.5 1. Now sets a language-specific endpoint regex so directory sitemaps match
+ * @since 5.2.0 1. Now sets a language-specific endpoint regex so directory sitemaps match
  *                 when the home URL includes a language or front-page slug.
  *              2. Now registers a non-advertised directory alias for the default language
  *                 when Polylang does not hide it.
@@ -131,7 +131,7 @@ function _polylang_register_sitemap_languages( $list ) {
  * for robots.txt or sitemap matching.
  *
  * @hook the_seo_framework_sitemap_settings_language_endpoints 10
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @param string[] $endpoints Administrative language names keyed by sitemap endpoint ID.
  * @return string[]
@@ -184,7 +184,7 @@ function _polylang_sitemap_language_endpoints( $endpoints ) {
  *
  * @hook the_seo_framework_sitemap_base_path 10
  * @since 4.1.2 Introduced as `_polylang_fix_sitemap_base_bath`. Dropped during the 5.0 refactor.
- * @since 5.1.5 Restored. Now always uses the unfiltered home path; directory sitemaps match
+ * @since 5.2.0 Restored. Now always uses the unfiltered home path; directory sitemaps match
  *              via their endpoint regex instead of a language-prefixed base path.
  * @link https://github.com/sybrew/the-seo-framework/issues/514
  * @link https://github.com/sybrew/the-seo-framework/issues/675
@@ -214,7 +214,7 @@ function _polylang_fix_sitemap_base_path( $path ) {
  *
  * @hook the_seo_framework_sitemap_header 10
  * @since 4.1.2
- * @since 5.1.5 1. Now accepts the sitemap ID from the hook.
+ * @since 5.2.0 1. Now accepts the sitemap ID from the hook.
  *              2. Now forces the default language for the unprefixed directory sitemap, so cookie or
  *                 browser detection cannot hijack `/sitemap.xml` when the default language slug is shown.
  *              3. Now treats the CSS stylesheet endpoint like the XSL stylesheet for default-language detection.
@@ -337,7 +337,7 @@ function _polylang_sitemap_append_non_translatables( $args ) {
  * remains unchanged.
  *
  * @hook the_seo_framework_supported_taxonomy 10
- * @since 5.1.5
+ * @since 5.2.0
  * @link https://github.com/polylang/polylang/pull/1871 Partially supersedes this for pre_get_posts.
  *
  * @param bool   $supported Whether the taxonomy is supported.
@@ -360,7 +360,7 @@ function _polylang_support_language_taxonomy( $supported, $taxonomy ) {
  * needs until Polylang translates IDs added during pre_get_posts itself.
  *
  * @hook pre_get_posts 10000
- * @since 5.1.5
+ * @since 5.2.0
  * @link https://github.com/polylang/polylang/pull/1871 May be redundant when Polylang translates late post IDs.
  *
  * @param \WP_Query $wp_query The WP_Query instance.

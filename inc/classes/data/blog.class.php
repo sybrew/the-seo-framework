@@ -50,7 +50,7 @@ class Blog {
 	 * Do not consider this function safe for printing!
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now keeps a site title of `0` instead of falling back to the filtered blog name.
+	 * @since 5.2.0 Now keeps a site title of `0` instead of falling back to the filtered blog name.
 	 *
 	 * @return string $blogname The sanitized blogname.
 	 */

@@ -50,7 +50,7 @@ class Excerpt {
 	 * Returns a description excerpt.
 	 *
 	 * @since 5.1.0
-	 * @since 5.1.5 Now falls back to the post content when a singular excerpt is unusable after HTML extraction.
+	 * @since 5.2.0 Now falls back to the post content when a singular excerpt is unusable after HTML extraction.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -92,7 +92,7 @@ class Excerpt {
 	 * Returns a description excerpt for the current query.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now keeps an excerpt of `0` instead of replacing it with an empty string.
+	 * @since 5.2.0 Now keeps an excerpt of `0` instead of replacing it with an empty string.
 	 *
 	 * @return string
 	 */
@@ -259,7 +259,7 @@ class Excerpt {
 	 * The excerpt and content are not concatenated.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now falls back to the post content when the excerpt is unusable after HTML extraction.
+	 * @since 5.2.0 Now falls back to the post content when the excerpt is unusable after HTML extraction.
 	 * NOTE: Don't add memo; large memory heaps can occur.
 	 *       It only runs twice on the post edit screen (post.php).
 	 *       Front-end caller get_excerpt_from_query() uses memo.

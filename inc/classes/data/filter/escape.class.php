@@ -48,7 +48,7 @@ class Escape {
 	 * CRLF and leftover CR are collapsed to LF before encoding, so a Windows newline
 	 * is one CSS line break (`\A`) instead of CR+LF.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @see https://www.w3.org/TR/css-values-4/#string-value
 	 * @see https://www.w3.org/TR/css-content-3/#propdef-content
 	 *

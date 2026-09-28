@@ -49,7 +49,7 @@ use The_SEO_Framework\Helper\{
  * - params shouldn't change, like the page ID.
  *
  * @since 5.0.0
- * @since 5.1.5 No longer final.
+ * @since 5.2.0 No longer final.
  * @see \The_SEO_Framework\Admin\Script\Registry
  * @access protected
  *         Use tsf()->admin()->scripts()->loader() instead.
@@ -61,7 +61,7 @@ class Loader {
 	 *
 	 * Great for manual initialization; for example, on the front-end.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @api Not used internally.
 	 */
 	public static function mount() {
@@ -82,7 +82,7 @@ class Loader {
 	 *
 	 * @hook admin_enqueue_scripts 0
 	 * @since 5.0.0
-	 * @since 5.1.5 1. Prevents multiple runs.
+	 * @since 5.2.0 1. Prevents multiple runs.
 	 *              2. Now also loads author profile scripts.
 	 */
 	public static function init() {
@@ -223,7 +223,7 @@ class Loader {
 	 * Returns the common TSF scripts.
 	 *
 	 * @since 5.1.0
-	 * @since 5.1.5 No longer includes unused `manage_options` and `upload_files` l10n nonces.
+	 * @since 5.2.0 No longer includes unused `manage_options` and `upload_files` l10n nonces.
 	 *
 	 * @return array The script params.
 	 */
@@ -583,7 +583,7 @@ class Loader {
 	/**
 	 * Returns Author profile scripts params.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @return array The script params.
 	 */

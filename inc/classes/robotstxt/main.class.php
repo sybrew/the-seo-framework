@@ -58,7 +58,7 @@ class Main {
 	 * @since 5.0.0
 	 * @since 5.1.0 1. Refactored to output the directives via a priority system.
 	 *              2. Now supports blocking AI language model trainers and SEO analysis tools.
-	 * @since 5.1.5 Fixed WordPress Core sitemap URL extraction for robots.txt Sitemap Hinting.
+	 * @since 5.2.0 Fixed WordPress Core sitemap URL extraction for robots.txt Sitemap Hinting.
 	 * @link <https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt>
 	 *
 	 * @return string Robots.txt output.

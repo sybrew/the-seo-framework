@@ -34,7 +34,7 @@ add_filter(
 /**
  * Registers baseline CPTs and taxonomies.
  *
- * @since 5.1.5
+ * @since 5.2.0
  */
 function wpr_tsf_register_types() {
 
@@ -94,7 +94,7 @@ function wpr_tsf_register_types() {
 /**
  * Creates baseline posts, pages, and terms once.
  *
- * @since 5.1.5
+ * @since 5.2.0
  */
 function wpr_tsf_seed_content() {
 
@@ -258,7 +258,7 @@ function wpr_tsf_seed_content() {
 /**
  * Switches blog-on-front vs static front + posts page.
  *
- * @since 5.1.5
+ * @since 5.2.0
  *
  * @param bool   $handled Whether a consumer already applied the frame.
  * @param string $name    Frame name.

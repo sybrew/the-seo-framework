@@ -293,7 +293,7 @@ class Utils {
 	 * ASCII URI, such as Facebook's `og:image` crawler, then ignore the tag.
 	 * Already-percent-encoded sequences and reserved ASCII characters are left intact.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param string $url The URL to encode.
 	 * @return string The URL with non-ASCII octets percent-encoded.
@@ -538,7 +538,7 @@ class Utils {
 	 * - `get_term_link()`, `get_post_type_archive_link()`, `get_author_posts_url()`
 	 *
 	 * @since 5.1.0
-	 * @since 5.1.5 1. Now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks
+	 * @since 5.2.0 1. Now returns query-based permastructures when WordPress has no extra permastruct (plain permalinks
 	 *                 or rewrite disabled), matching Core's `get_permalink()`, `get_page_link()`,
 	 *                 `get_attachment_link()`, `get_post_permalink()`, `get_term_link()`,
 	 *                 `get_post_type_archive_link()`, and `get_author_posts_url()` fallbacks.
@@ -663,7 +663,7 @@ class Utils {
 	 * Returns the query permastruct for a post type with no extra permastruct.
 	 * Matches WordPress's `get_post_permalink()` fallback.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param \WP_Post_Type $post_type_obj The post type object.
 	 * @return string The query permastruct.
@@ -680,7 +680,7 @@ class Utils {
 	 * Returns the query permastruct for a taxonomy with no extra permastruct.
 	 * Matches WordPress's `get_term_link()` fallback.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param string $taxonomy The taxonomy name.
 	 * @return string The query permastruct. Empty when the taxonomy does not exist.

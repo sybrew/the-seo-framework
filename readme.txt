@@ -243,7 +243,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
-### 5.1.5
+### 5.2.0
 
 ## For everyone
 

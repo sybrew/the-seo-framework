@@ -151,7 +151,7 @@ final class Page extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 Added syntax test.
-	 * @since 5.1.5 Now treats a homepage title of `0` as set when choosing the SEO Settings vs Edit Page assessment.
+	 * @since 5.2.0 Now treats a homepage title of `0` as set when choosing the SEO Settings vs Edit Page assessment.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar title item.
@@ -376,7 +376,7 @@ final class Page extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 4.0.5 Added syntax test.
-	 * @since 5.1.5 1. Now treats a homepage description of `0` as set when choosing the SEO Settings vs Edit Page assessment.
+	 * @since 5.2.0 1. Now treats a homepage description of `0` as set when choosing the SEO Settings vs Edit Page assessment.
 	 *              2. Now treats a post excerpt of `0` as excerpt content.
 	 *
 	 * @return array $item {

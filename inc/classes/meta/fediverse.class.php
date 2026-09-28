@@ -30,7 +30,7 @@ use The_SEO_Framework\Data;
 /**
  * Holds getters for Fediverse output.
  *
- * @since 5.1.5
+ * @since 5.2.0
  * @access protected
  *         Use tsf()->fediverse() instead.
  */
@@ -41,7 +41,7 @@ class Fediverse {
 	 *
 	 * Prefers the post author's profile, then the site author fallback, then the site profile.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @return string The stored `@user@domain` handle. Empty string if none is set.
 	 */
@@ -57,7 +57,7 @@ class Fediverse {
 	 * Uses the same source as get_creator(). Empty when that source has no stored URL;
 	 * get_profile_url() can still build one from the handle.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @return string The stored profile URL. Empty string if none is set.
 	 */
@@ -75,7 +75,7 @@ class Fediverse {
 	/**
 	 * Returns the site Fediverse profile handle.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @return string The stored `@user@domain` handle. Empty string if none is set.
 	 */
@@ -86,7 +86,7 @@ class Fediverse {
 	/**
 	 * Returns the site Fediverse profile URL.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @return string The stored profile URL. Empty string if none is set.
 	 */
@@ -97,7 +97,7 @@ class Fediverse {
 	/**
 	 * Returns a Fediverse profile URL from a stored URL or handle.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param string $handle A `@user@domain` handle.
 	 * @param string $url    Optional. A stored profile URL. Used when set, so
@@ -124,7 +124,7 @@ class Fediverse {
 	 * Includes the site profile when set, and the current creator when it differs.
 	 * Prefers a stored profile URL; otherwise builds one from the handle.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @return string[] Profile URLs.
 	 */

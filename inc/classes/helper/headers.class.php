@@ -40,7 +40,7 @@ class Headers {
 	 * @since 2.8.0
 	 * @since 2.9.0 Now flushes all levels rather than just the latest one.
 	 * @since 4.0.0 Is now public.
-	 * @since 5.1.5 Now discourages page caches from storing scrubbed buffers.
+	 * @since 5.2.0 Now discourages page caches from storing scrubbed buffers.
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */

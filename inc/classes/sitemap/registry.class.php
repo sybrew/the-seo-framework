@@ -187,7 +187,7 @@ class Registry {
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 Is now static.
-	 * @since 5.1.5 Now registers the `css` endpoint.
+	 * @since 5.2.0 Now registers the `css` endpoint.
 	 *
 	 * @return array[] The sitemap endpoints with their callbacks.
 	 */
@@ -196,7 +196,7 @@ class Registry {
 			/**
 			 * @since 4.0.0
 			 * @since 4.0.2 Made the endpoints' regex case-insensitive.
-			 * @since 5.1.5 Now includes a `css` endpoint in the default list.
+			 * @since 5.2.0 Now includes a `css` endpoint in the default list.
 			 * @link Example: https://github.com/sybrew/tsf-term-sitemap
 			 * @param array[] $list {
 			 *     A list of sitemap endpoints keyed by ID.
@@ -376,7 +376,7 @@ class Registry {
 	 * @since 4.0.0 1. Moved to \The_SEO_Framework\Bridges\Sitemap
 	 *              2. Renamed from `output_sitemap_xsl_stylesheet()`
 	 * @since 4.1.2 Is now static.
-	 * @since 5.1.5 1. Now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
+	 * @since 5.2.0 1. Now sends a nofollow header to prevent crawlers from following non-existent template links in the XSL.
 	 *              2. Now also outputs the CSS when `$sitemap_id` is `css`.
 	 *
 	 * @param string $sitemap_id The sitemap ID. Accepts 'xsl-stylesheet' and 'css'.
@@ -411,7 +411,7 @@ class Registry {
 	 * @since 4.0.0
 	 * @since 4.1.3 Added a trailing newline to the stylesheet-tag for readability.
 	 * @since 5.0.0 Is now static.
-	 * @since 5.1.5 Now also emits a CSS xml-stylesheet processing instruction after the XSL one.
+	 * @since 5.2.0 Now also emits a CSS xml-stylesheet processing instruction after the XSL one.
 	 */
 	public static function output_sitemap_header() {
 

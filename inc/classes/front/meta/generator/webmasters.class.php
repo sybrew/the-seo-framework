@@ -37,7 +37,7 @@ final class Webmasters {
 
 	/**
 	 * @since 5.0.0
-	 * @since 5.1.5 Added the Facebook domain verification generator.
+	 * @since 5.2.0 Added the Facebook domain verification generator.
 	 * @var callable[] GENERATORS A list of auto-loaded meta callbacks.
 	 */
 	public const GENERATORS = [
@@ -135,7 +135,7 @@ final class Webmasters {
 	}
 
 	/**
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 * @generator
 	 */
 	public static function generate_facebook_verification() {

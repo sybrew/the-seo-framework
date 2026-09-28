@@ -96,7 +96,7 @@ final class Author extends Reference {
 
 	/**
 	 * @since 5.0.0
-	 * @since 5.1.5 Now adds the author's Fediverse profile to `sameAs`.
+	 * @since 5.2.0 Now adds the author's Fediverse profile to `sameAs`.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.

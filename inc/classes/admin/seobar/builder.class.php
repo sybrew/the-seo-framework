@@ -34,7 +34,7 @@ use The_SEO_Framework\Data;
  * @since 5.0.0 1. Moved from `\The_SEO_Framework\Interpreters`
  *              2. Renamed from `SEOBar`.
  *              3. The entire class is now static.
- * @since 5.1.5 No longer final.
+ * @since 5.2.0 No longer final.
  * @access protected
  *         Use tsf()->admin()->seobar() instead.
  */
@@ -256,7 +256,7 @@ class Builder {
 	 * Generates SEO Bar single HTML block content.
 	 *
 	 * @since 4.0.0
-	 * @since 5.1.5 Now strips HTML tags from title and reason before interpolating them into the tooltip HTML and ARIA text.
+	 * @since 5.2.0 Now strips HTML tags from title and reason before interpolating them into the tooltip HTML and ARIA text.
 	 * @generator
 	 * FIXME? The data herein is obtained via `builders/seobar-{type}.php`. If they escape their cache before we do here, it'd be much quicker.
 	 *        Provided, however, that there are fewer items cached (130~137) than SEOBar blocks outputted (240 on most sites).

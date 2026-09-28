@@ -50,7 +50,7 @@ final class Query {
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_search_query_in`.
-	 * @since 5.1.5 Now also tests the effective search query vars.
+	 * @since 5.2.0 Now also tests the effective search query vars.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *
@@ -89,7 +89,7 @@ final class Query {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `alter_search_query_post`.
 	 * @since 5.1.3 Now verifies that the search query is actually set.
-	 * @since 5.1.5 Now also tests the effective search query vars.
+	 * @since 5.2.0 Now also tests the effective search query vars.
 	 * @access private
 	 *
 	 * @param array     $posts    The array of retrieved posts.
@@ -184,7 +184,7 @@ final class Query {
 	/**
 	 * Determines whether a WP_Query instance handles an actual search query.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param \WP_Query $wp_query The WP_Query instance.
 	 * @return bool

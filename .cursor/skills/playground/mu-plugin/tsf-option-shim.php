@@ -27,7 +27,7 @@ add_filter(
 	/**
 	 * Routes TSF site settings through Data\Plugin::update_option().
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param bool   $handled Whether a consumer already wrote the option.
 	 * @param string $name    Option name.
@@ -63,7 +63,7 @@ add_filter(
 	/**
 	 * Routes TSF post and term meta through Data\Plugin\Post and Data\Plugin\Term.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param bool   $handled Whether a consumer already wrote the meta.
 	 * @param int    $id      Object ID.

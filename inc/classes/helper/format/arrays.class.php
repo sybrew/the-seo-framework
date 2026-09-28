@@ -154,7 +154,7 @@ class Arrays {
 	 * @link <https://3v4l.org/3rvrS> Test the new one here (1.9x faster, two functions).
 	 *
 	 * @since 5.1.0
-	 * @since 5.1.5 Now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
+	 * @since 5.2.0 Now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
 	 *
 	 * @param array ...$arrays The arrays to differentiate. The leftmost array's values are dominant.
 	 * @return array The differentiated array values.
@@ -175,7 +175,7 @@ class Arrays {
 	/**
 	 * Computes a pairwise difference between two arrays, recursively.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param array $compare The comparison array (carry from array_reduce).
 	 * @param array $base    The base array (item from array_reduce).

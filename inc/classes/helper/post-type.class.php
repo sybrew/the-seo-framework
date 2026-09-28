@@ -305,7 +305,7 @@ class Post_Type {
 	 * @since 4.1.0 Now gets hierarchical post types that don't support rewrite, as well.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_hierarchical_post_types`.
-	 * @since 5.1.5 Now resets the index keys of the return value.
+	 * @since 5.2.0 Now resets the index keys of the return value.
 	 *
 	 * @return string[] All public hierarchical post types.
 	 */
@@ -328,7 +328,7 @@ class Post_Type {
 	 * @since 4.1.0 Now gets non-hierarchical post types that don't support rewrite, as well.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_nonhierarchical_post_types`.
-	 * @since 5.1.5 Now resets the index keys of the return value.
+	 * @since 5.2.0 Now resets the index keys of the return value.
 	 *
 	 * @return array The public nonhierarchical post types.
 	 */

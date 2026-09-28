@@ -200,7 +200,7 @@ class Title {
 	 *              2. The first parameter is now rectified, so you can leave out indexes.
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @since 5.1.5 Can now return `0` instead of an untitled fallback.
+	 * @since 5.2.0 Can now return `0` instead of an untitled fallback.
 	 *
 	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                         Leave null to autodetermine query.
@@ -229,7 +229,7 @@ class Title {
 		 *        You may want to avoid this filter for the homepage and pta, by returning the default value.
 		 * @since 3.1.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 * @since 5.1.5 Now passes through `0` instead of the untitled fallback.
+		 * @since 5.2.0 Now passes through `0` instead of the untitled fallback.
 		 * @param string     $title The title.
 		 * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
 		 *                          Is null when the query is auto-determined.
@@ -476,7 +476,7 @@ class Title {
 	 * Returns the generated archive title by evaluating the current query.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.
+	 * @since 5.2.0 Now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.
 	 *
 	 * @return string[$title,$prefix] The title and prefix.
 	 */
@@ -552,7 +552,7 @@ class Title {
 	 * Returns the generated archive title by evaluating the input object only.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now sanitizes generated archive titles and prefixes. Titles from `get_term_title()`, `get_user_title()`, and `get_post_type_archive_title()` are not sanitized again.
+	 * @since 5.2.0 Now sanitizes generated archive titles and prefixes. Titles from `get_term_title()`, `get_user_title()`, and `get_post_type_archive_title()` are not sanitized again.
 	 *
 	 * @param \WP_Term|\WP_User|\WP_Post_Type $object The archive object.
 	 * @return string[$title,$prefix] The title and prefix.
@@ -758,7 +758,7 @@ class Title {
 	 * Returns search title.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
+	 * @since 5.2.0 Now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
 	 *
 	 * @return string The generated search title.
 	 */

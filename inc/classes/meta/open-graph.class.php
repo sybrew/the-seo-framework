@@ -331,7 +331,7 @@ class Open_Graph {
 	 * Returns the locale for Open Graph.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Now uses the site language instead of the raw WordPress locale.
+	 * @since 5.2.0 Now uses the site language instead of the raw WordPress locale.
 	 *
 	 * @return string
 	 */
@@ -442,7 +442,7 @@ class Open_Graph {
 	 * any that responded with their locale in the JS file header were considered valid. 46500 locales were tested.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 1. Removed deprecated locales: ak_GH, ay_BO, cb_IQ, ck_US, cx_PH, en_IN, en_PI, en_UD, eo_EO,
+	 * @since 5.2.0 1. Removed deprecated locales: ak_GH, ay_BO, cb_IQ, ck_US, cx_PH, en_IN, en_PI, en_UD, eo_EO,
 	 *                 es_CL, es_CO, es_MX, es_VE, fb_LT, gx_GR, ig_NG, la_VA, lg_UG, li_NL, ln_CD, mi_NZ, nd_ZW, ny_MW,
 	 *                 qu_PE, rm_CH, sa_IN, se_NO, sy_SY, sz_PL, tl_ST, tz_MA, wo_SN, xh_ZA, yi_DE, yo_NG, zu_ZA, zz_TR.
 	 *              2. Added locales: th_TH, ik_US.

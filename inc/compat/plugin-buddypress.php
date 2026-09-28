@@ -16,7 +16,7 @@ namespace The_SEO_Framework;
  *
  * @hook the_seo_framework_meta_generator_pools 10
  * @since 5.0.0
- * @since 5.1.5 Now also removes the Fediverse tag pool.
+ * @since 5.2.0 Now also removes the Fediverse tag pool.
  *
  * @param string[] $generator_pools A list of tag pools requested for the current query.
  *                                  The tag pool names correspond directly to the classes'.

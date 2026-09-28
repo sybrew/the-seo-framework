@@ -267,7 +267,7 @@ final class AJAX {
 	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
 	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
 	 * @since 5.1.0 Now relays the 'edit_post' capability check to the reference handler.
-	 * @since 5.1.5 Now keeps a homepage description of `0` instead of falling back to the generated description.
+	 * @since 5.2.0 Now keeps a homepage description of `0` instead of falling back to the generated description.
 	 * @access private
 	 */
 	public static function get_post_data() {

@@ -573,7 +573,7 @@ class Sanitize {
 	 * value as a handle and can fail the entire link preview. A guessed handle
 	 * from a URL host can be wrong; store the profile URL in the companion field.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param string $value An unsanitized handle or profile URL.
 	 * @return string A sanitized `@user@domain` handle, or an empty string.
@@ -611,7 +611,7 @@ class Sanitize {
 	/**
 	 * Normalizes a WebFinger-like handle to `@user@domain`.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param string $handle A handle such as `user@domain` or `@user@domain`.
 	 * @return string A sanitized `@user@domain` handle, or an empty string.
@@ -649,7 +649,7 @@ class Sanitize {
 	/**
 	 * Extracts a username from a Fediverse profile URL path.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param string $path A URL path such as `/@user` or `/users/user`.
 	 * @return string The path username, a `user@other.host` remote path, or empty.
@@ -680,7 +680,7 @@ class Sanitize {
 	 * Accepts an HTTPS (or HTTP) profile URL. A handle is rejected. HTTP is
 	 * upgraded to HTTPS. The host is not rewritten from the companion handle.
 	 *
-	 * @since 5.1.5
+	 * @since 5.2.0
 	 *
 	 * @param string $value An unsanitized profile URL.
 	 * @return string A sanitized HTTPS profile URL, or an empty string.

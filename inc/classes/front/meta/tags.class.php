@@ -138,7 +138,7 @@ final class Tags {
 	 * Renders an HTML5 element. Sane, performant, and secure drop-in for DOMDocument and whatnot.
 	 *
 	 * @since 5.0.0
-	 * @since 5.1.5 Removed XHTML support. The tags are now always rendered in HTML5 syntax.
+	 * @since 5.2.0 Removed XHTML support. The tags are now always rendered in HTML5 syntax.
 	 *
 	 * @param array         $attributes {
 	 *                          Associative array of tag names and tag values.
