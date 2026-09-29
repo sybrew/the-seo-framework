@@ -117,9 +117,11 @@ class Cache {
 	 * Returns the sitemap's storage transient name.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns false when `cache_id` is missing or empty.
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 * @return string|false The sitemap transient store key.
+	 *                      False when the endpoint is missing or `cache_id` is not set.
 	 */
 	public static function get_sitemap_cache_key( $sitemap_id ) {
 
@@ -128,9 +130,11 @@ class Cache {
 		if ( empty( $ep_list[ $sitemap_id ] ) )
 			return false;
 
-		$cache_key = $ep_list[ $sitemap_id ]['cache_id'] ?? $sitemap_id;
+		$cache_id = $ep_list[ $sitemap_id ]['cache_id'] ?? null;
 
-		return self::build_sitemap_cache_key( self::get_transient_prefix() . $cache_key );
+		if ( ! $cache_id ) return false;
+
+		return self::build_sitemap_cache_key( self::get_transient_prefix() . $cache_id );
 	}
 
 	/**

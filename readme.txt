@@ -104,7 +104,6 @@ The SEO Framework works on many things without notifying you, because the best s
 * It prevents canonical errors for categories, pages, subdomains, and WordPress Multisite domain mapping.
 * It stops SEO attacks that are caused by pagination exploits in WordPress by telling the search engine to look at the existing last page instead.
 * It discourages 404 pages and empty categories from being indexed, even when they don't send a 404 response.
-* It automatically notifies Google and the Bing network on website updates when sitemaps are enabled.
 * It discourages search engines from indexing feeds and the sitemap. This doesn't mean they won't use them; only, they won't show them in their search results.
 * It directs search engines from the comment pages back to the post storing those comments.
 
@@ -347,6 +346,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where shortlinks on plain permalinks repeated their own query, such as `?p=123&p=123`.
 	* Resolved an issue where a custom taxonomy shortlink used the taxonomy name as its query key, so WordPress could not resolve the link when that taxonomy's query variable was different.
 	* Resolved an issue where Bulk Edit visibility selects wrapped below their labels instead of sitting beside them.
+	* Sitemap post queries now order by modified date.
+	* On-site search filtering now skips queries that are marked as search but have no search term.
+	* WordPress core sitemaps now omit password-protected posts.
+	* The cached list of posts excluded from on-site search and archives now refreshes when a post is saved, including through the REST API and WP-CLI.
+	* Saving or deleting a post now refreshes the sitemap, including through the REST API and WP-CLI.
+	* Creating a post no longer refreshes the sitemap while the post is an auto-draft.
 * **Notes:**
 	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
@@ -407,6 +412,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Methods `The_SEO_Framework\Meta\Title::get_archive_title_from_query()` (`tsf()->title()->get_archive_title_from_query()`) and `The_SEO_Framework\Meta\Title::get_archive_title_from_object()` (`tsf()->title()->get_archive_title_from_object()`) now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.
 		* Method `The_SEO_Framework\Helper\Query::is_seo_settings_page()` (`tsf()->query()->is_seo_settings_page()`): Replaced `$secure` with `'page_hook'` (default) and `'page_query'` (kept backward compatibility for a falsy value). `$secure` was a misnomer that never checked capabilities.
 		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
+		* Method `The_SEO_Framework\Sitemap\Cache::get_sitemap_cache_key()` (`tsf()->sitemap()->cache()->get_sitemap_cache_key()`) now returns `false` when `cache_id` is missing or empty.
+		* Method `The_SEO_Framework\Data\Plugin\Post::save_meta()` (`tsf()->data()->plugin()->post()->save_meta()`) now refreshes the sitemap after saving.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now accepts `$sitemap_id` (`xsl-stylesheet` or `css`) and outputs the CSS when that ID is `css`.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_sitemap_header()` (`tsf()->sitemap()->registry()->output_sitemap_header()`) now also emits a CSS xml-stylesheet processing instruction after the XSL one.
 		* Function `tsf_breadcrumb()`:
@@ -471,7 +478,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			1. `$style` is now an empty string when the CSS filter returns no rules.
 			2. `$crumbs` may now omit the `home` crumb, rename it, and include an item with role `ellipsis` when `max` collapses the trail. It is still the list rendered in the shortcode.
 			3. Added `$trail`, the generated list before those changes.
-		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`) in the default list.
+		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`). A null `lock_id` uses the endpoint id. A sitemap is not cached unless `cache_id` is set.
 	* **Fixed:**
 		* `the_seo_framework_title_from_generation` now passes through `0` instead of the untitled fallback.
 		* `the_seo_framework_seo_column_keys_order` returning an empty array no longer causes a PHP warning when placing the SEO column.

@@ -35,7 +35,7 @@ namespace The_SEO_Framework\Sitemap;
 class Cron {
 
 	/**
-	 * Prepares a cronjob-based ping within 30 seconds of calling this.
+	 * Schedules sitemap prerender within 30 seconds of calling this.
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Now returns whether the cron engagement was successful.

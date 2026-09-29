@@ -10,10 +10,7 @@ namespace The_SEO_Framework;
 
 use function The_SEO_Framework\is_headless;
 
-use The_SEO_Framework\Helper\{
-	Compatibility,
-	Query,
-};
+use The_SEO_Framework\Helper\Compatibility;
 
 /**
  * The SEO Framework plugin
@@ -31,22 +28,6 @@ use The_SEO_Framework\Helper\{
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-$refresh_sitemap_callback = [ Sitemap\Registry::class, '_refresh_sitemap_on_post_change' ];
-// Can-be cron actions.
-\add_action( 'publish_post', $refresh_sitemap_callback );
-\add_action( 'publish_page', $refresh_sitemap_callback );
-
-// Other actions.
-\add_action( 'deleted_post', $refresh_sitemap_callback );
-\add_action( 'deleted_page', $refresh_sitemap_callback );
-\add_action( 'post_updated', $refresh_sitemap_callback );
-\add_action( 'page_updated', $refresh_sitemap_callback );
-
-$clear_excluded_callback = [ Query\Exclusion::class, 'clear_excluded_post_ids_cache' ];
-// Excluded IDs cache.
-\add_action( 'wp_insert_post', $clear_excluded_callback );
-\add_action( 'attachment_updated', $clear_excluded_callback );
 
 // Delete Sitemap transient on permalink structure change.
 \add_action(

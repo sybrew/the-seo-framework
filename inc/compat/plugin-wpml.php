@@ -44,14 +44,12 @@ use The_SEO_Framework\{
  *     @type array {$id} {
  *         The sitemap endpoint.
  *
- *         @type string|false $lock_id  Optional. The cache key to use for locking. Defaults to index 'id'.
- *                                      Set to false to disable locking.
- *         @type string|false $cache_id Optional. The cache key to use for storing. Defaults to index 'id'.
- *                                      Set to false to disable caching.
- *         @type string       $endpoint The expected "pretty" endpoint, meant for administrative display.
- *         @type string       $regex    The endpoint regex, following the home path regex.
- *         @type callable     $callback The callback for the sitemap output.
- *         @type bool         $robots   Whether the endpoint should be mentioned in the robots.txt file.
+ *         @type ?string  $lock_id  Optional. The cache key to use for locking. Null uses the endpoint id.
+ *         @type ?string  $cache_id Optional. The cache key to use for storing. Null or omitted means the sitemap is not cached.
+ *         @type string   $endpoint The expected "pretty" endpoint, meant for administrative display.
+ *         @type string   $regex    The endpoint regex, following the home path regex.
+ *         @type callable $callback The callback for the sitemap output.
+ *         @type bool     $robots   Whether the endpoint should be mentioned in the robots.txt file.
  *     }
  * }
  * @return array[]

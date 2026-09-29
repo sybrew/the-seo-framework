@@ -68,6 +68,22 @@ final class Filter {
 	}
 
 	/**
+	 * Omits password-protected posts from the core posts sitemap.
+	 *
+	 * @hook wp_sitemaps_posts_query_args 10
+	 * @since 5.2.0
+	 *
+	 * @param array $args Array of WP_Query arguments.
+	 * @return array The query arguments.
+	 */
+	public static function filter_posts_query_args( $args ) {
+
+		$args['has_password'] = false;
+
+		return $args;
+	}
+
+	/**
 	 * Filters Core sitemap provider.
 	 *
 	 * @hook wp_sitemaps_add_provider 9

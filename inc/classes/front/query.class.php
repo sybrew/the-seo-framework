@@ -50,7 +50,7 @@ final class Query {
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_search_query_in`.
-	 * @since 5.2.0 Now also tests the effective search query vars.
+	 * @since 5.2.0 Now requires a non-empty search term when the raw search parameter is absent.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *
@@ -89,7 +89,7 @@ final class Query {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `alter_search_query_post`.
 	 * @since 5.1.3 Now verifies that the search query is actually set.
-	 * @since 5.2.0 Now also tests the effective search query vars.
+	 * @since 5.2.0 Now requires a non-empty search term when the raw search parameter is absent.
 	 * @access private
 	 *
 	 * @param array     $posts    The array of retrieved posts.
@@ -190,9 +190,17 @@ final class Query {
 	 * @return bool
 	 */
 	private static function is_search_query( $wp_query ) {
-		return $wp_query->is_search && (
-			isset( $wp_query->query['s'] ) || ! \is_null( $wp_query->get( 's', null ) )
-		);
+
+		if ( ! $wp_query->is_search )
+			return false;
+
+		// Includes an empty `?s=`. fill_query_vars() sets a missing `s` to ''.
+		if ( isset( $wp_query->query['s'] ) )
+			return true;
+
+		$search = $wp_query->query_vars['s'] ?? null;
+
+		return \is_string( $search ) && strlen( $search );
 	}
 
 	/**

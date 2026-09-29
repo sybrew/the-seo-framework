@@ -12,6 +12,7 @@ use The_SEO_Framework\Helper\{
 	Headers,
 	Query,
 };
+use The_SEO_Framework\Sitemap;
 
 /**
  * The SEO Framework plugin
@@ -49,3 +50,10 @@ if ( \defined( 'XMLRPC_REQUEST' ) && \XMLRPC_REQUEST )
 
 // Register the TSF breadcrumb shortcode.
 \add_shortcode( 'tsf_breadcrumb', 'tsf_breadcrumb' );
+
+// wp_insert_post covers publish and update. Attachments return before it. Deletes use deleted_post.
+$refresh_post_callback = [ Sitemap\Registry::class, '_refresh_sitemap_on_post_change' ];
+\add_action( 'wp_insert_post', $refresh_post_callback );
+\add_action( 'deleted_post', $refresh_post_callback );
+\add_action( 'wp_insert_post', [ Query\Exclusion::class, 'clear_excluded_post_ids_cache' ] );
+\add_action( 'attachment_updated', [ Query\Exclusion::class, 'clear_excluded_post_ids_cache' ] );

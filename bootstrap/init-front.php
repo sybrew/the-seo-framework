@@ -48,6 +48,7 @@ if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 	// It's not a bridge, don't treat it like one: clean me up?
 	\add_filter( 'wp_sitemaps_add_provider', [ Sitemap\WP\Filter::class, 'filter_add_provider' ], 9, 2 );
 	\add_filter( 'wp_sitemaps_max_urls', [ Sitemap\WP\Filter::class, 'filter_max_urls' ], 9 );
+	\add_filter( 'wp_sitemaps_posts_query_args', [ Sitemap\WP\Filter::class, 'filter_posts_query_args' ] );
 	// We miss the proper hooks. https://github.com/sybrew/the-seo-framework/issues/610#issuecomment-1300191500
 	\add_filter( 'wp_sitemaps_posts_query_args', [ Sitemap\WP\Filter::class, 'trick_filter_doing_sitemap' ], 11 );
 }

@@ -310,7 +310,7 @@ Sitemap (inc/classes/sitemap/)
 XML sitemap generation with caching, locking, and WP Core sitemap augmentation.
 
 cache.class.php                 Manages sitemap transient caching, per-blog/language cache keys, and cache clearing
-cron.class.php                  Schedules WP-Cron single events for sitemap ping notifications
+cron.class.php                  Schedules WP-Cron single events for sitemap prerender
 lock.class.php                  Locking mechanics to prevent concurrent sitemap generation; serves 503 when locked
 registry.class.php              Registers sitemap endpoints, parses requests, dispatches sitemap output
 utils.class.php                 Sitemap utilities: post query limits, URL exclusion checks, robots-based filtering

@@ -238,6 +238,7 @@ class Base extends Main {
 			 * @since 4.0.0
 			 * @since 5.0.5 1. Now sets orderby to 'lastmod', from 'date'.
 			 *              2. Now sets order to 'DESC', from 'ASC'.
+			 * @since 5.2.0 Now orders by 'modified'. 'lastmod' was mistakenly applied.
 			 * @param array $args The query arguments.
 			 * @link <https://w.org/support/topic/sitemap-and-memory-exhaustion/#post-13331896>
 			 */
@@ -246,7 +247,7 @@ class Base extends Main {
 				[
 					'posts_per_page' => $_hierarchical_posts_limit + \count( $_exclude_ids ),
 					'post_type'      => $hierarchical_post_types,
-					'orderby'        => 'lastmod',
+					'orderby'        => 'modified',
 					'order'          => 'DESC',
 					'post_status'    => 'publish',
 					'has_password'   => false,
@@ -272,6 +273,7 @@ class Base extends Main {
 		if ( $non_hierarchical_post_types ) {
 			/**
 			 * @since 4.0.0
+			 * @since 5.2.0 Now orders by 'modified'.
 			 * @param array $args The query arguments.
 			 */
 			$_args = (array) \apply_filters(
@@ -280,7 +282,7 @@ class Base extends Main {
 					// phpcs:ignore WordPress.WP.PostsPerPage -- This is a sitemap, it will be slow.
 					'posts_per_page' => Sitemap\Utils::get_sitemap_post_limit( 'nonhierarchical' ),
 					'post_type'      => $non_hierarchical_post_types,
-					'orderby'        => 'lastmod',
+					'orderby'        => 'modified',
 					'order'          => 'DESC',
 					'post_status'    => 'publish',
 					'has_password'   => false,

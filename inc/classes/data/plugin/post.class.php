@@ -12,6 +12,7 @@ use function The_SEO_Framework\is_headless;
 
 use The_SEO_Framework\{
 	Data,
+	Sitemap,
 	Traits\Property_Refresher,
 };
 use The_SEO_Framework\Helper\{
@@ -247,6 +248,8 @@ class Post {
 	 * @since 4.1.4 Removed deprecated filter.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `save_post_meta`.
+	 * @since 5.2.0 1. Now clears the excluded post ID cache.
+	 *              2. Now refreshes the sitemap.
 	 *
 	 * @param int|\WP_Post $post_id The post ID. Also accepts Post objects.
 	 * @param array        $data    The post meta fields, will be merged with the defaults.
@@ -293,6 +296,14 @@ class Post {
 				// This is fine for as long as we merge the getter values with the defaults.
 				\delete_post_meta( $post_id, $field );
 			}
+		}
+
+		if (
+			   ! \wp_is_post_revision( $post_id )
+			&& 'auto-draft' !== \get_post_status( $post_id )
+		) {
+			Sitemap\Registry::refresh_sitemaps();
+			Query\Exclusion::clear_excluded_post_ids_cache();
 		}
 	}
 

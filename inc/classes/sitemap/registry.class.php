@@ -196,7 +196,8 @@ class Registry {
 			/**
 			 * @since 4.0.0
 			 * @since 4.0.2 Made the endpoints' regex case-insensitive.
-			 * @since 5.2.0 Now includes a `css` endpoint in the default list.
+			 * @since 5.2.0 1. Now includes a `css` endpoint in the default list.
+			 *              2. A null `lock_id` now uses the endpoint id. A sitemap is not cached without a `cache_id`.
 			 * @link Example: https://github.com/sybrew/tsf-term-sitemap
 			 * @example $list `[ 'base' => [ 'endpoint' => 'sitemap.xml', 'robots' => true ] ]`
 			 * @param array[] $list {
@@ -205,21 +206,19 @@ class Registry {
 			 *     @type array {$id} {
 			 *         The sitemap endpoint.
 			 *
-			 *         @type string|false $lock_id  Optional. The cache key to use for locking. Defaults to index 'id'.
-			 *                                      Set to false to disable locking.
-			 *         @type string|false $cache_id Optional. The cache key to use for storing. Defaults to index 'id'.
-			 *                                      Set to false to disable caching.
-			 *         @type string       $endpoint The expected "pretty" endpoint, meant for administrative display.
-			 *         @type string       $regex    The endpoint regex, following the home path regex.
-			 *                                      N.B. Be wary of case sensitivity. Append the i-flag.
-			 *                                      N.B. Trailing slashes will cause the match to fail.
-			 *                                      N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.
-			 *         @type callable     $callback The callback for the sitemap output.
-			 *                                      Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
-			 *                                      Tip: In the callback, use
-			 *                                           `\The_SEO_Framework\Sitemap\Registry::get_sitemap_endpoint_list()[$sitemap_id]`
-			 *                                           It returns the arguments you've passed in this filter; including your arbitrary indexes.
-			 *         @type bool         $robots   Whether the endpoint should be mentioned in the robots.txt file.
+			 *         @type ?string  $lock_id  Optional. The cache key to use for locking. Null uses the endpoint id.
+			 *         @type ?string  $cache_id Optional. The cache key to use for storing. Null or omitted means the sitemap is not cached.
+			 *         @type string   $endpoint The expected "pretty" endpoint, meant for administrative display.
+			 *         @type string   $regex    The endpoint regex, following the home path regex.
+			 *                                  N.B. Be wary of case sensitivity. Append the i-flag.
+			 *                                  N.B. Trailing slashes will cause the match to fail.
+			 *                                  N.B. Use ASCII-endpoints only. Don't play with UTF-8 or translation strings.
+			 *         @type callable $callback The callback for the sitemap output.
+			 *                                  Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
+			 *                                  Tip: In the callback, use
+			 *                                       `\The_SEO_Framework\Sitemap\Registry::get_sitemap_endpoint_list()[$sitemap_id]`
+			 *                                       It returns the arguments you've passed in this filter; including your arbitrary indexes.
+			 *         @type bool     $robots   Whether the endpoint should be mentioned in the robots.txt file.
 			 *     }
 			 * }
 			 */
@@ -243,16 +242,16 @@ class Registry {
 						'robots'   => false,
 					],
 					'xsl-stylesheet' => [
-						'lock_id'  => false,
-						'cache_id' => false,
+						'lock_id'  => null,
+						'cache_id' => null,
 						'endpoint' => 'sitemap.xsl',
 						'regex'    => '/^sitemap\.xsl/i',
 						'callback' => [ self::class, 'output_stylesheet' ],
 						'robots'   => false,
 					],
 					'css'            => [
-						'lock_id'  => false,
-						'cache_id' => false,
+						'lock_id'  => null,
+						'cache_id' => null,
 						'endpoint' => 'sitemap.css',
 						'regex'    => '/^sitemap\.css/i',
 						'callback' => [ self::class, 'output_stylesheet' ],
@@ -264,7 +263,7 @@ class Registry {
 	}
 
 	/**
-	 * Deletes transients for sitemaps. Also engages pings for or pings search engines.
+	 * Deletes sitemap transients and schedules prerender.
 	 * Can only run once per request.
 	 *
 	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
@@ -294,13 +293,11 @@ class Registry {
 	/**
 	 * Refreshes sitemaps on post change.
 	 *
-	 * @hook publish_post 10
-	 * @hook publish_page 10
+	 * @hook wp_insert_post 10
 	 * @hook deleted_post 10
-	 * @hook deleted_page 10
-	 * @hook post_updated 10
-	 * @hook page_updated 10
 	 * @since 5.0.0
+	 * @since 5.2.0 1. Now runs on `wp_insert_post` and `deleted_post`.
+	 *              2. Now skips auto-drafts.
 	 * @access private
 	 *
 	 * @param int $post_id The Post ID that has been updated.
@@ -308,9 +305,13 @@ class Registry {
 	 */
 	public static function _refresh_sitemap_on_post_change( $post_id ) {
 
-		// Don't refresh sitemap on revision.
-		if ( ! $post_id || \wp_is_post_revision( $post_id ) )
+		if (
+			   ! $post_id
+			|| \wp_is_post_revision( $post_id )
+			|| 'auto-draft' === \get_post_status( $post_id )
+		) {
 			return false;
+		}
 
 		return self::refresh_sitemaps();
 	}
