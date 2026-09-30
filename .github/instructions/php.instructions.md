@@ -51,7 +51,7 @@ applyTo: "**/*.php"
 	6. When importing multiple symbols from the same namespace, use a single import statement with a comma-separated list and each item on a new line. A single symbol stays on one line: `use The_SEO_Framework\Data;` Do not wrap a lone name in `{ }`.
 	7. Mix depths in one group unless two or more symbols share the same parent namespace. Then split that parent into its own group: `use The_SEO_Framework\{ Data, Helper\Format, Helper\Query };` becomes `use The_SEO_Framework\Data;` and `use The_SEO_Framework\Helper\{ Format, Query };`. A lone nested name stays mixed: `use The_SEO_Framework\{ Data, Helper\Query };`.
 	8. Within each group (constants, functions, classes), sort imported identifiers alphabetically (case-sensitive `strcmp`). `API` before `Admin`.
-	9. Import the prefix you write at the call site. A unique leaf is the import (`HTML::`). Import a parent when that parent is a class you call, or when the leaf name is already used (`Format\HTML::`, `Data\Plugin::`, `Query\Utils::`). Same-namespace siblings stay unqualified.
+	9. Call the imported name. A unique leaf requires `HTML::` and requires `Format\HTML` as a brace-group item, not its own `use` line: `use The_SEO_Framework\Helper\{ Format\HTML, Query };`. Import a parent when you call that parent, or when the leaf name is already used (`Format\HTML::`, `Data\Plugin::`, `Query\Utils::`). Same-namespace siblings stay unqualified. Use the names in the code, not these pattern names.
 	10. Do not namespace-escape calls to functions defined in the current namespace unless phpcs.xml already requires an exception.
 - For SQL queries over 80 characters:
 	1. Put every clause on a new line.

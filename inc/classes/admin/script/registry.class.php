@@ -10,8 +10,8 @@ namespace The_SEO_Framework\Admin\Script;
 
 use function The_SEO_Framework\{
 	has_run,
-	umemo,
 	is_headless,
+	umemo,
 };
 
 use The_SEO_Framework\Data;
@@ -21,6 +21,7 @@ use The_SEO_Framework\Helper\{
 	Query,
 	Taxonomy,
 	Template,
+	User,
 };
 
 /**
@@ -94,6 +95,7 @@ final class Registry {
 	 *
 	 * @hook admin_enqueue_scripts 0
 	 * @since 5.0.0
+	 * @since 5.2.0 Now registers scripts on profile and user screens when the user is supported.
 	 *
 	 * @access private
 	 */
@@ -103,6 +105,11 @@ final class Registry {
 			   Query::is_seo_settings_page()
 			// Notices can be outputted if not entirely headless -- this very method only runs when not entirely headless.
 			|| Data\Plugin::get_site_cache( 'persistent_notices' )
+			|| (
+				   ! is_headless( 'user' )
+				&& Query::is_profile_admin()
+				&& User::is_supported()
+			)
 			|| (
 				   ! is_headless( 'meta' )
 				&& (

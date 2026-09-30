@@ -169,7 +169,7 @@ class Post {
 		return ! empty(
 			   $post->post_password
 			?? \get_post( $post ?: Query::get_the_real_id() )->post_password
-			?? ''
+			?? null
 		);
 	}
 
@@ -185,11 +185,10 @@ class Post {
 	 */
 	public static function is_private( $post = null ) {
 		// Don't get the post directly if it can be evaded, it's still quite slow.
-		// We cast type false for Zend tests strict type before identical-string-comparing.
 		return 'private' === (
 			   $post->post_status
 			?? \get_post( $post ?: Query::get_the_real_id() )->post_status
-			?? false
+			?? null
 		);
 	}
 
@@ -209,7 +208,7 @@ class Post {
 		switch (
 			   $post->post_status
 			?? \get_post( $post ?: Query::get_the_real_id() )->post_status
-			?? ''
+			?? null
 		) {
 			case 'draft':
 			case 'auto-draft':

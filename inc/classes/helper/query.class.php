@@ -213,6 +213,22 @@ class Query {
 	}
 
 	/**
+	 * Fetches the user ID being edited on profile and user-edit screens.
+	 *
+	 * WordPress assigns `$user_id` before `admin_enqueue_scripts` on those screens.
+	 *
+	 * @since 5.2.0
+	 * @global int $user_id
+	 *
+	 * @return int The user ID. 0 when this is not a profile or user-edit screen.
+	 */
+	public static function get_admin_user_id() {
+		return self::is_profile_edit()
+			? \absint( $GLOBALS['user_id'] ?? 0 )
+			: 0;
+	}
+
+	/**
 	 * Returns the current taxonomy, if any.
 	 * Memoizes the return value.
 	 *
@@ -433,6 +449,32 @@ class Query {
 		switch ( $GLOBALS['current_screen']->base ?? '' ) {
 			case 'edit-tags':
 			case 'edit':
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Detects profile and user screens in WP Admin.
+	 *
+	 * Includes the profile, user-edit, and Add User screens, including their network variants.
+	 * WordPress names the Add User screen base `user` because `user-new` is stored as action `add`.
+	 *
+	 * @since 5.2.0
+	 * @global \WP_Screen $current_screen
+	 *
+	 * @return bool True if on a profile or user admin screen. False otherwise.
+	 */
+	public static function is_profile_admin() {
+
+		switch ( $GLOBALS['current_screen']->base ?? '' ) {
+			case 'profile':
+			case 'profile-network':
+			case 'user':
+			case 'user-network':
+			case 'user-edit':
+			case 'user-edit-network':
 				return true;
 		}
 

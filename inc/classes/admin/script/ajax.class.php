@@ -267,7 +267,8 @@ final class AJAX {
 	 * @since 4.2.0 Now uses wp.ajax, instead of $.ajax
 	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
 	 * @since 5.1.0 Now relays the 'edit_post' capability check to the reference handler.
-	 * @since 5.2.0 Now keeps a homepage description of `0` instead of falling back to the generated description.
+	 * @since 5.2.0 1. Now keeps a homepage description of `0` instead of falling back to the generated description.
+	 *              2. Now ignores a posted `"false"` flag.
 	 * @access private
 	 */
 	public static function get_post_data() {
@@ -297,6 +298,7 @@ final class AJAX {
 					),
 					$_get_defaults,
 				),
+				'wp_validate_boolean', // jQuery.param posts boolean false as the string "false", which callbackless array_filter() keeps.
 			),
 		);
 

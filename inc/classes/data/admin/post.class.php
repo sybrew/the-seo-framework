@@ -103,6 +103,7 @@ final class Post {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_save_inpost_primary_term`.
 	 * @since 5.1.3 Now supports quick-edit and bulk-edit.
+	 * @since 5.2.0 Now does not clear a primary term during bulk edit.
 	 *
 	 * @param int $post_id The post ID.
 	 */
@@ -192,8 +193,6 @@ final class Post {
 						if ( \in_array( $term_id, $valid_term_ids, true ) )
 							Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, $term_id );
 					}
-				} else {
-					Data\Plugin\Post::update_primary_term_id( $post_id, $taxonomy, 0 );
 				}
 			}
 		}

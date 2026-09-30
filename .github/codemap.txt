@@ -223,6 +223,7 @@ query.class.php                 Comprehensive WordPress query interpretation hel
 redirect.class.php              Filterable check for whether external 301 redirects are allowed
 taxonomy.class.php              Determines whether a taxonomy is disabled, supported, or available for SEO
 template.class.php              Secure view/template loader with secret token to prevent unauthorized inclusion
+user.class.php                  Determines whether a user is supported for author SEO
 
 format/
 	arrays.class.php              Array manipulation: list flattening, scrubbing, merging multidimensional arrays

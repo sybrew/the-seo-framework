@@ -326,6 +326,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory twice, including when "Use directory for default language" is enabled, so advertised sitemaps 404'd.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
+	* Resolved an issue where Bulk Edit cleared the primary term on every edited post if selected terms mismatched, even when that term was left unchanged.
+	* Resolved an issue where saving in the Block Editor regenerated every SEO preview field, including fields that were not on screen.
 	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the homepage URL for hierarchical custom post types, and for post types with rewrite disabled.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the posts permalink prefix as the homepage placeholder when the permalink structure had a static front such as `/blog/%postname%/`.
@@ -390,6 +392,11 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::fediverse_profile_handle()` (`tsf()->sanitize()->fediverse_profile_handle()`) accepts a WebFinger handle or profile URL and returns `@user@domain`. URLs are never kept.
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::fediverse_profile_url()` (`tsf()->sanitize()->fediverse_profile_url()`) accepts an HTTP or HTTPS profile URL and returns HTTPS. A handle is rejected. The host is not rewritten from the companion handle.
 		* Method `The_SEO_Framework\Admin\Script\Loader::get_author_edit_scripts()` (`tsf()->admin()->scripts()->loader()->get_author_edit_scripts()`) now exists.
+		* Method `The_SEO_Framework\Helper\Query::is_profile_admin()` (`tsf()->query()->is_profile_admin()`) detects the profile, user-edit, and Add User screens, including their network variants.
+		* Method `The_SEO_Framework\Helper\Query::get_admin_user_id()` (`tsf()->query()->get_admin_user_id()`) returns the user ID being edited on profile and user-edit screens.
+		* Pool `tsf()->user()` is now available.
+			* It contains public method `is_supported()`.
+			* Internally known as `The_SEO_Framework\Helper\User`.
 		* Method `The_SEO_Framework\Data\Filter\Escape::css_content()` (`tsf()->escape()->css_content()`) escapes a string as a CSS `<string>` (using in `content` and quoted `url()` arguments).
 		* Method `The_SEO_Framework\Meta\URI\Utils::encode_url()` (`tsf()->uri()->utils()->encode_url()`) percent-encodes non-ASCII octets in a URL so the result is an RFC 3986 URI. Already-encoded sequences are left intact.
 	* **Removed:**
@@ -463,6 +470,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_sitemap_settings_language_endpoints` returns administrative language names keyed by sitemap endpoint ID, used for translated sitemap links in SEO Settings.
+		* `the_seo_framework_supported_user` returns whether a user can carry author SEO. The default is true when that user has the author-info capability.
 	* **Changed:**
 		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
 		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.

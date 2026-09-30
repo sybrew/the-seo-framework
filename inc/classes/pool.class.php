@@ -1121,4 +1121,23 @@ class Pool extends Legacy_API {
 			}
 		};
 	}
+
+	/**
+	 * Returns the User helper as an instantiated object with deprecation capabilities.
+	 * This allows for easy API access, and it allows us to silence fatal errors.
+	 *
+	 * @since 5.2.0
+	 * @api Not used internally.
+	 *
+	 * @return \The_SEO_Framework\Helper\User
+	 */
+	public static function user() {
+		return static::$pool[ __FUNCTION__ ] ??= new class extends Helper\User {
+			use Static_Deprecator;
+
+			private $colloquial_handle     = 'tsf()->user()';
+			private $deprecated_methods    = [];
+			private $deprecated_properties = [];
+		};
+	}
 }
