@@ -9,4 +9,4 @@ applyTo: "**/*.css"
 - Use lowercase hex colors.
 - Remove the zero before decimal points.
 - Close the last property with a semicolon.
-- Do not create, edit, or search for `*.min.css`.
+- Do not create, edit, read, grep, search, or `git diff` `*.min.js` or `*.min.css`, including after minify exit code 0.

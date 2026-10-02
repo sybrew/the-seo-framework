@@ -8,8 +8,6 @@ namespace The_SEO_Framework\Data\Filter;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\Meta;
-
 /**
  * The SEO Framework plugin
  * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
@@ -85,8 +83,7 @@ final class Term {
 					break;
 
 				case 'tw_card_type':
-					if ( ! \in_array( $value, Meta\Twitter::get_supported_cards(), true ) )
-						$value = ''; // default
+					$value = Sanitize::twitter_card( $value );
 					break;
 
 				default:

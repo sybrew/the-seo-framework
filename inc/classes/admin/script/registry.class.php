@@ -14,7 +14,10 @@ use function The_SEO_Framework\{
 	umemo,
 };
 
-use The_SEO_Framework\Data;
+use The_SEO_Framework\{
+	Data,
+	Data\Filter\Sanitize,
+};
 use The_SEO_Framework\Helper\{
 	Format\Color,
 	Post_Type,
@@ -518,6 +521,7 @@ final class Registry {
 	 * @since 5.2.0 1. Now registers the admin color scheme if not yet registered.
 	 *              2. Now uses cached user data for improved admin performance.
 	 *              3. Added support for WordPress 7.0 admin color schemes.
+	 *              4. Now sanitizes scheme colors to hexadecimal before inline CSS.
 	 * @link <https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/>
 	 *
 	 * @param array $css The CSS to convert.
@@ -549,6 +553,16 @@ final class Registry {
 
 			// When the scheme lacks a 4th color, duplicate the background into the accent slot, shifting the rest down by one.
 			isset( $_colors[3] ) or array_unshift( $_colors, $_colors[0] );
+
+			// 'modern' after the same unshift. A non-hex slot cannot break out of the style declaration.
+			$_fallbacks = [ '#1e1e1e', '#1e1e1e', '#3858e9', '#7b90ff' ];
+
+			foreach ( [ 0, 1, 2, 3 ] as $i ) {
+				$color = $_colors[ $i ] ?? '';
+				$hex   = \is_string( $color ) ? Sanitize::rgb_hex( $color ) : '';
+
+				$_colors[ $i ] = $hex ? "#$hex" : $_fallbacks[ $i ];
+			}
 
 			$_conversion_table = [
 				'{{$bg}}'               => $_colors[0],

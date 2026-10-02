@@ -36,6 +36,7 @@ final class User {
 	/**
 	 * @hook "sanitize_usermeta_ . THE_SEO_FRAMEWORK_USER_OPTIONS" 10
 	 * @since 5.0.0
+	 * @since 5.2.0 No longer accepts `counter_type`.
 	 *
 	 * @param mixed[] $meta_value An unsanitized value.
 	 * @return array[] The sanitized user meta.
@@ -61,13 +62,31 @@ final class User {
 					$value = Sanitize::twitter_profile_handle( $value );
 					break;
 
-				// This is a preference rather than a user setting...
-				// TODO split this to another key and use ex. "filter_preference_update"
-				case 'counter_type':
-					$value = \absint( $value );
+				default:
+					unset( $meta_value[ $key ] );
+			}
+		}
 
-					if ( $value > 3 )
-						$value = 0;
+		// Store an empty array on failure. Data\Plugin\User::get_meta() repopulates it on demand.
+		return $meta_value ?: [];
+	}
+
+	/**
+	 * @hook "sanitize_user_meta_" . THE_SEO_FRAMEWORK_USER_PREFERENCES 10
+	 * @since 5.2.0
+	 *
+	 * @param mixed $meta_value An unsanitized value.
+	 * @return array The sanitized user preferences.
+	 */
+	public static function filter_preference_update( $meta_value ) {
+
+		if ( ! \is_array( $meta_value ) )
+			return [];
+
+		foreach ( $meta_value as $key => &$value ) {
+			switch ( $key ) {
+				case 'counter_type':
+					$value = Sanitize::counter_type( $value );
 					break;
 
 				default:
@@ -75,7 +94,6 @@ final class User {
 			}
 		}
 
-		// Store an empty array on failure. Data\Plugin\User::get_meta() repopulates it on demand.
 		return $meta_value ?: [];
 	}
 }

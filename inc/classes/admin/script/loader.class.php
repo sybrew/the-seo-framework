@@ -649,6 +649,7 @@ class Loader {
 	 * @since 4.0.0
 	 * @since 4.1.2 Removed redundant button titles.
 	 * @since 5.1.0 Added tsf-media CSS. Added `tsfMediaL10n.warning`.
+	 * @since 5.2.0 Now passes media labels and warnings to JavaScript unescaped.
 	 *
 	 * @return array The script params.
 	 */
@@ -676,22 +677,22 @@ class Loader {
 					'data' => [
 						'labels'  => [
 							'social' => [
-								'imgSelect'      => \esc_attr__( 'Select Image', 'autodescription' ),
+								'imgSelect'      => \__( 'Select Image', 'autodescription' ),
 								'imgSelectTitle' => '',
-								'imgChange'      => \esc_attr__( 'Change Image', 'autodescription' ),
-								'imgRemove'      => \esc_attr__( 'Remove Image', 'autodescription' ),
+								'imgChange'      => \__( 'Change Image', 'autodescription' ),
+								'imgRemove'      => \__( 'Remove Image', 'autodescription' ),
 								'imgRemoveTitle' => '',
-								'imgFrameTitle'  => \esc_attr_x( 'Select Social Image', 'Frame title', 'autodescription' ),
-								'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+								'imgFrameTitle'  => \_x( 'Select Social Image', 'Frame title', 'autodescription' ),
+								'imgFrameButton' => \__( 'Use this image', 'autodescription' ),
 							],
 							'logo'   => [
-								'imgSelect'      => \esc_attr__( 'Select Logo', 'autodescription' ),
+								'imgSelect'      => \__( 'Select Logo', 'autodescription' ),
 								'imgSelectTitle' => '',
-								'imgChange'      => \esc_attr__( 'Change Logo', 'autodescription' ),
-								'imgRemove'      => \esc_attr__( 'Remove Logo', 'autodescription' ),
+								'imgChange'      => \__( 'Change Logo', 'autodescription' ),
+								'imgRemove'      => \__( 'Remove Logo', 'autodescription' ),
 								'imgRemoveTitle' => '',
-								'imgFrameTitle'  => \esc_attr_x( 'Select Logo', 'Frame title', 'autodescription' ),
-								'imgFrameButton' => \esc_attr__( 'Use this image', 'autodescription' ),
+								'imgFrameTitle'  => \_x( 'Select Logo', 'Frame title', 'autodescription' ),
+								'imgFrameButton' => \__( 'Use this image', 'autodescription' ),
 							],
 						],
 						'warning' => [
@@ -715,11 +716,11 @@ class Loader {
 								],
 							],
 							'i18n'           => [
-								'notLoaded'    => \esc_attr__( 'The image file could not be loaded.', 'autodescription' ),
+								'notLoaded'    => \__( 'The image file could not be loaded.', 'autodescription' ),
 								/* translators: %s is the file extension. */
-								'extWarned'    => \esc_attr__( 'The file extension "%s" is not supported on all platforms, which could prevent this image from being displayed.', 'autodescription' ),
+								'extWarned'    => \__( 'The file extension "%s" is not supported on all platforms, which could prevent this image from being displayed.', 'autodescription' ),
 								/* translators: %s is the file extension. */
-								'extForbidden' => \esc_attr__( 'The file extension "%s" is not supported. Choose a different file.', 'autodescription' ),
+								'extForbidden' => \__( 'The file extension "%s" is not supported. Choose a different file.', 'autodescription' ),
 							],
 						],
 						'nonce'   => Utils::create_ajax_capability_nonce( 'upload_files' ),
@@ -911,8 +912,11 @@ class Loader {
 				'name'    => $tax,
 				'primary' => $primary_term_id, // if 0, it'll use hints from the interface.
 				'i18n'    => [
-					/* translators: %s = term name */
-					'selectPrimary' => \sprintf( \esc_html__( 'Select primary %s', 'autodescription' ), $singular_name ),
+					'selectPrimary' => \esc_html( \sprintf(
+						/* translators: %s = term name */
+						\__( 'Select primary %s', 'autodescription' ),
+						$singular_name,
+					) ),
 				],
 			];
 		}
@@ -979,6 +983,8 @@ class Loader {
 	 * Returns the Pixel and Character counter script params.
 	 *
 	 * @since 4.0.0
+	 * @since 5.2.0 1. Now reads the counter from user preferences.
+	 *              2. Now passes the pixel-counter sentence to JavaScript unescaped.
 	 *
 	 * @return array The script params.
 	 */
@@ -1005,11 +1011,11 @@ class Loader {
 					'name' => 'tsfCL10n',
 					'data' => [
 						'guidelines'  => Guidelines::get_text_size_guidelines(),
-						'counterType' => \absint( Data\Plugin\User::get_meta_item( 'counter_type' ) ),
+						'counterType' => \absint( Data\Plugin\User::get_preference_item( 'counter_type' ) ),
 						'i18n'        => [
 							'guidelines' => Guidelines::get_text_size_guidelines_i18n(),
 							/* translators: Pixel counter. 1: number (value), 2: number (guideline) */
-							'pixelsUsed' => \esc_attr__( '%1$d out of %2$d pixels are used.', 'autodescription' ),
+							'pixelsUsed' => \__( '%1$d out of %2$d pixels are used.', 'autodescription' ),
 						],
 					],
 				],

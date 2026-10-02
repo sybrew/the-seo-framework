@@ -105,6 +105,13 @@ namespace The_SEO_Framework;
 \define( 'THE_SEO_FRAMEWORK_USER_OPTIONS', 'autodescription-user-settings' );
 
 /**
+ * Plugin user preference key.
+ *
+ * @since 5.2.0
+ */
+\define( 'THE_SEO_FRAMEWORK_USER_PREFERENCES', 'autodescription-user-preferences' );
+
+/**
  * Plugin updates cache key.
  *
  * @since 3.1.0

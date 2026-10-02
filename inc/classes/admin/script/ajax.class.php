@@ -96,6 +96,7 @@ final class AJAX {
 	 *              2. No longer tests if settings-saving was successful.
 	 * @since 5.0.0 Removed _wp_ajax_ from the plugin name.
 	 * @since 5.1.0 No longer sends the updated value. We can assume it's updated without repercussions.
+	 * @since 5.2.0 Now stores the counter as a user preference.
 	 * @access private
 	 */
 	public static function update_counter_type() {
@@ -110,17 +111,19 @@ final class AJAX {
 		 * $_POST['val'] already contains updated number.
 		 */
 		if ( isset( $_POST['val'] ) ) {
-			$value = (int) $_POST['val'];
+			$value = $_POST['val'];
 		} else {
-			$value = Data\Plugin\User::get_meta_item( 'counter_type' ) + 1;
+			$value = Data\Plugin\User::get_preference_item( 'counter_type' ) + 1;
 		}
-		$value = \absint( $value );
 
-		if ( $value > 3 )
-			$value = 0;
+		$value = Sanitize::counter_type( $value );
 
 		// Update the option and get results of action.
-		Data\Plugin\User::update_single_meta_item( Query::get_current_user_id(), 'counter_type', $value );
+		Data\Plugin\User::update_single_preference_item(
+			'counter_type',
+			$value,
+			Query::get_current_user_id(),
+		);
 
 		\wp_send_json_success();
 		// phpcs:enable WordPress.Security.NonceVerification

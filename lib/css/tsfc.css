@@ -7,26 +7,31 @@
 .tsf-counter {
 	font-weight: 400;
 	color: #666;
-	cursor: pointer;
 	-webkit-user-select: none;
 	user-select: none;
 	will-change: contents;
 }
 
-.tsf-count-bad {
+.tsf-counter .tsf-tooltip-item {
+	color: inherit;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.tsf-counter .tsf-count-bad {
 	color: #d63638;
 }
-.tsf-count-okay {
+.tsf-counter .tsf-count-okay {
 	color: #ffae00;
 }
-.tsf-count-good {
+.tsf-counter .tsf-count-good {
 	color: #00a32a;
 }
-.tsf-count-unknown {
+.tsf-counter .tsf-count-unknown {
 	color: #2271b1;
 }
 
-.tsf-counter-one {
+.tsf-counter .tsf-counter-one {
 	color: #fff;
 	border-radius: 4em;
 	padding: 0 1ch;
@@ -35,16 +40,16 @@
 	text-align: center;
 	vertical-align: baseline;
 }
-.tsf-counter-one.tsf-count-bad {
+.tsf-counter .tsf-counter-one.tsf-count-bad {
 	background-color: #d63638;
 }
-.tsf-counter-one.tsf-count-okay {
+.tsf-counter .tsf-counter-one.tsf-count-okay {
 	background-color: #ffae00;
 }
-.tsf-counter-one.tsf-count-good {
+.tsf-counter .tsf-counter-one.tsf-count-good {
 	background-color: #00a32a;
 }
-.tsf-counter-one.tsf-count-unknown {
+.tsf-counter .tsf-counter-one.tsf-count-unknown {
 	background-color: #4f94d4;
 }
 

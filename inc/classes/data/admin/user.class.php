@@ -8,6 +8,8 @@ namespace The_SEO_Framework\Data\Admin;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use function The_SEO_Framework\is_headless;
+
 use The_SEO_Framework\Data;
 
 /**
@@ -62,25 +64,23 @@ final class User {
 	 * @since 5.0.0 1. Now tests if our POST data is set at all before acting.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `_update_user_meta`.
+	 * @since 5.2.0 Now returns early when user metadata is headless.
 	 * @access private
 	 *
 	 * @param int $user_id The user ID.
 	 */
 	public static function update_meta( $user_id ) {
 
-		if ( empty( $_POST['tsf-user-meta'] ) ) return;
-
-		if ( ! \current_user_can( 'edit_user', $user_id ) ) return;
-
 		if (
-			   ! isset( $_POST[ self::SAVE_NONCES['user-edit']['name'] ] )
+			   empty( $_POST['tsf-user-meta'] )
+			|| ! \current_user_can( 'edit_user', $user_id )
+			|| is_headless( 'user' )
+			|| ! isset( $_POST[ self::SAVE_NONCES['user-edit']['name'] ] )
 			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['user-edit']['name'] ], self::SAVE_NONCES['user-edit']['action'] )
+			|| ! Data\User::user_has_author_info_cap_on_network( $user_id )
 		) {
 			return;
 		}
-
-		if ( ! Data\User::user_has_author_info_cap_on_network( $user_id ) )
-			return;
 
 		// We won't reset the data, just overwrite what's given.
 		// This is because we only update a portion of the meta.

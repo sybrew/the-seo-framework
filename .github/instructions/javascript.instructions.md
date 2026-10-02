@@ -19,4 +19,4 @@ applyTo: "**/*.js"
 - Do not add parentheses to lone parameters in arrow functions.
 - Put each chained method call on a new line.
 - Add trailing commas on multiline calls, arrays, objects, and parameter lists.
-- Do not create, edit, or search for `*.min.js`.
+- Do not create, edit, read, grep, search, or `git diff` `*.min.js` or `*.min.css`, including after minify exit code 0.

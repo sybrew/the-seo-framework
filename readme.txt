@@ -2,7 +2,7 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
-Requires at least: 6.7
+Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 7.4.0
 Stable tag: 5.1.4
@@ -294,6 +294,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Tooltips now spawn correctly on Android when tapping child elements within tooltip items.
 		* Added `touchcancel` event handling for multi-finger gesture support -- it won't invoke multiple tooltips anymore.
 		* Tooltips now stay when invoking a scroll or pan on touch devices.
+		* The character counter's "Click to change the counter type" hint is now a tooltip and an ARIA label on the count. The count is a link, so pressing Enter changes the counter type.
 		* SEO Bar focus styles now use `:focus-visible` instead of `:focus`, preventing focus rings on touch taps, but still showing them for keyboard navigation.
 	* **Styling:**
 		* The default admin style for WordPress 7.0 is now assumed to be `'modern'` instead of `'fresh'`.
@@ -354,8 +355,11 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* The cached list of posts excluded from on-site search and archives now refreshes when a post is saved, including through the REST API and WP-CLI.
 	* Saving or deleting a post now refreshes the sitemap, including through the REST API and WP-CLI.
 	* Creating a post no longer refreshes the sitemap while the post is an auto-draft.
+	* Resolved an issue where changing the character counter cleared saved Facebook, X, and Fediverse profile fields while user metadata was headless.
+	* Resolved an issue where a user profile submission could still change SEO profile fields while user metadata was headless.
+	* Resolved an issue where saving SEO Settings turned off each post type archive's "Remove the site title?" choice while "Remove site title from the title?" was on.
 * **Notes:**
-	* WordPress 6.7 is now required, from 6.0. This allowed us to drop some legacy workarounds.
+	* WordPress 6.9 is now required, from 6.0. This allowed us to drop some legacy workarounds and benefit from PHP 8.5 polyfills.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
 * **Other:**
 	* Twitter Card help links now point to our [Knowledge Base](https://kb.theseoframework.com/?p=451#card-types) because X removed the original documentation. The explanation on how this works has also been more explicitely defined.
@@ -376,6 +380,11 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Added index `fediverse_creator_url`. Default `''`.
 		* Added index `breadcrumb_archive`. Default `[]`. `0` omits that post type's archive crumb from singular breadcrumbs. A missing post type includes the archive when the post type has one.
 		* Added index `breadcrumb_taxonomy`. Default `[]`. A taxonomy slug selects that singular trail, and `-1` removes it. A missing post type uses the first public hierarchical taxonomy, per `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`).
+* **User data notes:**
+	* Of user meta `autodescription-user-preferences` (constant `THE_SEO_FRAMEWORK_USER_PREFERENCES`):
+		* Added index `counter_type`. Default `3`. A value above `3` is stored as `0`.
+	* Of user meta `autodescription-user-settings` (constant `THE_SEO_FRAMEWORK_USER_OPTIONS`):
+		* The 5.2.0 upgrade copies `counter_type` into `autodescription-user-preferences` and leaves the old index in place. The next save of this meta drops `counter_type`, because it is no longer a known SEO field.
 * **PHP API notes:**
 	* **Added:**
 		* Pool `tsf()->fediverse()` is now available.
@@ -391,6 +400,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* **Fun fact:** We had to add the two pools above to display interactive demos of TSF on our Knowledge Base -- in this case, for our [SEO Bar explainer](https://kb.theseoframework.com/kb/what-is-the-seo-bar/). More demos will come, which will force us to improve the APIs even further.
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::fediverse_profile_handle()` (`tsf()->sanitize()->fediverse_profile_handle()`) accepts a WebFinger handle or profile URL and returns `@user@domain`. URLs are never kept.
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::fediverse_profile_url()` (`tsf()->sanitize()->fediverse_profile_url()`) accepts an HTTP or HTTPS profile URL and returns HTTPS. A handle is rejected. The host is not rewritten from the companion handle.
+		* Method `The_SEO_Framework\Data\Filter\Sanitize::counter_type()` (`tsf()->sanitize()->counter_type()`) accepts `0` through `3`. A higher value becomes `0`.
+		* Method `The_SEO_Framework\Data\Filter\Sanitize::twitter_card()` (`tsf()->sanitize()->twitter_card()`) returns a supported Twitter card type, or an empty string.
+		* Constant `THE_SEO_FRAMEWORK_USER_PREFERENCES` is `autodescription-user-preferences`. It stores per-user interface preferences, separate from `THE_SEO_FRAMEWORK_USER_OPTIONS`.
 		* Method `The_SEO_Framework\Admin\Script\Loader::get_author_edit_scripts()` (`tsf()->admin()->scripts()->loader()->get_author_edit_scripts()`) now exists.
 		* Method `The_SEO_Framework\Helper\Query::is_profile_admin()` (`tsf()->query()->is_profile_admin()`) detects the profile, user-edit, and Add User screens, including their network variants.
 		* Method `The_SEO_Framework\Helper\Query::get_admin_user_id()` (`tsf()->query()->get_admin_user_id()`) returns the user ID being edited on profile and user-edit screens.
@@ -410,7 +422,11 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
 			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
-		* Method `The_SEO_Framework\Data\Plugin\User::get_default_meta()` (`tsf()->data()->plugin()->user()->get_default_meta()`) now includes `fediverse_page` and `fediverse_page_url`.
+		* Method `The_SEO_Framework\Data\Plugin\User::get_default_meta()` (`tsf()->data()->plugin()->user()->get_default_meta()`):
+			1. Added `fediverse_page` and `fediverse_page_url`.
+			2. Now omits `counter_type`. It is stored as a user preference.
+		* Method `The_SEO_Framework\Data\Plugin\User::update_single_meta_item()` (`tsf()->data()->plugin()->user()->update_single_meta_item()`) now takes the meta key, the value, and then the user ID. An integer first parameter still uses the old order and raises a deprecation notice.
+		* Methods `The_SEO_Framework\Data\Plugin\User::get_preference()` (`tsf()->data()->plugin()->user()->get_preference()`), `The_SEO_Framework\Data\Plugin\User::get_preference_item()` (`tsf()->data()->plugin()->user()->get_preference_item()`), `The_SEO_Framework\Data\Plugin\User::update_single_preference_item()` (`tsf()->data()->plugin()->user()->update_single_preference_item()`), `The_SEO_Framework\Data\Plugin\User::save_preference()` (`tsf()->data()->plugin()->user()->save_preference()`), and `The_SEO_Framework\Data\Plugin\User::delete_preference()` (`tsf()->data()->plugin()->user()->delete_preference()`) read, write, and delete that preference meta. `get_preference()` includes `counter_type`, default `3`. `update_single_preference_item()` takes the preference key, the value, and then the user ID, and now stores that value through `save_preference()`.
 		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs`.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
@@ -437,6 +453,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Admin\Settings\Layout\Form::make_single_select_form()` (`tsf()->admin()->layout()->form()->make_single_select_form()`):
 			1. No longer wraps the select in a `div`.
 			2. Removed the `class` argument.
+		* Method `The_SEO_Framework\Admin\Settings\Layout\Form::output_character_counter_wrap()` (`tsf()->admin()->layout()->form()->output_character_counter_wrap()`):
+			1. Now exposes the click hint as a tooltip and an ARIA label on the count.
+			2. Now outputs the count as a link, so Enter changes the counter type.
 	* **Improved:**
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_locale()` (`tsf()->open_graph()->get_locale()`) now derives the Open Graph locale from `The_SEO_Framework\Data\Blog::get_language()` (`tsf()->data()->blog()->get_language()`) instead of calling `get_locale()` directly. Because `get_language()` is memoized, repeated locale filter callbacks on multilingual sites (Polylang, WPML) are avoided.
 		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
@@ -462,6 +481,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Added:**
 		* Method `tsfCanonical.isQueryStructure()` tests whether a URL structure uses query parameters.
 		* Method `tsfCanonical.canTrackUrlStructure()` reports whether the Canonical URL Notation Tracker can predict URLs for an input.
+	* **Changed:**
+		* `tsfMediaL10n.labels` and `tsfMediaL10n.warning.i18n` are no longer attribute-escaped. The media script escapes warnings before the tooltip, and the remove-image label before `innerHTML`.
+		* `tsfCL10n.i18n.pixelsUsed` and `tsfCL10n.i18n.guidelines` are no longer attribute-escaped. The counter script escapes them before writing the counter and the pixel tooltip.
+		* Method `tsfC.resetCounterListener()`:
+			1. Now binds to the count link, not the whole counter. Enter activates that link.
+			2. Now stops Enter from bubbling, so post Quick Edit does not save instead.
 	* **Removed:**
 		* `tsfL10n.nonces.manage_options` and `tsfL10n.nonces.upload_files`. They were unused. Media still uses `tsfMediaL10n.nonce`.
 * **Action notes:**
@@ -471,11 +496,15 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Added:**
 		* `the_seo_framework_sitemap_settings_language_endpoints` returns administrative language names keyed by sitemap endpoint ID, used for translated sitemap links in SEO Settings.
 		* `the_seo_framework_supported_user` returns whether a user can carry author SEO. The default is true when that user has the author-info capability.
+		* `the_seo_framework_user_preference_defaults` returns the default user preferences. The default includes `counter_type` as `3`.
+		* `the_seo_framework_save_user_preference` returns the user preference data that's going to be saved. The value includes the default preferences.
 	* **Changed:**
 		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
 		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.
 		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, `fediverse_creator_url`, `breadcrumb_archive`, and `breadcrumb_taxonomy`.
-		* `the_seo_framework_user_meta_defaults` now includes `fediverse_page` and `fediverse_page_url`.
+		* `the_seo_framework_user_meta_defaults`:
+			1. Added `fediverse_page` and `fediverse_page_url`.
+			2. Now omits `counter_type`. It is stored as a user preference.
 		* `the_seo_framework_scripts` now includes the author profile script on user profile screens when user-edit fields are enabled.
 		* `the_seo_framework_breadcrumb_list` now includes `role` on each crumb. Crumbs you add or replace must include `role`, or `tsf_breadcrumb()` causes a PHP warning.
 		* `the_seo_framework_breadcrumb_shortcode_css`:

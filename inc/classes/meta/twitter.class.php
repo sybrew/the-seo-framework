@@ -125,14 +125,7 @@ class Twitter {
 			}
 		}
 
-		if (
-			   ! empty( $card )
-			&& \in_array( $card, self::get_supported_cards(), true )
-		) {
-			return $card;
-		}
-
-		return '';
+		return Sanitize::twitter_card( $card );
 	}
 
 	/**
@@ -147,12 +140,11 @@ class Twitter {
 	 */
 	public static function get_generated_card_type( $args = null ) { // phpcs:ignore Generic.CodeAnalysis, VariableAnalysis.CodeAnalysis -- see doc note
 
-		$card = Data\Plugin::get_option( 'twitter_card' );
+		$card = Sanitize::twitter_card( Data\Plugin::get_option( 'twitter_card' ) );
 
-		$supported_cards = self::get_supported_cards();
-		// Forward compatibility
-		if ( ! \in_array( $card, $supported_cards, true ) )
-			$card = reset( $supported_cards );
+		// Forward compatibility, this is practically a no-op now.
+		if ( ! $card )
+			$card = reset( self::get_supported_cards() );
 
 		return $card;
 	}

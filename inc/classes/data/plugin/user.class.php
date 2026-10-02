@@ -52,6 +52,12 @@ class User {
 	private static $meta_memo = [];
 
 	/**
+	 * @since 5.2.0
+	 * @var array[] Stored user preference data.
+	 */
+	private static $preference_memo = [];
+
+	/**
 	 * Returns the current post's author meta item by key.
 	 * Won't fall back to the logged in user's data.
 	 *
@@ -157,31 +163,6 @@ class User {
 		if ( $is_headless['user'] ) {
 			// We filter out everything that's 'not supported' or otherwise 'immutable' in headless-mode.
 			$meta = [];
-
-			if ( \in_array( false, $is_headless, true ) ) {
-				$_meta = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, true ) ?: [];
-				// The counter type is still supported for meta and settings.
-				// Retrieve those items if either type (meta/settings) isn't headless.
-				$non_headless_meta = [
-					'counter_type' => [
-						'meta',
-						'settings',
-					],
-				];
-
-				// Grab non-headless meta if any meta type isn't headless.
-				foreach ( $non_headless_meta as $meta_key => $meta_types ) {
-					if ( ! isset( $_meta[ $meta_key ] ) ) continue;
-
-					foreach ( $meta_types as $meta_type ) {
-						if ( $is_headless[ $meta_type ] ) continue;
-
-						$meta[ $meta_key ] = $_meta[ $meta_key ];
-						// We made this key bypass headless mode. Skip subsequently redundant checks.
-						continue 2;
-					}
-				}
-			}
 		} else {
 			// FIXME: (array) is a patch. We messed up the datastore in 5.1.1, where strings got stored instead of arrays.
 			// We'll rectify it in a future database upgrade, so we can remove the patch.
@@ -191,7 +172,6 @@ class User {
 		/**
 		 * @since 4.1.4
 		 * @param array $meta        The current user meta.
-		 *                           If headless, it may still contain administration settings.
 		 * @param int   $user_id     The user ID.
 		 * @param bool  $is_headless Whether the meta are headless.
 		 */
@@ -212,7 +192,8 @@ class User {
 	 * @since 4.1.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `get_user_meta_defaults`.
-	 * @since 5.2.0 Added `fediverse_page` and `fediverse_page_url`.
+	 * @since 5.2.0 1. Added `fediverse_page` and `fediverse_page_url`.
+	 *              2. Now omits `counter_type`. It is stored as a user preference.
 	 *
 	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
 	 * @return array The user meta defaults.
@@ -220,13 +201,14 @@ class User {
 	public static function get_default_meta( $user_id = 0 ) {
 		/**
 		 * @since 4.1.4
+		 * @since 5.2.0 1. Added `fediverse_page` and `fediverse_page_url`.
+		 *              2. Now omits `counter_type`. It is stored as a user preference.
 		 * @param array $defaults
 		 * @param int   $user_id
 		 */
 		return (array) \apply_filters(
 			'the_seo_framework_user_meta_defaults',
 			[
-				'counter_type'       => 3,
 				'facebook_page'      => '',
 				'fediverse_page'     => '',
 				'fediverse_page_url' => '',
@@ -242,12 +224,28 @@ class User {
 	 * @since 4.1.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `update_single_user_meta_item`.
+	 * @since 5.2.0 The first parameter is now the meta key, the second the value, and the third the user ID.
+	 *              An integer first parameter still uses the old order and raises a deprecation notice.
 	 *
-	 * @param int    $user_id The user ID.
-	 * @param string $item    The user's SEO meta item to update.
-	 * @param mixed  $value   The option value.
+	 * @param string|int $item    The user's SEO meta item to update.
+	 *                            Deprecated: the user ID when passed as an integer.
+	 * @param mixed      $value   The option value.
+	 *                            Deprecated: the meta key when `$item` is an integer.
+	 * @param int|mixed  $user_id The user ID.
+	 *                            Deprecated: the option value when `$item` is an integer.
 	 */
-	public static function update_single_meta_item( $user_id, $item, $value ) {
+	public static function update_single_meta_item( $item, $value, $user_id ) {
+
+		if ( \is_int( $item ) ) {
+			\tsf()->_doing_it_wrong(
+				__METHOD__,
+				\esc_html__( 'The first parameter must be the meta key. The user ID is now the third parameter.', 'autodescription' ),
+				'5.2.0',
+			);
+
+			// Old order: ( $user_id, $item, $value ).
+			[ $user_id, $item, $value ] = [ $item, $value, $user_id ];
+		}
 
 		// Make sure the user exists before we go through another hoop of fetching all data.
 		$user_id = \get_userdata( $user_id )->ID ?? null;
@@ -325,6 +323,167 @@ class User {
 			\delete_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS );
 		} else {
 			\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
+		}
+	}
+
+	/**
+	 * Returns the user preference item by key.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param string $item    The user preference item to get. Required.
+	 * @param int    $user_id The user ID. Optional. Defaults to the current user.
+	 * @return mixed The user preference item. Null when the user or item is not found.
+	 */
+	public static function get_preference_item( $item, $user_id = 0 ) {
+
+		$user_id = $user_id ?: Query::get_current_user_id();
+
+		return $user_id
+			? static::get_preference( $user_id )[ $item ] ?? null
+			: null;
+	}
+
+	/**
+	 * Fetches user preferences set by The SEO Framework.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int $user_id The user ID. Optional. Defaults to the current user.
+	 * @return array The user preferences.
+	 */
+	public static function get_preference( $user_id = 0 ) {
+
+		$user_id = $user_id ?: Query::get_current_user_id();
+
+		if ( isset( static::$preference_memo[ $user_id ] ) )
+			return static::$preference_memo[ $user_id ];
+
+		empty( static::$preference_memo )
+			and static::register_automated_refresh( 'preference_memo' );
+
+		if ( empty( $user_id ) )
+			return static::$preference_memo[ $user_id ] = static::get_default_preference( $user_id );
+
+		if ( \count( static::$preference_memo ) > 69 )
+			static::$preference_memo = \array_slice( static::$preference_memo, 0, 7, true );
+
+		$preference = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_PREFERENCES, true );
+
+		if ( ! \is_array( $preference ) )
+			$preference = [];
+
+		return static::$preference_memo[ $user_id ] = array_merge(
+			static::get_default_preference( $user_id ),
+			$preference,
+		);
+	}
+
+	/**
+	 * Returns the default user preferences.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int $user_id The user ID.
+	 * @return array The user preference defaults.
+	 */
+	private static function get_default_preference( $user_id = 0 ) {
+		/**
+		 * @since 5.2.0
+		 * @param array $defaults The default user preferences.
+		 * @param int   $user_id  The user ID.
+		 */
+		return (array) \apply_filters(
+			'the_seo_framework_user_preference_defaults',
+			[
+				'counter_type' => 3,
+			],
+			$user_id ?: Query::get_current_user_id(),
+		);
+	}
+
+	/**
+	 * Updates one user preference.
+	 *
+	 * @since 5.2.0
+	 * @since 5.2.0 Now stores the value through `save_preference()`.
+	 *
+	 * @param string $item    The preference item to update.
+	 * @param mixed  $value   The preference value.
+	 * @param int    $user_id The user ID.
+	 */
+	public static function update_single_preference_item( $item, $value, $user_id ) {
+
+		// Make sure the user exists before we go through another hoop of fetching all data.
+		$user_id = \get_userdata( $user_id )->ID ?? null;
+
+		if ( empty( $user_id ) ) return;
+
+		$preference          = static::get_preference( $user_id );
+		$preference[ $item ] = $value;
+
+		static::save_preference( $user_id, $preference );
+	}
+
+	/**
+	 * Updates user preferences from input.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int   $user_id The user ID.
+	 * @param array $data    The data to save.
+	 */
+	public static function save_preference( $user_id, $data ) {
+
+		$user_id = \get_userdata( $user_id )->ID ?? null;
+
+		if ( empty( $user_id ) ) return;
+
+		/**
+		 * @since 5.2.0
+		 * @param array  $data     The data that's going to be saved.
+		 * @param int    $user_id  The user ID.
+		 */
+		$data = (array) \apply_filters(
+			'the_seo_framework_save_user_preference',
+			array_merge(
+				static::get_default_preference( $user_id ),
+				$data,
+			),
+			$user_id,
+		);
+
+		unset( static::$preference_memo[ $user_id ] );
+
+		\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_PREFERENCES, $data );
+	}
+
+	/**
+	 * Deletes user preferences.
+	 * Deletes only the default data keys as set by `get_default_preference()`
+	 * or everything when no custom keys are set.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int $user_id The user ID.
+	 */
+	public static function delete_preference( $user_id ) {
+
+		$data = \get_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_PREFERENCES, true );
+
+		if ( \is_array( $data ) ) {
+			foreach ( static::get_default_preference( $user_id ) as $key => $value )
+				unset( $data[ $key ] );
+		}
+
+		// Always unset. We must refill defaults later.
+		unset( static::$preference_memo[ $user_id ] );
+
+		// Only delete when no values are left, because someone else might've filtered it.
+		if ( empty( $data ) ) {
+			\delete_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_PREFERENCES );
+		} else {
+			\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_PREFERENCES, $data );
 		}
 	}
 }

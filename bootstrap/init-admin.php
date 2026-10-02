@@ -102,16 +102,17 @@ if ( ! $headless['settings'] ) {
 	\add_action( 'admin_menu', [ Admin\Menu::class, 'register_top_menu_page' ] );
 }
 
-if ( ! $headless['user'] ) {
-	// Initialize user meta filters and actions.
-	if ( Data\Plugin::get_option( 'display_user_edit_options' ) ) {
-		\add_action( 'show_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
-		\add_action( 'edit_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
-	}
-
-	\add_action( 'personal_options_update', [ Data\Admin\User::class, 'update_meta' ] );
-	\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, 'update_meta' ] );
+if (
+	   ! $headless['user']
+	&& Data\Plugin::get_option( 'display_user_edit_options' )
+) {
+	\add_action( 'show_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
+	\add_action( 'edit_user_profile', [ Admin\Settings\User::class, 'prepare_setting_fields' ], 0, 1 );
 }
+
+// Profile fields stay hidden while headless. The save handler still runs and tests headless after the nonce.
+\add_action( 'personal_options_update', [ Data\Admin\User::class, 'update_meta' ] );
+\add_action( 'edit_user_profile_update', [ Data\Admin\User::class, 'update_meta' ] );
 
 if ( \in_array( false, $headless, true ) ) { // Still got head...
 	// Set up notices.
@@ -127,6 +128,10 @@ if ( \in_array( false, $headless, true ) ) { // Still got head...
 	\add_action(
 		'sanitize_user_meta_' . \THE_SEO_FRAMEWORK_USER_OPTIONS,
 		[ Data\Filter\User::class, 'filter_meta_update' ],
+	);
+	\add_action(
+		'sanitize_user_meta_' . \THE_SEO_FRAMEWORK_USER_PREFERENCES,
+		[ Data\Filter\User::class, 'filter_preference_update' ],
 	);
 }
 

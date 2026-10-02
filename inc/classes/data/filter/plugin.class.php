@@ -663,35 +663,27 @@ final class Plugin {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 Now uses Sanitize::twitter_card(). An empty or unknown value selects the default.
 	 *
-	 * @param mixed $value     An unsanitized value.
-	 * @param mixed $old_value The last known value.
-	 * @return string A valid Twitter card type.
+	 * @param mixed $value An unsanitized value.
+	 * @return string A supported Twitter card type, or an empty string for the default.
 	 */
-	public static function homepage_twitter_card( $value, $old_value ) {
-
-		if ( \in_array( $value, Meta\Twitter::get_supported_cards(), true ) )
-			return $value;
-
-		if ( empty( $value ) )
-			return ''; // Default.
-
-		return $old_value;
+	public static function homepage_twitter_card( $value ) {
+		return Sanitize::twitter_card( $value );
 	}
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 Now keeps the previous card when it is still supported, and otherwise uses the first supported card.
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
-	 * @return string A valid Twitter card type.
+	 * @return string A supported Twitter card type.
 	 */
 	public static function twitter_card( $value, $old_value ) {
-
-		if ( \in_array( $value, Meta\Twitter::get_supported_cards(), true ) )
-			return $value;
-
-		return $old_value;
+		return Sanitize::twitter_card( $value )
+			?: Sanitize::twitter_card( $old_value )
+			?: array_first( Meta\Twitter::get_supported_cards() );
 	}
 
 	/**
@@ -755,8 +747,7 @@ final class Plugin {
 						break;
 
 					case 'tw_card_type':
-						if ( ! \in_array( $val, Meta\Twitter::get_supported_cards(), true ) )
-							$val = ''; // default
+						$val = Sanitize::twitter_card( $val );
 						break;
 
 					default:

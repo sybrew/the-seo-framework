@@ -141,22 +141,26 @@ class Form {
 	 * Outputs character counter wrap for both JavaScript and no-Javascript.
 	 *
 	 * @since 4.1.4
+	 * @since 5.2.0 1. Now exposes the click hint as a tooltip and an ARIA label on the count.
+	 *              2. Now outputs the count as a link, so Enter changes the counter type.
 	 *
 	 * @param string $input_id The input ID it's for.
 	 * @param bool   $display  Whether to display the counter. (options page gimmick)
 	 */
 	public static function output_character_counter_wrap( $input_id, $display = true ) {
+
 		vprintf(
-			'<div class="tsf-counter-wrap hide-if-no-tsf-js" %s><span class=tsf-counter title="%s">%s</span><span class=tsf-ajax></span></div>',
+			'<div class="tsf-counter-wrap hide-if-no-tsf-js" %s><span class=tsf-counter>%s</span><span class=tsf-ajax></span></div>',
 			[
 				( $display ? '' : 'style=display:none;' ),
-				\esc_attr__( 'Click to change the counter type', 'autodescription' ),
 				\sprintf(
 					/* translators: %s = number */
 					\esc_html__( 'Characters: %s', 'autodescription' ),
 					\sprintf(
-						'<span id="%s">0</span>',
+						'<span class=tsf-tooltip-wrap><a id="%1$s" class=tsf-tooltip-item href="javascript:;" data-desc="%2$s" aria-label="%2$s">%3$s</a></span>',
 						\esc_attr( "{$input_id}_chars" ),
+						\esc_attr__( 'Click to change the counter type', 'autodescription' ),
+						'0',
 					),
 				),
 			],

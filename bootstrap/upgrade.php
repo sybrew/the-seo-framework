@@ -12,6 +12,7 @@ namespace The_SEO_Framework\Bootstrap;
 use The_SEO_Framework\{
 	Admin,
 	Data,
+	Data\Filter\Sanitize,
 };
 use The_SEO_Framework\Helper\{
 	Format\Markdown,
@@ -1017,12 +1018,13 @@ function _do_upgrade_5140() {
  * Registers new options 'facebook_verification', 'fediverse_site',
  * 'fediverse_site_url', 'fediverse_creator', 'fediverse_creator_url',
  * 'breadcrumb_archive', and 'breadcrumb_taxonomy'.
+ * Copies `counter_type` from user SEO meta into user preferences.
  *
  * @since 5.2.0
  */
 function _do_upgrade_5200() {
 
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5200' )
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5200' ) {
 		Data\Plugin::update_option( [
 			'facebook_verification' => '',
 			'fediverse_site'        => '',
@@ -1032,4 +1034,38 @@ function _do_upgrade_5200() {
 			'breadcrumb_archive'    => [],
 			'breadcrumb_taxonomy'   => [],
 		] );
+
+		global $wpdb;
+
+		// This runs on every site in a multisite. The number of authors ought to be limited.
+		// The counter_type guard below stops processing when it isn't set.
+		// Race condition writes are not an issue; add_user_meta's $unique prevents cache thrashing.
+		$meta_rows = $wpdb->get_results( $wpdb->prepare(
+			"SELECT user_id, meta_value FROM {$wpdb->usermeta} WHERE meta_key = %s",
+			\THE_SEO_FRAMEWORK_USER_OPTIONS,
+		) );
+
+		foreach ( $meta_rows as $row ) {
+			$meta = \is_serialized( $row->meta_value )
+				? unserialize( // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- this is the correct way.
+					trim( $row->meta_value ),
+					[ 'allowed_classes' => false ],
+				)
+				: $row->meta_value;
+
+			if (
+				! \is_array( $meta )
+				|| ! isset( $meta['counter_type'] )
+			) {
+				continue;
+			}
+
+			\add_user_meta(
+				(int) $row->user_id,
+				\THE_SEO_FRAMEWORK_USER_PREFERENCES,
+				[ 'counter_type' => Sanitize::counter_type( $meta['counter_type'] ) ],
+				true, // unique
+			);
+		}
+	}
 }

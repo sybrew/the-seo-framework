@@ -75,6 +75,25 @@ class Sanitize {
 	}
 
 	/**
+	 * Sanitizes the character counter type.
+	 *
+	 * Accepts 0, 1, 2, and 3. Anything above 3 becomes 0.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param mixed $value The counter type.
+	 * @return int The counter type. 0, 1, 2, or 3.
+	 */
+	public static function counter_type( $value ) {
+
+		$value = \absint( $value );
+
+		return $value > 3
+			? 0
+			: $value;
+	}
+
+	/**
 	 * Sanitizes color hexadecimals to either 3 or 6 length: rgb or rrggbb.
 	 * Removes leading hashtags.
 	 * Makes the input lowercase.
@@ -532,6 +551,20 @@ class Sanitize {
 		}
 
 		return \sanitize_url( $link );
+	}
+
+	/**
+	 * Sanitizes a Twitter card type.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param mixed $card The card type.
+	 * @return string A supported card type, or an empty string for the default selection.
+	 */
+	public static function twitter_card( $card ) {
+		return \in_array( $card, Meta\Twitter::get_supported_cards(), true )
+			? $card
+			: '';
 	}
 
 	/**
