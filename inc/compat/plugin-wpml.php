@@ -204,32 +204,30 @@ function _wpml_fix_sitemap_base_path( $path ) {
 }
 
 /**
- * Deletes all sitemap transients, instead of just one.
+ * Deletes sitemap transients for every active WPML language.
  *
- * We didn't implement this in our default APIs because we want to trigger WP hooks.
- * Executing database queries directly bypass those. So, we do this afterward.
+ * `Cache::clear_sitemap_caches()` only deletes the current locale.
  *
  * @hook the_seo_framework_cleared_sitemap_transients 10
  * @since 3.1.0
  * @since 5.0.0 Removed clearing once-per-request restriction.
- * @global \wpdb $wpdb
+ * @since 5.2.0 Now deletes each active language's transients via `delete_transient()`.
+ * @global \SitePress $sitepress
  */
 function _wpml_flush_sitemap() {
 
-	global $wpdb;
+	global $sitepress;
 
-	$transient_prefix = Sitemap\Cache::get_transient_prefix();
+	if (
+		   empty( $sitepress )
+		|| ! method_exists( $sitepress, 'get_active_languages' )
+	) {
+		return;
+	}
 
-	$wpdb->query( $wpdb->prepare(
-		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-		$wpdb->esc_like( "_transient_$transient_prefix" ) . '%',
-	) );
-
-	// We didn't use a wildcard after "_transient_" to reduce scans.
-	// A second query is faster on saturated sites.
-	$wpdb->query( $wpdb->prepare(
-		"DELETE FROM $wpdb->options WHERE option_name LIKE %s",
-		$wpdb->esc_like( "_transient_timeout_$transient_prefix" ) . '%',
+	Sitemap\Cache::delete_sitemap_transients_for_locales( \array_column(
+		$sitepress->get_active_languages(),
+		'default_locale',
 	) );
 }
 

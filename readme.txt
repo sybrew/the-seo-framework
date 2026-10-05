@@ -323,8 +323,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Plugin: Polylang:**
 		* Resolved an issue where posts excluded from local search could still appear in translated search results.
 		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory or the static front-page slug, so advertised sitemaps 404'd or redirected to WordPress's sitemap.
+		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 	* **Plugin: WPML:**
 		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory twice, including when "Use directory for default language" is enabled, so advertised sitemaps 404'd.
+		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
 	* Resolved an issue where Bulk Edit cleared the primary term on every edited post if selected terms mismatched, even when that term was left unchanged.
@@ -411,6 +413,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* Internally known as `The_SEO_Framework\Helper\User`.
 		* Method `The_SEO_Framework\Data\Filter\Escape::css_content()` (`tsf()->escape()->css_content()`) escapes a string as a CSS `<string>` (using in `content` and quoted `url()` arguments).
 		* Method `The_SEO_Framework\Meta\URI\Utils::encode_url()` (`tsf()->uri()->utils()->encode_url()`) percent-encodes non-ASCII octets in a URL so the result is an RFC 3986 URI. Already-encoded sequences are left intact.
+		* Method `The_SEO_Framework\Sitemap\Cache::delete_sitemap_transients_for_locales()` (`tsf()->sitemap()->cache()->delete_sitemap_transients_for_locales()`) deletes sitemap transients for each given locale, including when a persistent object cache is active.
 	* **Removed:**
 		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private, and this pool pointed at a class that never existed.
 	* **Changed:**
@@ -436,6 +439,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Helper\Query::is_seo_settings_page()` (`tsf()->query()->is_seo_settings_page()`): Replaced `$secure` with `'page_hook'` (default) and `'page_query'` (kept backward compatibility for a falsy value). `$secure` was a misnomer that never checked capabilities.
 		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
 		* Method `The_SEO_Framework\Sitemap\Cache::get_sitemap_cache_key()` (`tsf()->sitemap()->cache()->get_sitemap_cache_key()`) now returns `false` when `cache_id` is missing or empty.
+		* Method `The_SEO_Framework\Helper\Query\Exclusion::get_excluded_ids_from_cache()` (`tsf()->query()->exclusion()->get_excluded_ids_from_cache()`) now returns an empty array for `archive` and `search` when meta is headless.
 		* Method `The_SEO_Framework\Data\Plugin\Post::save_meta()` (`tsf()->data()->plugin()->post()->save_meta()`) now refreshes the sitemap after saving.
 		* Methods `The_SEO_Framework\Data\Post::get_latest_post_id()` (`tsf()->data()->post()->get_latest_post_id()`) and `The_SEO_Framework\Data\Term::get_latest_term_id()` (`tsf()->data()->term()->get_latest_term_id()`) now return null when no post or term exists.
 		* Method `The_SEO_Framework\Sitemap\Registry::output_stylesheet()` (`tsf()->sitemap()->registry()->output_stylesheet()`) now accepts `$sitemap_id` (`xsl-stylesheet` or `css`) and outputs the CSS when that ID is `css`.

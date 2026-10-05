@@ -66,6 +66,7 @@ class Exclusion {
 	 *              2. Now considers headlessness. This method runs only on the front-end.
 	 * @since 5.0.0 1. Now uses the static cache methods instead of non-expiring-transients.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now returns an empty array for each list when meta is headless.
 	 *
 	 * @return array {
 	 *     The excluded post IDs.
@@ -78,8 +79,8 @@ class Exclusion {
 
 		if ( is_headless( 'meta' ) )
 			return [
-				'archive' => '',
-				'search'  => '',
+				'archive' => [],
+				'search'  => [],
 			];
 
 		$cache = Data\Plugin::get_site_cache( 'excluded_ids' );

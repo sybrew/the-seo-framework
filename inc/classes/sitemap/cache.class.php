@@ -90,6 +90,36 @@ class Cache {
 	}
 
 	/**
+	 * Deletes sitemap transients for each locale.
+	 *
+	 * `clear_sitemap_caches()` only deletes the current locale.
+	 * A persistent object cache keeps the other locales out of the options table.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param string[] $locales Locale codes, such as `nl_NL`.
+	 */
+	public static function delete_sitemap_transients_for_locales( $locales ) {
+
+		$prefix    = self::get_transient_prefix();
+		$cache_ids = array_unique( array_filter( array_column(
+			Registry::get_sitemap_endpoint_list(),
+			'cache_id',
+		) ) );
+		$blog_id   = $GLOBALS['blog_id'];
+
+		$locales = array_unique( (array) $locales );
+
+		foreach ( $cache_ids as $cache_id ) {
+			foreach ( $locales as $locale ) {
+				if ( ! \is_string( $locale ) || ! $locale ) continue;
+
+				\delete_transient( "{$prefix}{$cache_id}_{$blog_id}_{$locale}" );
+			}
+		}
+	}
+
+	/**
 	 * Tells whether sitemap caching is enabled by user.
 	 *
 	 * @since 5.0.0
