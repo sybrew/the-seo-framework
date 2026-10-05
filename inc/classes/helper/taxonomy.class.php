@@ -90,15 +90,14 @@ class Taxonomy {
 	/**
 	 * Determines if the taxonomy supports The SEO Framework.
 	 *
-	 * Checks if at least one taxonomy objects post type supports The SEO Framework,
-	 * and whether the taxonomy is public and rewritable.
+	 * Checks that the taxonomy is viewable and that it is not disabled.
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `is_taxonomy_supported`.
 	 *
 	 * @param string $taxonomy Optional. The taxonomy name.
-	 * @return bool True if at least one post type in taxonomy isn't disabled.
+	 * @return bool True when the taxonomy is viewable and not disabled.
 	 */
 	public static function is_supported( $taxonomy = '' ) {
 
@@ -107,8 +106,8 @@ class Taxonomy {
 		/**
 		 * @since 3.1.0
 		 * @since 4.0.0 Now returns only returns false when all post types in the taxonomy aren't supported.
-		 * @param bool   $post_type Whether the post type is supported
-		 * @param string $post_type_evaluated The evaluated post type.
+		 * @param bool   $supported Whether the taxonomy is supported.
+		 * @param string $taxonomy  The taxonomy name.
 		 */
 		return (bool) \apply_filters(
 			'the_seo_framework_supported_taxonomy',

@@ -297,8 +297,7 @@ function _wpml_sitemap_filter_non_translatables( $args ) {
  * @param array[] $fields {
  *     Translation fields.
  *
- *     @type string $field_type The WPML field type, such as `field-_genesis_title-0`
- *                              or `tfield-_genesis_title-{term_id}`.
+ *     @type string $field_type The WPML field type, such as `field-_genesis_title-0`.
  *     @type string $purpose    Optional. Set to `seo_title` or `seo_meta_description`.
  * }
  * @return array[]

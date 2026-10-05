@@ -38,7 +38,7 @@ final class PluginTable {
 	/**
 	 * Adds various links to the plugin row on the plugin's screen.
 	 *
-	 * @hook plugin_action_links_the-seo-framework/the-seo-framework.php 10
+	 * @hook plugin_action_links_autodescription/autodescription.php 10
 	 * @since 3.1.0
 	 * @since 4.1.4 Moved to PluginTable.
 	 * @access private

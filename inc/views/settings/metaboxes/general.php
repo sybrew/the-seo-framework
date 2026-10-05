@@ -212,6 +212,12 @@ switch ( $instance ) :
 			\esc_html__( 'Altering the query on the site is much faster, but can lead to inconsistent pagination. It can also lead to 404 error messages if all queried pages have been excluded.', 'autodescription' ),
 		);
 
+		/**
+		 * Values other than `in_query` and `post_query` aren't saved.
+		 *
+		 * @since 5.0.0
+		 * @param array $query_types The query alteration options by option value.
+		 */
 		$query_types = (array) \apply_filters(
 			'the_seo_framework_query_alteration_types',
 			[

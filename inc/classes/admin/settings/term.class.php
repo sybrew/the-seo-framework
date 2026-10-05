@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Admin\Settings\Post
+ * @package The_SEO_Framework\Classes\Admin\Settings\Term
  * @subpackage The_SEO_Framework\Admin\Edit\Term
  */
 

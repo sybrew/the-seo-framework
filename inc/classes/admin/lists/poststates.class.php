@@ -27,7 +27,7 @@ use The_SEO_Framework\Data;
  */
 
 /**
- * Prepares the SEO Settings page interface.
+ * Adds post states on list tables.
  *
  * @since 5.0.0
  * @access private

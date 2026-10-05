@@ -109,7 +109,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 * This column is a dummy, but it's required to display quick/bulk edit items.
 	 *
 	 * @hook manage_{$screen_id}_columns 10
-	 * @hook manage_edit-{$taxonomy}_columns 1
+	 * @hook manage_edit-{$taxonomy}_columns 10
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_add_column`.
 	 * @abstract

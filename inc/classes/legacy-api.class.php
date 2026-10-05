@@ -126,7 +126,7 @@ class Legacy_API {
 
 	/**
 	 * Returns the Twitter meta title.
-	 * Falls back to Open Graph title.
+	 * Falls back to the Open Graph title when Open Graph tags are enabled, and otherwise to the meta title.
 	 *
 	 * @since 3.0.4
 	 * @since 3.1.0 1. The first parameter now expects an array.
@@ -183,7 +183,7 @@ class Legacy_API {
 
 	/**
 	 * Returns the Twitter meta description.
-	 * Falls back to Open Graph description.
+	 * Falls back to the Open Graph description when Open Graph tags are enabled, and otherwise to the meta description.
 	 *
 	 * @since 3.0.4
 	 * @since 3.1.0 1. Now tries to get the homepage social descriptions.

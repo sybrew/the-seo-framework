@@ -296,7 +296,7 @@ class User {
 	}
 
 	/**
-	 * Deletes term meta.
+	 * Deletes user meta.
 	 * Deletes only the default data keys as set by `get_default_meta()`
 	 * or everything when no custom keys are set.
 	 *

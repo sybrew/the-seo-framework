@@ -32,7 +32,7 @@ namespace The_SEO_Framework;
 \define( 'THE_SEO_FRAMEWORK_PRESENT', true );
 
 /**
- * The user capability required to access the extension overview page.
+ * The user capability required to access the SEO Settings page.
  *
  * == WARNING ==
  * When this constant is used incorrectly, you can expose your site to unforeseen
@@ -73,7 +73,7 @@ namespace The_SEO_Framework;
  * The plugin's main settings page slug.
  *
  * @since 5.0.0
- * @param bool
+ * @param string
  */
 \defined( 'THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG' )
 	or \define( 'THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG', 'theseoframework-settings' );

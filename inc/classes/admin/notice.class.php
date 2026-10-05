@@ -28,7 +28,7 @@ use The_SEO_Framework\Admin; // Yes, it is legal to share class and namespace.
  */
 
 /**
- * Holds simple persistent notices functionality.
+ * Holds dismissible notice generation.
  *
  * @since 5.0.0
  * @access protected
@@ -55,7 +55,7 @@ class Notice {
 	 *                          Default 'updated'.
 	 *     @type bool   $icon   Optional. Whether to enable icon. Default true.
 	 *     @type bool   $escape Optional. Whether to escape the $message. Default true.
-	 *     @type bool   $inline Optional. Whether to escape the whole output. Default false.
+	 *     @type bool   $inline Optional. Whether to add the `inline` class. Default false.
 	 * }
 	 */
 	public static function output_notice( $message, $args ) {
@@ -91,7 +91,7 @@ class Notice {
 	 *                          Default 'updated'.
 	 *     @type bool   $icon   Optional. Whether to enable icon. Default true.
 	 *     @type bool   $escape Optional. Whether to escape the $message. Default true.
-	 *     @type bool   $inline Optional. Whether to escape the whole output. Default false.
+	 *     @type bool   $inline Optional. Whether to add the `inline` class. Default false.
 	 * }
 	 * @return string The dismissible error notice.
 	 */

@@ -317,7 +317,7 @@ class Registry {
 	}
 
 	/**
-	 * Checks whether the permalink structure is updated.
+	 * Refreshes sitemaps when the Permalinks form is submitted and the nonce passes.
 	 *
 	 * @hook load-options-permalink.php 20
 	 * @since 5.0.0

@@ -559,7 +559,7 @@ function _prepare_upgrade_notice( $previous_version, $current_version ) {
 }
 
 /**
- * Enqueues and outputs an Extension Manager suggestion.
+ * Loads the upgrade suggestion notice when a previous version exists.
  *
  * @hook the_seo_framework_upgraded 100
  * @since 3.1.0

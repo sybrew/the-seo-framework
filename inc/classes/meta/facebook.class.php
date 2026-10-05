@@ -39,7 +39,7 @@ class Facebook {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @return string Facebook author's value if API type is 'article'.
+	 * @return ?string Facebook author URL when the Open Graph type is `article`. Null otherwise.
 	 */
 	public static function get_author() {
 
@@ -52,7 +52,7 @@ class Facebook {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @return string Facebook publisher value if API type is 'article'.
+	 * @return ?string Facebook publisher URL when the Open Graph type is `article`. Null otherwise.
 	 */
 	public static function get_publisher() {
 

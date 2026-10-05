@@ -33,8 +33,8 @@ use The_SEO_Framework\{
  */
 
 /**
- * This file holds functions for installing TSFEM.
- * This file will only be called ONCE on plugin install, or upgrade from pre-v3.0.6.
+ * This file registers an upgrade suggestion notice.
+ * It is loaded on upgrade when a previous version exists, not on a new install.
  *
  * @since 3.0.6
  * @since 3.2.4 Applied namespacing to this file. All method names have changed.

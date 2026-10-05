@@ -84,8 +84,8 @@ foreach ( $tabs as $tab => $args ) {
 		 *         @type string   $name     Tab name.
 		 *         @type callable $callback Output function.
 		 *         @type string   $dashicon The dashicon to use.
-		 *         @type mixed    $args     Optional callback function args. These arguments
-		 *                                  will be extracted to variables in scope of the view.
+		 *         @type mixed    $args     Optional callback arguments. Passed as one array
+		 *                                  to the callback.
 		 *    }
 		 * }
 		 */

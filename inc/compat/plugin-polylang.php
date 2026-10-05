@@ -333,11 +333,10 @@ function _polylang_sitemap_append_non_translatables( $args ) {
 }
 
 /**
- * Allows front-end query adjustments when Polylang filters by language.
+ * Treats Polylang's non-public `language` taxonomy as supported on the front end.
  *
- * Polylang adds its non-public 'language' taxonomy to front-end tax queries.
- * TSF supports it only for query adjustment checks; admin taxonomy SEO support
- * remains unchanged.
+ * The callback returns true for every front-end support check on `language`.
+ * Admin taxonomy SEO support stays unchanged.
  *
  * @hook the_seo_framework_supported_taxonomy 10
  * @since 5.2.0

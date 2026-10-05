@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Front\Redirect
- * @subpackage The_SEO_Framework\Redirect
+ * @package The_SEO_Framework\Classes\Front\Title
+ * @subpackage The_SEO_Framework\Title
  */
 
 namespace The_SEO_Framework\Front;
@@ -31,7 +31,7 @@ use The_SEO_Framework\{
  */
 
 /**
- * Prepares redirects.
+ * Prepares document titles.
  *
  * @since 5.0.0
  * @access private

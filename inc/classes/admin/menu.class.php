@@ -40,7 +40,7 @@ use function The_SEO_Framework\{
 class Menu {
 
 	/**
-	 * Adds menu links under "settings" in the wp-admin dashboard
+	 * Adds the top-level SEO menu in wp-admin.
 	 *
 	 * @hook admin_menu 10
 	 * @since 2.2.2

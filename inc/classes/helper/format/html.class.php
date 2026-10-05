@@ -296,7 +296,8 @@ class HTML {
 	 * @since 4.2.7 1. No longer clears `figcaption`, `hr`, `link`, `meta`, `option`, or `tfoot`.
 	 *              2. Now clears `area`, `audio`, `datalist`, `del`, `dialog`, `dl`, `hgroup`, `menu`, `meter`, `ol`,
 	 *                 `object`, `output`, `progress`, `s`, `template`, and `ul`.
-	 *              3. Now adds spaces around `blockquote`, `details`, and `hr`.
+	 *              3. Now adds spaces around `details` and `hr`.
+	 *                 `blockquote` is cleared, so its content is removed.
 	 *              4. Now ignores `dd`, `dl`, `dt`, `li`, `main`, for they are inherently excluded or ignored anyway.
 	 *              5. Now processed the `auto_description_html_method` option for stripping tags.
 	 * @since 5.0.0 1. The first parameter is now required.

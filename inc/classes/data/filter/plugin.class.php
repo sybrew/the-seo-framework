@@ -344,7 +344,7 @@ final class Plugin {
 	 *
 	 * @param mixed $value     An unsanitized value.
 	 * @param mixed $old_value The last known value.
-	 * @return string A sanitized verification code value.
+	 * @return string A valid description HTML method: `fast`, `accurate`, or `thorough`.
 	 */
 	public static function auto_description_method( $value, $old_value ) {
 
@@ -538,7 +538,7 @@ final class Plugin {
 	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
-	 * @return string Either left or right.
+	 * @return int An absolute integer.
 	 */
 	public static function absolute_integer( $value ) {
 		return \absint( $value );
@@ -613,7 +613,7 @@ final class Plugin {
 	 * @since 5.0.0
 	 *
 	 * @param mixed $value An unsanitized value.
-	 * @return string A valid copyright content length option value.
+	 * @return string A sanitized hexadecimal color.
 	 */
 	public static function rgb_hex( $value ) {
 		return Sanitize::rgb_hex( $value );
@@ -691,7 +691,7 @@ final class Plugin {
 	 * @link <https://help.twitter.com/en/managing-your-account/change-x-handle>
 	 *
 	 * @param mixed $value An unsanitized value.
-	 * @return string A valid title separator.
+	 * @return string A sanitized Twitter/X profile handle.
 	 */
 	public static function twitter_profile_handle( $value ) {
 		return Sanitize::twitter_profile_handle( $value );

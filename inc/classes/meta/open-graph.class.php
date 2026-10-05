@@ -48,14 +48,11 @@ use The_SEO_Framework\{
 class Open_Graph {
 
 	/**
-	 * Returns an array of the collected robots meta assertions.
-	 *
-	 * This only works when generate_robots_meta()'s $options value was given:
-	 * The_SEO_Framework\ROBOTS_ASSERT (0b100);
+	 * Returns the Open Graph type.
 	 *
 	 * @since 5.0.0
 	 *
-	 * @return array
+	 * @return string `article`, `website`, `profile`, or `product`.
 	 */
 	public static function get_type() {
 
@@ -109,7 +106,7 @@ class Open_Graph {
 	}
 
 	/**
-	 * Returns the Twitter meta title from custom field, based on query.
+	 * Returns the Open Graph meta title from custom field, based on query.
 	 * Falls back to meta title.
 	 *
 	 * @since 5.0.0
@@ -225,7 +222,7 @@ class Open_Graph {
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
-	 * @return string TwOpen Graphitter description.
+	 * @return string Open Graph description.
 	 */
 	public static function get_custom_description( $args = null ) {
 		return isset( $args )
@@ -376,7 +373,7 @@ class Open_Graph {
 	}
 
 	/**
-	 * Returns the locale for Open Graph.
+	 * Returns the site name for Open Graph.
 	 *
 	 * @since 5.0.0
 	 *
@@ -387,7 +384,7 @@ class Open_Graph {
 	}
 
 	/**
-	 * Returns the locale for Open Graph.
+	 * Returns the canonical URL for Open Graph.
 	 *
 	 * @since 5.0.0
 	 *
@@ -417,7 +414,7 @@ class Open_Graph {
 	}
 
 	/**
-	 * Returns the locale for Open Graph.
+	 * Returns the article modified time for Open Graph.
 	 *
 	 * @since 5.0.0
 	 *
@@ -445,7 +442,7 @@ class Open_Graph {
 	 * @since 5.2.0 1. Removed deprecated locales: ak_GH, ay_BO, cb_IQ, ck_US, cx_PH, en_IN, en_PI, en_UD, eo_EO,
 	 *                 es_CL, es_CO, es_MX, es_VE, fb_LT, gx_GR, ig_NG, la_VA, lg_UG, li_NL, ln_CD, mi_NZ, nd_ZW, ny_MW,
 	 *                 qu_PE, rm_CH, sa_IN, se_NO, sy_SY, sz_PL, tl_ST, tz_MA, wo_SN, xh_ZA, yi_DE, yo_NG, zu_ZA, zz_TR.
-	 *              2. Added locales: th_TH, ik_US.
+	 *              2. Added locales: ht_HT, ik_US, iu_CA.
 	 * @link https://wordpress.org/support/topic/oglocale-problem/#post-11456346
 	 * @link https://wordpress.org/support/topic/change-locale-3/#post-18791499
 	 * @link https://www.facebook.com/translations/FacebookLocales.xml (gone, deprecated)

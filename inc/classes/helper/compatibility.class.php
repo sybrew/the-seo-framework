@@ -41,7 +41,7 @@ use The_SEO_Framework\{
 final class Compatibility {
 
 	/**
-	 * Registers plugin cache checks on plugin activation.
+	 * Registers the SEO plugin conflict notice when any plugin is activated and a conflicting SEO plugin is active.
 	 *
 	 * @hook activated_plugin 10
 	 * @since 5.0.0
@@ -70,7 +70,7 @@ final class Compatibility {
 	}
 
 	/**
-	 * Clears plugin cache checks on plugin deactivation.
+	 * Clears the SEO plugin conflict notice when any plugin is deactivated.
 	 *
 	 * @hook deactivated_plugin 10
 	 * @since 5.0.0

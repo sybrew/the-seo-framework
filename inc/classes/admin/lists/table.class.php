@@ -290,7 +290,7 @@ abstract class Table {
 	 * Add column on edit(-tags).php
 	 *
 	 * @hook manage_{$screen_id}_columns 10
-	 * @hook manage_edit-{$taxonomy}_columns 1
+	 * @hook manage_edit-{$taxonomy}_columns 10
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_add_column`.
 	 * @access private

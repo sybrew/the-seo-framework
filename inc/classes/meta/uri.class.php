@@ -743,10 +743,11 @@ class URI {
 	 *              2. Now redirects post type archives.
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.1.0 Now supports `homepage_redirect`.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
-	 * @return string The canonical URL if found, empty string otherwise.
+	 * @return string The redirect URL if found, empty string otherwise.
 	 */
 	public static function get_redirect_url( $args = null ) {
 

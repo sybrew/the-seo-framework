@@ -59,6 +59,7 @@ class Utils {
 		 * @since 3.1.0 Now returns an option value; it falls back to the default value if not set.
 		 * @since 4.0.0 1. The default is now 3000, from 1200.
 		 *              2. Now passes a second parameter.
+		 * @since 5.0.5 The option default is now 250.
 		 * @param int $total_post_limit
 		 * @param bool $hierarchical Whether the query is for hierarchical post types or not.
 		 */

@@ -167,7 +167,7 @@ $robots_settings = [
 	/**
 	 * @since 4.0.5
 	 * @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
-	 * @param string $post_type The current taxonomy type (if any).
+	 * @param string $taxonomy  The current taxonomy type (if any).
 	 */
 	\do_action( 'the_seo_framework_after_quick_edit', $post_type, $taxonomy );
 	?>

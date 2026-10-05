@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Data\Filter\Term
- * @subpackage The_SEO_Framework\Data\Term
+ * @package The_SEO_Framework\Classes\Data\Filter\Post
+ * @subpackage The_SEO_Framework\Data\Post
  */
 
 namespace The_SEO_Framework\Data\Filter;

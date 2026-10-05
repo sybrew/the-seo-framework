@@ -78,10 +78,7 @@ class PTA {
 
 	/**
 	 * Returns all post type archive meta.
-	 *
-	 * We do not test whether a post type is supported, for it'll conflict with data-fills on the
-	 * SEO settings page. This meta should never get called on the front-end if the post type is
-	 * disabled, anyway, for we never query post types externally, aside from the SEO settings page.
+	 * Returns the default meta when the post type is empty or `Post_Type::is_supported()` is false.
 	 *
 	 * @since 4.2.0
 	 * @since 5.0.0 1. The first parameter may now be empty to autodetermine post type.

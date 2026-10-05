@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Admin\Script\Loader
+ * @package The_SEO_Framework\Classes\Admin\Script\Utils
  * @subpackage The_SEO_Framework\Scripts
  */
 
@@ -69,7 +69,7 @@ final class Utils {
 	}
 
 	/**
-	 * Checks ajax referred set by set_js_nonces based on capability.
+	 * Creates a nonce for an AJAX action when the user has the capability.
 	 *
 	 * @since 5.0.0
 	 * @since 5.1.0 Added the `...$args` parameter.

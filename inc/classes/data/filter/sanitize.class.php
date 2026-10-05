@@ -517,7 +517,8 @@ class Sanitize {
 	}
 
 	/**
-	 * Sanitizes the Facebook profile link. Makes an actual Facebook link if it isn't already.
+	 * Sanitizes the Facebook profile link.
+	 * A host without a scheme is treated as a path.
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
@@ -526,6 +527,7 @@ class Sanitize {
 	 *              2. Now returns empty when using only spaces and tabs.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_facebook_profile`.
+	 *              3. Now trims only spaces and slashes, so a tab-only value is no longer emptied.
 	 *
 	 * @param string $link The unsanitized Facebook profile URL.
 	 * @return string The sanitized Facebook profile URL.

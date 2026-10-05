@@ -207,9 +207,10 @@ class Form {
 	 * @param array $args {
 	 *     The image uploader arguments.
 	 *
-	 *     @type string $id                Required. The HTML input id to pass URL into.
-	 *     @type int    $post_id           Optional. The Post ID to bind the uploaded file to. Default current post ID.
-	 *     @type array  $data              {
+	 *     @type string $id           Required. The HTML input id to pass URL into.
+	 *     @type int    $post_id      Optional. Passed to `get_upload_iframe_src()` as the file's parent.
+	 *                                Defaults to `Query::get_the_real_id()`, which is the term ID on term screens.
+	 *     @type array  $data         {
 	 *         Optional. The data attributes for the image uploader.
 	 *
 	 *         @type string $inputType      Optional. Whether the upload type is 'social' or 'logo' for i18n. Default 'social'.
@@ -219,14 +220,14 @@ class Form {
 	 *         @type int    $minHeight      Optional. The minimum image height. Default 200.
 	 *         @type bool   $flex           Optional. Whether the image W:H ratio may be changed. Default true.
 	 *     },
-	 *     @type array  $i18n              {
+	 *     @type array  $i18n         {
 	 *         Optional. The internationalization strings.
 	 *
 	 *         @type string $button_title   Optional. The image-select button on-hover title for accessibility. Default ''.
 	 *                                   Tip: Only fill if 'button_text' is ambiguous.
 	 *         @type string $button_text    Optional. The image-select button title. Defaults l10n 'Select Image'.
 	 *     },
-	 *     @type array  $button_class      {
+	 *     @type array  $button_class {
 	 *         Optional. The button classes.
 	 *
 	 *         @type array $set             Optional. The image set button classes.

@@ -1,7 +1,7 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Data\Filter\Term
- * @subpackage The_SEO_Framework\Data\Term
+ * @package The_SEO_Framework\Classes\Data\Filter\User
+ * @subpackage The_SEO_Framework\Data\User
  */
 
 namespace The_SEO_Framework\Data\Filter;
@@ -34,7 +34,7 @@ namespace The_SEO_Framework\Data\Filter;
 final class User {
 
 	/**
-	 * @hook "sanitize_usermeta_ . THE_SEO_FRAMEWORK_USER_OPTIONS" 10
+	 * @hook "sanitize_user_meta_ . THE_SEO_FRAMEWORK_USER_OPTIONS" 10
 	 * @since 5.0.0
 	 * @since 5.2.0 No longer accepts `counter_type`.
 	 *

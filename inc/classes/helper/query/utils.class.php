@@ -147,8 +147,8 @@ class Utils {
 	 * Example 4: `/?hour=nonnumeric`, the same issue as Example 1. The canonical URL is malformed, noindex is set, and
 	 * link relationships will be active. A complete mess. `minute` and `second` are also affected the same way.
 	 *
-	 * Example 5: `/page/2/?p=0`, this is the trickiest. It's indicative of a paginated blog, but also the homepage. When
-	 * the homepage is not a blog, then this query is malformed. Otherwise, however, it's a good query.
+	 * Example 5: `/page/2/?p=0` is flagged. `p=0` fails the numeric rule on any request without a real ID,
+	 * including a blog homepage.
 	 *
 	 * @since 4.0.5
 	 * @since 4.2.7 1. Added detection `not_home_as_page`, specifically for query variable `search`.
@@ -186,7 +186,7 @@ class Utils {
 		/**
 		 * @since 4.0.5
 		 * @since 4.2.7 Added index `not_home_as_page` with value `search`.
-		 * @since 5.0.5 Added index `not_front_page` with values `sitemap` and `sitemap-subtype`.
+		 * @since 5.0.5 Added index `should_be_404` with values `sitemap` and `sitemap-subtype`.
 		 * @param array $exploitables The exploitable endpoints by type.
 		 */
 		$exploitables = \apply_filters(

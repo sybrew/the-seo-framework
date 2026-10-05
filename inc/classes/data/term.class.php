@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Data\Post
+ * @package The_SEO_Framework\Classes\Data\Term
  * @subpackage The_SEO_Framework\Data
  */
 

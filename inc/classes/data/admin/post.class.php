@@ -308,7 +308,7 @@ final class Post {
 	}
 
 	/**
-	 * Overwrites a park of the post meta on bulk-edit.
+	 * Overwrites a part of the post meta on bulk-edit.
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.

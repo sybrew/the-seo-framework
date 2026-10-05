@@ -36,7 +36,7 @@ use The_SEO_Framework\Helper\{
  */
 
 /**
- * Holds a collection of data saving methods for posts.
+ * Holds a collection of data saving methods for the SEO settings.
  *
  * @since 5.0.0
  * @access private
@@ -99,8 +99,6 @@ final class Plugin {
 	 * @since 5.0.0
 	 * @since 5.1.0 1. Now differentiates the options independently of the order.
 	 *              2. Now resets options regardless of whether settings are changed from defaults.
-	 *
-	 * @return void Early if not on SEO settings page.
 	 */
 	private static function process_settings_reset() {
 
@@ -130,8 +128,6 @@ final class Plugin {
 	 * @since 3.1.0 Now always flushes the cache, even before the options are updated.
 	 * @since 4.1.0 1. Renamed from 'handle_update_post' to 'process_settings_submission'
 	 *              2. Is now a protected method.
-	 *
-	 * @return void Early if nonce failed.
 	 */
 	private static function process_settings_submission() {
 

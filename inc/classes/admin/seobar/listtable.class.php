@@ -59,11 +59,11 @@ final class ListTable extends Admin\Lists\Table {
 	/**
 	 * Adds SEO column on edit(-tags).php
 	 *
-	 * Also determines where the column should be placed. Preferred before comments, then data, then tags.
+	 * Also determines where the column should be placed. Preferred before comments, then posts, then date, then tags.
 	 * When none found, it will add the column to the end.
 	 *
 	 * @hook manage_{$screen_id}_columns 10
-	 * @hook manage_edit-{$taxonomy}_columns 1
+	 * @hook manage_edit-{$taxonomy}_columns 10
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_add_column`.
 	 * @abstract

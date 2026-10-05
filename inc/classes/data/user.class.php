@@ -1,6 +1,6 @@
 <?php
 /**
- * @package The_SEO_Framework\Classes\Data\Post
+ * @package The_SEO_Framework\Classes\Data\User
  * @subpackage The_SEO_Framework\Data
  */
 
@@ -37,7 +37,7 @@ use function The_SEO_Framework\umemo;
 class User {
 
 	/**
-	 * Saves user profile fields.
+	 * Tests whether the user has the author-info capability on this site or any site in the network.
 	 *
 	 * @since 5.0.0
 	 * @todo add memoization?
