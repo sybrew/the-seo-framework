@@ -58,6 +58,7 @@ final class Plugin {
 	 * @since 2.2.2
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `sanitize`.
+	 * @since 5.2.0 Now passes each sanitizer the previous sanitizer's return.
 	 *
 	 * @param mixed  $value          The sanitized [sic] option value.
 	 * @param string $option         The option name.
@@ -80,6 +81,7 @@ final class Plugin {
 
 		/**
 		 * @since 5.0.0
+		 * @since 5.2.0 Callbacks for one option now run in order. Each receives the previous return.
 		 * @example $sanitizers `[ 'title_separator' => [ 'sanitize_text_field' ] ]`
 		 * @param array<string, callable[]> $sanitizers {
 		 *     A map of option sanitizers and their callbacks.
@@ -99,7 +101,7 @@ final class Plugin {
 				$store[ $sub_option ] = \call_user_func_array(
 					$callback,
 					[
-						$value[ $sub_option ] ?? '', // If no value is sent, the form field was empty.
+						$store[ $sub_option ] ?? $value[ $sub_option ] ?? '', // If no value is sent, the form field was empty.
 						$original_value[ $sub_option ], // If this fails, the option isn't registered properly. Error is good.
 						$sub_option,
 					],

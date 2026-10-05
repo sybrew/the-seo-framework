@@ -329,6 +329,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
+	* Resolved an issue where a crafted SEO Settings save could exclude the default post types and taxonomies.
 	* Resolved an issue where Bulk Edit cleared the primary term on every edited post if selected terms mismatched, even when that term was left unchanged.
 	* Resolved an issue where saving in the Block Editor regenerated every SEO preview field, including fields that were not on screen.
 	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
@@ -522,6 +523,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			3. Added `$trail`, the generated list before those changes.
 		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`). A null `lock_id` uses the endpoint id. A sitemap is not cached unless `cache_id` is set.
 	* **Fixed:**
+		* `the_seo_framework_settings_update_sanitizers` callbacks for one option now run in order. Each receives the previous callback's return.
 		* `the_seo_framework_title_from_generation` now passes through `0` instead of the untitled fallback.
 		* `the_seo_framework_seo_column_keys_order` returning an empty array no longer causes a PHP warning when placing the SEO column.
 
