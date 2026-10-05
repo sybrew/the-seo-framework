@@ -87,8 +87,8 @@ class URI {
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Now always returns a sanitized URL.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The canonical URL, if any.
 	 */
 	public static function get_canonical_url( $args = null ) {
@@ -101,8 +101,8 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The custom canonical URL, if any.
 	 */
 	public static function get_custom_canonical_url( $args = null ) {
@@ -118,8 +118,8 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine and memoize query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine and memoize query.
 	 * @return string The custom canonical URL, if any.
 	 */
 	public static function get_generated_url( $args = null ) {
@@ -320,7 +320,7 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int|null $post_id The page ID. Leave null to autodetermine.
+	 * @param ?int $post_id The page ID. Leave null to autodetermine.
 	 * @return string The singular URL.
 	 */
 	public static function get_singular_url( $post_id = null ) {
@@ -357,7 +357,7 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int|null $post_id The post ID to get the URL from. Leave null to autodetermine.
+	 * @param ?int $post_id The post ID to get the URL from. Leave null to autodetermine.
 	 * @return string The singular canonical URL without complex optimizations.
 	 */
 	public static function get_bare_singular_url( $post_id = null ) {
@@ -379,8 +379,8 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
-	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
+	 * @param ?int   $term_id  The term ID. Leave null to autodetermine.
+	 * @param string $taxonomy The taxonomy. Leave empty to autodetermine.
 	 * @return string The taxonomical canonical URL, if any.
 	 */
 	public static function get_term_url( $term_id = null, $taxonomy = '' ) {
@@ -408,8 +408,8 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int|null $term_id  The term ID.
-	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
+	 * @param ?int   $term_id  The term ID.
+	 * @param string $taxonomy The taxonomy. Leave empty to autodetermine.
 	 * @return string The taxonomical canonical URL, if any.
 	 */
 	public static function get_bare_term_url( $term_id = null, $taxonomy = '' ) {
@@ -465,8 +465,8 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param null|string $post_type The post type archive's post type.
-	 *                          Leave null to autodetermine query and allow pagination.
+	 * @param ?string $post_type The post type archive's post type.
+	 *                      Leave null to autodetermine query and allow pagination.
 	 * @return string The post type archive canonical URL, if any.
 	 */
 	public static function get_bare_pta_url( $post_type = null ) {
@@ -515,7 +515,7 @@ class URI {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param int|null $id The author ID. Leave null to autodetermine.
+	 * @param ?int $id The author ID. Leave null to autodetermine.
 	 * @return string The author canonical URL, if any.
 	 */
 	public static function get_bare_author_url( $id = null ) {
@@ -744,8 +744,8 @@ class URI {
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The canonical URL if found, empty string otherwise.
 	 */
 	public static function get_redirect_url( $args = null ) {

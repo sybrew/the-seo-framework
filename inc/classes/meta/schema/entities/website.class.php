@@ -59,8 +59,8 @@ final class WebSite extends Reference {
 	 * @since 5.0.5 Added back alternateName.
 	 * @see https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return ?array $entity The Schema.org graph entity. Null on failure.
 	 */
 	public static function build( $args = null ) { // phpcs:ignore -- VariableAnalysis, abstract.

@@ -83,8 +83,8 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string Open Graph Title.
 	 */
 	public static function get_title( $args = null ) {
@@ -98,8 +98,8 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string Open Graph Title.
 	 */
 	public static function get_custom_title( $args = null ) {
@@ -195,8 +195,8 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The generated Open Graph Title.
 	 */
 	public static function get_generated_title( $args = null ) {
@@ -208,8 +208,8 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The real Open Graph description output.
 	 */
 	public static function get_description( $args = null ) {
@@ -223,8 +223,8 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string TwOpen Graphitter description.
 	 */
 	public static function get_custom_description( $args = null ) {
@@ -319,8 +319,8 @@ class Open_Graph {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The generated Open Graph description output.
 	 */
 	public static function get_generated_description( $args = null ) {

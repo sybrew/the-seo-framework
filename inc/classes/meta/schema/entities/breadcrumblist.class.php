@@ -48,8 +48,8 @@ final class BreadcrumbList extends Reference {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return ?array $entity The Schema.org graph entity. Null on failure.
 	 */
 	public static function build( $args = null ) {

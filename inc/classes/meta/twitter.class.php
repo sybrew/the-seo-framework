@@ -65,8 +65,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The Twitter Card type.
 	 */
 	public static function get_card_type( $args = null ) {
@@ -79,8 +79,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The custom card type. Empty string if not set.
 	 */
 	public static function get_custom_card_type( $args = null ) {
@@ -201,8 +201,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string Twitter Title.
 	 */
 	public static function get_title( $args = null ) {
@@ -216,8 +216,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string Twitter Title.
 	 */
 	public static function get_custom_title( $args = null ) {
@@ -315,8 +315,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The generated Twitter Title.
 	 */
 	public static function get_generated_title( $args = null ) {
@@ -329,8 +329,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The real Twitter description output.
 	 */
 	public static function get_description( $args = null ) {
@@ -344,8 +344,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string Twitter description.
 	 */
 	public static function get_custom_description( $args = null ) {
@@ -445,8 +445,8 @@ class Twitter {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The generated Twitter description output.
 	 */
 	public static function get_generated_description( $args = null ) {

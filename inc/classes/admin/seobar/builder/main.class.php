@@ -125,7 +125,7 @@ abstract class Main {
 	 * @since 4.0.0
 	 *
 	 * @param string $key The cache key.
-	 * @return mixed|null The cache value. Null on failure.
+	 * @return ?mixed The cache value. Null on failure.
 	 */
 	final protected static function get_cache( $key ) {
 		return self::$cache[ $key ] ?? null;

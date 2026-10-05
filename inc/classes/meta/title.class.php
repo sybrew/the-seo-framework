@@ -56,8 +56,8 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The real title output.
 	 */
 	public static function get_title( $args = null ) {
@@ -71,8 +71,8 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The unmodified title output.
 	 */
 	public static function get_bare_title( $args = null ) {
@@ -92,9 +92,9 @@ class Title {
 	 *              3. Moved the third parameter to the second.
 	 * @since 5.1.3 Now runs the title through `Sanitize::metadata_content()`.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $social Whether the title is meant for social display.
+	 * @param ?array $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                       Leave null to autodetermine query.
+	 * @param bool   $social Whether the title is meant for social display.
 	 * @return string The custom field title.
 	 */
 	public static function get_custom_title( $args = null, $social = false ) {
@@ -131,9 +131,9 @@ class Title {
 	 *              3. Moved the third parameter to the second.
 	 * @since 5.1.3 Now runs the title through `Sanitize::metadata_content()`.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $social Whether the title is meant for social display.
+	 * @param ?array $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                       Leave null to autodetermine query.
+	 * @param bool   $social Whether the title is meant for social display.
 	 * @return string The generated title output.
 	 */
 	public static function get_generated_title( $args = null, $social = false ) {
@@ -162,8 +162,8 @@ class Title {
 	 *              3. Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The raw custom field title output.
 	 */
 	public static function get_bare_custom_title( $args = null ) {
@@ -181,9 +181,9 @@ class Title {
 		 * @since 3.1.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 *
-		 * @param string     $title The title.
-		 * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                          Is null when the query is auto-determined.
+		 * @param string $title The title.
+		 * @param ?array $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                      Is null when the query is auto-determined.
 		 */
 		return Sanitize::metadata_content( (string) \apply_filters(
 			'the_seo_framework_title_from_custom_field',
@@ -202,8 +202,8 @@ class Title {
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.2.0 Can now return `0` instead of an untitled fallback.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The raw generated title output.
 	 */
 	public static function get_bare_generated_title( $args = null ) {
@@ -230,9 +230,9 @@ class Title {
 		 * @since 3.1.0
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @since 5.2.0 Now passes through `0` instead of the untitled fallback.
-		 * @param string     $title The title.
-		 * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                          Is null when the query is auto-determined.
+		 * @param string $title The title.
+		 * @param ?array $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                      Is null when the query is auto-determined.
 		 */
 		$title = (string) \apply_filters(
 			'the_seo_framework_title_from_generation',
@@ -257,8 +257,8 @@ class Title {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The custom field title, if it exists.
 	 */
 	public static function get_bare_unfiltered_custom_title( $args = null ) {
@@ -638,7 +638,7 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param null|\WP_Term $term The term object, required in the admin area.
+	 * @param ?\WP_Term $term The term object, required in the admin area.
 	 * @return string The generated single term title.
 	 */
 	public static function get_term_title( $term = null ) {
@@ -798,9 +798,9 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param string     $title The title.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                          Leave null to autodetermine query.
+	 * @param string $title The title.
+	 * @param ?array $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                      Leave null to autodetermine query.
 	 * @return string The title with branding.
 	 */
 	public static function add_branding( $title, $args = null ) {
@@ -883,9 +883,9 @@ class Title {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param string     $title The title.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                          Leave null to autodetermine query.
+	 * @param string $title The title.
+	 * @param ?array $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                      Leave null to autodetermine query.
 	 * @return string The title with possible protection status.
 	 */
 	public static function add_protection_status( $title, $args = null ) {

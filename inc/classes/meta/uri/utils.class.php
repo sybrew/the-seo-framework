@@ -447,12 +447,12 @@ class Utils {
 	 * @since 4.2.0 Now properly removes pagination from search links.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param string    $url  The fully qualified URL to remove pagination from.
-	 * @param int|null  $page The page number to remove. If null, it will get number from query.
-	 * @param bool|null $use_base Whether to remove the pagination base.
-	 *                            If null, it will autodetermine.
-	 *                            Should be true on archives and the homepage (blog and static!).
-	 *                            False on singular post types.
+	 * @param string $url      The fully qualified URL to remove pagination from.
+	 * @param ?int   $page     The page number to remove. If null, it will get number from query.
+	 * @param ?bool  $use_base Whether to remove the pagination base.
+	 *                         If null, it will autodetermine.
+	 *                         Should be true on archives and the homepage (blog and static!).
+	 *                         False on singular post types.
 	 * @return string $url The fully qualified URL without pagination.
 	 */
 	public static function remove_pagination_from_url( $url, $page = null, $use_base = null ) {

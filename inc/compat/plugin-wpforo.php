@@ -89,9 +89,9 @@ function _wpforo_filter_canonical_url( $canonical_url ) {
  * @since 4.0.0 No longer overrules external queries.
  * @todo this may cause issues when the forum is on the homepage... Tell users to set the "additions".
  *
- * @param string     $title The filter title.
- * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                          Is null when the query is auto-determined.
+ * @param string $title The filter title.
+ * @param ?array $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+ *                      Is null when the query is auto-determined.
  * @return string $title The wpForo title.
  */
 function _wpforo_filter_pre_title( $title, $args ) {

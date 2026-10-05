@@ -56,8 +56,8 @@ class Description {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The real description output.
 	 */
 	public static function get_description( $args = null ) {
@@ -70,8 +70,8 @@ class Description {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The custom field description.
 	 */
 	public static function get_custom_description( $args = null ) {
@@ -87,9 +87,9 @@ class Description {
 		 * @since 2.9.0
 		 * @since 4.2.0 1. No longer gets supplied custom query arguments when in the loop.
 		 *              2. Now supports the `$args['pta']` index.
-		 * @param string     $desc The custom-field description.
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                         Is null when the query is auto-determined.
+		 * @param string $desc The custom-field description.
+		 * @param ?array $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                     Is null when the query is auto-determined.
 		 */
 		return Sanitize::metadata_content( \apply_filters(
 			'the_seo_framework_custom_field_description',
@@ -114,9 +114,9 @@ class Description {
 	 *              2. Removed the second `$escape` parameter.
 	 *              3. Moved the third parameter to the second.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @param string     $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
+	 * @param string $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
 	 * @return string The generated description output.
 	 */
 	public static function get_generated_description( $args = null, $type = 'search' ) {
@@ -143,10 +143,10 @@ class Description {
 
 		/**
 		 * @since 5.0.0
-		 * @param string     $excerpt The excerpt to use.
-		 * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                            Is null when the query is auto-determined.
-		 * @param string     $type    Type of description. Accepts 'search', 'opengraph', 'twitter'.
+		 * @param string $excerpt The excerpt to use.
+		 * @param ?array $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                        Is null when the query is auto-determined.
+		 * @param string $type    Type of description. Accepts 'search', 'opengraph', 'twitter'.
 		 */
 		$excerpt = (string) \apply_filters(
 			'the_seo_framework_description_excerpt',
@@ -169,10 +169,10 @@ class Description {
 		 * @since 3.1.0 No longer passes 3rd and 4th parameter.
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 * @since 5.0.0 Added third parameter `$type`.
-		 * @param string     $desc The generated description.
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                         Is null when the query is auto-determined.
-		 * @param string     $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
+		 * @param string $desc The generated description.
+		 * @param ?array $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                     Is null when the query is auto-determined.
+		 * @param string $type Type of description. Accepts 'search', 'opengraph', 'twitter'.
 		 */
 		$desc = (string) \apply_filters(
 			'the_seo_framework_generated_description',
@@ -267,8 +267,8 @@ class Description {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return bool
 	 */
 	public static function may_generate( $args = null ) {
@@ -280,9 +280,9 @@ class Description {
 		 * @since 3.0.0 Now passes $args as the second parameter.
 		 * @since 3.1.0 Now listens to option.
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
-		 * @param bool       $autodescription Enable or disable the automated descriptions.
-		 * @param array|null $args            The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                                    Is null when the query is auto-determined.
+		 * @param bool   $autodescription Enable or disable the automated descriptions.
+		 * @param ?array $args            The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                                Is null when the query is auto-determined.
 		 */
 		return (bool) \apply_filters(
 			'the_seo_framework_enable_auto_description',

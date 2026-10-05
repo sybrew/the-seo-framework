@@ -118,7 +118,7 @@ class Input {
 	 *     @type string|string[] $id          The option index or map of indexes therefor, used as field ID.
 	 *     @type string          $class       The checkbox class.
 	 *     @type string          $label       The checkbox label description, placed inline of the checkbox.
-	 *     @type null|mixed      $value       The option value. If not set, it'll try to retrieve the value based on $id.
+	 *     @type ?mixed          $value       The option value. If not set, it'll try to retrieve the value based on $id.
 	 *     @type string          $description The checkbox additional description, placed underneat.
 	 *     @type array           $data        The checkbox field data. Sub-items are expected to be escaped if they're not an array.
 	 *     @type bool            $escape      Whether to enable escaping of the $label and $description.

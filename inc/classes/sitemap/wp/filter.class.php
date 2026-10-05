@@ -92,8 +92,8 @@ final class Filter {
 	 *
 	 * @param \WP_Sitemaps_Provider $provider Instance of a \WP_Sitemaps_Provider.
 	 * @param string                $name     Name of the sitemap provider.
-	 * @return \WP_Sitemaps_Provider|null The original or augmented instance of a \WP_Sitemaps_Provider.
-	 *                                    null if the provider is disabled.
+	 * @return ?\WP_Sitemaps_Provider The original or augmented instance of a \WP_Sitemaps_Provider.
+	 *                                null if the provider is disabled.
 	 */
 	public static function filter_add_provider( $provider, $name ) {
 

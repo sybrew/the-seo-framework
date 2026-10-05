@@ -49,9 +49,9 @@ class Image {
 	 * @since 5.0.0
 	 * @since 5.1.3 The first argument is null by default now.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return string The first valid image URL found, if any.
 	 */
 	public static function get_first_image_url( $args = null, $context = 'social' ) {
@@ -63,9 +63,9 @@ class Image {
 	 * @since 5.0.0
 	 * @since 5.1.3 The first argument is null by default now.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return string The first valid image URL found, if any.
 	 */
 	public static function get_first_custom_image_url( $args = null, $context = 'social' ) {
@@ -76,9 +76,9 @@ class Image {
 	 * @since 5.0.0
 	 * @since 5.1.3 The first argument is null by default now.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return string The first valid image URL found, if any.
 	 */
 	public static function get_first_generated_image_url( $args = null, $context = 'social' ) {
@@ -94,10 +94,10 @@ class Image {
 	 * @since 5.0.0 1. Now always obtains cleaned images.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param bool       $single  Whether to fetch one image, or multiple.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param bool   $single  Whether to fetch one image, or multiple.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return array[] {
 	 *     An array of image details.
 	 *
@@ -124,10 +124,10 @@ class Image {
 	 *              2. Renamed from `get_custom_field_image_details`.
 	 *              3. Now accepts `$context`.
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                           Leave null to autodetermine query.
-	 * @param bool       $single  Whether to fetch one image, or multiple.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param bool   $single  Whether to fetch one image, or multiple.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return array[] {
 	 *     An array of image details.
 	 *
@@ -143,7 +143,7 @@ class Image {
 	public static function get_custom_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
 		 * @since 5.0.0
-		 * @param array      $details {
+		 * @param array  $details {
 		 *     The image details array, sequential.
 		 *
 		 *     @type string $url      The image URL.
@@ -154,9 +154,9 @@ class Image {
 		 *     @type string $caption  The image caption.
 		 *     @type int    $filesize The image filesize in bytes.
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-		 *                            Is null when the query is auto-determined.
-		 * @param bool       $single  Whether to fetch one image, or multiple.
+		 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+		 *                        Is null when the query is auto-determined.
+		 * @param bool   $single  Whether to fetch one image, or multiple.
 		 */
 		return \apply_filters(
 			'the_seo_framework_custom_image_details',
@@ -175,10 +175,10 @@ class Image {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param bool       $single  Whether to fetch one image, or multiple.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param bool   $single  Whether to fetch one image, or multiple.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @return array[] {
 	 *     An array of image details.
 	 *
@@ -194,7 +194,7 @@ class Image {
 	public static function get_generated_image_details( $args = null, $single = false, $context = 'social' ) {
 		/**
 		 * @since 5.0.0
-		 * @param array      $details {
+		 * @param array  $details {
 		 *     The image details array, sequential.
 		 *
 		 *     @type string $url      The image URL.
@@ -205,10 +205,10 @@ class Image {
 		 *     @type string $caption  The image caption.
 		 *     @type int    $filesize The image filesize in bytes.
 		 * }
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-		 *                            Is null when the query is auto-determined.
-		 * @param bool       $single  Whether to fetch one image, or multiple.
-		 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+		 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+		 *                        Is null when the query is auto-determined.
+		 * @param bool   $single  Whether to fetch one image, or multiple.
+		 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 		 */
 		return \apply_filters(
 			'the_seo_framework_generated_image_details',
@@ -227,9 +227,9 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @yield array[] {
 	 *     An array of image details.
 	 *
@@ -260,9 +260,9 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @yield array[] {
 	 *     An array of image details.
 	 *
@@ -291,9 +291,9 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @yield array[] {
 	 *     An array of image details.
 	 *
@@ -402,8 +402,8 @@ class Image {
 	 * @since 5.0.0
 	 * @since 5.1.0 Is now public.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
 	 * @yield array {
 	 *     The image details array.
 	 *
@@ -484,10 +484,10 @@ class Image {
 	 * @since 5.0.0 1. Now expects an ID before testing whether an attachment is an image.
 	 *              2. Now supports 'organization' context.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Use null to autodetermine query.
-	 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-	 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Use null to autodetermine query.
+	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+	 *                        May be (for example) 'breadcrumb' or 'article' for structured data.
 	 * @return array {
 	 *     The image generation parameters, associative.
 	 *
@@ -560,10 +560,10 @@ class Image {
 		 *     @type array   $cbs      The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 *     @type array   $fallback The callbacks to parse. Ideally be generators, so we can halt remotely.
 		 * ];
-		 * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                            Is null when the query is auto-determined.
-		 * @param string     $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
-		 *                            May be (for example) 'breadcrumb' or 'article' for structured data.
+		 * @param ?array $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                        Is null when the query is auto-determined.
+		 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
+		 *                        May be (for example) 'breadcrumb' or 'article' for structured data.
 		 */
 		return \apply_filters(
 			'the_seo_framework_image_generation_params',
@@ -585,7 +585,7 @@ class Image {
 	 * @since 5.0.0
 	 * @generator
 	 *
-	 * @param array|null $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 * @param ?array     $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                           Leave null to autodetermine query.
 	 * @param callable[] $cbs    The callbacks to parse. Ideally be generators, so we can halt early.
 	 * @param string     $size   The image size to use.

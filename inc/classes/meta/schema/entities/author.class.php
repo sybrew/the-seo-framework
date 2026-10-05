@@ -55,8 +55,8 @@ final class Author extends Reference {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return int The author ID. 0 on failure.
 	 */
 	private static function get_author_id_from_args( $args ) {
@@ -79,8 +79,8 @@ final class Author extends Reference {
 	/**
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The entity ID for $args.
 	 */
 	public static function get_id( $args = null ) {
@@ -98,8 +98,8 @@ final class Author extends Reference {
 	 * @since 5.0.0
 	 * @since 5.2.0 Now adds the author's Fediverse profile to `sameAs`.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return ?array $entity The Schema.org graph entity.
 	 */
 	public static function build( $args = null ) {

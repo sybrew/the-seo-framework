@@ -96,8 +96,8 @@ class Legacy_API {
 	 *              3. Removed the third parameter; use `get_open_graph_title()` or `get_twitter_title()` instead.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The meta title output.
 	 */
 	public static function get_title( $args = null ) {
@@ -116,8 +116,8 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The Open Graph title output.
 	 */
 	public static function get_open_graph_title( $args = null ) {
@@ -136,8 +136,8 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The Twitter title output.
 	 */
 	public static function get_twitter_title( $args = null ) {
@@ -154,8 +154,8 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The meta description output.
 	 */
 	public static function get_description( $args = null ) {
@@ -173,8 +173,8 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The Open Graph description output.
 	 */
 	public static function get_open_graph_description( $args = null ) {
@@ -193,8 +193,8 @@ class Legacy_API {
 	 *              2. Removed the second parameter, the output is always sanitized now.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The Twitter description output.
 	 */
 	public static function get_twitter_description( $args = null ) {
@@ -214,8 +214,8 @@ class Legacy_API {
 	 *                 You should've used `create_canonical_url()` instead.
 	 * @api
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The canonical URL output.
 	 */
 	public static function get_canonical_url( $args = null ) {
@@ -232,10 +232,10 @@ class Legacy_API {
 	 *              2. Removed the last `$clean` parameter. It always returns a cleaned image now.
 	 * @api
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param bool       $single  Whether to fetch one image, or multiple.
-	 * @param string     $context The filter context. Default 'social'.
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param bool   $single  Whether to fetch one image, or multiple.
+	 * @param string $context The filter context. Default 'social'.
 	 * @return array[] {
 	 *     The image details array, sequential.
 	 *

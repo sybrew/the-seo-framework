@@ -83,13 +83,12 @@ class Robots {
 	 * @since 5.0.0 1. Renamed from `get_robots_meta()`
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param array|null $get     The robots types to retrieve. Accepts an array of
-	 *                            'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'.
-	 *                            Leave null to retrieve all.
-	 * }
-	 * @param int <bit>  $options The options level. {
+	 * @param ?array    $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                           Leave null to autodetermine query.
+	 * @param ?array    $get     The robots types to retrieve. Accepts an array of values
+	 *                           'noindex', 'nofollow', 'noarchive', 'max_snippet', 'max_image_preview', 'max_video_preview'.
+	 *                           Leave null to retrieve all.
+	 * @param int <bit> $options The options level. {
 	 *    0 = 0b000: Ignore nothing. Collect no assertions. (Default front-end.)
 	 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
 	 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
@@ -145,7 +144,7 @@ class Robots {
 		 * @since 4.0.3 Changed `$meta` key `max_snippet_length` to `max_snippet`
 		 * @since 4.2.0 Now supports the `$args['pta']` index.
 		 *
-		 * @param array      $meta {
+		 * @param array     $meta    {
 		 *     The current robots meta.
 		 *
 		 *     @type ?string $noindex           If set, it should be 'noindex'.
@@ -158,9 +157,9 @@ class Robots {
 		 *     @type ?string $max_video_preview If set, it should be 'max-video-preview:<R>=-1>',
 		 *                                      where '<R>=-1>' is a number of or above -1.
 		 * }
-		 * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                         Is null when the query is auto-determined.
-		 * @param int <bit>  $options The ignore level. {
+		 * @param ?array    $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                           Is null when the query is auto-determined.
+		 * @param int <bit> $options The ignore level. {
 		 *    0 = 0b000: Ignore nothing. Collect nothing. (Default front-end.)
 		 *    1 = 0b001: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
 		 *    2 = 0b010: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)

@@ -40,8 +40,8 @@ final class Main {
 
 	/**
 	 * @since 4.2.0
-	 * @var array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                       Leave null to autodetermine query.
+	 * @var ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                   Leave null to autodetermine query.
 	 */
 	private $args;
 
@@ -101,9 +101,9 @@ final class Main {
 	 * @since 4.2.0
 	 * @access private
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param int        $options Modifies return values/assertions. See const ROBOTS_* at /bootstrap/define.php
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param int    $options Modifies return values/assertions. See const ROBOTS_* at /bootstrap/define.php
 	 * @return Main $this
 	 */
 	public function set( $args = null, $options = 0 ) {
@@ -120,7 +120,7 @@ final class Main {
 	 * @since 4.2.0
 	 * @access public
 	 *
-	 * @param null|array $get The robots types to retrieve. See class constant GETTERS for valid values.
+	 * @param ?array $get The robots types to retrieve. See class constant GETTERS for valid values.
 	 * @return array The robots-values results. Assert values may be true-esque.
 	 */
 	public function get( $get = null ) {

@@ -395,9 +395,9 @@ class Post {
 		/**
 		 * @since 5.0.0
 		 * @param ?\WP_Term $primary_term The primary term. Null if cannot be generated.
-		 * @param int       $post_id     The post ID.
-		 * @param string    $taxonomy    The taxonomy name.
-		 * @param bool      $is_headless Whether the meta are headless.
+		 * @param int       $post_id      The post ID.
+		 * @param string    $taxonomy     The taxonomy name.
+		 * @param bool      $is_headless  Whether the meta are headless.
 		 */
 		static::$pt_memo[ $post_id ][ $taxonomy ] = \apply_filters(
 			'the_seo_framework_primary_term',
@@ -432,9 +432,9 @@ class Post {
 	 * @since 3.0.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 *
-	 * @param int|null $post_id  The post ID.
-	 * @param string   $taxonomy The taxonomy name.
-	 * @param int      $value    The new value. If empty, it will delete the entry.
+	 * @param ?int   $post_id  The post ID.
+	 * @param string $taxonomy The taxonomy name.
+	 * @param int    $value    The new value. If empty, it will delete the entry.
 	 * @return bool True on success, false on failure.
 	 */
 	public static function update_primary_term_id( $post_id = null, $taxonomy = '', $value = 0 ) {

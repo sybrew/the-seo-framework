@@ -52,9 +52,9 @@ use The_SEO_Framework\Helper\{
  * @source bbp_title()
  * @NOTE Do NOT call `bbp_title()` or apply filter `bbptitle` here, it'll cause an infinite loop.
  *
- * @param string     $title The title.
- * @param array|null $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                          Is null when the query is auto-determined.
+ * @param string $title The title.
+ * @param ?array $args  The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+ *                      Is null when the query is auto-determined.
  * @return string The corrected bbPress title on bbPress pages.
  */
 function _bbpress_filter_title( $title, $args ) {
@@ -248,7 +248,7 @@ function _bbpress_filter_do_adjust_query( $adjust, $wp_query ) {
  * @hook the_seo_framework_robots_meta_array 10
  * @since 4.2.8
  *
- * @param array      $meta    {
+ * @param array  $meta {
  *     The parsed robots meta.
  *
  *     @type string $noindex           Ideally be empty or 'noindex'
@@ -258,8 +258,8 @@ function _bbpress_filter_do_adjust_query( $adjust, $wp_query ) {
  *     @type string $max_image_preview Ideally be empty or 'max-image-preview:<none|standard|large>'
  *     @type string $max_video_preview Ideally be empty or 'max-video-preview:<R>=-1>'
  * }
- * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                         Is null when the query is auto-determined.
+ * @param ?array $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+ *                     Is null when the query is auto-determined.
  * @return array
  */
 function _bbpress_filter_robots( $meta, $args ) {

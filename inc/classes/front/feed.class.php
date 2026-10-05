@@ -60,8 +60,8 @@ final class Feed {
 	 * @hook the_excerpt_rss 10
 	 * @since 5.0.0
 	 *
-	 * @param string      $content   The feed's content.
-	 * @param null|string $feed_type The feed type (not used in excerpted content)
+	 * @param string  $content   The feed's content.
+	 * @param ?string $feed_type The feed type (not used in excerpted content)
 	 * @return string The modified feed entry.
 	 */
 	public static function modify_the_content_feed( $content = '', $feed_type = null ) {

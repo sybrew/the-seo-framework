@@ -118,7 +118,7 @@ function is_trivia( $tok ) {
 /**
  * @param array[] $tokens
  * @param int     $i
- * @return array{0:int,1:array}|null
+ * @return ?array{0:int,1:array}
  */
 function prev_sig( $tokens, $i ) {
 

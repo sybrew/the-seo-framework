@@ -52,16 +52,16 @@ class Excerpt {
 	 * @since 5.1.0
 	 * @since 5.2.0 Now falls back to the post content when a singular excerpt is unusable after HTML extraction.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The post, term, pta, or user excerpt.
 	 */
 	public static function get_excerpt( $args = null ) {
 		/**
 		 * @since 5.1.0
-		 * @param string     $excerpt The obtained excerpt.
-		 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-		 *                            Leave null to autodetermine query.
+		 * @param string $excerpt The obtained excerpt.
+		 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+		 *                        Leave null to autodetermine query.
 		 * @return string The post, term, pta, or user excerpt.
 		 */
 		return \apply_filters(
@@ -80,8 +80,8 @@ class Excerpt {
 	 * @alias
 	 * @todo deprecate 5.2: use get_excerpt() instead.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string
 	 */
 	public static function get_post_excerpt( $args = null ) {

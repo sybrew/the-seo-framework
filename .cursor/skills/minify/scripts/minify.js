@@ -171,7 +171,7 @@ function startServer( cwd, port ) {
  * @param {string} label Display name for console output.
  * @param {string} cwd   Directory containing the server's run.js.
  * @param {number} port  Port the server listens on.
- * @return {Promise<import('child_process').ChildProcess|null>}
+ * @return {Promise<?import('child_process').ChildProcess>}
  */
 async function ensureServer( label, cwd, port ) {
 

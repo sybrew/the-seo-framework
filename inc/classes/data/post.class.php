@@ -104,9 +104,9 @@ class Post {
 
 		/**
 		 * @since 4.1.0
-		 * @param Boolean|null $detected Whether a builder should be detected.
-		 * @param int          $post_id The current Post ID.
-		 * @param array        $meta The current post meta.
+		 * @param ?Boolean $detected Whether a builder should be detected.
+		 * @param int      $post_id  The current Post ID.
+		 * @param array    $meta     The current post meta.
 		 */
 		$detected = \apply_filters( 'the_seo_framework_detect_non_html_page_builder', null, $post_id, $meta );
 
@@ -227,6 +227,7 @@ class Post {
 	 * @since 2.9.3 1. Removed object caching.
 	 *              2. It now uses WP_Query, instead of wpdb.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now returns null when no post exists.
 	 * @slow The queried result is not stored in WP Post's cache, which would allow
 	 *       direct access to all values of the post (if requested). This is because
 	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.

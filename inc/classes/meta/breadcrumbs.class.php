@@ -66,9 +66,9 @@ class Breadcrumbs {
 	 *              4. Generated archive crumb names now drop their archive title prefix.
 	 *              5. Front-end term archives now include ancestor terms again.
 	 *
-	 * @param array|null $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                            Leave null to autodetermine query.
-	 * @param array      $options Optional. {
+	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                        Leave null to autodetermine query.
+	 * @param array  $options Optional. {
 	 *     The options for breadcrumb generation
 	 *
 	 *     @type ?bool $use_meta_title Whether to consider meta titles before using page titles.
@@ -122,9 +122,9 @@ class Breadcrumbs {
 		 *     @type string $role The crumb role: `home`, `pta`, `archive-N`, `page-N`, `current`,
 		 *                        or `current-home` on the front page.
 		 * }
-		 * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                            Is null when the query is auto-determined.
-		 * @param array      $options The options used for breadcrumb generation.
+		 * @param ?array  $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                         Is null when the query is auto-determined.
+		 * @param array   $options The options used for breadcrumb generation.
 		 */
 		return (array) \apply_filters(
 			'the_seo_framework_breadcrumb_list',
@@ -140,8 +140,8 @@ class Breadcrumbs {
 	 * @since 5.1.4
 	 * @since 5.2.0 Now drops the archive title prefix from generated archive names.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The breadcrumb title.
 	 */
 	private static function get_breadcrumb_title( $args = null ) {
@@ -416,8 +416,8 @@ class Breadcrumbs {
 	 * @since 5.2.0 1. Added the role index to the return value.
 	 *              2. Front-end term archives now include ancestor terms again.
 	 *
-	 * @param int|null $term_id  The term ID. Leave null to autodetermine.
-	 * @param string   $taxonomy The taxonomy. Leave empty to autodetermine.
+	 * @param ?int   $term_id  The term ID. Leave null to autodetermine.
+	 * @param string $taxonomy The taxonomy. Leave empty to autodetermine.
 	 * @return array[] {
 	 *     The breadcrumb list items in order of appearance.
 	 *

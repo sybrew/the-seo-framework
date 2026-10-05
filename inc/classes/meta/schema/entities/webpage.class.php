@@ -67,8 +67,8 @@ final class WebPage extends Reference {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return string The ID.
 	 */
 	public static function get_id( $args = null ) {
@@ -79,8 +79,8 @@ final class WebPage extends Reference {
 	 * @since 5.0.0
 	 * @since 5.2.0 The front page `about` reference now follows `knowledge_type`.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return ?array $entity The Schema.org graph entity. Null on failure.
 	 */
 	public static function build( $args = null ) {

@@ -121,8 +121,8 @@ function _set_real_id_wc_shop( $id ) {
  * @hook the_seo_framework_is_singular_archive 10
  * @since 4.0.5
  *
- * @param bool     $is_singular_archive Whether the post ID is a singular archive.
- * @param int|null $id                  The supplied post ID. Null when in the loop.
+ * @param bool $is_singular_archive Whether the post ID is a singular archive.
+ * @param ?int $id                  The supplied post ID. Null when in the loop.
  * @return bool
  */
 function _set_shop_singular_archive( $is_singular_archive, $id ) {
@@ -195,7 +195,7 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  * @since 4.1.4
  * @since 4.2.8 Now uses `Query::is_singular()` instead of `is_singular()` (for debug support).
  *
- * @param array      $meta    {
+ * @param array     $meta    {
  *     The parsed robots meta.
  *
  *     @type string $noindex           Ideally be empty or 'noindex'
@@ -205,9 +205,9 @@ function _set_wc_is_product_admin( $is_product_admin ) {
  *     @type string $max_image_preview Ideally be empty or 'max-image-preview:<none|standard|large>'
  *     @type string $max_video_preview Ideally be empty or 'max-video-preview:<R>=-1>'
  * }
- * @param array|null $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                            Is null when the query is auto-determined.
- * @param int <bit>  $options The generator settings. {
+ * @param ?array    $args    The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+ *                           Is null when the query is auto-determined.
+ * @param int <bit> $options The generator settings. {
  *    0 = 0b00: Ignore nothing.
  *    1 = 0b01: Ignore protection. (\The_SEO_Framework\ROBOTS_IGNORE_PROTECTION)
  *    2 = 0b10: Ignore post/term setting. (\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS)
@@ -311,8 +311,8 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
  *     @type array   $cbs      The callbacks to parse. Ideally be generators, so we can halt remotely.
  *     @type array   $fallback The callbacks to parse. Ideally be generators, so we can halt remotely.
  * ];
- * @param array|null $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
- *                         Is null when the query is auto-determined.
+ * @param ?array $args The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+ *                     Is null when the query is auto-determined.
  * @return array $params
  */
 function _adjust_wc_image_generation_params( $params, $args ) {
@@ -353,9 +353,9 @@ function _adjust_wc_image_generation_params( $params, $args ) {
  * @since 4.2.0 Now supports the `$args['pta']` index.
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
- *                         Leave null to autodetermine query.
- * @param string     $size The size of the image to get.
+ * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+ *                     Leave null to autodetermine query.
+ * @param string $size The size of the image to get.
  * @yield array {
  *     The image details.
  *
@@ -401,9 +401,9 @@ function _get_product_gallery_image_details( $args = null, $size = 'full' ) {
  * @since 4.0.0
  * @generator
  *
- * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
- *                         Leave null to autodetermine query.
- * @param string     $size The size of the image to get.
+ * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+ *                     Leave null to autodetermine query.
+ * @param string $size The size of the image to get.
  * @yield array {
  *     The image details.
  *

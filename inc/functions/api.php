@@ -332,9 +332,9 @@ namespace The_SEO_Framework {
 	 * @see https://github.com/sybrew/the-seo-framework/issues/640#issuecomment-1703260744.
 	 *      We made an exception about passing by reference for this function.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to have queries be autodetermined.
-	 *                         Passed by reference.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to have queries be autodetermined.
+	 *                     Passed by reference.
 	 */
 	function normalize_generation_args( &$args ) {
 

@@ -56,8 +56,8 @@ class Schema {
 	 * @since 5.0.0
 	 * @see https://developers.google.com/search/docs/appearance/structured-data/search-gallery
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return array The Schema.org graph, if any.
 	 */
 	public static function get_generated_graph( $args = null ) {
@@ -90,7 +90,7 @@ class Schema {
 		/**
 		 * @since 5.0.0
 		 * @param callable[] $entity_builders A list of Schema.org entity builders.
-		 * @param array|null $args            The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+		 * @param ?array     $args            The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 		 *                                    Is null when being autodetermined.
 		 */
 		$entity_builders = \apply_filters(
@@ -112,9 +112,9 @@ class Schema {
 		 * Use `the_seo_framework_schema_graph_data` for direct alteration instead.
 		 *
 		 * @since 5.1.0
-		 * @param array[]    $graph A sequential list of graph entities.
-		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-		 *                          Is null when the query is autodetermined.
+		 * @param array[] $graph A sequential list of graph entities.
+		 * @param ?array  $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+		 *                       Is null when the query is autodetermined.
 		 */
 		$graph = \apply_filters(
 			'the_seo_framework_schema_queued_graph_data',
@@ -135,9 +135,9 @@ class Schema {
 		 * filters for breadcrumb and page titles. Use this only if those aren't available.
 		 *
 		 * @since 5.0.0
-		 * @param array[]    $graph A sequential list of graph entities.
-		 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-		 *                          Is null when the query is autodetermined.
+		 * @param array[] $graph A sequential list of graph entities.
+		 * @param ?array  $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+		 *                       Is null when the query is autodetermined.
 		 */
 		$graph = \apply_filters(
 			'the_seo_framework_schema_graph_data',

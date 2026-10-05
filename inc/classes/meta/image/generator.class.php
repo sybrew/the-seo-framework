@@ -52,9 +52,9 @@ final class Generator {
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @param string     $size The size of the image to get.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
+	 * @param string $size The size of the image to get.
 	 * @yield array {
 	 *     The image details.
 	 *
@@ -81,9 +81,9 @@ final class Generator {
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @param string     $size The size of the image to get.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
+	 * @param string $size The size of the image to get.
 	 * @yield array {
 	 *     The image details.
 	 *
@@ -119,8 +119,8 @@ final class Generator {
 	 * @TODO consider matching these images with wp-content/uploads items via database calls, which is heavy...
 	 *       Combine query, instead of using WP API? Only do that for the first image, instead?
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @yield array {
 	 *     The image details.
 	 *
@@ -213,9 +213,9 @@ final class Generator {
 	 * @since 5.2.0 Now yields a header image when `header_image_data` is stored as an array.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @param string     $size The size of the image to get.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
+	 * @param string $size The size of the image to get.
 	 * @yield array {
 	 *     The image details.
 	 *
@@ -263,9 +263,9 @@ final class Generator {
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @param string     $size The size of the image to get.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
+	 * @param string $size The size of the image to get.
 	 * @yield array {
 	 *     The image details.
 	 *
@@ -293,9 +293,9 @@ final class Generator {
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @generator
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @param string     $size The size of the image to get.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
+	 * @param string $size The size of the image to get.
 	 * @yield array {
 	 *     The image details.
 	 *

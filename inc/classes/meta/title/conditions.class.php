@@ -51,8 +51,8 @@ class Conditions {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return bool True when prefixes are allowed.
 	 */
 	public static function use_protection_status( $args = null ) {
@@ -84,8 +84,8 @@ class Conditions {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `use_title_pagination`.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
 	 * @return bool True when additions are allowed.
 	 */
 	public static function use_pagination( $args = null ) {
@@ -109,8 +109,8 @@ class Conditions {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `use_title_branding`.
 	 *
-	 * @param array|null  $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                           Leave null to autodetermine query.
+	 * @param ?array      $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                            Leave null to autodetermine query.
 	 * @param bool|string $social Whether the title is meant for social display.
 	 *                            Also accepts string 'og' and 'twitter' for future proofing.
 	 * @return bool True when additions are allowed.
@@ -164,10 +164,10 @@ class Conditions {
 		/**
 		 * @since 3.1.2
 		 * @since 4.1.0 Added the third $social parameter.
-		 * @param bool       $use    Whether to use branding.
-		 * @param array|null $args   The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
-		 *                           Is null when the query is auto-determined.
-		 * @param bool       $social Whether the title is meant for social display.
+		 * @param bool   $use    Whether to use branding.
+		 * @param ?array $args   The query arguments. Contains 'id', 'tax', 'pta', and 'uid'.
+		 *                       Is null when the query is auto-determined.
+		 * @param bool   $social Whether the title is meant for social display.
 		 */
 		return \apply_filters(
 			'the_seo_framework_use_title_branding',

@@ -336,8 +336,8 @@ class Query {
 				/**
 				 * @since 4.0.5
 				 * @since 4.0.7 The $id can now be null, when no post is given.
-				 * @param bool     $is_singular_archive Whether the post ID is a singular archive.
-				 * @param int|null $id                  The supplied post ID. Null when in the loop.
+				 * @param bool $is_singular_archive Whether the post ID is a singular archive.
+				 * @param ?int $id                  The supplied post ID. Null when in the loop.
 				 */
 				(bool) \apply_filters(
 					'the_seo_framework_is_singular_archive',

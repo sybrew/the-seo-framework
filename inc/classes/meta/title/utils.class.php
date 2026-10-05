@@ -91,9 +91,9 @@ class Utils {
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 * @internal Only to be used within Meta\Title::get_bare_generated_title()
 	 *
-	 * @param bool       $reset Whether to reset the removed filters.
-	 * @param array|null $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                          Leave null to autodetermine query.
+	 * @param bool   $reset Whether to reset the removed filters.
+	 * @param ?array $args  The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                      Leave null to autodetermine query.
 	 */
 	public static function remove_default_title_filters( $reset = false, $args = null ) {
 

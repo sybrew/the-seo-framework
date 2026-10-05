@@ -95,8 +95,8 @@ class Cache {
 	 * @since 3.2.2 No longer spits out errors on production websites.
 	 * @since 5.0.0 1. No longer accepts the $method parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
-	 * @global \WP_Query $wp_query
-	 * @global \WP_Screen|null $current_screen
+	 * @global \WP_Query   $wp_query
+	 * @global ?\WP_Screen $current_screen
 	 *
 	 * @return bool True when wp_query or current_screen has been initialized.
 	 */
