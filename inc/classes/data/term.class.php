@@ -41,18 +41,19 @@ class Term {
 	 * Memoizes the return value.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns null when no term exists.
 	 * @slow The queried result is not stored in WP Term's cache, which would allow
 	 *       direct access to all values of the term (if requested). This is because
 	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
 	 *
 	 * @param string $taxonomy The taxonomy to get the latest term from.
-	 * @return int Latest Term ID.
+	 * @return ?int The latest Term ID. Null when no term exists.
 	 */
 	public static function get_latest_term_id( $taxonomy = 'category' ) {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo( null, $taxonomy ) )
-			return $memo;
+			return $memo ?: null;
 
 		$cats = \get_terms( [
 			'taxonomy'   => $taxonomy,
@@ -63,7 +64,10 @@ class Term {
 			'number'     => 1,
 		] );
 
-		return memo( reset( $cats ), $taxonomy );
+		return memo(
+			( \is_array( $cats ) ? array_first( $cats ) : null ) ?? false,
+			$taxonomy
+		) ?: null;
 	}
 
 	/**

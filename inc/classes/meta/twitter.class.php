@@ -133,10 +133,11 @@ class Twitter {
 	 *
 	 * @NOTE Forward compatibility with $args: https://github.com/sybrew/the-seo-framework/issues/525
 	 * @since 5.0.0
+	 * @since 5.2.0 Now uses array_first(). An empty supported list returns null.
 	 *
-	 * @param array|null $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 *                         Leave null to autodetermine query.
-	 * @return string The default Twitter Card type for the current request.
+	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
+	 *                     Leave null to autodetermine query.
+	 * @return ?string The default Twitter Card type, or null when no card is supported.
 	 */
 	public static function get_generated_card_type( $args = null ) { // phpcs:ignore Generic.CodeAnalysis, VariableAnalysis.CodeAnalysis -- see doc note
 
@@ -144,7 +145,7 @@ class Twitter {
 
 		// Forward compatibility, this is practically a no-op now.
 		if ( ! $card )
-			$card = reset( self::get_supported_cards() );
+			$card = array_first( self::get_supported_cards() );
 
 		return $card;
 	}

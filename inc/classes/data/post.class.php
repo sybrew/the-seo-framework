@@ -231,13 +231,13 @@ class Post {
 	 *       direct access to all values of the post (if requested). This is because
 	 *       we're using `'fields' => 'ids'` instead of `'fields' => 'all'`.
 	 *
-	 * @return int The latest Post ID.
+	 * @return ?int The latest Post ID. Null when no post exists.
 	 */
 	public static function get_latest_post_id() {
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( null !== $memo = memo() )
-			return $memo;
+			return $memo ?: null;
 
 		$query = new \WP_Query( [
 			'posts_per_page'   => 1,
@@ -251,7 +251,7 @@ class Post {
 			'no_found_rows'    => true,
 		] );
 
-		return memo( reset( $query->posts ) );
+		return memo( array_first( $query->posts ) ?? false ) ?: null;
 	}
 
 	/**
