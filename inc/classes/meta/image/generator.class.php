@@ -210,7 +210,8 @@ final class Generator {
 	 * @since 4.0.0
 	 * @since 5.0.0 No longer yields if there's obviously no URL.
 	 * @since 5.0.1 No longer uses `get_custom_header()`, which tried to generate images.
-	 * @since 5.2.0 Now yields a header image when `header_image_data` is stored as an array.
+	 * @since 5.2.0 1. Now yields a header image when `header_image_data` is stored as an array.
+	 *              2. Now yields nothing when the header is removed or random.
 	 * @generator
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
@@ -224,6 +225,17 @@ final class Generator {
 	 * }
 	 */
 	public static function generate_theme_header_image_details( $args = null, $size = 'full' ) {
+
+		$header_image = \get_theme_mod( 'header_image' );
+
+		// Core strips header_image_data for these, so the theme data must not be accepted.
+		if (
+			   'remove-header' === $header_image
+			|| 'random-default-image' === $header_image
+			|| 'random-uploaded-image' === $header_image
+		) {
+			return;
+		}
 
 		$image = \get_theme_mod(
 			'header_image_data',

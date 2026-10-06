@@ -329,6 +329,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
+	* Resolved an issue where allowed HTML in a term description, such as emphasis and links, was printed as text in the meta description.
+	* Resolved an issue where removing the header image, or choosing a random header, still used the theme's default image as a social image.
+	* Resolved an issue where a private bbPress forum still showed that the page SEO meta input overrides indexing.
 	* Resolved an issue where a crafted SEO Settings save could exclude the default post types and taxonomies.
 	* Resolved an issue where Bulk Edit cleared the primary term on every edited post if selected terms mismatched, even when that term was left unchanged.
 	* Resolved an issue where saving in the Block Editor regenerated every SEO preview field, including fields that were not on screen.

@@ -319,6 +319,8 @@ function _bbpress_filter_robots( $meta, $args ) {
  *
  * @hook the_seo_framework_seo_bar 10
  * @since 4.2.8
+ * @since 5.2.0 1. Now removes the indexing override assessment.
+ *              2. Now compares the forum post type with `bbp_get_forum_post_type()`.
  *
  * @param string $interpreter The interpreter class name.
  * @param object $builder     The builder's class instance.
@@ -343,8 +345,10 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 	// Don't do anything if there's a blocking redirect.
 	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
 
+	$forum_post_type = \bbp_get_forum_post_type();
+
 	switch ( $interpreter::$query['post_type'] ) {
-		case \bbp_get_forum_post_type():
+		case $forum_post_type:
 			$forum_id = $interpreter::$query['id'];
 			break;
 		case \bbp_get_topic_post_type():
@@ -359,12 +363,12 @@ function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 		? $interpreter::STATE_OKAY
 		: $interpreter::STATE_UNKNOWN;
 
-	if ( 'forum' === $interpreter::$query['post_type'] ) {
+	if ( $forum_post_type === $interpreter::$query['post_type'] ) {
 		$index_item['assess']['notpublic'] = \__( 'This is not a public forum.', 'autodescription' );
 	} else {
 		$index_item['assess']['notpublic'] = \__( 'This page is not part of a public forum.', 'autodescription' );
 	}
 
 	// No amount of overriding will fix this -- the forum/topic/reply is publicly unreachable.
-	unset( $index_item['override'] );
+	unset( $index_item['assess']['override'] );
 }

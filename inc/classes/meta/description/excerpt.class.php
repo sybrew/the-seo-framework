@@ -168,6 +168,7 @@ class Excerpt {
 	 * Returns a description excerpt for archives.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now strips HTML from term descriptions.
 	 *
 	 * @param null|\WP_Term|\WP_Post_Type $object The term or post type object.
 	 * @return string
@@ -204,9 +205,8 @@ class Excerpt {
 
 		if ( $in_the_loop ) {
 			if ( Query::is_category() || Query::is_tag() || Query::is_tax() ) {
-				// WordPress DOES NOT allow HTML in term descriptions, not even if you're a super-administrator.
-				// See https://wpscan.com/vulnerability/8bc4cf95-79f7-4d92-b320-a841ab7e6a6f/. We won't parse HTML tags unless WordPress adds native support.
-				$excerpt = $object->description ?? '';
+				// Core keeps the comment allow-list on term descriptions. Strip those tags so they are not printed as text.
+				$excerpt = HTML::extract_content( $object->description ?? '' );
 			} elseif ( Query::is_author() ) {
 				$excerpt = HTML::extract_content( \get_the_author_meta(
 					'description',
@@ -248,6 +248,9 @@ class Excerpt {
 			}
 		} else {
 			$excerpt = $object->description ?? '';
+
+			if ( \strlen( $excerpt ) && $object instanceof \WP_Term )
+				$excerpt = HTML::extract_content( $excerpt );
 		}
 
 		return $excerpt;
