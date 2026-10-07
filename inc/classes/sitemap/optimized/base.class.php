@@ -156,6 +156,7 @@ class Base extends Main {
 	 *              2. Improved performance by a factor of two+.
 	 *              3. Renamed method from "generate_sitemap" to abstract extension "build_sitemap".
 	 *              4. Moved to \The_SEO_Framework\Builders\Sitemap\Base
+	 * @since 5.2.0 Now prints the timestamp comment in GMT.
 	 * @override
 	 * @slow The queried results are not stored in WP Post's cache, which would allow direct access
 	 *       to all values of the post (if requested). This is because we're using
@@ -193,7 +194,7 @@ class Base extends Main {
 						? \esc_html__( 'Sitemap is prerendered on %s', 'autodescription' )
 						/* translators: %s = timestamp */
 						: \esc_html__( 'Sitemap is generated on %s', 'autodescription' ),
-					\current_time( 'Y-m-d H:i:s \G\M\T' ),
+					\current_time( 'Y-m-d H:i:s \G\M\T', true ),
 				),
 			);
 

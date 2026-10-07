@@ -34,6 +34,8 @@ use The_SEO_Framework\{
 /**
  * Augments the WordPress Core 'posts' sitemap.
  *
+ * TSF disabled Post Types do not affect Core features.
+ *
  * @since 4.1.2
  * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\CoreSitemaps`.
  *

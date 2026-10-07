@@ -30,6 +30,8 @@ use The_SEO_Framework\Sitemap;
 /**
  * Augments the WordPress Core 'taxonomies' sitemap.
  *
+ * TSF disabled Post Types and Taxonomies do not affect Core features.
+ *
  * @since 4.1.2
  * @since 5.0.0 Moved from `\The_SEO_Framework\Builders\CoreSitemaps`.
  *

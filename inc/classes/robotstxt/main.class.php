@@ -58,7 +58,8 @@ class Main {
 	 * @since 5.0.0
 	 * @since 5.1.0 1. Refactored to output the directives via a priority system.
 	 *              2. Now supports blocking AI language model trainers and SEO analysis tools.
-	 * @since 5.2.0 Fixed WordPress Core sitemap URL extraction for robots.txt Sitemap Hinting.
+	 * @since 5.2.0 1. Fixed WordPress Core sitemap URL extraction for robots.txt Sitemap Hinting.
+	 *              2. Now lists the optimized sitemap when may_output_optimized_sitemap() is true.
 	 * @link <https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt>
 	 *
 	 * @return string Robots.txt output.
@@ -100,7 +101,7 @@ class Main {
 
 		// Add extra whitespace and sitemap full URL
 		if ( Data\Plugin::get_option( 'sitemaps_robots' ) ) {
-			if ( Data\Plugin::get_option( 'sitemaps_output' ) ) {
+			if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 				foreach ( Sitemap\Registry::get_sitemap_endpoint_list() as $id => $data )
 					if ( ! empty( $data['robots'] ) )
 						$sitemaps[] = \esc_url( Sitemap\Registry::get_expected_sitemap_endpoint_url( $id ) );
