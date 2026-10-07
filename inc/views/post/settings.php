@@ -88,9 +88,13 @@ switch ( $instance ) :
 		 */
 		$tabs = (array) \apply_filters( 'the_seo_framework_inpost_settings_tabs', $default_tabs, null );
 
-		echo '<div class="tsf-flex tsf-flex-inside-wrap">';
-		Admin\Settings\Post::flex_nav_tab_wrapper( 'inpost', $tabs );
-		echo '</div>';
+		?>
+		<div class="tsf-flex tsf-flex-inside-wrap">
+			<?php
+			Admin\Settings\Post::flex_nav_tab_wrapper( 'inpost', $tabs );
+			?>
+		</div>
+		<?php
 		break;
 
 	case 'general':
@@ -639,14 +643,24 @@ switch ( $instance ) :
 					</div>
 					<?php
 					if ( $is_static_front_page ) {
-						printf(
-							'<div class=tsf-flex-setting-label-sub-item><span class="description attention">%s</span></div>',
-							\esc_html__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' ),
-						);
-						printf(
-							'<div class=tsf-flex-setting-label-sub-item><span class=description>%s</span></div>',
-							\esc_html__( 'Note: A non-default selection here will overwrite the global homepage SEO settings.', 'autodescription' ),
-						);
+						?>
+						<div class=tsf-flex-setting-label-sub-item>
+							<?php
+							HTML::attention_description(
+								\__( 'Warning: No public site should ever apply "noindex" or "nofollow" to the homepage.', 'autodescription' ),
+								false,
+							);
+							?>
+						</div>
+						<div class=tsf-flex-setting-label-sub-item>
+							<?php
+							HTML::description(
+								\__( 'Note: A non-default selection here will overwrite the global homepage SEO settings.', 'autodescription' ),
+								false,
+							);
+							?>
+						</div>
+						<?php
 					}
 					?>
 				</div>

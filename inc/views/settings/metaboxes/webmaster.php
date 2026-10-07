@@ -43,62 +43,44 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 			'google'    => [
 				'setting'     => 'google_verification',
 				'label'       => \__( 'Google Search Console Verification Code', 'autodescription' ),
-				'info'        => HTML::make_info(
-					\__( 'Get the Google verification code.', 'autodescription' ),
-					'https://search.google.com/search-console/ownership?resource_id=' . rawurlencode( $site_url ),
-					false,
-				),
+				'description' => \__( 'Get the Google verification code.', 'autodescription' ),
+				'link'        => 'https://search.google.com/search-console/ownership?resource_id=' . rawurlencode( $site_url ),
 				'placeholder' => 'ab1cDe2Fg3HI4Jklm5nOpqRSt67UVW78XYzAbcdEfgH',
 			],
 			'bing'      => [
 				'setting'     => 'bing_verification',
 				'label'       => \__( 'Bing Webmaster Verification Code', 'autodescription' ),
-				'info'        => HTML::make_info(
-					\__( 'Get the Bing verification code.', 'autodescription' ),
-					'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url ),
-					false,
-				),
+				'description' => \__( 'Get the Bing verification code.', 'autodescription' ),
+				'link'        => 'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url ),
 				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
 			],
 			'yandex'    => [
 				'setting'     => 'yandex_verification',
 				'label'       => \__( 'Yandex Webmaster Verification Code', 'autodescription' ),
-				'info'        => HTML::make_info(
-					\__( 'Get the Yandex verification code.', 'autodescription' ),
-					'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url ),
-					false,
-				),
+				'description' => \__( 'Get the Yandex verification code.', 'autodescription' ),
+				'link'        => 'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url ),
 				'placeholder' => '12345abc678901d2',
 			],
 			'baidu'     => [
 				'setting'     => 'baidu_verification',
 				/* translators: literal translation from '百度搜索资源平台'-Code */
 				'label'       => \__( 'Baidu Search Resource Platform Code', 'autodescription' ),
-				'info'        => HTML::make_info(
-					\__( 'Get the Baidu verification code.', 'autodescription' ),
-					'https://ziyuan.baidu.com/login/index?u=/site/siteadd',
-					false,
-				),
+				'description' => \__( 'Get the Baidu verification code.', 'autodescription' ),
+				'link'        => 'https://ziyuan.baidu.com/login/index?u=/site/siteadd',
 				'placeholder' => 'a12bcDEFGa',
 			],
 			'pinterest' => [
 				'setting'     => 'pint_verification',
 				'label'       => \__( 'Pinterest Analytics Verification Code', 'autodescription' ),
-				'info'        => HTML::make_info(
-					\__( 'Get the Pinterest verification code.', 'autodescription' ),
-					'https://analytics.pinterest.com/',
-					false,
-				),
+				'description' => \__( 'Get the Pinterest verification code.', 'autodescription' ),
+				'link'        => 'https://analytics.pinterest.com/',
 				'placeholder' => '123456a7b8901de2fa34bcdef5a67b90',
 			],
 			'facebook'  => [
 				'setting'     => 'facebook_verification',
 				'label'       => \__( 'Facebook Domain Verification Code', 'autodescription' ),
-				'info'        => HTML::make_info(
-					\__( 'Get the Facebook verification code.', 'autodescription' ),
-					'https://business.facebook.com/settings/owned-domains',
-					false,
-				),
+				'description' => \__( 'Get the Facebook verification code.', 'autodescription' ),
+				'link'        => 'https://business.facebook.com/settings/owned-domains',
 				'placeholder' => 'abc1d234efghij56k7l8mn9op1qrst',
 			],
 		];
@@ -111,18 +93,21 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 		<hr>
 		<?php
 		foreach ( $settings as $setting ) {
-			printf(
-				'<p><label for=%s><strong>%s</strong> %s</label></p>',
-				\esc_attr( Input::get_field_id( $setting['setting'] ) ),
-				\esc_html( $setting['label'] ),
-				$setting['info'], // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- should be escaped in list.
-			);
-			printf(
-				'<p><input type=text name=%s class="large-text ltr" id=%s placeholder="%s" value="%s"></p>',
-				\esc_attr( Input::get_field_name( $setting['setting'] ) ),
-				\esc_attr( Input::get_field_id( $setting['setting'] ) ),
-				\esc_attr( $setting['placeholder'] ),
-				\esc_attr( Data\Plugin::get_option( $setting['setting'] ) ),
-			);
+			?>
+			<p>
+				<label for="<?php Input::field_id( $setting['setting'] ); ?>">
+					<strong><?= \esc_html( $setting['label'] ) ?></strong>
+					<?php
+					HTML::make_info(
+						$setting['description'],
+						$setting['link'],
+					);
+					?>
+				</label>
+			</p>
+			<p>
+				<input type=text name="<?php Input::field_name( $setting['setting'] ); ?>" class="large-text ltr" id="<?php Input::field_id( $setting['setting'] ); ?>" placeholder="<?= \esc_attr( $setting['placeholder'] ) ?>" value="<?= \esc_attr( Data\Plugin::get_option( $setting['setting'] ) ) ?>">
+			</p>
+			<?php
 		}
 endswitch;
