@@ -177,6 +177,7 @@ final class ListEdit extends Admin\Lists\Table {
 	 * @hook manage_pages_custom_column 1
 	 * @since 4.0.0
 	 * @since 5.0.0 Renamed from `_output_column_contents_for_post`.
+	 * @since 5.2.0 Now ignores password protection when building the Indexing default.
 	 * @abstract
 	 *
 	 * @param string $column_name The name of the column to display.
@@ -196,7 +197,7 @@ final class ListEdit extends Admin\Lists\Table {
 		$r_defaults = Meta\Robots::get_generated_meta(
 			$generator_args,
 			[ 'noindex', 'nofollow', 'noarchive' ],
-			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS,
+			\The_SEO_Framework\ROBOTS_IGNORE_SETTINGS | \The_SEO_Framework\ROBOTS_IGNORE_PROTECTION,
 		);
 
 		$meta        = Data\Plugin\Post::get_meta( $post_id );

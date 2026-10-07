@@ -277,6 +277,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Breadcrumbs no longer prefix archive names, such as "Category:", "Archives:", or "Author:". Custom meta titles appear as written. This affects structured data and the shortcode alike.
 		* Breadcrumb shortcode crumbs now wrap as a whole instead of breaking mid-word.
 * **Changed:**
+	* **Homepage descriptions:**
+		* The generated description "Latest posts:" plus the site title is no longer used. That text treated the homepage and the posts page as a blog, and not every site uses those pages that way. A homepage that shows your latest posts has no generated description until you write one. The posts page now uses its own excerpt or content, like any other page.
 	* **Open Graph locales:** We couldn't find any documentation on the languages Facebook supports for Open Graph, so we resorted to scraping their network, testing all 46500 possible locale combinations, and adjusted support accordingly:
 		* **These WordPress locales are no longer supported by Facebook:** Cebuano, Esperanto, Spanish (Chile, Colombia, Mexico, Venezuela), Igbo, Limburgish, Lingala, Luganda, Māori, Romansh, Sanskrit, Silesian, Syriac, Tamazight, Wolof, Xhosa, Yoruba, Zulu.
 			* A fallback locale will be calculated for these languages based on their language code only. For example, `es_MX` (Spanish - Mexico) will fall back to `es_ES` (Spanish - Spain).
@@ -329,6 +331,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
+	* Resolved an issue where saving the static front page in the Block Editor replaced the Open Graph and Twitter description placeholders with the homepage meta description.
+	* Resolved an issue where clearing a password in Quick Edit kept Indexing on Default (noindex) and hid the canonical placeholder.
 	* Resolved an issue where allowed HTML in a term description, such as emphasis and links, was printed as text in the meta description.
 	* Resolved an issue where removing the header image, or choosing a random header, still used the theme's default image as a social image.
 	* Resolved an issue where a private bbPress forum still showed that the page SEO meta input overrides indexing.
@@ -437,6 +441,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs`.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
+		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_args()` (`tsf()->description()->excerpt()->get_excerpt_from_args()`) now returns nothing for a latest-posts homepage, and the posts page uses the singular excerpt. `get_excerpt_from_query()` does the same.
+		* Calling `tsf()->description()->excerpt()->get_blog_page_excerpt()` is deprecated and returns an empty string. There is no replacement.
 		* Method `The_SEO_Framework\Meta\Title::get_bare_generated_title()` (`tsf()->title()->get_bare_generated_title()`) can now return `0` instead of an untitled fallback.
 		* Method `The_SEO_Framework\Meta\Title::get_search_query_title()` (`tsf()->title()->get_search_query_title()`) now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
 		* Methods `The_SEO_Framework\Meta\Title::get_archive_title_from_query()` (`tsf()->title()->get_archive_title_from_query()`) and `The_SEO_Framework\Meta\Title::get_archive_title_from_object()` (`tsf()->title()->get_archive_title_from_object()`) now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.

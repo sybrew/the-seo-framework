@@ -62,10 +62,10 @@ final class Debug {
 	 * @since 4.1.1 No longer registers a custom error handler.
 	 * @access private
 	 *
-	 * @param string $function     The function that was called.
-	 * @param string $version      The version of WordPress that deprecated the function.
-	 * @param string $replacement  Optional. The function that should have been called. Default null.
-	 *                             Expected to be escaped.
+	 * @param string $function    The function that was called.
+	 * @param string $version     The version of WordPress that deprecated the function.
+	 * @param string $replacement Optional. The function that should have been called. Default null.
+	 *                            Expected to be escaped.
 	 */
 	public static function _deprecated_function( $function, $version, $replacement = null ) { // phpcs:ignore -- Wrong asserts, copied method name.
 

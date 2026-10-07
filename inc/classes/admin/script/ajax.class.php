@@ -272,6 +272,7 @@ final class AJAX {
 	 * @since 5.1.0 Now relays the 'edit_post' capability check to the reference handler.
 	 * @since 5.2.0 1. Now keeps a homepage description of `0` instead of falling back to the generated description.
 	 *              2. Now ignores a posted `"false"` flag.
+	 *              3. Now uses the homepage Open Graph and Twitter descriptions on the static front page.
 	 * @access private
 	 */
 	public static function get_post_data() {
@@ -330,7 +331,8 @@ final class AJAX {
 					case 'ogdescription':
 						if ( Query::is_static_front_page( $post_id ) ) {
 							$data[ $g ] =
-								   coalesce_strlen( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) ) )
+								   coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
+								?? coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
 								?? Meta\Open_Graph::get_generated_description( $generator_args );
 						} else {
 							$data[ $g ] = Meta\Open_Graph::get_generated_description( $generator_args );
@@ -339,7 +341,9 @@ final class AJAX {
 					case 'twdescription':
 						if ( Query::is_static_front_page( $post_id ) ) {
 							$data[ $g ] =
-								   coalesce_strlen( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_description' ) ) )
+								   coalesce_strlen( Data\Plugin::get_option( 'homepage_twitter_description' ) )
+								?? coalesce_strlen( Data\Plugin::get_option( 'homepage_og_description' ) )
+								?? coalesce_strlen( Data\Plugin::get_option( 'homepage_description' ) )
 								?? Meta\Twitter::get_generated_description( $generator_args );
 						} else {
 							$data[ $g ] = Meta\Twitter::get_generated_description( $generator_args );

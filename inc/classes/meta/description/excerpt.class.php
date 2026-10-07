@@ -92,7 +92,8 @@ class Excerpt {
 	 * Returns a description excerpt for the current query.
 	 *
 	 * @since 5.0.0
-	 * @since 5.2.0 Now keeps an excerpt of `0` instead of replacing it with an empty string.
+	 * @since 5.2.0 1. Now keeps an excerpt of `0` instead of replacing it with an empty string.
+	 *              2. Now uses the singular excerpt for the posts page.
 	 *
 	 * @return string
 	 */
@@ -102,9 +103,7 @@ class Excerpt {
 		if ( null !== $memo = memo() )
 			return $memo;
 
-		if ( Query::is_blog_as_page() ) {
-			$excerpt = self::get_blog_page_excerpt();
-		} elseif ( Query::is_singular() ) {
+		if ( Query::is_singular() ) {
 			$excerpt = self::get_singular_excerpt();
 		} elseif ( Query::is_archive() ) {
 			$excerpt = self::get_archive_excerpt();
@@ -117,6 +116,8 @@ class Excerpt {
 	 * Returns a description excerpt for the current query.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 1. Now returns nothing for a latest-posts homepage.
+	 *              2. Now uses the singular excerpt for the posts page.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string
@@ -127,41 +128,20 @@ class Excerpt {
 
 		switch ( get_query_type_from_args( $args ) ) {
 			case 'single':
-				if ( Query::is_blog_as_page( $args['id'] ) ) {
-					$excerpt = self::get_blog_page_excerpt();
-				} else {
-					$excerpt = self::get_singular_excerpt( $args['id'] );
-				}
+				$excerpt = self::get_singular_excerpt( $args['id'] );
 				break;
 			case 'term':
 				$excerpt = self::get_archive_excerpt( \get_term( $args['id'], $args['tax'] ) );
-				break;
-			case 'homeblog':
-				$excerpt = self::get_blog_page_excerpt();
 				break;
 			case 'pta':
 				$excerpt = self::get_archive_excerpt( \get_post_type_object( $args['pta'] ) );
 				break;
 			case 'user':
 				$excerpt = self::get_archive_excerpt( Data\User::get_userdata( $args['uid'] ) );
+			// Skip homeblog: a latest-posts homepage has no generated excerpt.
 		}
 
 		return $excerpt ?? '';
-	}
-
-	/**
-	 * Returns a description excerpt for the blog page.
-	 *
-	 * @since 5.0.0
-	 *
-	 * @return string
-	 */
-	private static function get_blog_page_excerpt() {
-		return \sprintf(
-			/* translators: %s = Blog page title. Front-end output. */
-			\__( 'Latest posts: %s', 'autodescription' ),
-			Data\Blog::get_public_blog_name(),
-		);
 	}
 
 	/**

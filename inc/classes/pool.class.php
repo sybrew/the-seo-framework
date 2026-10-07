@@ -434,7 +434,12 @@ class Pool extends Legacy_API {
 					use Static_Deprecator;
 
 					private $colloquial_handle     = 'tsf()->description()->excerpt()';
-					private $deprecated_methods    = [];
+					private $deprecated_methods    = [
+						'get_blog_page_excerpt' => [
+							'since'    => '5.2.0',
+							'fallback' => '__return_empty_string',
+						],
+					];
 					private $deprecated_properties = [];
 				};
 			}
