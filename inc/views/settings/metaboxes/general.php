@@ -288,7 +288,7 @@ switch ( $instance ) :
 				Input::make_checkbox( [
 					'id'     => 'alter_archive_query',
 					'label'  => \esc_html__( 'Enable archive query alteration?', 'autodescription' )
-						. ' ' . HTML::make_info( \__( 'This allows you to exclude pages from on-site archive listings.', 'autodescription' ), '', false ),
+						. ' ' . HTML::make_info( \__( 'This allows you to exclude pages from on-site archive listings and feeds.', 'autodescription' ), '', false ),
 					'escape' => false,
 				] ),
 				$archive_query_select_field,

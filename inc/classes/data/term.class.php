@@ -66,7 +66,7 @@ class Term {
 
 		return memo(
 			( \is_array( $cats ) ? array_first( $cats ) : null ) ?? false,
-			$taxonomy
+			$taxonomy,
 		) ?: null;
 	}
 

@@ -219,13 +219,13 @@ switch ( $instance ) :
 	case 'additions':
 		// Fetches escaped title parts.
 		$_example_title = \esc_html(
-			Meta\Title::get_bare_custom_title( $generator_args )
+			   Meta\Title::get_bare_custom_title( $generator_args )
 			?: Meta\Title::get_bare_generated_title( $generator_args ),
 		);
 		// On JS: The 'Untitled' title will disappear, this is intentional. On no-JS one will see 'Untitled'.
 		// TODO: Deprecate no-JS support? WordPress doesn't function without JS since 5.0 anyway...
 		$_example_blogname  = \esc_html(
-			Meta\Title::get_addition_for_front_page()
+			   Meta\Title::get_addition_for_front_page()
 			?: Meta\Title::get_untitled_title(),
 		);
 		$_example_separator = \esc_html( Meta\Title::get_separator() );

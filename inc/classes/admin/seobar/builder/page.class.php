@@ -115,6 +115,7 @@ final class Page extends Main {
 				'locale'       => \get_locale(),
 				'isprotected'  => Data\Post::is_protected( $post ),
 				'isdraft'      => Data\Post::is_draft( $post ),
+				'istrashed'    => Data\Post::is_trash( $post ),
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
@@ -410,8 +411,6 @@ final class Page extends Main {
 					'builder'   => \__( 'A page builder is used that renders content dynamically, so no description can be generated for performance and privacy reasons. Consider providing a custom description.', 'autodescription' ),
 					'protected' => \__( 'The page is protected, so no description is generated.', 'autodescription' ),
 					'excerpt'   => \__( "It's built from the page excerpt field.", 'autodescription' ),
-					/* translators: %s = list of repeated words */
-					'dupes'     => \__( 'Found repeated words: %s', 'autodescription' ),
 					'syntax'    => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
 				],
 				'reason'   => [
@@ -622,7 +621,6 @@ final class Page extends Main {
 				'reason'   => [
 					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
 					'protected'    => \__( 'The page is protected.', 'autodescription' ),
-					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
 					'canonicalurl' => \__( 'The canonical URL points to another page.', 'autodescription' ),
 				],
 				'defaults' => [
@@ -653,6 +651,15 @@ final class Page extends Main {
 							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
+					'trashed' => [
+						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
+						'title'  => \__( 'Indexing', 'autodescription' ),
+						'status' => Builder::STATE_UNKNOWN,
+						'reason' => \__( 'Page is in the trash.', 'autodescription' ),
+						'assess' => [
+							'base' => \__( "This page is in the trash and can't be found publicly.", 'autodescription' ),
+						],
+					],
 				],
 			],
 		);
@@ -660,7 +667,10 @@ final class Page extends Main {
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
 
-			// TODO Really stop asserting from here?
+			return $item;
+		} elseif ( $this->query_cache['states']['istrashed'] ) {
+			$item = $cache['defaults']['trashed'];
+
 			return $item;
 		} elseif ( $this->query_cache['states']['robotsmeta']['noindex'] ) {
 			$item = $cache['defaults']['noindex'];
@@ -782,8 +792,7 @@ final class Page extends Main {
 					'noindex'   => \__( 'The page may not be indexed, this may also discourage link following.', 'autodescription' ),
 				],
 				'reason'   => [
-					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
-					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
+					'notpublic' => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
 				],
 				'defaults' => [
 					'follow'   => [
@@ -813,6 +822,15 @@ final class Page extends Main {
 							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
+					'trashed'  => [
+						'symbol' => \_x( 'F', 'Following', 'autodescription' ),
+						'title'  => \__( 'Following', 'autodescription' ),
+						'status' => Builder::STATE_UNKNOWN,
+						'reason' => \__( 'Page is in the trash.', 'autodescription' ),
+						'assess' => [
+							'base' => \__( "This page is in the trash and can't be found publicly.", 'autodescription' ),
+						],
+					],
 				],
 			],
 		);
@@ -820,7 +838,10 @@ final class Page extends Main {
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
 
-			// TODO Really stop asserting from here?
+			return $item;
+		} elseif ( $this->query_cache['states']['istrashed'] ) {
+			$item = $cache['defaults']['trashed'];
+
 			return $item;
 		} elseif ( $this->query_cache['states']['robotsmeta']['nofollow'] ) {
 			$item = $cache['defaults']['nofollow'];
@@ -922,8 +943,7 @@ final class Page extends Main {
 					'noindex'   => \__( 'The page may not be indexed, this may also discourage archiving.', 'autodescription' ),
 				],
 				'reason'   => [
-					'notpublic'    => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
-					'notpublished' => \__( 'The page is not published.', 'autodescription' ),
+					'notpublic' => \__( 'WordPress overrides the robots directive.', 'autodescription' ),
 				],
 				'defaults' => [
 					'archive'   => [
@@ -953,6 +973,15 @@ final class Page extends Main {
 							'base' => \__( "This page isn't published and can't be found publicly.", 'autodescription' ),
 						],
 					],
+					'trashed'   => [
+						'symbol' => \_x( 'A', 'Archiving', 'autodescription' ),
+						'title'  => \__( 'Archiving', 'autodescription' ),
+						'status' => Builder::STATE_UNKNOWN,
+						'reason' => \__( 'Page is in the trash.', 'autodescription' ),
+						'assess' => [
+							'base' => \__( "This page is in the trash and can't be found publicly.", 'autodescription' ),
+						],
+					],
 				],
 			],
 		);
@@ -960,7 +989,10 @@ final class Page extends Main {
 		if ( $this->query_cache['states']['isdraft'] ) {
 			$item = $cache['defaults']['draft'];
 
-			// TODO Really stop asserting from here?
+			return $item;
+		} elseif ( $this->query_cache['states']['istrashed'] ) {
+			$item = $cache['defaults']['trashed'];
+
 			return $item;
 		} elseif ( $this->query_cache['states']['robotsmeta']['noarchive'] ) {
 			$item = $cache['defaults']['noarchive'];
@@ -1035,6 +1067,8 @@ final class Page extends Main {
 	 * Runs redirect tests.
 	 *
 	 * @since 4.0.0
+	 * @since 5.2.0 A stored redirect on a draft or trashed page now warns that
+	 *              it does nothing until the page is published or restored.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar redirect item.
@@ -1049,29 +1083,8 @@ final class Page extends Main {
 	 */
 	protected function test_redirect() {
 
-		if ( empty( $this->query_cache['meta']['redirect'] ) ) {
-			$default = static::get_cache( 'page/redirect/default/0' ) ?? static::set_cache(
-				'page/redirect/default/0',
-				[
-					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
-					'title'  => \__( 'Redirection', 'autodescription' ),
-					'status' => Builder::STATE_GOOD,
-					'reason' => \__( 'Page does not redirect visitors.', 'autodescription' ),
-					'assess' => [
-						'redirect' => \__( 'Visitors and crawlers may view this page.', 'autodescription' ),
-					],
-					'meta'   => [
-						'blocking' => false,
-					],
-				],
-			);
-
-			if ( $this->query_cache['states']['isdraft'] )
-				$default['assess']['redirect'] = \__( 'Visitors and crawlers may view this page once published.', 'autodescription' );
-
-			return $default;
-		} else {
-			return static::get_cache( 'post/redirect/default/1' ) ?? static::set_cache(
+		if ( $this->has_blocking_redirect() ) {
+			$item = static::get_cache( 'post/redirect/default/1' ) ?? static::set_cache(
 				'post/redirect/default/1',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
@@ -1086,6 +1099,34 @@ final class Page extends Main {
 					],
 				],
 			);
+
+			if ( $this->query_cache['states']['isdraft'] ) {
+				$item['status']             = Builder::STATE_OKAY;
+				$item['reason']             = \__( 'Redirect is inactive.', 'autodescription' );
+				$item['assess']['redirect'] = \__( 'A redirect is stored but does nothing until the page is published.', 'autodescription' );
+			} elseif ( $this->query_cache['states']['istrashed'] ) {
+				$item['status']             = Builder::STATE_OKAY;
+				$item['reason']             = \__( 'Redirect is inactive.', 'autodescription' );
+				$item['assess']['redirect'] = \__( 'A redirect is stored but does nothing until the page is restored.', 'autodescription' );
+			}
+
+			return $item;
 		}
+
+		return static::get_cache( 'page/redirect/default/0' ) ?? static::set_cache(
+			'page/redirect/default/0',
+			[
+				'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
+				'title'  => \__( 'Redirection', 'autodescription' ),
+				'status' => Builder::STATE_GOOD,
+				'reason' => \__( 'Page does not redirect visitors.', 'autodescription' ),
+				'assess' => [
+					'redirect' => \__( 'Visitors and crawlers may view this page.', 'autodescription' ),
+				],
+				'meta'   => [
+					'blocking' => false,
+				],
+			],
+		);
 	}
 }

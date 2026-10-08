@@ -155,6 +155,7 @@ final class Args extends Factory {
 	 * Generates robots assertions for noindex in passes.
 	 *
 	 * @since 4.2.0
+	 * @since 5.2.0 The 404 pass now applies `the_seo_framework_enable_noindex_no_posts`.
 	 * @generator
 	 *
 	 * @param string $pass The passage to assert.
@@ -166,7 +167,25 @@ final class Args extends Factory {
 
 		switch ( $pass ) {
 			case '404': // We only tests 404 terms via args.
-				yield '404' => ! Data\Term::is_term_populated( $args['id'], $args['tax'] );
+				if ( Data\Term::is_term_populated( $args['id'], $args['tax'] ) ) {
+					yield '404' => false;
+				} else {
+					/**
+					 * We recommend using this filter ONLY for archives that have useful content but no "posts" attached.
+					 * For example: a specially custom-developed author page for an author that never published a post.
+					 *
+					 * This filter won't run when a few other conditions for noindex have been met.
+					 *
+					 * @since 4.1.4
+					 * @since 5.2.0 Now also applies when robots meta are generated from arguments.
+					 * @link <https://github.com/sybrew/the-seo-framework/issues/194#issuecomment-864298702>
+					 * @param bool $noindex Whether to enable no posts protection.
+					 */
+					yield '404' => (bool) \apply_filters(
+						'the_seo_framework_enable_noindex_no_posts',
+						true,
+					);
+				}
 				break;
 
 			case 'protected':

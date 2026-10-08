@@ -387,8 +387,6 @@ final class Term extends Main {
 				],
 				'assess'   => [
 					'empty'  => \__( 'No description could be generated.', 'autodescription' ),
-					/* translators: %s = list of repeated words */
-					'dupes'  => \__( 'Found repeated words: %s', 'autodescription' ),
 					'syntax' => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom description.", 'autodescription' ),
 				],
 				'reason'   => [
@@ -486,8 +484,8 @@ final class Term extends Main {
 				$dupes[] = \sprintf(
 					/* translators: 1: Word found, 2: Occurrences */
 					\esc_attr__( '&#8220;%1$s&#8221; is used %2$d times.', 'autodescription' ),
-					\esc_attr( key( $_repeated_word ) ),
-					reset( $_repeated_word ), // escaped in sprintf %d.
+					\esc_attr( array_key_first( $_repeated_word ) ),
+					array_first( $_repeated_word ), // escaped in sprintf %d.
 				);
 			}
 
@@ -969,23 +967,8 @@ final class Term extends Main {
 	 * }
 	 */
 	protected function test_redirect() {
-		if ( empty( $this->query_cache['meta']['redirect'] ) ) {
-			return static::get_cache( 'term/redirect/default/0' ) ?? static::set_cache(
-				'term/redirect/default/0',
-				[
-					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
-					'title'  => \__( 'Redirection', 'autodescription' ),
-					'status' => Builder::STATE_GOOD,
-					'reason' => \__( 'Term does not redirect visitors.', 'autodescription' ),
-					'assess' => [
-						'redirect' => \__( 'All visitors and crawlers may access this page.', 'autodescription' ),
-					],
-					'meta'   => [
-						'blocking' => false,
-					],
-				],
-			);
-		} else {
+
+		if ( $this->has_blocking_redirect() )
 			return static::get_cache( 'term/redirect/default/1' ) ?? static::set_cache(
 				'term/redirect/default/1',
 				[
@@ -1001,6 +984,21 @@ final class Term extends Main {
 					],
 				],
 			);
-		}
+
+		return static::get_cache( 'term/redirect/default/0' ) ?? static::set_cache(
+			'term/redirect/default/0',
+			[
+				'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
+				'title'  => \__( 'Redirection', 'autodescription' ),
+				'status' => Builder::STATE_GOOD,
+				'reason' => \__( 'Term does not redirect visitors.', 'autodescription' ),
+				'assess' => [
+					'redirect' => \__( 'All visitors and crawlers may access this page.', 'autodescription' ),
+				],
+				'meta'   => [
+					'blocking' => false,
+				],
+			],
+		);
 	}
 }

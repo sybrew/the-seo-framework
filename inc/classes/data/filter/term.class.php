@@ -36,6 +36,7 @@ final class Term {
 	/**
 	 * @hook "sanitize_term_meta_ . THE_SEO_FRAMEWORK_TERM_OPTIONS" 10
 	 * @since 5.0.0
+	 * @since 5.2.0 Now stores the canonical URL fully qualified.
 	 *
 	 * @param mixed[] $meta_value An unsanitized value.
 	 * @return array The sanitized term meta. An empty array on failure.
@@ -59,6 +60,9 @@ final class Term {
 					break;
 
 				case 'canonical':
+					$value = Sanitize::fully_qualified_url( $value );
+					break;
+
 				case 'social_image_url':
 					$value = \sanitize_url( $value, [ 'https', 'http' ] );
 					break;

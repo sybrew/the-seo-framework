@@ -156,9 +156,11 @@ class Query {
 		return (int) \apply_filters(
 			'the_seo_framework_current_admin_id',
 			// Get in the loop first, fall back to globals or get parameters.
-			   \get_the_id()
-			?: self::get_admin_post_id()
-			?: self::get_admin_term_id(),
+			(
+				   \get_the_id()
+				?: self::get_admin_post_id()
+				?: self::get_admin_term_id()
+			),
 		);
 	}
 

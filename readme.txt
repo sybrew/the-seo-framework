@@ -277,6 +277,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Breadcrumbs no longer prefix archive names, such as "Category:", "Archives:", or "Author:". Custom meta titles appear as written. This affects structured data and the shortcode alike.
 		* Breadcrumb shortcode crumbs now wrap as a whole instead of breaking mid-word.
 * **Changed:**
+	* **Archive exclusion:**
+		* Posts excluded from on-site archive listings are now also omitted from the feed.
+	* **SEO Bar:**
+		* Trashed pages now use their own indexing, following, and archiving notes, like drafts.
 	* **Homepage descriptions:**
 		* The generated description "Latest posts:" plus the site title is no longer used. That text treated the homepage and the posts page as a blog, and not every site uses those pages that way. A homepage that shows your latest posts has no generated description until you write one. The posts page now uses its own excerpt or content, like any other page.
 	* **Open Graph locales:** We couldn't find any documentation on the languages Facebook supports for Open Graph, so we resorted to scraping their network, testing all 46500 possible locale combinations, and adjusted support accordingly:
@@ -331,6 +335,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
+	* Saving SEO Settings no longer clears "Remove the site title?" on a post type archive while site title additions are removed.
+	* A redirect stored on a draft or trashed page warns that it does nothing until the page is published or restored.
+	* An empty Sitemap Query Limit is stored as the default. A stored limit of 0 is read as the default.
+	* Canonical addresses entered as a path are stored as a full URL. Redirect addresses are stored only as http or https.
 	* Resolved an issue where the optimized sitemap's timestamp comment said GMT but showed the site's local time.
 	* Resolved an issue where saving the static front page in the Block Editor replaced the Open Graph and Twitter description placeholders with the homepage meta description.
 	* Resolved an issue where clearing a password in Quick Edit kept Indexing on Default (noindex) and hid the canonical placeholder.
@@ -413,6 +421,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::fediverse_profile_url()` (`tsf()->sanitize()->fediverse_profile_url()`) accepts an HTTP or HTTPS profile URL and returns HTTPS. A handle is rejected. The host is not rewritten from the companion handle.
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::counter_type()` (`tsf()->sanitize()->counter_type()`) accepts `0` through `3`. A higher value becomes `0`.
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::twitter_card()` (`tsf()->sanitize()->twitter_card()`) returns a supported Twitter card type, or an empty string.
+		* Method `The_SEO_Framework\Data\Filter\Sanitize::fully_qualified_url()` (`tsf()->sanitize()->fully_qualified_url()`) turns a path or URL into an absolute http or https address. Other protocols are rejected.
+		* Method `The_SEO_Framework\Data\Post::is_trash()` (`tsf()->data()->post()->is_trash()`) returns whether the post is in the trash.
 		* Constant `THE_SEO_FRAMEWORK_USER_PREFERENCES` is `autodescription-user-preferences`. It stores per-user interface preferences, separate from `THE_SEO_FRAMEWORK_USER_OPTIONS`.
 		* Method `The_SEO_Framework\Admin\Script\Loader::get_author_edit_scripts()` (`tsf()->admin()->scripts()->loader()->get_author_edit_scripts()`) now exists.
 		* Method `The_SEO_Framework\Helper\Query::is_profile_admin()` (`tsf()->query()->is_profile_admin()`) detects the profile, user-edit, and Add User screens, including their network variants.
@@ -426,6 +436,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Removed:**
 		* Pool `tsf()->data()->plugin()->filter()`. Its namesake class is private, and this pool pointed at a class that never existed.
 	* **Changed:**
+		* Method `The_SEO_Framework\Data\Filter\Sanitize::redirect_url()` (`tsf()->sanitize()->redirect_url()`) now only returns http and https URLs.
+		* Method `The_SEO_Framework\Sitemap\Utils::get_sitemap_post_limit()` (`tsf()->sitemap()->utils()->get_sitemap_post_limit()`) now uses the default option when `sitemap_query_limit` is empty.
+		* Methods `The_SEO_Framework\Meta\URI::get_custom_canonical_url()` (`tsf()->uri()->get_custom_canonical_url()`) and `The_SEO_Framework\Meta\URI::get_canonical_url()` (`tsf()->uri()->get_canonical_url()`) now make a relative canonical path absolute.
 		* Method `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`) now strips HTML tags from tooltip title and reason. The title and reason were already considered trusted (hardcoded input), but this extra hardening mitigates potential oversights from custom integrations.
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object. Props [Contributolo](https://github.com/Contributolo).
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):
@@ -516,6 +529,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* `the_seo_framework_user_preference_defaults` returns the default user preferences. The default includes `counter_type` as `3`.
 		* `the_seo_framework_save_user_preference` returns the user preference data that's going to be saved. The value includes the default preferences.
 	* **Changed:**
+		* `the_seo_framework_enable_noindex_no_posts` now also applies when robots meta are generated from arguments. Empty terms in the SEO Bar, the term editor's Default label, and sitemaps follow the returned value.
+		* `the_seo_framework_sitemap_post_limit` receives the default option when `sitemap_query_limit` is empty.
 		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
 		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.
 		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, `fediverse_creator_url`, `breadcrumb_archive`, and `breadcrumb_taxonomy`.

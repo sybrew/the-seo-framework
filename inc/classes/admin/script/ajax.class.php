@@ -356,7 +356,10 @@ final class AJAX {
 			case 'imageurl':
 				if ( Query::is_static_front_page( $post_id ) ) {
 					$data[ $g ] =
-						   \sanitize_url( Data\Plugin::get_option( 'homepage_social_image_url' ), [ 'https', 'http' ] )
+						\sanitize_url(
+							Data\Plugin::get_option( 'homepage_social_image_url' ),
+							[ 'https', 'http' ],
+						)
 						?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 				} else {
 					$data[ $g ] = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );

@@ -553,14 +553,7 @@ final class Plugin {
 	 * @return string A fully qualified sanitized URL that matches the current scheme if current domain.
 	 */
 	public static function fully_qualified_url( $value ) {
-
-		if ( empty( $value ) )
-			return '';
-
-		return \sanitize_url(
-			Meta\URI\Utils::make_absolute_current_scheme_url( $value ),
-			[ 'https', 'http' ],
-		);
+		return Sanitize::fully_qualified_url( $value );
 	}
 
 	/**
@@ -623,17 +616,20 @@ final class Plugin {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 An empty value now falls back to the default option.
 	 *
-	 * @param mixed $value     An unsanitized value.
-	 * @param mixed $old_value The last known value.
+	 * @param mixed  $value      An unsanitized value.
+	 * @param mixed  $old_value  The last known value.
+	 * @param string $sub_option The option name.
 	 * @return int A valid sitemap query limit.
 	 */
-	public static function sitemap_query_limit( $value, $old_value ) {
+	public static function sitemap_query_limit( $value, $old_value, $sub_option ) {
+		// At least 1, at most 50000.
 		return max(
 			1,
 			min(
 				50000,
-				\absint( $value ) ?: $old_value,
+				\absint( $value ) ?: Data\Plugin\Setup::get_default_option( $sub_option ),
 			),
 		);
 	}
@@ -701,6 +697,7 @@ final class Plugin {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 Now stores the canonical URL fully qualified.
 	 *
 	 * @param mixed $value An unsanitized value.
 	 * @return array[] The sanitized post type archive meta.
@@ -725,6 +722,9 @@ final class Plugin {
 						break;
 
 					case 'canonical':
+						$val = self::fully_qualified_url( $val );
+						break;
+
 					case 'social_image_url':
 						$val = \sanitize_url( $val, [ 'https', 'http' ] );
 						break;

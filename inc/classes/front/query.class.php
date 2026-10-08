@@ -121,6 +121,7 @@ final class Query {
 	 * @since 3.0.0 Exchanged meta query for post__not_in query.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_archive_query_in`.
+	 * @since 5.2.0 Now also adjusts the main posts feed.
 	 * @see Twenty Fourteen theme @source \Featured_Content::pre_get_posts()
 	 * @access private
 	 *
@@ -130,7 +131,7 @@ final class Query {
 	public static function alter_archive_query_in( $wp_query ) {
 
 		if (
-			   ! ( $wp_query->is_archive || $wp_query->is_home )
+			   ! self::is_archive_listing( $wp_query )
 			|| self::is_query_adjustment_blocked( $wp_query )
 		) {
 			return;
@@ -158,6 +159,7 @@ final class Query {
 	 * @since 2.9.4
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `_alter_archive_query_post`.
+	 * @since 5.2.0 Now also adjusts the main posts feed.
 	 * @access private
 	 *
 	 * @param array     $posts    The array of retrieved posts.
@@ -167,7 +169,7 @@ final class Query {
 	public static function alter_archive_query_post( $posts, $wp_query ) {
 
 		if (
-			   ! ( $wp_query->is_archive || $wp_query->is_home )
+			   ! self::is_archive_listing( $wp_query )
 			|| self::is_query_adjustment_blocked( $wp_query )
 		) {
 			return $posts;
@@ -179,6 +181,28 @@ final class Query {
 
 		// Reset numeric index before returning posts.
 		return array_values( $posts );
+	}
+
+	/**
+	 * Determines whether the query lists posts as an archive or the main posts feed.
+	 *
+	 * WordPress does not set `is_home` when the query is a feed, so `/feed/` is neither
+	 * an archive nor the homepage. Comment feeds and search feeds are left alone.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param \WP_Query $wp_query The WP_Query instance.
+	 * @return bool
+	 */
+	private static function is_archive_listing( $wp_query ) {
+
+		if ( $wp_query->is_archive || $wp_query->is_home )
+			return true;
+
+		return $wp_query->is_feed
+			&& ! $wp_query->is_singular      // /hello-world/feed/
+			&& ! $wp_query->is_search        // /?s=test&feed=rss2
+			&& ! $wp_query->is_comment_feed; // /comments/feed/
 	}
 
 	/**
@@ -200,7 +224,7 @@ final class Query {
 
 		$search = $wp_query->query_vars['s'] ?? null;
 
-		return \is_string( $search ) && strlen( $search );
+		return \is_string( $search ) && \strlen( $search );
 	}
 
 	/**

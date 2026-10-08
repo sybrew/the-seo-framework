@@ -216,6 +216,7 @@ final class Front extends Factory {
 						 * This filter won't run when a few other conditions for noindex have been met.
 						 *
 						 * @since 4.1.4
+						 * @since 5.2.0 Now also applies when robots meta are generated from arguments.
 						 * @link <https://github.com/sybrew/the-seo-framework/issues/194#issuecomment-864298702>
 						 * @param bool $noindex Whether to enable no posts protection.
 						 */

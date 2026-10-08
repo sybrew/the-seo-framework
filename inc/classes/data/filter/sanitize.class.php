@@ -357,6 +357,27 @@ class Sanitize {
 	}
 
 	/**
+	 * Sanitizes a URL into a fully qualified http or https address.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param mixed $url An unsanitized URL.
+	 * @return string A fully qualified sanitized URL that matches the current scheme if current domain.
+	 */
+	public static function fully_qualified_url( $url ) {
+
+		$url = trim( $url );
+
+		if ( empty( $url ) )
+			return '';
+
+		return \sanitize_url(
+			Meta\URI\Utils::make_absolute_current_scheme_url( $url ),
+			[ 'https', 'http' ],
+		);
+	}
+
+	/**
 	 * Sanitizes the Redirect URL.
 	 *
 	 * @since 2.2.4
@@ -370,6 +391,7 @@ class Sanitize {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_redirect_url`.
 	 *              3. No longer provides stripping URL queries via a filter.
+	 * @since 5.2.0 Now only allows the https and http protocols.
 	 *
 	 * @param string $url String with potentially unwanted redirect URL.
 	 * @return string The Sanitized Redirect URL
@@ -388,8 +410,7 @@ class Sanitize {
 			) );
 		}
 
-		// All WP defined protocols are allowed.
-		return \sanitize_url( $url );
+		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
 
 	/**

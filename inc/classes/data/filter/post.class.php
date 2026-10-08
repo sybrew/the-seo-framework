@@ -35,6 +35,7 @@ final class Post {
 
 	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 Now stores the canonical URL fully qualified.
 	 *
 	 * @param mixed[] $meta_value Metadata value to sanitize.
 	 * @return array[] The sanitized post meta.
@@ -56,6 +57,9 @@ final class Post {
 					break;
 
 				case '_genesis_canonical_uri':
+					$value = Sanitize::fully_qualified_url( $value );
+					break;
+
 				case '_social_image_url':
 					$value = \sanitize_url( $value, [ 'https', 'http' ] );
 					break;

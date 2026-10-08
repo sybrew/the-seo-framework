@@ -48,6 +48,7 @@ class Utils {
 	 * Returns the sitemap post query limit.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now falls back to the default option when the stored limit is empty.
 	 *
 	 * @param string $type Whether the query is for hierarchical post types or not.
 	 * @return int The post limit
@@ -60,12 +61,16 @@ class Utils {
 		 * @since 4.0.0 1. The default is now 3000, from 1200.
 		 *              2. Now passes a second parameter.
 		 * @since 5.0.5 The option default is now 250.
+		 * @since 5.2.0 The first parameter is the default option when the stored limit is empty.
 		 * @param int $total_post_limit
 		 * @param bool $hierarchical Whether the query is for hierarchical post types or not.
 		 */
 		return (int) \apply_filters(
 			'the_seo_framework_sitemap_post_limit',
-			Data\Plugin::get_option( 'sitemap_query_limit' ),
+			(
+				   Data\Plugin::get_option( 'sitemap_query_limit' )
+				?: Data\Plugin\Setup::get_default_option( 'sitemap_query_limit' )
+			),
 			'hierarchical' === $type,
 		);
 	}

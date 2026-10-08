@@ -56,6 +56,7 @@ PHP 7.4+ on `PATH`. If `php` is missing, say so and do not invent a width.
 | Ternary/coalesce RHS already multiline | no | Break after `=`, pad first operand 3 spaces so `?` / `:` / `??` align |
 | Call arguments > 30 characters **total** | no (30) | Wrap those arguments |
 | Array/object/closure among several arguments | no | Every argument of that call on its own line |
+| Assigned `?:` / `??` whose first operand is a multi-parameter call | no | Each parameter on its own line. Indent the call one tab, and put the operator at that same indent. Do not pad the call by 3 spaces. Keep each later operand on one line |
 | SQL over 80 | SQL 80 | SQL clause rules, not compact-if |
 | PHP attribute + symbol vis > 80 | yes | Attribute on the line above. If the attribute itself vis > 80, wrap its arguments like a call |
 | Function `{` blank | n/a | Functions/closures only, 2+ statements. Never after `if` / loop / `try` / labeled `{` |

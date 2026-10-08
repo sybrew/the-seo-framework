@@ -132,6 +132,7 @@ class URI {
 	 * Returns the custom canonical URL, based on query.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now makes a relative path absolute.
 	 *
 	 * @return string The custom canonical URL, if any.
 	 */
@@ -156,16 +157,17 @@ class URI {
 		if ( empty( $url ) )
 			return '';
 
-		if ( URI\Utils::url_matches_blog_domain( $url ) )
-			$url = URI\Utils::set_preferred_url_scheme( $url );
-
-		return \sanitize_url( $url, [ 'https', 'http' ] );
+		return \sanitize_url(
+			URI\Utils::make_absolute_current_scheme_url( $url ),
+			[ 'https', 'http' ],
+		);
 	}
 
 	/**
 	 * Returns the custom canonical URL, based on arguments.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now makes a relative path absolute.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The custom canonical URL, if any.
@@ -197,10 +199,10 @@ class URI {
 		if ( empty( $url ) )
 			return '';
 
-		if ( URI\Utils::url_matches_blog_domain( $url ) )
-			$url = URI\Utils::set_preferred_url_scheme( $url );
-
-		return \sanitize_url( $url, [ 'https', 'http' ] );
+		return \sanitize_url(
+			URI\Utils::make_absolute_current_scheme_url( $url ),
+			[ 'https', 'http' ],
+		);
 	}
 
 	/**
@@ -794,6 +796,7 @@ class URI {
 		if ( empty( $url ) )
 			return '';
 
+		// Protocol check only. Sanitize::redirect_url() also rewrites external URLs.
 		return \sanitize_url( $url, [ 'https', 'http' ] );
 	}
 

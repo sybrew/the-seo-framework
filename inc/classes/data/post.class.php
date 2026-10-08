@@ -220,6 +220,23 @@ class Post {
 	}
 
 	/**
+	 * Determines if the current post is in the trash.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int|null|\WP_Post $post The post ID or WP Post object.
+	 * @return bool True if trashed, false otherwise.
+	 */
+	public static function is_trash( $post = null ) {
+		// Don't get the post directly if it can be evaded, it's still quite slow.
+		return 'trash' === (
+			   $post->post_status
+			?? \get_post( $post ?: Query::get_the_real_id() )->post_status
+			?? null
+		);
+	}
+
+	/**
 	 * Fetch latest public, future, or pending post/page ID.
 	 * Memoizes the return value.
 	 *
