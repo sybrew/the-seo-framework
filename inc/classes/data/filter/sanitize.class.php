@@ -539,7 +539,6 @@ class Sanitize {
 
 	/**
 	 * Sanitizes the Facebook profile link.
-	 * A host without a scheme is treated as a path.
 	 *
 	 * @since 2.2.2
 	 * @since 2.8.0 Method is now public.
@@ -549,13 +548,14 @@ class Sanitize {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_facebook_profile`.
 	 *              3. Now trims only spaces and slashes, so a tab-only value is no longer emptied.
+	 * @since 5.2.0 Now strips a schemeless host before prefixing `https://www.facebook.com/`.
 	 *
 	 * @param string $link The unsanitized Facebook profile URL.
 	 * @return string The sanitized Facebook profile URL.
 	 */
 	public static function facebook_profile_link( $link ) {
 
-		$path = trim( Meta\URI\Utils::get_relative_part_from_url( $link ), ' /' );
+		$path = trim( Meta\URI\Utils::get_relative_part_from_url( $link ), ' /@' );
 
 		// /0 is a valid profile link.
 		if ( ! \strlen( $path ) )
@@ -601,6 +601,7 @@ class Sanitize {
 	 *              2. Now returns empty when using only spaces and tabs.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `s_twitter_name`.
+	 * @since 5.2.0 Now reads a schemeless profile URL, such as `x.com/username`, as the handle.
 	 *
 	 * @param string $handle An unsanitized profile handle.
 	 * @return string A sanitized profile handle with '@' prefixed to it.

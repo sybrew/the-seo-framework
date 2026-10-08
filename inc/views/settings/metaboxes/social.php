@@ -224,11 +224,8 @@ switch ( $instance ) :
 		break;
 
 	case 'facebook':
-		$fb_author             = Data\Plugin::get_option( 'facebook_author' );
-		$fb_author_placeholder = \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' );
-
-		$fb_publisher             = Data\Plugin::get_option( 'facebook_publisher' );
-		$fb_publisher_placeholder = \_x( 'https://www.facebook.com/YourBusinessProfile', 'Example Facebook Business URL', 'autodescription' );
+		$fb_author    = Data\Plugin::get_option( 'facebook_author' );
+		$fb_publisher = Data\Plugin::get_option( 'facebook_publisher' );
 
 		HTML::header_title( \__( 'Facebook Integration Settings', 'autodescription' ) );
 		HTML::description( \__( 'Facebook post sharing works mostly through Open Graph. However, you can also link your Business and Personal Facebook pages, among various other options.', 'autodescription' ) );
@@ -249,8 +246,15 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( 'facebook_publisher' ); ?>" class=large-text id="<?php Input::field_id( 'facebook_publisher' ); ?>" placeholder="<?= \esc_attr( $fb_publisher_placeholder ) ?>" value="<?= \esc_attr( $fb_publisher ) ?>">
+			<input type=url name="<?php Input::field_name( 'facebook_publisher' ); ?>" class=large-text id="<?php Input::field_id( 'facebook_publisher' ); ?>" value="<?= \esc_attr( $fb_publisher ) ?>">
 		</p>
+		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( \_x( 'https://www.facebook.com/YourBusinessProfile', 'Example Facebook Business URL', 'autodescription' ) ),
+		) );
+		?>
 
 		<p>
 			<label for="<?php Input::field_id( 'facebook_author' ); ?>">
@@ -266,17 +270,19 @@ switch ( $instance ) :
 		</p>
 		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
-			<input type=url name="<?php Input::field_name( 'facebook_author' ); ?>" class=large-text id="<?php Input::field_id( 'facebook_author' ); ?>" placeholder="<?= \esc_attr( $fb_author_placeholder ) ?>" value="<?= \esc_attr( $fb_author ) ?>">
+			<input type=url name="<?php Input::field_name( 'facebook_author' ); ?>" class=large-text id="<?php Input::field_id( 'facebook_author' ); ?>" value="<?= \esc_attr( $fb_author ) ?>">
 		</p>
 		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ) ),
+		) );
 		break;
 
 	case 'twitter':
-		$tw_site             = Data\Plugin::get_option( 'twitter_site' );
-		$tw_site_placeholder = \_x( '@your-site-username', 'Twitter @username', 'autodescription' );
-
-		$tw_creator             = Data\Plugin::get_option( 'twitter_creator' );
-		$tw_creator_placeholder = \_x( '@your-personal-username', 'Twitter @username', 'autodescription' );
+		$tw_site    = Data\Plugin::get_option( 'twitter_site' );
+		$tw_creator = Data\Plugin::get_option( 'twitter_creator' );
 
 		$supported_twitter_cards = Meta\Twitter::get_supported_cards();
 
@@ -349,8 +355,15 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'twitter_site' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_site' ); ?>" placeholder="<?= \esc_attr( $tw_site_placeholder ) ?>" value="<?= \esc_attr( $tw_site ) ?>">
+			<input type=text name="<?php Input::field_name( 'twitter_site' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_site' ); ?>" value="<?= \esc_attr( $tw_site ) ?>">
 		</p>
+		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( \_x( '@your-site-username', 'Twitter @username', 'autodescription' ) ),
+		) );
+		?>
 
 		<p>
 			<label for="<?php Input::field_id( 'twitter_creator' ); ?>" class=tsf-toblock>
@@ -366,23 +379,36 @@ switch ( $instance ) :
 		</p>
 		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'twitter_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_creator' ); ?>" placeholder="<?= \esc_attr( $tw_creator_placeholder ) ?>" value="<?= \esc_attr( $tw_creator ) ?>">
+			<input type=text name="<?php Input::field_name( 'twitter_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'twitter_creator' ); ?>" value="<?= \esc_attr( $tw_creator ) ?>">
 		</p>
 		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( \_x( '@username', 'Twitter @username', 'autodescription' ) ),
+		) );
 		break;
 
 	case 'fediverse':
-		$fv_site             = Data\Plugin::get_option( 'fediverse_site' );
-		$fv_site_placeholder = \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' );
+		$fv_site     = Data\Plugin::get_option( 'fediverse_site' );
+		$fv_site_url = Data\Plugin::get_option( 'fediverse_site_url' );
+		$fv_creator  = Data\Plugin::get_option( 'fediverse_creator' );
 
-		$fv_site_url             = Data\Plugin::get_option( 'fediverse_site_url' );
-		$fv_site_url_placeholder = \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' );
+		$fv_handle_example = \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' );
+		$fv_url_example    = \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' );
 
-		$fv_creator             = Data\Plugin::get_option( 'fediverse_creator' );
-		$fv_creator_placeholder = $fv_site;
+		$fv_site_url_placeholder = Meta\Fediverse::get_profile_url( $fv_site );
 
-		$fv_creator_url             = Data\Plugin::get_option( 'fediverse_creator_url' );
-		$fv_creator_url_placeholder = $fv_site_url;
+		if ( $fv_creator ) {
+			$fv_creator_url_placeholder = Meta\Fediverse::get_profile_url( $fv_creator );
+		} else {
+			$fv_creator_url_placeholder = Meta\Fediverse::get_profile_url(
+				$fv_site,
+				$fv_site_url,
+			);
+		}
+
+		$fv_creator_url = Data\Plugin::get_option( 'fediverse_creator_url' );
 
 		HTML::header_title( \__( 'Fediverse Integration Settings', 'autodescription' ) );
 		HTML::description( \__( 'Mastodon and other Fediverse platforms can credit a profile when a link to your website is shared, and can verify that you own this website.', 'autodescription' ) );
@@ -418,8 +444,15 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'fediverse_site' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site' ); ?>" placeholder="<?= \esc_attr( $fv_site_placeholder ) ?>" value="<?= \esc_attr( $fv_site ) ?>">
+			<input type=text name="<?php Input::field_name( 'fediverse_site' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site' ); ?>" value="<?= \esc_attr( $fv_site ) ?>">
 		</p>
+		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( $fv_handle_example ),
+		) );
+		?>
 		<p>
 			<label for="<?php Input::field_id( 'fediverse_site_url' ); ?>" class=tsf-toblock>
 				<strong><?php \esc_html_e( 'Website Fediverse Profile URL', 'autodescription' ); ?></strong>
@@ -435,6 +468,13 @@ switch ( $instance ) :
 		<p>
 			<input type=url name="<?php Input::field_name( 'fediverse_site_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site_url' ); ?>" placeholder="<?= \esc_attr( $fv_site_url_placeholder ) ?>" value="<?= \esc_attr( $fv_site_url ) ?>">
 		</p>
+		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( $fv_url_example ),
+		) );
+		?>
 
 		<p>
 			<label for="<?php Input::field_id( 'fediverse_creator' ); ?>" class=tsf-toblock>
@@ -450,8 +490,15 @@ switch ( $instance ) :
 		</p>
 		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'fediverse_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator' ); ?>" placeholder="<?= \esc_attr( $fv_creator_placeholder ) ?>" value="<?= \esc_attr( $fv_creator ) ?>">
+			<input type=text name="<?php Input::field_name( 'fediverse_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator' ); ?>" placeholder="<?= \esc_attr( $fv_site ) ?>" value="<?= \esc_attr( $fv_creator ) ?>">
 		</p>
+		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( $fv_handle_example ),
+		) );
+		?>
 		<p>
 			<label for="<?php Input::field_id( 'fediverse_creator_url' ); ?>" class=tsf-toblock>
 				<strong><?php \esc_html_e( 'Fediverse Author Fallback Profile URL', 'autodescription' ); ?></strong>
@@ -468,6 +515,11 @@ switch ( $instance ) :
 			<input type=url name="<?php Input::field_name( 'fediverse_creator_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator_url' ); ?>" placeholder="<?= \esc_attr( $fv_creator_url_placeholder ) ?>" value="<?= \esc_attr( $fv_creator_url ) ?>">
 		</p>
 		<?php
+		HTML::description_noesc( \sprintf(
+			/* translators: %s = example value */
+			\esc_html__( 'Example: %s', 'autodescription' ),
+			HTML::code_wrap( $fv_url_example ),
+		) );
 		break;
 
 	case 'oembed':

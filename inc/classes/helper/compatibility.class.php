@@ -70,12 +70,39 @@ final class Compatibility {
 	}
 
 	/**
-	 * Clears the SEO plugin conflict notice when any plugin is deactivated.
+	 * Clears the SEO plugin conflict notice when no conflicting SEO plugin remains.
+	 *
+	 * Runs on `deactivated_plugin`, before the active plugin list is stored, once per plugin.
+	 * Plugins deactivated in this request count as already gone, so one action clears the
+	 * notice once. Silent updates do not fire this hook, so the notice stays.
 	 *
 	 * @hook deactivated_plugin 10
 	 * @since 5.0.0
+	 * @since 5.2.0 Now clears the notice only when no conflicting SEO plugin remains.
+	 *              Plugins deactivated in this request count as inactive, because this
+	 *              hook still runs before the active plugin list is stored.
+	 *
+	 * @param string $plugin The plugin basename just deactivated.
 	 */
-	public static function clear_plugin_conflict_notification() {
+	public static function clear_plugin_conflict_notification( $plugin = '' ) {
+
+		static $deactivated = [];
+
+		if ( $plugin )
+			$deactivated[] = $plugin;
+
+		$active = array_diff(
+			Data\Blog::get_active_plugins(),
+			$deactivated,
+		);
+
+		if ( array_intersect(
+			self::get_conflicting_plugins()['seo_tools'],
+			$active,
+		) ) {
+			return;
+		}
+
 		Admin\Notice\Persistent::clear_notice( 'seo-plugin-conflict' );
 	}
 

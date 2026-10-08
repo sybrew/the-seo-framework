@@ -45,21 +45,21 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'label'       => \__( 'Google Search Console Verification Code', 'autodescription' ),
 				'description' => \__( 'Get the Google verification code.', 'autodescription' ),
 				'link'        => 'https://search.google.com/search-console/ownership?resource_id=' . rawurlencode( $site_url ),
-				'placeholder' => 'ab1cDe2Fg3HI4Jklm5nOpqRSt67UVW78XYzAbcdEfgH',
+				'example'     => 'ab1cDe2Fg3HI4Jklm5nOpqRSt67UVW78XYzAbcdEfgH',
 			],
 			'bing'      => [
 				'setting'     => 'bing_verification',
 				'label'       => \__( 'Bing Webmaster Verification Code', 'autodescription' ),
 				'description' => \__( 'Get the Bing verification code.', 'autodescription' ),
 				'link'        => 'https://www.bing.com/webmaster/home/addsite?addurl=' . rawurlencode( $site_url ),
-				'placeholder' => '123A456B78901C2D3456E7890F1A234D',
+				'example'     => '123A456B78901C2D3456E7890F1A234D',
 			],
 			'yandex'    => [
 				'setting'     => 'yandex_verification',
 				'label'       => \__( 'Yandex Webmaster Verification Code', 'autodescription' ),
 				'description' => \__( 'Get the Yandex verification code.', 'autodescription' ),
 				'link'        => 'https://webmaster.yandex.com/sites/add/?hostName=' . rawurlencode( $site_url ),
-				'placeholder' => '12345abc678901d2',
+				'example'     => '12345abc678901d2',
 			],
 			'baidu'     => [
 				'setting'     => 'baidu_verification',
@@ -67,21 +67,21 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				'label'       => \__( 'Baidu Search Resource Platform Code', 'autodescription' ),
 				'description' => \__( 'Get the Baidu verification code.', 'autodescription' ),
 				'link'        => 'https://ziyuan.baidu.com/login/index?u=/site/siteadd',
-				'placeholder' => 'a12bcDEFGa',
+				'example'     => 'a12bcDEFGa',
 			],
 			'pinterest' => [
 				'setting'     => 'pint_verification',
 				'label'       => \__( 'Pinterest Analytics Verification Code', 'autodescription' ),
 				'description' => \__( 'Get the Pinterest verification code.', 'autodescription' ),
 				'link'        => 'https://analytics.pinterest.com/',
-				'placeholder' => '123456a7b8901de2fa34bcdef5a67b90',
+				'example'     => '123456a7b8901de2fa34bcdef5a67b90',
 			],
 			'facebook'  => [
 				'setting'     => 'facebook_verification',
 				'label'       => \__( 'Facebook Domain Verification Code', 'autodescription' ),
 				'description' => \__( 'Get the Facebook verification code.', 'autodescription' ),
 				'link'        => 'https://business.facebook.com/settings/owned-domains',
-				'placeholder' => 'abc1d234efghij56k7l8mn9op1qrst',
+				'example'     => 'abc1d234efghij56k7l8mn9op1qrst',
 			],
 		];
 
@@ -106,8 +106,13 @@ switch ( $instance ) : // Quite useless, but prepared for expansion.
 				</label>
 			</p>
 			<p>
-				<input type=text name="<?php Input::field_name( $setting['setting'] ); ?>" class="large-text ltr" id="<?php Input::field_id( $setting['setting'] ); ?>" placeholder="<?= \esc_attr( $setting['placeholder'] ) ?>" value="<?= \esc_attr( Data\Plugin::get_option( $setting['setting'] ) ) ?>">
+				<input type=text name="<?php Input::field_name( $setting['setting'] ); ?>" class="large-text ltr" id="<?php Input::field_id( $setting['setting'] ); ?>" value="<?= \esc_attr( Data\Plugin::get_option( $setting['setting'] ) ) ?>">
 			</p>
 			<?php
+			HTML::description_noesc( \sprintf(
+				/* translators: %s = example value */
+				\esc_html__( 'Example: %s', 'autodescription' ),
+				HTML::code_wrap( $setting['example'] ),
+			) );
 		}
 endswitch;

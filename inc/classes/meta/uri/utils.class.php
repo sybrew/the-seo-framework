@@ -344,19 +344,28 @@ class Utils {
 
 	/**
 	 * Converts absolute URLs to relative URLs, if they weren't already.
-	 * Returns the path, query, and fragment.
+	 * Returns the path, query, and fragment with a leading slash.
 	 *
 	 * @since 2.6.5
 	 * @since 2.8.0 Method is now public.
 	 * @since 4.0.0 No longer strips the prepended / path.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
-	 *              2. Renamed from `s_relative_url()`
+	 *              2. Renamed from `s_relative_url()`.
+	 * @since 5.2.0 1. Now also strips any scheme and a schemeless host, such as `facebook.com./YourPage`.
+	 *              2. Now returns `/` when nothing follows that host, and keeps a pathless query or fragment.
 	 *
 	 * @param string $url An absolute or relative URL.
 	 * @return string $url The URL's path.
 	 */
 	public static function get_relative_part_from_url( $url ) {
-		return preg_replace( '/^(?:https?:)?\/\/[^\/]+(\/.*)/i', '$1', $url );
+		return '/' . ltrim(
+			preg_replace(
+				'/^(?:\w+:\/*|\/\/|(?=[^@]*[.\/]))[^\/#?]*/',
+				'',
+				ltrim( $url ),
+			) ?? $url,
+			'/',
+		);
 	}
 
 	/**

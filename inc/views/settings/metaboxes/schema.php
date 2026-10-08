@@ -253,56 +253,56 @@ switch ( $instance ) :
 				'option'      => 'knowledge_facebook',
 				'dashicon'    => 'dashicons-facebook',
 				'desc'        => \__( 'Facebook Page', 'autodescription' ),
-				'placeholder' => "https://www.facebook.com/$connectedi18n",
+				'example'     => "https://www.facebook.com/$connectedi18n",
 				'examplelink' => 'https://www.facebook.com/me',
 			],
 			'twitter'    => [
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
 				'desc'        => \__( 'X Profile', 'autodescription' ),
-				'placeholder' => "https://x.com/$connectedi18n",
+				'example'     => "https://x.com/$connectedi18n",
 				'examplelink' => 'https://x.com/home', // No example link available.
 			],
 			'instagram'  => [
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
 				'desc'        => \__( 'Instagram Profile', 'autodescription' ),
-				'placeholder' => "https://instagram.com/$connectedi18n",
+				'example'     => "https://instagram.com/$connectedi18n",
 				'examplelink' => 'https://instagram.com/', // No example link available.
 			],
 			'youtube'    => [
 				'option'      => 'knowledge_youtube',
 				'dashicon'    => 'genericon-youtube',
 				'desc'        => \__( 'Youtube Profile', 'autodescription' ),
-				'placeholder' => "https://www.youtube.com/channel/$connectedi18n",
+				'example'     => "https://www.youtube.com/channel/$connectedi18n",
 				'examplelink' => 'https://www.youtube.com/user/',
 			],
 			'linkedin'   => [
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
 				'desc'        => \__( 'LinkedIn Profile', 'autodescription' ),
-				'placeholder' => "https://www.linkedin.com/in/$connectedi18n/",
+				'example'     => "https://www.linkedin.com/in/$connectedi18n/",
 				'examplelink' => 'https://www.linkedin.com/profile/view',
 			],
 			'pinterest'  => [
 				'option'      => 'knowledge_pinterest',
 				'dashicon'    => 'genericon-pinterest-alt',
 				'desc'        => \__( 'Pinterest Profile', 'autodescription' ),
-				'placeholder' => "https://www.pinterest.com/$connectedi18n/",
+				'example'     => "https://www.pinterest.com/$connectedi18n/",
 				'examplelink' => 'https://www.pinterest.com/me/',
 			],
 			'soundcloud' => [
 				'option'      => 'knowledge_soundcloud',
 				'dashicon'    => 'genericon-cloud', // I know, it's not the real one. D:
 				'desc'        => \__( 'SoundCloud Profile', 'autodescription' ),
-				'placeholder' => "https://soundcloud.com/$connectedi18n",
+				'example'     => "https://soundcloud.com/$connectedi18n",
 				'examplelink' => 'https://soundcloud.com/you',
 			],
 			'tumblr'     => [
 				'option'      => 'knowledge_tumblr',
 				'dashicon'    => 'genericon-tumblr',
 				'desc'        => \__( 'Tumblr Blog', 'autodescription' ),
-				'placeholder' => "https://www.tumblr.com/blog/$connectedi18n",
+				'example'     => "https://www.tumblr.com/blog/$connectedi18n",
 				'examplelink' => 'https://www.tumblr.com/dashboard',  // No example link available.
 			],
 		];
@@ -331,9 +331,14 @@ switch ( $instance ) :
 				</label>
 			</p>
 			<p>
-				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" placeholder="<?= \esc_attr( $sc['placeholder'] ) ?>" value="<?= \esc_attr( Data\Plugin::get_option( $sc['option'] ) ) ?>" autocomplete=off>
+				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" value="<?= \esc_attr( Data\Plugin::get_option( $sc['option'] ) ) ?>" autocomplete=off>
 			</p>
 			<?php
+			HTML::description_noesc( \sprintf(
+				/* translators: %s = example value */
+				\esc_html__( 'Example: %s', 'autodescription' ),
+				HTML::code_wrap( $sc['example'] ),
+			) );
 		}
 		break;
 

@@ -254,7 +254,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* Each profile has a handle and a profile URL. Enter the @username@domain handle from Author attribution. A pasted profile URL fills both fields; correct the handle if the guessed domain is wrong.
 			* The author fallback field shows the website profile as its placeholder.
 			* On the credited profile, open Preferences -> Public profile -> Verification. Add this website's domain under Author attribution, and add this website as a website field for the green checkmark.
-			* The author's Fediverse profile is also added to Schema.org `sameAs`.
+			* The author's Fediverse profile is also added to Schema.org `sameAs` when that author has a handle.
 		* You can now enter a Facebook domain verification code in Webmaster Integration Settings. Props [Contributolo](https://github.com/Contributolo).
 	* **Sitemap styling ported from XSL to CSS:**
 		* A CSS stylesheet for the optimized sitemap has been added, so browsers that no longer apply XSLT still show a styled, human-readable sitemap.
@@ -277,6 +277,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Breadcrumbs no longer prefix archive names, such as "Category:", "Archives:", or "Author:". Custom meta titles appear as written. This affects structured data and the shortcode alike.
 		* Breadcrumb shortcode crumbs now wrap as a whole instead of breaking mid-word.
 * **Changed:**
+	* **Social and webmaster fields:**
+		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
 	* **Archive exclusion:**
 		* Posts excluded from on-site archive listings are now also omitted from the feed.
 	* **SEO Bar:**
@@ -335,6 +337,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
+	* An author Fediverse profile is added to Schema.org `sameAs` only when that author has a handle.
+	* A Facebook or X profile entered without a scheme, such as `facebook.com/YourPage`, keeps the path instead of repeating the host.
+	* The notice about multiple SEO plugins stays until every conflicting SEO plugin is deactivated.
 	* Saving SEO Settings no longer clears "Remove the site title?" on a post type archive while site title additions are removed.
 	* A redirect stored on a draft or trashed page warns that it does nothing until the page is published or restored.
 	* An empty Sitemap Query Limit is stored as the default. A stored limit of 0 is read as the default.
@@ -453,7 +458,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Data\Plugin\User::update_single_meta_item()` (`tsf()->data()->plugin()->user()->update_single_meta_item()`) now takes the meta key, the value, and then the user ID. An integer first parameter still uses the old order and raises a deprecation notice.
 		* Methods `The_SEO_Framework\Data\Plugin\User::get_preference()` (`tsf()->data()->plugin()->user()->get_preference()`), `The_SEO_Framework\Data\Plugin\User::get_preference_item()` (`tsf()->data()->plugin()->user()->get_preference_item()`), `The_SEO_Framework\Data\Plugin\User::update_single_preference_item()` (`tsf()->data()->plugin()->user()->update_single_preference_item()`), `The_SEO_Framework\Data\Plugin\User::save_preference()` (`tsf()->data()->plugin()->user()->save_preference()`), and `The_SEO_Framework\Data\Plugin\User::delete_preference()` (`tsf()->data()->plugin()->user()->delete_preference()`) read, write, and delete that preference meta. `get_preference()` includes `counter_type`, default `3`. `update_single_preference_item()` takes the preference key, the value, and then the user ID, and now stores that value through `save_preference()`.
 		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
-		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs`.
+		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs` when a handle is set.
+		* Method `The_SEO_Framework\Meta\URI\Utils::get_relative_part_from_url()` (`tsf()->uri()->utils()->get_relative_part_from_url()`) now also strips a schemeless host, such as `facebook.com/YourPage`. `The_SEO_Framework\Data\Filter\Sanitize::facebook_profile_link()` (`tsf()->sanitize()->facebook_profile_link()`) and `The_SEO_Framework\Data\Filter\Sanitize::twitter_profile_handle()` (`tsf()->sanitize()->twitter_profile_handle()`) use that path.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_args()` (`tsf()->description()->excerpt()->get_excerpt_from_args()`) now returns nothing for a latest-posts homepage, and the posts page uses the singular excerpt. `get_excerpt_from_query()` does the same.
 		* Calling `tsf()->description()->excerpt()->get_blog_page_excerpt()` is deprecated and returns an empty string. There is no replacement.

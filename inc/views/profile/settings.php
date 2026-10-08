@@ -10,6 +10,8 @@ namespace The_SEO_Framework;
 
 use const The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 
+use The_SEO_Framework\Admin\Settings\Layout\HTML;
+
 // phpcs:disable WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
 /**
@@ -32,38 +34,55 @@ use const The_SEO_Framework\ROBOTS_IGNORE_SETTINGS;
 // See output_setting_fields et al.
 [ $user ] = $view_args;
 
+$author_fediverse  = Data\Plugin\User::get_meta_item( 'fediverse_page', $user->ID );
+$creator_fediverse = Data\Plugin::get_option( 'fediverse_creator' );
+
+if ( $author_fediverse ) {
+	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url( $author_fediverse );
+} elseif ( $creator_fediverse ) {
+	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url(
+		$creator_fediverse,
+		Data\Plugin::get_option( 'fediverse_creator_url' ),
+	);
+} else {
+	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url(
+		Data\Plugin::get_option( 'fediverse_site' ),
+		Data\Plugin::get_option( 'fediverse_site_url' ),
+	);
+}
+
 $fields = [
 	'tsf-user-meta[facebook_page]'      => [
-		'name'        => \__( 'Facebook profile page', 'autodescription' ),
-		'type'        => 'url',
-		'placeholder' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
-		'value'       => Data\Plugin\User::get_meta_item( 'facebook_page', $user->ID ),
-		'class'       => '',
+		'name'    => \__( 'Facebook profile page', 'autodescription' ),
+		'type'    => 'url',
+		'example' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
+		'value'   => Data\Plugin\User::get_meta_item( 'facebook_page', $user->ID ),
+		'class'   => '',
 	],
 	'tsf-user-meta[fediverse_page]'     => [
 		'name'        => \__( 'Fediverse profile', 'autodescription' ),
 		'type'        => 'text',
 		'placeholder' =>
-			   Data\Plugin::get_option( 'fediverse_creator' )
+			   $creator_fediverse
 			?: Data\Plugin::get_option( 'fediverse_site' ),
-		'value'       => Data\Plugin\User::get_meta_item( 'fediverse_page', $user->ID ),
+		'example'     => \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' ),
+		'value'       => $author_fediverse,
 		'class'       => 'ltr',
 	],
 	'tsf-user-meta[fediverse_page_url]' => [
 		'name'        => \__( 'Fediverse profile URL', 'autodescription' ),
 		'type'        => 'url',
-		'placeholder' =>
-			   Data\Plugin::get_option( 'fediverse_creator_url' )
-			?: Data\Plugin::get_option( 'fediverse_site_url' ),
+		'placeholder' => $fediverse_url_placeholder,
+		'example'     => \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' ),
 		'value'       => Data\Plugin\User::get_meta_item( 'fediverse_page_url', $user->ID ),
 		'class'       => 'ltr',
 	],
 	'tsf-user-meta[twitter_page]'       => [
-		'name'        => \__( 'X profile handle', 'autodescription' ),
-		'type'        => 'text',
-		'placeholder' => \_x( '@your-personal-username', 'X @username', 'autodescription' ),
-		'value'       => Data\Plugin\User::get_meta_item( 'twitter_page', $user->ID ),
-		'class'       => 'ltr',
+		'name'    => \__( 'X profile handle', 'autodescription' ),
+		'type'    => 'text',
+		'example' => \_x( '@username', 'X @username', 'autodescription' ),
+		'value'   => Data\Plugin\User::get_meta_item( 'twitter_page', $user->ID ),
+		'class'   => 'ltr',
 	],
 ];
 
@@ -83,9 +102,16 @@ foreach ( $fields as $field => $labels ) {
 				name="<?= \esc_attr( $field ) ?>"
 				id="<?= \esc_attr( $field ) ?>"
 				value="<?= \esc_attr( $labels['value'] ) ?>"
-				placeholder="<?= \esc_attr( $labels['placeholder'] ) ?>"
+				placeholder="<?= \esc_attr( $labels['placeholder'] ?? '' ) ?>"
 				class="regular-text <?= \esc_attr( $labels['class'] ) ?>" />
 			<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
+			<p class=description><?php
+				printf(
+					/* translators: %s = example value */
+					\esc_html__( 'Example: %s', 'autodescription' ),
+					HTML::code_wrap( $labels['example'] ),
+				);
+			?></p>
 		</td>
 	</tr>
 	<?php
