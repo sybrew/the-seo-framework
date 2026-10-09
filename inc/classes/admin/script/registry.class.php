@@ -522,6 +522,7 @@ final class Registry {
 	 *              2. Now uses cached user data for improved admin performance.
 	 *              3. Added support for WordPress 7.0 admin color schemes.
 	 *              4. Now sanitizes scheme colors to hexadecimal before inline CSS.
+	 *              5. Now falls back to the 'modern' scheme. WordPress 7.0 is required.
 	 * @link <https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/>
 	 *
 	 * @param array $css The CSS to convert.
@@ -535,12 +536,7 @@ final class Registry {
 			$_scheme = Data\User::get_userdata(
 				Query::get_current_user_id(),
 				'admin_color',
-			) ?: (
-				// WP 7.0+ 'modern', fallback to 'fresh' for older versions
-				version_compare( \wp_get_wp_version(), '7.0', '<' )
-					? 'fresh'
-					: 'modern'
-			);
+			) ?: 'modern';
 
 			// register_admin_color_schemes runs on admin_init; but we may want to convert colors elsewhere.
 			if ( empty( $GLOBALS['_wp_admin_css_colors'] ) )
@@ -549,29 +545,25 @@ final class Registry {
 			$_colors = $GLOBALS['_wp_admin_css_colors'][ $_scheme ]->colors ?? null;
 
 			if ( ! \is_array( $_colors ) || \count( $_colors ) < 3 )
-				$_colors = [ '#1e1e1e', '#3858e9', '#7b90ff' ]; // Default to 'modern' scheme colors if something's wrong.
+				$_colors = [ '1e1e1e', '3858e9', '7b90ff' ]; // Default to 'modern' scheme colors if something's wrong.
 
 			// When the scheme lacks a 4th color, duplicate the background into the accent slot, shifting the rest down by one.
 			isset( $_colors[3] ) or array_unshift( $_colors, $_colors[0] );
 
-			// 'modern' after the same unshift. A non-hex slot cannot break out of the style declaration.
-			$_fallbacks = [ '#1e1e1e', '#1e1e1e', '#3858e9', '#7b90ff' ];
+			// Modern scheme in that slot order. A non-hex slot cannot break out of the style declaration.
+			$_fallbacks = [ '1e1e1e', '1e1e1e', '3858e9', '7b90ff' ];
 
-			foreach ( [ 0, 1, 2, 3 ] as $i ) {
-				$color = $_colors[ $i ] ?? '';
-				$hex   = \is_string( $color ) ? Sanitize::rgb_hex( $color ) : '';
-
-				$_colors[ $i ] = $hex ? "#$hex" : $_fallbacks[ $i ];
-			}
+			foreach ( [ 0, 1, 2, 3 ] as $i )
+				$_colors[ $i ] = Sanitize::rgb_hex( $_colors[ $i ] ?? '' ) ?: $_fallbacks[ $i ];
 
 			$_conversion_table = [
-				'{{$bg}}'               => $_colors[0],
+				'{{$bg}}'               => '#' . $_colors[0],
 				'{{$rel_bg}}'           => '#' . Color::get_relative_fontcolor( $_colors[0] ),
-				'{{$bg_accent}}'        => $_colors[1],
+				'{{$bg_accent}}'        => '#' . $_colors[1],
 				'{{$rel_bg_accent}}'    => '#' . Color::get_relative_fontcolor( $_colors[1] ),
-				'{{$color}}'            => $_colors[2],
+				'{{$color}}'            => '#' . $_colors[2],
 				'{{$rel_color}}'        => '#' . Color::get_relative_fontcolor( $_colors[2] ),
-				'{{$color_accent}}'     => $_colors[3],
+				'{{$color_accent}}'     => '#' . $_colors[3],
 				'{{$rel_color_accent}}' => '#' . Color::get_relative_fontcolor( $_colors[3] ),
 			];
 

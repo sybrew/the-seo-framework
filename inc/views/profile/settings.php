@@ -105,13 +105,13 @@ foreach ( $fields as $field => $labels ) {
 				placeholder="<?= \esc_attr( $labels['placeholder'] ?? '' ) ?>"
 				class="regular-text <?= \esc_attr( $labels['class'] ) ?>" />
 			<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
-			<p class=description><?php
-				printf(
-					/* translators: %s = example value */
-					\esc_html__( 'Example: %s', 'autodescription' ),
-					HTML::code_wrap( $labels['example'] ),
-				);
-			?></p>
+			<?php
+			HTML::description_noesc( \sprintf(
+				/* translators: %s = example value */
+				\esc_html__( 'Example: %s', 'autodescription' ),
+				HTML::code_wrap( $labels['example'] ),
+			) );
+			?>
 		</td>
 	</tr>
 	<?php

@@ -16,14 +16,14 @@
  * Plugin Name: The SEO Framework
  * Plugin URI: https://theseoframework.com/
  * Description: An automated, advanced, accessible, unbranded and extremely fast SEO solution for your WordPress website.
- * Version: 5.2.0-dev-62
+ * Version: 5.2.0-dev-63
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: autodescription
  * Domain Path: /language
- * Requires at least: 6.9
- * Tested up to: 6.9
+ * Requires at least: 7.0
+ * Tested up to: 7.1
  * Requires PHP: 7.4.0
  */
 

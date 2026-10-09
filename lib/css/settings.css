@@ -58,6 +58,15 @@
 	clear: both;
 }
 
+/* Dashboard cards: 8px corners, title padding 12px 16px. */
+.tsf-metaboxes .postbox {
+	border-radius: 8px;
+}
+
+.tsf-metaboxes .postbox-header .hndle {
+	padding: 12px 16px;
+}
+
 #tsf-title-separator {
 	display: table;
 	width: 100%;

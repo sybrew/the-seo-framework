@@ -2,8 +2,8 @@
 Contributors: Cybr
 Donate link: https://github.com/sponsors/sybrew
 Tags: seo, xml sitemap, google search, open graph, structured data
-Requires at least: 6.9
-Tested up to: 6.9
+Requires at least: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4.0
 Stable tag: 5.1.4
 License: GPLv3
@@ -136,7 +136,7 @@ The SEO Framework works on many things without notifying you, because the best s
 ### This plugin requires:
 
 * PHP 7.4 or higher.
-* WordPress 6.0 or higher.
+* WordPress 7.0 or higher.
 * Any modern browser for administration.
 
 ### Installation instructions:
@@ -307,7 +307,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Styling:**
 		* The default admin style for WordPress 7.0 is now assumed to be `'modern'` instead of `'fresh'`.
 		* Updated radio buttons and checkboxes to accommodate for WordPress 7.0.
-		* Fixed a layout issue where hovering title prefix and addition overlays were misaligned in WordPress 7.0 admin input fields. Remains compatible with WordPress 6.8 and 6.9.
+		* Fixed a layout issue where hovering title prefix and addition overlays were misaligned in WordPress 7.0 admin input fields.
+		* Admin notices now use the WordPress 7.0 border colors on their icons, at the 20px line height, and the dismiss control matches the 24px notice button.
+		* SEO Settings cards now use the dashboard cards' rounded corners and title spacing.
 	* **Robots.txt:**
 		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled. Props [Contributolo](https://github.com/Contributolo).
 	* **Sitemap settings:**
@@ -383,8 +385,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where a user profile submission could still change SEO profile fields while user metadata was headless.
 	* Resolved an issue where saving SEO Settings turned off each post type archive's "Remove the site title?" choice while "Remove site title from the title?" was on.
 * **Notes:**
-	* WordPress 6.9 is now required, from 6.0. This allowed us to drop some legacy workarounds and benefit from PHP 8.5 polyfills.
+	* WordPress 7.0 is now required, from 6.0. This allowed us to drop some legacy workarounds, benefit from PHP 8.5 polyfills, and not juggle between two different UI principles.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
+		* Thanks to our anonymized [Troy Server](https://deploytroy.org/docs/troy-server/) data, we found that fewer than 5% of our users are still on WordPress 6.9 or below.
 * **Other:**
 	* Twitter Card help links now point to our [Knowledge Base](https://kb.theseoframework.com/?p=451#card-types) because X removed the original documentation. The explanation on how this works has also been more explicitely defined.
 

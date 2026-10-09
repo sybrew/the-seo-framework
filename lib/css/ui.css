@@ -1,84 +1,92 @@
 /**
  * Dismissible Notices.
+ *
+ * Icon colors are the WordPress 7.0 notice borders.
+ * Icons are 20px, the notice line box. The dismiss control is the 24px core button.
  */
 .notice.tsf-notice {
 	position: relative;
-	padding-inline-end: 38px;
+	padding-inline-end: 48px;
 	clear: both;
 }
 
 .tsf-notice.tsf-show-icon p::before {
 	content: '';
 	margin-inline-end: 12px;
-	background: 0 0;
+	background: none;
 	display: inline-block;
-	font: 400 14px/16px dashicons;
-	speak: none;
-	height: 16px;
+	font: normal 20px/1 dashicons;
+	speak: never;
+	height: 20px; /* 13px type at line-height 1.54. */
 	text-align: center;
-	vertical-align: middle;
-	width: 16px;
-	line-height: 14px;
+	vertical-align: top;
+	width: 20px;
 	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .error.tsf-notice.tsf-show-icon p::before {
-	color: #d63638;
+	color: #cc1818;
 	content: "\f534";
 }
 
 .notice-warning.tsf-notice.tsf-show-icon p::before {
-	color: #dba617;
+	color: #f0b849;
 	content: "\f227";
 }
 
 .notice-info.tsf-notice.tsf-show-icon p::before {
-	color: #67a8e4;
-	font-size: 16px;
+	color: #3858e9;
 	content: "\f223";
 }
 
 .updated.tsf-notice.tsf-show-icon p::before {
-	color: #00a32a;
-	font-size: 16px;
+	color: #4ab866;
 	content: "\f147";
 }
 
-/* Specific because common.css overrides via `.updated a` */
+/* Specific because common.css overrides via `.updated a`. */
 .tsf-notice .tsf-dismiss {
 	position: absolute;
-	top: 0;
-	inset-inline-end: 0;
+	top: 12px;
+	inset-inline-end: 12px;
 	border: none;
 	margin: 0;
-	padding: 10px;
-	background: 0 0;
-	color: #787c82;
+	padding: 0;
+	background: none;
+	color: #1e1e1e;
 	cursor: pointer;
 	text-decoration: none;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 2px;
 }
 
-.tsf-dismiss:hover {
-	color: #d63638;
+.tsf-notice .tsf-dismiss:hover::before,
+.tsf-notice .tsf-dismiss:active::before {
+	color: #1e1e1e;
+	opacity: .7;
 }
 
-.tsf-dismiss:focus {
-	outline: none;
-	box-shadow:
-		0 0 0 1px #5b9dd9,
-		0 0 2px 1px rgba( 30, 140, 190, .8);
+.tsf-notice .tsf-dismiss:focus {
+	outline: 2px solid transparent;
+	box-shadow: 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
 }
 
 .tsf-dismiss::before {
-	background: 0 0;
+	background: none;
 	color: currentColor;
-	content: "\f153";
+	content: "\f335";
+	content: "\f335" / '';
 	display: block;
-	font: normal 16px/20px dashicons;
+	font: normal 20px/1 dashicons;
 	speak: never;
-	height: 20px;
+	height: 1em;
 	text-align: center;
-	width: 20px;
+	width: 1em;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }

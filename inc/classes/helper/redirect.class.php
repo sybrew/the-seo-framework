@@ -45,10 +45,13 @@ final class Redirect {
 	 * @return bool Whether external redirect is allowed.
 	 */
 	public static function allow_external_redirect() {
-		/**
-		 * @since 2.1.0
-		 * @param bool $allowed Whether external redirect is allowed.
-		 */
-		return memo() ?? memo( (bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true ) );
+		return memo()
+			?? memo(
+				/**
+				 * @since 2.1.0
+				 * @param bool $allowed Whether external redirect is allowed.
+				 */
+				(bool) \apply_filters( 'the_seo_framework_allow_external_redirect', true ),
+			);
 	}
 }
