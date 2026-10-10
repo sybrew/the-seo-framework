@@ -406,7 +406,6 @@ class User {
 	 * Updates one user preference.
 	 *
 	 * @since 5.2.0
-	 * @since 5.2.0 Now stores the value through `save_preference()`.
 	 *
 	 * @param string $item    The preference item to update.
 	 * @param mixed  $value   The preference value.

@@ -21,6 +21,7 @@ applyTo: "**/*.php"
 - Use short array syntax.
 - Always delimit regular expressions with `/`. Escape slashes in the pattern. Do not use `#` or other preg delimiters.
 - Add trailing commas on multiline array items and function calls. Do not add them on function, method, closure, or `fn()` parameter lists, closure `use (` lists, or control-structure conditions (PHP 8.0).
+- A one-line list of plain strings longer than 120 visual columns (tab = 4) requires one string per line. Sort that list by byte order unless position changes behavior, such as the search array of `str_replace`. A one-line list of at most 120 visual columns stays as written.
 - Never use strict typing unless required.
 - Short Echo Tags, HereDoc, and NowDoc are permitted.
 - Use `(s|v)printf` for complex strings when variables still need to be escaped.

@@ -84,7 +84,7 @@ class Loader {
 	 * @since 5.0.0
 	 * @since 5.2.0 1. Prevents multiple runs.
 	 *              2. Now also loads author profile scripts.
-	 * @since 5.2.0 Now registers `tsf-http` for the settings and author screens.
+	 *              3. Now registers `tsf-http` for the settings and author screens.
 	 */
 	public static function init() {
 
@@ -370,7 +370,17 @@ class Loader {
 	 */
 	public static function get_list_edit_scripts() {
 
-		$deps = [ 'tsf-title', 'tsf-description', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf', 'tsf-tt', 'tsf-utils' ];
+		$deps = [
+			'tsf',
+			'tsf-authorslugs',
+			'tsf-canonical',
+			'tsf-description',
+			'tsf-postslugs',
+			'tsf-termslugs',
+			'tsf-title',
+			'tsf-tt',
+			'tsf-utils',
+		];
 
 		// tsf-pt-le is only registered on singular admin (post list) pages, not term list pages.
 		if ( Query::is_singular_admin() )
@@ -445,7 +455,20 @@ class Loader {
 			[
 				'id'       => 'tsf-settings',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf', 'tsf-tabs', 'tsf-tt', 'wp-color-picker', 'wp-util', 'tsf-http' ],
+				'deps'     => [
+					'jquery',
+					'tsf',
+					'tsf-ays',
+					'tsf-canonical',
+					'tsf-description',
+					'tsf-http',
+					'tsf-social',
+					'tsf-tabs',
+					'tsf-title',
+					'tsf-tt',
+					'wp-color-picker',
+					'wp-util',
+				],
 				'autoload' => true,
 				'name'     => 'settings',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -514,7 +537,21 @@ class Loader {
 			[
 				'id'       => 'tsf-post',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-postslugs', 'tsf-termslugs', 'tsf-authorslugs', 'tsf-tabs', 'tsf-tt', 'tsf-utils', 'tsf-ui', 'tsf' ],
+				'deps'     => [
+					'tsf',
+					'tsf-authorslugs',
+					'tsf-ays',
+					'tsf-canonical',
+					'tsf-description',
+					'tsf-postslugs',
+					'tsf-social',
+					'tsf-tabs',
+					'tsf-termslugs',
+					'tsf-title',
+					'tsf-tt',
+					'tsf-ui',
+					'tsf-utils',
+				],
 				'autoload' => true,
 				'name'     => 'post',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -585,7 +622,16 @@ class Loader {
 			[
 				'id'       => 'tsf-term',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf-termslugs', 'tsf-tt', 'tsf' ],
+				'deps'     => [
+					'tsf',
+					'tsf-ays',
+					'tsf-canonical',
+					'tsf-description',
+					'tsf-social',
+					'tsf-termslugs',
+					'tsf-title',
+					'tsf-tt',
+				],
 				'autoload' => true,
 				'name'     => 'term',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',

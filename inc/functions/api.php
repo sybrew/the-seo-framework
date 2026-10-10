@@ -96,12 +96,12 @@ namespace {
 	 *
 	 * @since 5.0.0
 	 * @since 5.1.4 Added the `title` attribute.
-	 * @since 5.2.0 Now omits the `<style>` element when `the_seo_framework_breadcrumb_shortcode_css` returns no rules.
-	 * @since 5.2.0 1. An empty `home` attribute now omits the `home` crumb.
-	 *              2. Added the `max` attribute, which collapses the trail. Values below 3 are raised to 3.
-	 *              3. The `home` label and `aria-current` now follow each crumb's `role` instead of its
+	 * @since 5.2.0 1. Now omits the `<style>` element when `the_seo_framework_breadcrumb_shortcode_css` returns no rules.
+	 *              2. An empty `home` attribute now omits the `home` crumb.
+	 *              3. Added the `max` attribute, which collapses the trail. Values below 3 are raised to 3.
+	 *              4. The `home` label and `aria-current` now follow each crumb's `role` instead of its
 	 *                 position. Each crumb must have a `role`.
-	 *              4. A crumb without a URL now renders as `<span>` instead of an empty link.
+	 *              5. A crumb without a URL now renders as `<span>` instead of an empty link.
 	 * @link <https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/examples/breadcrumb/>
 	 *
 	 * @param array|string $atts {
@@ -211,7 +211,7 @@ namespace {
 		 * @since 5.0.0
 		 * @since 5.2.0 1. Added `padding-inline-start:0` to `nav.$class ol`.
 		 *              2. Now omits the `<style>` element when this filter returns no rules.
-		 * @since 5.2.0 `nav.$class ol` is now a wrapping flex row whose crumbs use `white-space:nowrap`.
+		 *              3. `nav.$class ol` is now a wrapping flex row whose crumbs use `white-space:nowrap`.
 		 * @param array  $css   The CSS selectors and their attributes.
 		 * @param string $class The class name of the breadcrumb wrapper.
 		 */
@@ -253,10 +253,10 @@ namespace {
 
 		/**
 		 * @since 5.0.0
-		 * @since 5.2.0 `$style` is now an empty string when the CSS filter returns no rules.
-		 * @since 5.2.0 1. `$crumbs` may now omit the `home` crumb, rename it, and include an ellipsis item
+		 * @since 5.2.0 1. `$style` is now an empty string when the CSS filter returns no rules.
+		 *              2. `$crumbs` may now omit the `home` crumb, rename it, and include an ellipsis item
 		 *                 when `max` collapses the trail. It is still the list rendered in the shortcode.
-		 *              2. Added `$trail`, the generated list before those changes.
+		 *              3. Added `$trail`, the generated list before those changes.
 		 * @param string $output The entire breadcrumb navigation element output.
 		 * @param array  $crumbs The breadcrumb items rendered in the shortcode. May omit the `home` crumb,
 		 *                       use the `home` attribute as its name, and include an item with role `ellipsis`.

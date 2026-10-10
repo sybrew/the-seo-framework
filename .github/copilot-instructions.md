@@ -7,7 +7,7 @@ Follow these rules.
 ## Repository-Specific Rules
 
 - Use PHP 7.4+.
-- In autodescription.php, increment the `Version:` header by `-dev-{number}` once per chat, at the first change that belongs in a PR. If there is no `-dev-{number}` suffix yet, add `-dev-1`. Do not edit `autodescription.php` again in that chat for version bumps; the operator manages further increments.
+- In autodescription.php, increment the `Version:` header by `-dev-{number}` once per commit, at the first change that belongs in a PR or commit. If there is no `-dev-{number}` suffix yet, add `-dev-1`. Do not edit `autodescription.php` again in that chat for version bumps; the operator manages further increments.
 - Never increment the version number itself; that is done during release.
 - We use `var_dump()` in comments to indicate a blocking issue.
 - When copying content from code, such as docblocks, comments, or commit notes, into readme.txt or other user-facing docs, preserve the essence verbatim. Only minor prose tweaks for readability are allowed. Do not add details that are not present in the source.

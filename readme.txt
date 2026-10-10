@@ -404,13 +404,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Option notes:**
 	* Of option `autodescription-site-settings` (constant `THE_SEO_FRAMEWORK_SITE_OPTIONS`, pool `tsf()->data()->plugin()`, or legacy API `tsf()->get_options()`):
 		* Added index `facebook_verification`. Default `''`. Props [Contributolo](https://github.com/Contributolo).
-		* Added index `fediverse_site`. Default `''`.
-		* Added index `fediverse_site_url`. Default `''`.
-		* Added index `fediverse_creator`. Default `''`.
-		* Added index `fediverse_creator_url`. Default `''`.
-		* Added index `breadcrumb_archive`. Default `[]`. `0` omits that post type's archive crumb from singular breadcrumbs. A missing post type includes the archive when the post type has one.
-		* Added index `breadcrumb_taxonomy`. Default `[]`. A taxonomy slug selects that singular trail, and `-1` removes it. A missing post type uses the first public hierarchical taxonomy, per `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`).
-		* Added index `knowledge_tiktok`. Default `''`.
+		* Added indexes:
+			1. `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, and `fediverse_creator_url`. Default `''`.
+			2. `breadcrumb_archive` and `breadcrumb_taxonomy`.
+				* `breadcrumb_archive`. Default `[]`. `0` omits that post type's archive crumb from singular breadcrumbs. A missing post type includes the archive when the post type has one.
+				* `breadcrumb_taxonomy`. Default `[]`. A taxonomy slug selects that singular trail, and `-1` removes it. A missing post type uses the first public hierarchical taxonomy, per `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`).
+			3. `knowledge_tiktok`. Default `''`.
 * **User data notes:**
 	* Of user meta `autodescription-user-preferences` (constant `THE_SEO_FRAMEWORK_USER_PREFERENCES`):
 		* Added index `counter_type`. Default `3`. A value above `3` is stored as `0`.
@@ -500,6 +499,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Admin\Settings\Layout\Form::output_character_counter_wrap()` (`tsf()->admin()->layout()->form()->output_character_counter_wrap()`):
 			1. Now exposes the click hint as a tooltip and an ARIA label on the count.
 			2. Now outputs the count as a link, so Enter changes the counter type.
+		* Method `The_SEO_Framework\Admin\Script\Loader::init()` (`tsf()->admin()->scripts()->loader()->init()`) now prevents multiple runs.
 	* **Improved:**
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_locale()` (`tsf()->open_graph()->get_locale()`) now derives the Open Graph locale from `The_SEO_Framework\Data\Blog::get_language()` (`tsf()->data()->blog()->get_language()`) instead of calling `get_locale()` directly. Because `get_language()` is memoized, repeated locale filter callbacks on multilingual sites (Polylang, WPML) are avoided.
 		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
@@ -547,11 +547,13 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* `the_seo_framework_sitemap_post_limit` receives the default option when `sitemap_query_limit` is empty.
 		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
 		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.
-		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, `fediverse_creator_url`, `breadcrumb_archive`, and `breadcrumb_taxonomy`.
+		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, `fediverse_creator_url`, `breadcrumb_archive`, `breadcrumb_taxonomy`, and `knowledge_tiktok`.
 		* `the_seo_framework_user_meta_defaults`:
 			1. Added `fediverse_page` and `fediverse_page_url`.
 			2. Now omits `counter_type`. It is stored as a user preference.
-		* `the_seo_framework_scripts` now includes the author profile script on user profile screens when user-edit fields are enabled.
+		* `the_seo_framework_scripts`:
+			1. Now includes the author profile script on user profile screens when user-edit fields are enabled.
+			2. Now includes `tsf-http` for the settings and author screens.
 		* `the_seo_framework_breadcrumb_list` now includes `role` on each crumb. Crumbs you add or replace must include `role`, or `tsf_breadcrumb()` causes a PHP warning.
 		* `the_seo_framework_breadcrumb_shortcode_css`:
 			1. The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.

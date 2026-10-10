@@ -124,9 +124,9 @@ class Setup {
 	 * @since 4.0.0 `home_title_location` is now switched from right to left, or vice-versa.
 	 * @since 4.2.4 `max_image_preview` now defaults to `large`, from `standard`, matching WordPress's default.
 	 * @since 4.2.7 Added `auto_description_html_method`, defaults to `fast`.
-	 * @since 5.2.0 Added `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, and `fediverse_creator_url`.
-	 * @since 5.2.0 Added `breadcrumb_archive` and `breadcrumb_taxonomy`.
-	 * @since 5.2.0 Added `knowledge_tiktok`.
+	 * @since 5.2.0 1. Added `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, and `fediverse_creator_url`.
+	 *              2. Added `breadcrumb_archive` and `breadcrumb_taxonomy`.
+	 *              3. Added `knowledge_tiktok`.
 	 *
 	 * @return array Default site options.
 	 */
