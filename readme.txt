@@ -276,9 +276,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* The breadcrumb shortcode now omits the Home crumb when the `home` attribute is empty, and its new `max` attribute collapses a longer trail. A `max` below 3 is treated as 3.
 		* Breadcrumbs no longer prefix archive names, such as "Category:", "Archives:", or "Author:". Custom meta titles appear as written. This affects structured data and the shortcode alike.
 		* Breadcrumb shortcode crumbs now wrap as a whole instead of breaking mid-word.
+	* **Connected social pages:**
+		* You can now add a TikTok profile under Schema.org Settings. When that profile is set, it is included in the site's Schema.org `sameAs` links.
 * **Changed:**
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
+		* Connected social page fields no longer list an example under every input. When a URL does not match that network's profile format, a suggested format is shown, and Use this fills it in.
 	* **Archive exclusion:**
 		* Posts excluded from on-site archive listings are now also omitted from the feed.
 	* **SEO Bar:**
@@ -407,6 +410,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Added index `fediverse_creator_url`. Default `''`.
 		* Added index `breadcrumb_archive`. Default `[]`. `0` omits that post type's archive crumb from singular breadcrumbs. A missing post type includes the archive when the post type has one.
 		* Added index `breadcrumb_taxonomy`. Default `[]`. A taxonomy slug selects that singular trail, and `-1` removes it. A missing post type uses the first public hierarchical taxonomy, per `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`).
+		* Added index `knowledge_tiktok`. Default `''`.
 * **User data notes:**
 	* Of user meta `autodescription-user-preferences` (constant `THE_SEO_FRAMEWORK_USER_PREFERENCES`):
 		* Added index `counter_type`. Default `3`. A value above `3` is stored as `0`.
@@ -462,6 +466,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Methods `The_SEO_Framework\Data\Plugin\User::get_preference()` (`tsf()->data()->plugin()->user()->get_preference()`), `The_SEO_Framework\Data\Plugin\User::get_preference_item()` (`tsf()->data()->plugin()->user()->get_preference_item()`), `The_SEO_Framework\Data\Plugin\User::update_single_preference_item()` (`tsf()->data()->plugin()->user()->update_single_preference_item()`), `The_SEO_Framework\Data\Plugin\User::save_preference()` (`tsf()->data()->plugin()->user()->save_preference()`), and `The_SEO_Framework\Data\Plugin\User::delete_preference()` (`tsf()->data()->plugin()->user()->delete_preference()`) read, write, and delete that preference meta. `get_preference()` includes `counter_type`, default `3`. `update_single_preference_item()` takes the preference key, the value, and then the user ID, and now stores that value through `save_preference()`.
 		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs` when a handle is set.
+		* Methods `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`) and `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`) now add the TikTok profile to `sameAs` when `knowledge_tiktok` is set.
 		* Method `The_SEO_Framework\Meta\URI\Utils::get_relative_part_from_url()` (`tsf()->uri()->utils()->get_relative_part_from_url()`) now also strips a schemeless host, such as `facebook.com/YourPage`. `The_SEO_Framework\Data\Filter\Sanitize::facebook_profile_link()` (`tsf()->sanitize()->facebook_profile_link()`) and `The_SEO_Framework\Data\Filter\Sanitize::twitter_profile_handle()` (`tsf()->sanitize()->twitter_profile_handle()`) use that path.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_args()` (`tsf()->description()->excerpt()->get_excerpt_from_args()`) now returns nothing for a latest-posts homepage, and the posts page uses the singular excerpt. `get_excerpt_from_query()` does the same.

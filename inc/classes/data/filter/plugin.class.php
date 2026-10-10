@@ -223,6 +223,7 @@ final class Plugin {
 			'knowledge_output'             => 'checkbox',
 			'knowledge_pinterest'          => 'fully_qualified_url',
 			'knowledge_soundcloud'         => 'fully_qualified_url',
+			'knowledge_tiktok'             => 'fully_qualified_url',
 			'knowledge_tumblr'             => 'fully_qualified_url',
 			'knowledge_twitter'            => 'fully_qualified_url',
 			'knowledge_type'               => 'knowledge_type',

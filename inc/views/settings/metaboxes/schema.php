@@ -244,7 +244,6 @@ switch ( $instance ) :
 		</div>
 		<?php
 
-		$connectedi18n = \_x( 'RelatedProfile', 'No spaces. E.g. https://facebook.com/RelatedProfile', 'autodescription' );
 		/**
 		 * @todo maybe genericons?
 		 */
@@ -253,57 +252,71 @@ switch ( $instance ) :
 				'option'      => 'knowledge_facebook',
 				'dashicon'    => 'dashicons-facebook',
 				'desc'        => \__( 'Facebook Page', 'autodescription' ),
-				'example'     => "https://www.facebook.com/$connectedi18n",
+				'formats'     => [ 'https://www.facebook.com/{username}' ],
 				'examplelink' => 'https://www.facebook.com/me',
 			],
 			'twitter'    => [
 				'option'      => 'knowledge_twitter',
 				'dashicon'    => 'dashicons-twitter',
 				'desc'        => \__( 'X Profile', 'autodescription' ),
-				'example'     => "https://x.com/$connectedi18n",
+				'formats'     => [ 'https://x.com/{username}' ],
 				'examplelink' => 'https://x.com/home', // No example link available.
 			],
 			'instagram'  => [
 				'option'      => 'knowledge_instagram',
 				'dashicon'    => 'genericon-instagram',
 				'desc'        => \__( 'Instagram Profile', 'autodescription' ),
-				'example'     => "https://instagram.com/$connectedi18n",
+				'formats'     => [ 'https://www.instagram.com/{username}' ],
 				'examplelink' => 'https://instagram.com/', // No example link available.
 			],
 			'youtube'    => [
 				'option'      => 'knowledge_youtube',
 				'dashicon'    => 'genericon-youtube',
 				'desc'        => \__( 'Youtube Profile', 'autodescription' ),
-				'example'     => "https://www.youtube.com/channel/$connectedi18n",
+				'formats'     => [
+					'https://www.youtube.com/@{username}',
+					'https://www.youtube.com/channel/{username}',
+					'https://www.youtube.com/user/{username}',
+				],
 				'examplelink' => 'https://www.youtube.com/user/',
 			],
 			'linkedin'   => [
 				'option'      => 'knowledge_linkedin',
 				'dashicon'    => 'genericon-linkedin-alt',
 				'desc'        => \__( 'LinkedIn Profile', 'autodescription' ),
-				'example'     => "https://www.linkedin.com/in/$connectedi18n/",
+				'formats'     => [
+					'https://www.linkedin.com/in/{username}',
+					'https://www.linkedin.com/company/{username}',
+				],
 				'examplelink' => 'https://www.linkedin.com/profile/view',
 			],
 			'pinterest'  => [
 				'option'      => 'knowledge_pinterest',
 				'dashicon'    => 'genericon-pinterest-alt',
 				'desc'        => \__( 'Pinterest Profile', 'autodescription' ),
-				'example'     => "https://www.pinterest.com/$connectedi18n/",
+				'formats'     => [ 'https://www.pinterest.com/{username}' ],
 				'examplelink' => 'https://www.pinterest.com/me/',
+			],
+			'tiktok'     => [
+				'option'      => 'knowledge_tiktok',
+				'dashicon'    => '', // No Dashicon or Genericon.
+				'desc'        => \__( 'TikTok Profile', 'autodescription' ),
+				'formats'     => [ 'https://www.tiktok.com/@{username}' ],
+				'examplelink' => 'https://www.tiktok.com/', // No example link available.
 			],
 			'soundcloud' => [
 				'option'      => 'knowledge_soundcloud',
 				'dashicon'    => 'genericon-cloud', // I know, it's not the real one. D:
 				'desc'        => \__( 'SoundCloud Profile', 'autodescription' ),
-				'example'     => "https://soundcloud.com/$connectedi18n",
+				'formats'     => [ 'https://soundcloud.com/{username}' ],
 				'examplelink' => 'https://soundcloud.com/you',
 			],
 			'tumblr'     => [
 				'option'      => 'knowledge_tumblr',
 				'dashicon'    => 'genericon-tumblr',
 				'desc'        => \__( 'Tumblr Blog', 'autodescription' ),
-				'example'     => "https://www.tumblr.com/blog/$connectedi18n",
-				'examplelink' => 'https://www.tumblr.com/dashboard',  // No example link available.
+				'formats'     => [ 'https://www.tumblr.com/blog/{username}' ],
+				'examplelink' => 'https://www.tumblr.com/dashboard', // No example link available.
 			],
 		];
 
@@ -316,6 +329,16 @@ switch ( $instance ) :
 		HTML::description( \__( 'These settings do not affect sharing behavior with the social networks.', 'autodescription' ) );
 
 		foreach ( $socialsites as $sc ) {
+			$social_patterns = [];
+
+			foreach ( $sc['formats'] as $format )
+				$social_patterns[] = str_replace(
+					'\{username\}',
+					'([^/?#]+)',
+					preg_quote( $format, '/' ),
+				);
+
+			$social_pattern = '^(' . implode( '|', $social_patterns ) . ')/?$';
 			?>
 			<p>
 				<label for="<?php Input::field_id( $sc['option'] ); ?>">
@@ -330,15 +353,24 @@ switch ( $instance ) :
 					?>
 				</label>
 			</p>
-			<p>
-				<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" value="<?= \esc_attr( Data\Plugin::get_option( $sc['option'] ) ) ?>" autocomplete=off>
-			</p>
+			<div class=tsf-social-format-field>
+				<p>
+					<input type=url name="<?php Input::field_name( $sc['option'] ); ?>" class=large-text id="<?php Input::field_id( $sc['option'] ); ?>" value="<?= \esc_attr( Data\Plugin::get_option( $sc['option'] ) ) ?>" autocomplete=off data-social-formats="<?= \esc_attr( \wp_json_encode( $sc['formats'] ) ) ?>" data-social-pattern="<?= \esc_attr( $social_pattern ) ?>">
+				</p>
+				<p class="tsf-social-format-hint hidden">
+					<span class=description>
+						<span class=tsf-social-format-label></span>
+						<?php
+						printf(
+							'<button type=button class="button button-small tsf-social-format-apply hidden">%s</button>',
+							/* translators: Action button. Writes a suggested profile URL into the field. */
+							\esc_html__( 'Use this', 'autodescription' ),
+						);
+						?>
+					</span>
+				</p>
+			</div>
 			<?php
-			HTML::description_noesc( \sprintf(
-				/* translators: %s = example value */
-				\esc_html__( 'Example: %s', 'autodescription' ),
-				HTML::code_wrap( $sc['example'] ),
-			) );
 		}
 		break;
 

@@ -446,6 +446,7 @@ c.js                            Pixel and character counters for SEO input field
 canonical.js                    Canonical URL field tracking and prediction
 description.js                  Meta description field handling and live previews
 gbc.js                          Gutenberg block editor forwards-compatibility shim
+http.js                         URL parsing helpers (`tsfHTTP`)
 le.js                           List Edit (quick/bulk edit) SEO field adjustments
 media.js                        Image selection, cropping, and media modal integration
 post.js                         Post editor SEO settings panel logic

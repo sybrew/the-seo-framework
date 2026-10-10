@@ -84,6 +84,7 @@ class Loader {
 	 * @since 5.0.0
 	 * @since 5.2.0 1. Prevents multiple runs.
 	 *              2. Now also loads author profile scripts.
+	 * @since 5.2.0 Now registers `tsf-http` for the settings and author screens.
 	 */
 	public static function init() {
 
@@ -155,6 +156,7 @@ class Loader {
 			self::prepare_media_scripts();
 			self::prepare_metabox_scripts();
 
+			$scripts[] = self::get_http_scripts();
 			$scripts[] = self::get_seo_settings_scripts();
 			$scripts[] = self::get_tabs_scripts();
 			$scripts[] = self::get_media_scripts();
@@ -167,8 +169,10 @@ class Loader {
 			// Always load unconditionally, options may enable the counters dynamically.
 			$scripts[] = self::get_counter_scripts();
 		} elseif ( Query::is_profile_edit() ) {
-			if ( Data\Plugin::get_option( 'display_user_edit_options' ) )
+			if ( Data\Plugin::get_option( 'display_user_edit_options' ) ) {
+				$scripts[] = self::get_http_scripts();
 				$scripts[] = self::get_author_edit_scripts();
+			}
 		}
 
 		/**
@@ -395,10 +399,32 @@ class Loader {
 	}
 
 	/**
+	 * Returns HTTP helper script params.
+	 *
+	 * Registered only. `tsf-settings` and `tsf-author` load it as a dependency.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_http_scripts() {
+		return [
+			'id'       => 'tsf-http',
+			'type'     => 'js',
+			'deps'     => [],
+			'autoload' => false,
+			'name'     => 'http',
+			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+			'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+		];
+	}
+
+	/**
 	 * Returns the SEO Settings page script params.
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Updated l10n.data.
+	 * @since 5.2.0 Added `i18n.socialFormatSuggested`.
 	 *
 	 * @return array The script params.
 	 */
@@ -419,7 +445,7 @@ class Loader {
 			[
 				'id'       => 'tsf-settings',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf', 'tsf-tabs', 'tsf-tt', 'wp-color-picker', 'wp-util' ],
+				'deps'     => [ 'jquery', 'tsf-ays', 'tsf-title', 'tsf-description', 'tsf-social', 'tsf-canonical', 'tsf', 'tsf-tabs', 'tsf-tt', 'wp-color-picker', 'wp-util', 'tsf-http' ],
 				'autoload' => true,
 				'name'     => 'settings',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
@@ -430,6 +456,10 @@ class Loader {
 						'states' => [
 							'isFrontPrivate'   => $front_id && Data\Post::is_private( $front_id ),
 							'isFrontProtected' => $front_id && Data\Post::is_password_protected( $front_id ),
+						],
+						'i18n'   => [
+							/* translators: %s = suggested profile URL */
+							'socialFormatSuggested' => \__( 'Suggested format: %s', 'autodescription' ),
 						],
 					],
 				],
@@ -592,7 +622,7 @@ class Loader {
 			[
 				'id'       => 'tsf-author',
 				'type'     => 'js',
-				'deps'     => [ 'tsf' ],
+				'deps'     => [ 'tsf', 'tsf-http' ],
 				'autoload' => true,
 				'name'     => 'author',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',

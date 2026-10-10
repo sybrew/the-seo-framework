@@ -50,7 +50,8 @@ final class Organization extends Reference {
 
 	/**
 	 * @since 5.0.0
-	 * @since 5.2.0 Now keeps a knowledge name of `0` instead of falling back to the public blog name.
+	 * @since 5.2.0 1. Now keeps a knowledge name of `0` instead of falling back to the public blog name.
+	 *              2. Added the TikTok profile to `sameAs` when `knowledge_tiktok` is set.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
@@ -78,6 +79,7 @@ final class Organization extends Reference {
 			'knowledge_youtube',
 			'knowledge_linkedin',
 			'knowledge_pinterest',
+			'knowledge_tiktok',
 			'knowledge_soundcloud',
 			'knowledge_tumblr',
 		] as $option ) {

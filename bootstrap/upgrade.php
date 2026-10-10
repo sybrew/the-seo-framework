@@ -1017,7 +1017,7 @@ function _do_upgrade_5140() {
 /**
  * Registers new options 'facebook_verification', 'fediverse_site',
  * 'fediverse_site_url', 'fediverse_creator', 'fediverse_creator_url',
- * 'breadcrumb_archive', and 'breadcrumb_taxonomy'.
+ * 'breadcrumb_archive', 'breadcrumb_taxonomy', and 'knowledge_tiktok'.
  * Copies `counter_type` from user SEO meta into user preferences.
  *
  * @since 5.2.0
@@ -1033,6 +1033,7 @@ function _do_upgrade_5200() {
 			'fediverse_creator_url' => '',
 			'breadcrumb_archive'    => [],
 			'breadcrumb_taxonomy'   => [],
+			'knowledge_tiktok'      => '',
 		] );
 
 		global $wpdb;
