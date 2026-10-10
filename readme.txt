@@ -342,6 +342,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
+	* Resolved an issue where a backslash in a post or term SEO text field was removed every time it was saved. Now, the input and output are idempotent.
+		* This was already implemented for the site SEO Settings.
 	* An author Fediverse profile is added to Schema.org `sameAs` only when that author has a handle.
 	* A Facebook or X profile entered without a scheme, such as `facebook.com/YourPage`, keeps the path instead of repeating the host.
 	* The notice about multiple SEO plugins stays until every conflicting SEO plugin is deactivated.

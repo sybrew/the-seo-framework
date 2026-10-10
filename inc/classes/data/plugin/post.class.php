@@ -250,6 +250,7 @@ class Post {
 	 *              2. Renamed from `save_post_meta`.
 	 * @since 5.2.0 1. Now clears the excluded post ID cache.
 	 *              2. Now refreshes the sitemap.
+	 *              3. Now keeps backslashes. The value is slash-escaped for `update_post_meta()`, which unslashes on write.
 	 *
 	 * @param int|\WP_Post $post_id The post ID. Also accepts Post objects.
 	 * @param array        $data    The post meta fields, will be merged with the defaults.
@@ -290,7 +291,11 @@ class Post {
 			// Save $value, or delete if the $value is empty.
 			// We can safely assume no one-zero/qubit options pass through here thanks to sanitization earlier--alleviating database weight.
 			if ( $value || ( \is_string( $value ) && \strlen( $value ) ) ) {
-				\update_post_meta( $post_id, $field, $value );
+				\update_post_meta(
+					$post_id,
+					$field,
+					\wp_slash( $value ),
+				);
 			} else {
 				// All empty values are deleted here, even if they never existed... is this the best way to handle this?
 				// This is fine for as long as we merge the getter values with the defaults.

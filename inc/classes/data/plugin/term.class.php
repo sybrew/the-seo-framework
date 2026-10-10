@@ -229,6 +229,7 @@ class Term {
 	 * @since 5.0.0 1. Removed 3rd and 4th parameters ($tt_id and $taxonomy).
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `save_term_meta`.
+	 * @since 5.2.0 Now keeps backslashes. The value is slash-escaped for `update_term_meta()`, which unslashes before sanitizing.
 	 *
 	 * @param int   $term_id Term ID.
 	 * @param array $data    The data to save.
@@ -260,7 +261,11 @@ class Term {
 		unset( static::$meta_memo[ $term_id ] );
 
 		// Do we want to cycle through the data, so we store only the non-defaults? @see save_post_meta()
-		\update_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+		\update_term_meta(
+			$term_id,
+			\THE_SEO_FRAMEWORK_TERM_OPTIONS,
+			\wp_slash( $data ),
+		);
 	}
 
 	/**
@@ -272,6 +277,7 @@ class Term {
 	 * @since 4.0.0 Removed 2nd, unused, parameter.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `delete_term_meta`.
+	 * @since 5.2.0 Now keeps backslashes in remaining values. The value is slash-escaped for `update_term_meta()`, which unslashes on write.
 	 * @ignore Unused internally. Public API.
 	 *
 	 * @param int $term_id Term ID.
@@ -293,7 +299,11 @@ class Term {
 		if ( empty( $data ) ) {
 			\delete_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS );
 		} else {
-			\update_term_meta( $term_id, \THE_SEO_FRAMEWORK_TERM_OPTIONS, $data );
+			\update_term_meta(
+				$term_id,
+				\THE_SEO_FRAMEWORK_TERM_OPTIONS,
+				\wp_slash( $data ),
+			);
 		}
 	}
 }
