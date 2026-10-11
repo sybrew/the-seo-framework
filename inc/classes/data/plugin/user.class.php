@@ -205,6 +205,7 @@ class User {
 	 * @since 5.2.0 1. Added `fediverse_page` and `fediverse_page_url`.
 	 *              2. Now omits `counter_type`. It is stored as a user preference.
 	 *              3. Added author archive SEO fields.
+	 *              4. Added `author_type`.
 	 *
 	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
 	 * @return array The user meta defaults.
@@ -215,6 +216,7 @@ class User {
 		 * @since 5.2.0 1. Added `fediverse_page` and `fediverse_page_url`.
 		 *              2. Now omits `counter_type`. It is stored as a user preference.
 		 *              3. Added author archive SEO fields.
+		 *              4. Added `author_type`.
 		 * @param array $defaults
 		 * @param int   $user_id
 		 */
@@ -225,6 +227,7 @@ class User {
 				'fediverse_page'     => '',
 				'fediverse_page_url' => '',
 				'twitter_page'       => '',
+				'author_type'        => 'person',
 				'doctitle'           => '',
 				'title_no_blog_name' => 0,
 				'description'        => '',

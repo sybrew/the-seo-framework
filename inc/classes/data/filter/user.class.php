@@ -38,6 +38,7 @@ final class User {
 	 * @since 5.0.0
 	 * @since 5.2.0 1. No longer accepts `counter_type`.
 	 *              2. Added author archive SEO fields.
+	 *              3. Added `author_type`.
 	 *
 	 * @param mixed[] $meta_value An unsanitized value.
 	 * @return array[] The sanitized user meta.
@@ -90,6 +91,10 @@ final class User {
 
 				case 'twitter_page':
 					$value = Sanitize::twitter_profile_handle( $value );
+					break;
+
+				case 'author_type':
+					$value = 'organization' === $value ? 'organization' : 'person';
 					break;
 
 				case 'canonical':

@@ -77,7 +77,22 @@ final class Author extends Reference {
 	}
 
 	/**
+	 * Returns the Schema @type the author represents.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int $author_id The author ID.
+	 * @return string|string[] The Schema @type.
+	 */
+	private static function get_type( $author_id ) {
+		return 'organization' === Data\Plugin\User::get_meta_item( 'author_type', $author_id )
+			? 'Organization'
+			: static::$type;
+	}
+
+	/**
 	 * @since 5.0.0
+	 * @since 5.2.0 Now uses `Organization` in the ID when the author represents an organization.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
@@ -91,12 +106,13 @@ final class Author extends Reference {
 			return '';
 
 		return Meta\URI::get_bare_front_page_url()
-			. '#/schema/' . current( (array) static::$type ) . '/' . \wp_hash( "tsf+$author_id" );
+			. '#/schema/' . current( (array) static::get_type( $author_id ) ) . '/' . \wp_hash( "tsf+$author_id" );
 	}
 
 	/**
 	 * @since 5.0.0
-	 * @since 5.2.0 Now adds the author's Fediverse profile to `sameAs` when a handle is set.
+	 * @since 5.2.0 1. Now adds the author's Fediverse profile to `sameAs` when a handle is set.
+	 *              2. Now uses `Organization` as the type when the author represents an organization.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
@@ -113,7 +129,7 @@ final class Author extends Reference {
 		$user_meta = Data\Plugin\User::get_meta( $author_id );
 
 		$entity = [
-			'@type' => static::$type,
+			'@type' => static::get_type( $author_id ),
 			'@id'   => static::get_id( [ 'uid' => $author_id ] ),
 			'name'  => $user_data->display_name ?? '', // Yes, this could lead to an empty Author entity in a corner case.
 			// Let's not; may invoke bad bots. Let's do this via sameas.
