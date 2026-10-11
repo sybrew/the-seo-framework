@@ -138,10 +138,7 @@ final class ListTable extends Admin\Lists\Table {
 		if ( $this->column_name !== $column_name ) return;
 
 		// phpcs:disable WordPress.Security.EscapeOutput -- generate_bar escapes.
-		echo Builder::generate_bar( [
-			'id'        => $post_id,
-			'post_type' => $this->post_type,
-		] );
+		echo Builder::generate_bar( [ 'id' => $post_id ] );
 		// phpcs:enable WordPress.Security.EscapeOutput
 
 		if ( $this->doing_ajax )

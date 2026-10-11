@@ -141,15 +141,7 @@ abstract class Main {
 	 * @generator
 	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
 	 *
-	 * @param array $query {
-	 *     The query parameters.
-	 *
-	 *     @type int    $id        The current post or term ID. Required unless `uid` is set.
-	 *     @type string $taxonomy  Optional. If not set, this will interpret it as a post.
-	 *     @type string $post_type Optional. If not set, this will be automatically filled.
-	 *                             This parameter is ignored for taxonomies and users.
-	 *     @type int    $uid       The user ID. When set with an empty `id`, this runs the user SEO Bar.
-	 * }
+	 * @param array $query The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @yield array {
 	 *     @type array {$test} The testing results.
 	 * }
@@ -171,15 +163,7 @@ abstract class Main {
 	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
 	 *
 	 * @param string|string[] $tests The test(s) to perform.
-	 * @param array           $query {
-	 *     The query parameters.
-	 *
-	 *     @type int    $id        The current post or term ID. Required unless `uid` is set.
-	 *     @type string $taxonomy  Optional. If not set, this will interpret it as a post.
-	 *     @type string $post_type Optional. If not set, this will be automatically filled.
-	 *                             This parameter is ignored for taxonomies and users.
-	 *     @type int    $uid       The user ID. When set with an empty `id`, this runs the user SEO Bar.
-	 * }
+	 * @param array           $query The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @yield array {
 	 *     @type array {$test} The testing results.
 	 * }

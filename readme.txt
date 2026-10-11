@@ -473,6 +473,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`):
 			1. Now strips HTML tags from tooltip title and reason. The title and reason were already considered trusted (hardcoded input), but this extra hardening mitigates potential oversights from custom integrations.
 			2. Now builds the user SEO Bar when `uid` is set and `id` is empty.
+			3. Now reads the post type from the post. `$query['post_type']` is ignored.
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object. Props [Contributolo](https://github.com/Contributolo).
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):
 			1. No longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`

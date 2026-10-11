@@ -89,18 +89,10 @@ class Builder {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 Now manages the builder, too.
-	 * @since 5.2.0 Now builds a user SEO Bar when `uid` is set and `id` is empty.
+	 * @since 5.2.0 1. Now builds a user SEO Bar when `uid` is set and `id` is empty.
+	 *              2. Now reads the post type from the post. `$query['post_type']` is ignored.
 	 *
-	 * @param array $query {
-	 *     The query arguments for the SEO Bar.
-	 *
-	 *     @type int    $id        The current post or term ID. Required unless `uid` is set.
-	 *     @type string $tax       Optional. If not set, this will interpret it as a post.
-	 *     @type string $pta       Not implemented. Do not populate.
-	 *     @type string $post_type Optional. If not set, this will be automatically filled.
-	 *                             This parameter is ignored for taxonomies and users.
-	 *     @type int    $uid       The user ID. When set with an empty `id`, this builds the user SEO Bar.
-	 * }
+	 * @param array $query The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The SEO Bar.
 	 */
 	public static function generate_bar( $query ) {
@@ -124,8 +116,6 @@ class Builder {
 
 			case 'single':
 				$builder = Builder\Page::get_instance();
-
-				$query['post_type'] = ( $query['post_type'] ?? '' ) ?: \get_post_type( $query['id'] );
 				break;
 
 			default:
