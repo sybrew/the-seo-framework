@@ -190,6 +190,26 @@ switch ( $instance ) :
 		);
 
 		HTML::description( \__( 'Note: Hiding option fields does not remove the data once stored in them.', 'autodescription' ) );
+
+		?>
+		<hr>
+		<?php
+		HTML::header_title( \__( 'Editing Settings', 'autodescription' ) );
+
+		$editing_info = HTML::make_info(
+			\__( 'Clicking an empty input field keeps the blurred placeholder and places the cursor where you clicked. Editing makes it normal text. Clearing the field returns the placeholder.', 'autodescription' ),
+			'',
+			false,
+		);
+
+		HTML::wrap_fields(
+			Input::make_checkbox( [
+				'id'     => 'edit_proposed_values',
+				'label'  => \esc_html__( 'Edit generated values directly?', 'autodescription' ) . " $editing_info",
+				'escape' => false,
+			] ),
+			true,
+		);
 		break;
 
 	case 'performance':

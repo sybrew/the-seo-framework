@@ -127,6 +127,7 @@ class Setup {
 	 * @since 5.2.0 1. Added `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, and `fediverse_creator_url`.
 	 *              2. Added `breadcrumb_archive` and `breadcrumb_taxonomy`.
 	 *              3. Added `knowledge_tiktok`.
+	 *              4. Added `edit_proposed_values`.
 	 *
 	 * @return array Default site options.
 	 */
@@ -166,6 +167,8 @@ class Setup {
 
 				'display_pixel_counter'     => 1, // Pixel counter.
 				'display_character_counter' => 1, // Character counter.
+
+				'edit_proposed_values' => 1, // Edit generated values directly.
 
 				// General. Canonical.
 				'canonical_scheme' => 'automatic', // Canonical URL scheme.

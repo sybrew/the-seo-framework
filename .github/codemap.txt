@@ -453,6 +453,7 @@ le.js                           List Edit (quick/bulk edit) SEO field adjustment
 media.js                        Image selection, cropping, and media modal integration
 post.js                         Post editor SEO settings panel logic
 postslugs.js                    Post slug fetching and caching via REST API
+propose.js                      Fills empty SEO fields from data-tsf-proposed and keeps the placeholder blur until edited.
 pt.js                           Primary Term selection for the classic editor
 pt-gb.js                        Primary Term selection for the Gutenberg block editor
 pt-le.js                        Primary Term selection in List Edit (quick/bulk edit)

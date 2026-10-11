@@ -164,6 +164,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 				<th scope=row valign=top><?php \esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 				<td>
 					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- generate_bar escapes.
 					echo Admin\SEOBar\Builder::generate_bar( $generator_args );
 					?>
 				</td>
@@ -193,7 +194,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input type=text name="tsf-user-meta[doctitle]" id="tsf-user-meta[doctitle]" value="<?= \esc_html( Sanitize::metadata_content( $meta['doctitle'] ) ) ?>" size=40 autocomplete=off data-form-type=other>
+					<input type=text name="tsf-user-meta[doctitle]" id="tsf-user-meta[doctitle]" value="<?= \esc_html( Sanitize::metadata_content( $meta['doctitle'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-proposed="">
 					<?php
 					Input::output_js_title_data(
 						'tsf-user-meta[doctitle]',
@@ -241,7 +242,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 				?>
 			</th>
 			<td>
-				<textarea name="tsf-user-meta[description]" id="tsf-user-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= \esc_html( Sanitize::metadata_content( $meta['description'] ) ) ?></textarea>
+				<textarea name="tsf-user-meta[description]" id="tsf-user-meta[description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-proposed=""><?= \esc_html( Sanitize::metadata_content( $meta['description'] ) ) ?></textarea>
 				<?php
 				Input::output_js_description_data(
 					'tsf-user-meta[description]',
@@ -297,7 +298,7 @@ Input::output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-og-title-wrap>
-					<input name="tsf-user-meta[og_title]" id="tsf-user-meta[og_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['og_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=ogTitle>
+					<input name="tsf-user-meta[og_title]" id="tsf-user-meta[og_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['og_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=ogTitle data-tsf-proposed="">
 				</div>
 			</td>
 		</tr>
@@ -313,7 +314,7 @@ Input::output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="tsf-user-meta[og_description]" id="tsf-user-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=ogDesc><?= \esc_html( Sanitize::metadata_content( $meta['og_description'] ) ) ?></textarea>
+				<textarea name="tsf-user-meta[og_description]" id="tsf-user-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=ogDesc data-tsf-proposed=""><?= \esc_html( Sanitize::metadata_content( $meta['og_description'] ) ) ?></textarea>
 			</td>
 		</tr>
 
@@ -329,7 +330,7 @@ Input::output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-tw-title-wrap>
-					<input name="tsf-user-meta[tw_title]" id="tsf-user-meta[tw_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['tw_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=twTitle>
+					<input name="tsf-user-meta[tw_title]" id="tsf-user-meta[tw_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['tw_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=twTitle data-tsf-proposed="">
 				</div>
 			</td>
 		</tr>
@@ -345,7 +346,7 @@ Input::output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="tsf-user-meta[tw_description]" id="tsf-user-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=twDesc><?= \esc_html( Sanitize::metadata_content( $meta['tw_description'] ) ) ?></textarea>
+				<textarea name="tsf-user-meta[tw_description]" id="tsf-user-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=twDesc data-tsf-proposed=""><?= \esc_html( Sanitize::metadata_content( $meta['tw_description'] ) ) ?></textarea>
 			</td>
 		</tr>
 
@@ -395,7 +396,7 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="tsf-user-meta[social_image_url]" id=tsf_user_meta_socialimage-url placeholder="<?= \esc_attr( $image_placeholder ) ?>" value="<?= \esc_attr( $meta['social_image_url'] ) ?>" size=40 autocomplete=off>
+				<input type=url name="tsf-user-meta[social_image_url]" id=tsf_user_meta_socialimage-url placeholder="<?= \esc_attr( $image_placeholder ) ?>" value="<?= \esc_attr( $meta['social_image_url'] ) ?>" size=40 autocomplete=off data-tsf-proposed="<?= \esc_attr( $image_placeholder ) ?>">
 				<input type=hidden name="tsf-user-meta[social_image_id]" id=tsf_user_meta_socialimage-id value="<?= \absint( $meta['social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js>
 				<div class="hide-if-no-tsf-js tsf-user-button-wrap">
 					<?php
@@ -459,7 +460,7 @@ foreach ( $authorial_fields as $field => $labels ) {
 				</label>
 			</th>
 			<td>
-				<input type=url name="tsf-user-meta[canonical]" id="tsf-user-meta[canonical]" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off>
+				<input type=url name="tsf-user-meta[canonical]" id="tsf-user-meta[canonical]" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off data-tsf-proposed="<?= \esc_url( $default_canonical ) ?>">
 				<?php
 				Input::output_js_canonical_data(
 					'tsf-user-meta[canonical]',

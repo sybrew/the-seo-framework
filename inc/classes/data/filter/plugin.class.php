@@ -184,6 +184,7 @@ final class Plugin {
 			'display_seo_bar_tables'       => 'checkbox',
 			'display_term_edit_options'    => 'checkbox',
 			'display_user_edit_options'    => 'checkbox',
+			'edit_proposed_values'         => 'checkbox',
 			'excerpt_the_feed'             => 'checkbox',
 			'facebook_author'              => 'facebook_profile_link',
 			'facebook_publisher'           => 'facebook_profile_link',

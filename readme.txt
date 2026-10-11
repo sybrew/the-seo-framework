@@ -291,6 +291,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* The users list shows the SEO Bar.
 			* Profile and user-edit show Doing it Right when "Display the SEO Bar in the SEO Settings meta box?" is enabled.
 			* A user who cannot edit posts is not a public author. The SEO Bar shows only the indexing block.
+	* **Editing generated values:** Clicking an empty input field keeps the blurred placeholder and places the cursor where you clicked. Editing makes it normal text. Clearing the field returns the placeholder. New sites have this on. Existing sites keep the previous behavior until you enable "Edit generated values directly?" under General Settings > Layout > Editing Settings.
 * **Changed:**
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.

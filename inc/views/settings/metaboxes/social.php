@@ -466,7 +466,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( 'fediverse_site_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site_url' ); ?>" placeholder="<?= \esc_attr( $fv_site_url_placeholder ) ?>" value="<?= \esc_attr( $fv_site_url ) ?>">
+			<input type=url name="<?php Input::field_name( 'fediverse_site_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site_url' ); ?>" placeholder="<?= \esc_attr( $fv_site_url_placeholder ) ?>" value="<?= \esc_attr( $fv_site_url ) ?>" data-tsf-proposed="<?= \esc_attr( $fv_site_url_placeholder ) ?>">
 		</p>
 		<?php
 		HTML::description_noesc( \sprintf(
@@ -490,7 +490,7 @@ switch ( $instance ) :
 		</p>
 		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'fediverse_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator' ); ?>" placeholder="<?= \esc_attr( $fv_site ) ?>" value="<?= \esc_attr( $fv_creator ) ?>">
+			<input type=text name="<?php Input::field_name( 'fediverse_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator' ); ?>" placeholder="<?= \esc_attr( $fv_site ) ?>" value="<?= \esc_attr( $fv_creator ) ?>" data-tsf-proposed="<?= \esc_attr( $fv_site ) ?>">
 		</p>
 		<?php
 		HTML::description_noesc( \sprintf(
@@ -512,7 +512,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( 'fediverse_creator_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator_url' ); ?>" placeholder="<?= \esc_attr( $fv_creator_url_placeholder ) ?>" value="<?= \esc_attr( $fv_creator_url ) ?>">
+			<input type=url name="<?php Input::field_name( 'fediverse_creator_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator_url' ); ?>" placeholder="<?= \esc_attr( $fv_creator_url_placeholder ) ?>" value="<?= \esc_attr( $fv_creator_url ) ?>" data-tsf-proposed="<?= \esc_attr( $fv_creator_url_placeholder ) ?>">
 		</p>
 		<?php
 		HTML::description_noesc( \sprintf(

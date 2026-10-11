@@ -1017,10 +1017,12 @@ function _do_upgrade_5140() {
 /**
  * Registers new options 'facebook_verification', 'fediverse_site',
  * 'fediverse_site_url', 'fediverse_creator', 'fediverse_creator_url',
- * 'breadcrumb_archive', 'breadcrumb_taxonomy', and 'knowledge_tiktok'.
- * Copies `counter_type` from user SEO meta into user preferences.
+ * 'breadcrumb_archive', 'breadcrumb_taxonomy', 'knowledge_tiktok',
+ * and 'edit_proposed_values'. Copies `counter_type` from user SEO meta
+ * into user preferences.
  *
  * @since 5.2.0
+ * @since 5.2.0 Now also registers `edit_proposed_values`, disabled for upgraded sites.
  */
 function _do_upgrade_5200() {
 
@@ -1034,6 +1036,7 @@ function _do_upgrade_5200() {
 			'breadcrumb_archive'    => [],
 			'breadcrumb_taxonomy'   => [],
 			'knowledge_tiktok'      => '',
+			'edit_proposed_values'  => 0,
 		] );
 
 		global $wpdb;

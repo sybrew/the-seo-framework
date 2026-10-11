@@ -86,6 +86,7 @@ class Loader {
 	 *              2. Now also loads author profile scripts.
 	 *              3. Now registers `tsf-http` for the settings and author screens.
 	 *              4. Now loads the title, description, social, canonical, media, and counter scripts on the author profile screen.
+	 *              5. Now loads `tsf-propose` when `edit_proposed_values` is enabled, and always on SEO Settings.
 	 */
 	public static function init() {
 
@@ -97,6 +98,9 @@ class Loader {
 
 		if ( Query::is_post_edit() ) {
 			self::prepare_media_scripts();
+
+			if ( Data\Plugin::get_option( 'edit_proposed_values' ) )
+				$scripts[] = self::get_propose_scripts();
 
 			$scripts[] = self::get_post_edit_scripts();
 			$scripts[] = self::get_tabs_scripts();
@@ -121,6 +125,9 @@ class Loader {
 			if ( Data\Plugin::get_option( 'display_term_edit_options' ) ) {
 				self::prepare_media_scripts();
 
+				if ( Data\Plugin::get_option( 'edit_proposed_values' ) )
+					$scripts[] = self::get_propose_scripts();
+
 				$scripts[] = self::get_term_edit_scripts();
 				$scripts[] = self::get_media_scripts();
 				$scripts[] = self::get_title_scripts();
@@ -139,6 +146,9 @@ class Loader {
 		} elseif ( Query::is_wp_lists_edit() && ! Query::is_profile_admin() ) {
 			// User profiles don't have quick edit.
 			if ( Data\Plugin::get_option( 'display_list_edit_options' ) ) {
+				if ( Data\Plugin::get_option( 'edit_proposed_values' ) )
+					$scripts[] = self::get_propose_scripts();
+
 				$scripts[] = self::get_list_edit_scripts();
 				$scripts[] = self::get_title_scripts();
 				$scripts[] = self::get_description_scripts();
@@ -158,6 +168,8 @@ class Loader {
 			self::prepare_media_scripts();
 			self::prepare_metabox_scripts();
 
+			// The checkbox on this screen engages and disengages the script without a reload.
+			$scripts[] = self::get_propose_scripts();
 			$scripts[] = self::get_http_scripts();
 			$scripts[] = self::get_seo_settings_scripts();
 			$scripts[] = self::get_tabs_scripts();
@@ -173,6 +185,9 @@ class Loader {
 		} elseif ( Query::is_profile_edit() ) {
 			if ( Data\Plugin::get_option( 'display_user_edit_options' ) ) {
 				self::prepare_media_scripts();
+
+				if ( Data\Plugin::get_option( 'edit_proposed_values' ) )
+					$scripts[] = self::get_propose_scripts();
 
 				$scripts[] = self::get_http_scripts();
 				$scripts[] = self::get_author_edit_scripts();
@@ -474,6 +489,7 @@ class Loader {
 				'deps'     => [
 					'jquery',
 					'tsf',
+					'tsf-propose',
 					'tsf-ays',
 					'tsf-canonical',
 					'tsf-description',
@@ -1106,6 +1122,31 @@ class Loader {
 				],
 				'tmpl'     => [
 					'file' => $tmpl_file,
+				],
+			],
+		];
+	}
+
+	/**
+	 * Returns the generated-value editing script params.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_propose_scripts() {
+		return [
+			'id'       => 'tsf-propose',
+			'type'     => 'js',
+			'deps'     => [ 'tsf' ],
+			'autoload' => true,
+			'name'     => 'propose',
+			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+			'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			'l10n'     => [
+				'name' => 'tsfProposeL10n',
+				'data' => [
+					'enabled' => (bool) Data\Plugin::get_option( 'edit_proposed_values' ),
 				],
 			],
 		];

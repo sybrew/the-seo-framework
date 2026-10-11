@@ -89,7 +89,7 @@ $robots_settings = [
 				and Form::output_pixel_counter_wrap( 'autodescription-quick[doctitle]', 'title' );
 			?>
 			<div class="tsf-pad-input tsf-title-wrap">
-				<input type=text id=autodescription-quick[doctitle] name=autodescription-quick[doctitle]>
+				<input type=text id=autodescription-quick[doctitle] name=autodescription-quick[doctitle] data-tsf-proposed="">
 				<?php
 				Input::output_js_title_data( 'autodescription-quick[doctitle]', [] );
 				?>
@@ -106,7 +106,7 @@ $robots_settings = [
 				and Form::output_pixel_counter_wrap( 'autodescription-quick[description]', 'description' );
 			?>
 			<div class=tsf-pad-input>
-				<textarea id=autodescription-quick[description] name=autodescription-quick[description] rows=3 cols=22></textarea>
+				<textarea id=autodescription-quick[description] name=autodescription-quick[description] rows=3 cols=22 data-tsf-proposed=""></textarea>
 				<?php
 				Input::output_js_description_data( 'autodescription-quick[description]', [] );
 				?>
@@ -119,7 +119,7 @@ $robots_settings = [
 			<label>
 				<span class=title><?php \esc_html_e( 'Canonical URL', 'autodescription' ); ?></span>
 				<span class=tsf-inline-input>
-					<input type=url id=autodescription-quick[canonical] name=autodescription-quick[canonical]>
+					<input type=url id=autodescription-quick[canonical] name=autodescription-quick[canonical] data-tsf-proposed="">
 				</span>
 			</label>
 			<div class="inline-edit-group wp-clearfix">
