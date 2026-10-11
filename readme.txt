@@ -291,6 +291,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* The users list shows the SEO Bar.
 			* Profile and user-edit show Doing it Right when "Display the SEO Bar in the SEO Settings meta box?" is enabled.
 			* A user who cannot edit posts is not a public author. The SEO Bar shows only the indexing block.
+	* **Post authors:**
+		* Authorial Info on the profile page now asks whether the author represents a person or an organization. The default is A Person.
+		* Choose An Organization for an account that publishes on behalf of a company or brand. Structured data then credits that author's posts to an Organization instead of a Person.
 * **Changed:**
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
@@ -431,6 +434,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Of user meta `autodescription-user-settings` (constant `THE_SEO_FRAMEWORK_USER_OPTIONS`):
 		* The 5.2.0 upgrade copies `counter_type` into `autodescription-user-preferences` and leaves the old index in place. The next save of this meta drops `counter_type`, because it is no longer a known SEO field.
 		* Added indexes `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`. Default empty, except `title_no_blog_name`, `social_image_id`, `noindex`, `nofollow`, and `noarchive`, which default to `0`. An unchecked "Remove the site title?" is stored as `0`.
+		* Added index `author_type`. Default `person`. Any value other than `organization` is stored as `person`.
 * **PHP API notes:**
 	* **Added:**
 		* Pool `tsf()->fediverse()` is now available.
@@ -487,6 +491,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			1. Added `fediverse_page` and `fediverse_page_url`.
 			2. Now omits `counter_type`. It is stored as a user preference.
 			3. Added `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`.
+			4. Added `author_type`.
 		* Method `The_SEO_Framework\Data\Plugin\User::update_single_meta_item()` (`tsf()->data()->plugin()->user()->update_single_meta_item()`) now takes the meta key, the value, and then the user ID. An integer first parameter still uses the old order and raises a deprecation notice.
 		* Methods `The_SEO_Framework\Data\Plugin\User::save_meta()` (`tsf()->data()->plugin()->user()->save_meta()`) and `The_SEO_Framework\Data\Plugin\User::delete_meta()` (`tsf()->data()->plugin()->user()->delete_meta()`) now keep backslashes. The stored value is slash-escaped for `update_user_meta()`, which unslashes before storing.
 		* Methods `The_SEO_Framework\Meta\Title::get_custom_title()` (`tsf()->title()->get_custom_title()`), `The_SEO_Framework\Meta\Description::get_custom_description()` (`tsf()->description()->get_custom_description()`), `The_SEO_Framework\Meta\Open_Graph::get_custom_title()` (`tsf()->open_graph()->get_custom_title()`), `The_SEO_Framework\Meta\Open_Graph::get_custom_description()` (`tsf()->open_graph()->get_custom_description()`), `The_SEO_Framework\Meta\Twitter::get_custom_card_type()` (`tsf()->twitter()->get_custom_card_type()`), `The_SEO_Framework\Meta\Twitter::get_custom_title()` (`tsf()->twitter()->get_custom_title()`), `The_SEO_Framework\Meta\Twitter::get_custom_description()` (`tsf()->twitter()->get_custom_description()`), `The_SEO_Framework\Meta\URI::get_custom_canonical_url()` (`tsf()->uri()->get_custom_canonical_url()`), `The_SEO_Framework\Meta\URI::get_redirect_url()` (`tsf()->uri()->get_redirect_url()`), and `The_SEO_Framework\Meta\Image::generate_custom_image_details()` (`tsf()->image()->generate_custom_image_details()`) now read the matching author archive fields from user meta. Pass `[ 'uid' => $user_id ]` and leave `id` empty. On an author archive, the query path does the same.
@@ -498,6 +503,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Methods `The_SEO_Framework\Data\Plugin\User::get_preference()` (`tsf()->data()->plugin()->user()->get_preference()`), `The_SEO_Framework\Data\Plugin\User::get_preference_item()` (`tsf()->data()->plugin()->user()->get_preference_item()`), `The_SEO_Framework\Data\Plugin\User::update_single_preference_item()` (`tsf()->data()->plugin()->user()->update_single_preference_item()`), `The_SEO_Framework\Data\Plugin\User::save_preference()` (`tsf()->data()->plugin()->user()->save_preference()`), and `The_SEO_Framework\Data\Plugin\User::delete_preference()` (`tsf()->data()->plugin()->user()->delete_preference()`) read, write, and delete that preference meta. `get_preference()` includes `counter_type`, default `3`. `update_single_preference_item()` takes the preference key, the value, and then the user ID, and now stores that value through `save_preference()`.
 		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs` when a handle is set.
+		* Methods `The_SEO_Framework\Meta\Schema\Entities\Author::build()` and `The_SEO_Framework\Meta\Schema\Entities\Author::get_id()` (`tsf()->schema()->entities['Author']`) now use `Organization` instead of `Person` for the `@type` and the `@id` when the author's `author_type` is `organization`.
 		* Methods `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`) and `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`) now add the TikTok profile to `sameAs` when `knowledge_tiktok` is set.
 		* Method `The_SEO_Framework\Meta\URI\Utils::get_relative_part_from_url()` (`tsf()->uri()->utils()->get_relative_part_from_url()`) now also strips a schemeless host, such as `facebook.com/YourPage`. `The_SEO_Framework\Data\Filter\Sanitize::facebook_profile_link()` (`tsf()->sanitize()->facebook_profile_link()`) and `The_SEO_Framework\Data\Filter\Sanitize::twitter_profile_handle()` (`tsf()->sanitize()->twitter_profile_handle()`) use that path.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
@@ -587,6 +593,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			1. Added `fediverse_page` and `fediverse_page_url`.
 			2. Now omits `counter_type`. It is stored as a user preference.
 			3. Added `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`.
+			4. Added `author_type`.
 		* `the_seo_framework_scripts`:
 			1. Now includes the author profile script and stylesheet, and the title, description, social, canonical, media, and counter scripts, on user profile screens when user-edit fields are enabled.
 			2. Now includes `tsf-http` for the settings and author screens.

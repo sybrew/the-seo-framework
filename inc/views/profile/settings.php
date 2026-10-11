@@ -411,6 +411,28 @@ Input::output_js_social_data(
 
 <h3><?php \esc_html_e( 'Authorial Info', 'autodescription' ); ?></h3>
 <table class="form-table tsf-user-authorial">
+	<tr class="user-tsf-user-meta[author_type]-wrap">
+		<th><label for="tsf-user-meta[author_type]">
+			<?= \esc_html_x( 'This author represents:', '...Organization or Person.', 'autodescription' ) ?>
+		</label></th>
+		<td>
+			<select name="tsf-user-meta[author_type]" id="tsf-user-meta[author_type]">
+				<?php
+				foreach ( [
+					'person'       => \__( 'A Person', 'autodescription' ),
+					'organization' => \__( 'An Organization', 'autodescription' ),
+				] as $value => $name )
+					printf(
+						'<option value="%s" %s>%s</option>',
+						\esc_attr( $value ),
+						\selected( $meta['author_type'], $value, false ),
+						\esc_html( $name ),
+					);
+				?>
+			</select>
+			<p class=description><?php \esc_html_e( 'Structured data credits posts by this author to this person or organization.', 'autodescription' ); ?></p>
+		</td>
+	</tr>
 <?php
 foreach ( $authorial_fields as $field => $labels ) {
 	?>
