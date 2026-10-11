@@ -36,16 +36,46 @@ final class User {
 	/**
 	 * @hook "sanitize_user_meta_ . THE_SEO_FRAMEWORK_USER_OPTIONS" 10
 	 * @since 5.0.0
-	 * @since 5.2.0 No longer accepts `counter_type`.
+	 * @since 5.2.0 1. No longer accepts `counter_type`.
+	 *              2. Added author archive SEO fields.
 	 *
 	 * @param mixed[] $meta_value An unsanitized value.
 	 * @return array[] The sanitized user meta.
 	 */
 	public static function filter_meta_update( $meta_value ) {
 
+		if ( empty( $meta_value ) || ! \is_array( $meta_value ) )
+			return [];
+
 		// If registered metadata yields empty -- do not unset key! It'll override "defaults" that way.
 		foreach ( $meta_value as $key => &$value ) {
 			switch ( $key ) {
+				case 'doctitle':
+				case 'og_title':
+				case 'tw_title':
+				case 'description':
+				case 'og_description':
+				case 'tw_description':
+					$value = Sanitize::metadata_content( $value );
+					break;
+
+				case 'title_no_blog_name':
+					$value = Sanitize::boolean_integer( $value );
+					break;
+
+				case 'tw_card_type':
+					$value = Sanitize::twitter_card( $value );
+					break;
+
+				case 'social_image_url':
+					$value = \sanitize_url( $value, [ 'https', 'http' ] );
+					break;
+
+				case 'social_image_id':
+					// Bound to social_image_url.
+					$value = empty( $meta_value['social_image_url'] ) ? 0 : \absint( $value );
+					break;
+
 				case 'facebook_page':
 					$value = Sanitize::facebook_profile_link( $value );
 					break;
@@ -60,6 +90,20 @@ final class User {
 
 				case 'twitter_page':
 					$value = Sanitize::twitter_profile_handle( $value );
+					break;
+
+				case 'canonical':
+					$value = Sanitize::fully_qualified_url( $value );
+					break;
+
+				case 'noindex':
+				case 'nofollow':
+				case 'noarchive':
+					$value = Sanitize::qubit( $value );
+					break;
+
+				case 'redirect':
+					$value = Sanitize::redirect_url( $value );
 					break;
 
 				default:

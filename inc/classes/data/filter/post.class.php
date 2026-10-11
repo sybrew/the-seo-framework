@@ -56,8 +56,14 @@ final class Post {
 					$value = Sanitize::metadata_content( $value );
 					break;
 
-				case '_genesis_canonical_uri':
-					$value = Sanitize::fully_qualified_url( $value );
+				case '_tsf_title_no_blogname':
+				case 'exclude_local_search':
+				case 'exclude_from_archive':
+					$value = Sanitize::boolean_integer( $value );
+					break;
+
+				case '_tsf_twitter_card_type':
+					$value = Sanitize::twitter_card( $value );
 					break;
 
 				case '_social_image_url':
@@ -69,6 +75,10 @@ final class Post {
 					$value = empty( $meta_value['_social_image_url'] ) ? 0 : \absint( $value );
 					break;
 
+				case '_genesis_canonical_uri':
+					$value = Sanitize::fully_qualified_url( $value );
+					break;
+
 				case '_genesis_noindex':
 				case '_genesis_nofollow':
 				case '_genesis_noarchive':
@@ -77,16 +87,6 @@ final class Post {
 
 				case 'redirect':
 					$value = Sanitize::redirect_url( $value );
-					break;
-
-				case '_tsf_title_no_blogname':
-				case 'exclude_local_search':
-				case 'exclude_from_archive':
-					$value = Sanitize::boolean_integer( $value );
-					break;
-
-				case '_tsf_twitter_card_type':
-					$value = Sanitize::twitter_card( $value );
 					break;
 
 				default:

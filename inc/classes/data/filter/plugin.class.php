@@ -722,8 +722,12 @@ final class Plugin {
 						$val = Sanitize::metadata_content( $val );
 						break;
 
-					case 'canonical':
-						$val = self::fully_qualified_url( $val );
+					case 'title_no_blog_name':
+						$val = Sanitize::boolean_integer( $val );
+						break;
+
+					case 'tw_card_type':
+						$val = Sanitize::twitter_card( $val );
 						break;
 
 					case 'social_image_url':
@@ -735,6 +739,10 @@ final class Plugin {
 						$val = $meta['social_image_url'] ? \absint( $val ) : 0;
 						break;
 
+					case 'canonical':
+						$val = self::fully_qualified_url( $val );
+						break;
+
 					case 'noindex':
 					case 'nofollow':
 					case 'noarchive':
@@ -743,14 +751,6 @@ final class Plugin {
 
 					case 'redirect':
 						$val = Sanitize::redirect_url( $val );
-						break;
-
-					case 'title_no_blog_name':
-						$val = Sanitize::boolean_integer( $val );
-						break;
-
-					case 'tw_card_type':
-						$val = Sanitize::twitter_card( $val );
 						break;
 
 					default:

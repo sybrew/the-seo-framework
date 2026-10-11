@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Data;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function The_SEO_Framework\umemo;
+use function The_SEO_Framework\{
+	memo,
+	umemo,
+};
 
 /**
  * The SEO Framework plugin
@@ -114,5 +117,24 @@ class User {
 		return isset( $key )
 			? ( $userdata->$key ?? null )
 			: ( $userdata ?: null );
+	}
+
+	/**
+	 * Tests whether the user has published posts.
+	 * Memoizes the return value.
+	 *
+	 * WordPress author archives query the `post` type unless a theme changes that.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int $user_id The user ID.
+	 * @return bool True when the user has at least one published post.
+	 */
+	public static function has_published_posts( $user_id ) {
+		return memo( null, $user_id )
+			?? memo(
+				(bool) \count_user_posts( $user_id, 'post', true ),
+				$user_id,
+			);
 	}
 }

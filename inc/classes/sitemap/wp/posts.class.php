@@ -158,9 +158,10 @@ class Posts extends \WP_Sitemaps_Posts {
 				 *
 				 * @param array $sitemap_entry Sitemap entry for the home page.
 				 */
-				$sitemap_entry = \apply_filters( 'wp_sitemaps_posts_show_on_front_entry', $sitemap_entry );
-
-				$url_list[] = $sitemap_entry;
+				$url_list[] = \apply_filters(
+					'wp_sitemaps_posts_show_on_front_entry',
+					$sitemap_entry,
+				);
 			}
 		}
 
@@ -196,9 +197,12 @@ class Posts extends \WP_Sitemaps_Posts {
 			 * @param WP_Post $post          Post object.
 			 * @param string  $post_type     Name of the post_type.
 			 */
-			$sitemap_entry = \apply_filters( 'wp_sitemaps_posts_entry', $sitemap_entry, $post, $post_type );
-
-			$url_list[] = $sitemap_entry;
+			$url_list[] = \apply_filters(
+				'wp_sitemaps_posts_entry',
+				$sitemap_entry,
+				$post,
+				$post_type,
+			);
 		}
 
 		return $url_list;

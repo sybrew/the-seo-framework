@@ -615,7 +615,7 @@ class Query {
 	 */
 	public static function is_editable_term() {
 		return Query\Cache::memo()
-			?? Query\Cache::memo( Query::is_category() || Query::is_tag() || Query::is_tax() );
+			?? Query\Cache::memo( self::is_category() || self::is_tag() || self::is_tax() );
 	}
 
 	/**
@@ -1331,8 +1331,8 @@ class Query {
 		if ( null !== $memo = Query\Cache::memo( null, $post_id ) )
 			return $memo;
 
-		if ( $post_id || Query::is_singular() ) {
-			$post = \get_post( $post_id ?: Query::get_the_real_id() );
+		if ( $post_id || self::is_singular() ) {
+			$post = \get_post( $post_id ?: self::get_the_real_id() );
 
 			$author_id = isset( $post->post_author ) && \post_type_supports( $post->post_type, 'author' )
 				? $post->post_author
@@ -1340,6 +1340,21 @@ class Query {
 		}
 
 		return Query\Cache::memo( $author_id ?? 0, $post_id );
+	}
+
+	/**
+	 * Returns the author ID for the current query.
+	 *
+	 * Singular queries use the post author. Author archives use the queried author.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @return int The user ID. 0 when no author applies.
+	 */
+	public static function get_current_author_id() {
+		return self::get_post_author_id() ?: (
+			self::is_author() ? (int) self::get_the_real_id() : 0
+		);
 	}
 
 	/**

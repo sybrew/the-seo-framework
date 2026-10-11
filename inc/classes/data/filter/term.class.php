@@ -59,8 +59,12 @@ final class Term {
 					$value = Sanitize::metadata_content( $value );
 					break;
 
-				case 'canonical':
-					$value = Sanitize::fully_qualified_url( $value );
+				case 'title_no_blog_name':
+					$value = Sanitize::boolean_integer( $value );
+					break;
+
+				case 'tw_card_type':
+					$value = Sanitize::twitter_card( $value );
 					break;
 
 				case 'social_image_url':
@@ -72,6 +76,10 @@ final class Term {
 					$value = empty( $meta_value['social_image_url'] ) ? 0 : \absint( $value );
 					break;
 
+				case 'canonical':
+					$value = Sanitize::fully_qualified_url( $value );
+					break;
+
 				case 'noindex':
 				case 'nofollow':
 				case 'noarchive':
@@ -80,14 +88,6 @@ final class Term {
 
 				case 'redirect':
 					$value = Sanitize::redirect_url( $value );
-					break;
-
-				case 'title_no_blog_name':
-					$value = Sanitize::boolean_integer( $value );
-					break;
-
-				case 'tw_card_type':
-					$value = Sanitize::twitter_card( $value );
 					break;
 
 				default:

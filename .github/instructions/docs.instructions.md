@@ -19,3 +19,4 @@ applyTo: "README.md, readme.txt"
 - Within the non-general developer sections, preserve this subsection order when those subsections are present: `Upgraded`, `Added`, `Improved`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Notes`.
 - Preserve the existing nested list and indentation style in `readme.txt` changelogs, including bold category labels and indented follow-up bullets or numbered lists where the current format uses them.
 - When copying content from code, such as docblocks, comments, or commit notes, into `readme.txt` or other user-facing docs, preserve the essence verbatim. Only minor prose tweaks for readability are allowed. Do not add details that are not present in the source.
+- A symbol introduced in the unreleased version gets one changelog introduction. Do not add a later entry for edits made to it before release.

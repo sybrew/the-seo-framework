@@ -325,6 +325,7 @@ wp/
 	filter.class.php              Augments WP Core sitemap: sets TSF's "doing sitemap" state, filters query args
 	posts.class.php               Extends WP_Sitemaps_Posts: adds TSF-based filtering (noindex, lastmod) to Core posts sitemap
 	taxonomies.class.php          Extends WP_Sitemaps_Taxonomies: adds TSF-based filtering to Core taxonomies sitemap
+	users.class.php               Extends WP_Sitemaps_Users: adds TSF-based filtering to Core users sitemap
 
 
 Traits (inc/traits/)
@@ -470,6 +471,7 @@ CSS (lib/css/)
 --------------
 Stylesheets for admin interfaces. Each .css file has a corresponding .min.css minified version.
 
+author.css                      Styles for the user profile SEO settings
 le.css                          Styles for quick/bulk edit SEO columns and inline inputs
 media.css                       Styles for image selection buttons, previews, and warnings
 post.css                        Styles for the post editor SEO meta box (classic + block editor)

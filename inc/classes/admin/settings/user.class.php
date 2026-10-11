@@ -12,6 +12,7 @@ use function The_SEO_Framework\is_headless;
 
 use The_SEO_Framework\{
 	Data,
+	Helper,
 	Helper\Template,
 };
 
@@ -50,18 +51,15 @@ final class User {
 	 * @since 4.1.4
 	 * @since 5.0.0 1. Now asserts if user has capability on any multisite network's blog.
 	 *              2. Renamed from `_prepare_setting_fields`.
-	 * @since 5.2.0 Now returns early when user metadata is headless.
+	 * @since 5.2.0 1. Now returns early when user metadata is headless.
+	 *              2. Now uses `Helper\User::is_supported()` to gate the fields.
 	 *
 	 * @param \WP_User $user WP_User object.
 	 */
 	public static function prepare_setting_fields( $user ) {
 
-		if (
-			   is_headless( 'user' )
-			|| ! Data\User::user_has_author_info_cap_on_network( $user )
-		) {
+		if ( is_headless( 'user' ) || ! Helper\User::is_supported( $user->ID ) )
 			return;
-		}
 
 		self::output_setting_fields( $user );
 	}

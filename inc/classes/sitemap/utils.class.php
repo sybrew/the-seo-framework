@@ -143,7 +143,10 @@ class Utils {
 			 * @since 4.0.0
 			 * @param int[] $excluded Sequential list of excluded IDs: [ int ...term_id ]
 			 */
-			$excluded = (array) \apply_filters( 'the_seo_framework_sitemap_exclude_term_ids', [] );
+			$excluded = (array) \apply_filters(
+				'the_seo_framework_sitemap_exclude_term_ids',
+				[],
+			);
 
 			// isset() is faster than in_array(). And since we memoize, it's faster to flip.
 			$excluded = $excluded ? array_flip( $excluded ) : [];
@@ -160,6 +163,57 @@ class Utils {
 			];
 
 			// ROBOTS_IGNORE_PROTECTION is not tested for terms. However, we may use that later.
+			$included = 'noindex'
+				!== (
+					Meta\Robots::get_generated_meta(
+						$generator_args,
+						[ 'noindex' ],
+						ROBOTS_IGNORE_PROTECTION,
+					)['noindex'] ?? false // We cast type false for Zend tests strict type before identical-string-comparing.
+				);
+
+			if ( ! $included ) break;
+
+			// This is less likely than a "noindex," even though it's faster to process, we put it later.
+			$included = ! Meta\URI::get_redirect_url( $generator_args );
+			break;
+		}
+
+		return $included;
+	}
+
+	/**
+	 * Determines if the user is possibly included in the sitemap.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int $user_id The user ID to check.
+	 * @return bool True if included, false otherwise.
+	 */
+	public static function is_user_included_in_sitemap( $user_id ) {
+
+		static $excluded;
+
+		if ( ! isset( $excluded ) ) {
+			/**
+			 * @since 5.2.0
+			 * @param int[] $excluded Sequential list of excluded IDs: [ int ...user_id ]
+			 */
+			$excluded = (array) \apply_filters(
+				'the_seo_framework_sitemap_exclude_user_ids',
+				[],
+			);
+
+			// isset() is faster than in_array(). And since we memoize, it's faster to flip.
+			$excluded = $excluded ? array_flip( $excluded ) : [];
+		}
+
+		$included = ! isset( $excluded[ $user_id ] );
+
+		while ( $included ) {
+			$generator_args = [ 'uid' => $user_id ];
+
+			// ROBOTS_IGNORE_PROTECTION is not tested for authors. However, we may use that later.
 			$included = 'noindex'
 				!== (
 					Meta\Robots::get_generated_meta(

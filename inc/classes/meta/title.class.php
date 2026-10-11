@@ -274,6 +274,7 @@ class Title {
 	 * @since 3.2.2 Now tests for the static frontpage metadata prior getting fallback data.
 	 * @since 4.2.0 Can now return custom post type archive titles.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now returns the custom author archive title from user meta.
 	 *
 	 * @return string The custom title.
 	 */
@@ -293,6 +294,8 @@ class Title {
 			$title = Data\Plugin\Term::get_meta_item( 'doctitle' );
 		} elseif ( \is_post_type_archive() ) {
 			$title = Data\Plugin\PTA::get_meta_item( 'doctitle' );
+		} elseif ( Query::is_author() ) {
+			$title = Data\Plugin\User::get_current_post_author_meta_item( 'doctitle' );
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )
@@ -305,6 +308,7 @@ class Title {
 	 * Gets a custom title, based on input arguments query, without additions or prefixes.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive title from user meta.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The custom title.
@@ -331,6 +335,9 @@ class Title {
 				break;
 			case 'pta':
 				$title = Data\Plugin\PTA::get_meta_item( 'doctitle', $args['pta'] );
+				break;
+			case 'user':
+				$title = Data\Plugin\User::get_meta_item( 'doctitle', $args['uid'] );
 		}
 
 		if ( isset( $title ) && \strlen( $title ) )

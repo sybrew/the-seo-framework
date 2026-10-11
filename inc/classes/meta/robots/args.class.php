@@ -59,6 +59,7 @@ final class Args extends Factory {
 	 * Yields true when "noindex/noarchive/nofollow", yields false when "index/archive/follow".
 	 *
 	 * @since 4.2.0
+	 * @since 5.2.0 Now reads the per-author robots qubit from user meta.
 	 * @generator
 	 *
 	 * @param string $type The robots generator type (noindex, nofollow...).
@@ -85,6 +86,9 @@ final class Args extends Factory {
 					break;
 				case 'pta':
 					$qubit = (int) Data\Plugin\PTA::get_meta_item( $type, $args['pta'] );
+					break;
+				case 'user':
+					$qubit = (int) Data\Plugin\User::get_meta_item( $type, $args['uid'] );
 			}
 
 			switch ( isset( $qubit ) ) {
@@ -138,6 +142,11 @@ final class Args extends Factory {
 					break;
 				case 'pta':
 					yield 'globals_post_type' => Robots::is_post_type_robots_set( $type, $args['pta'] );
+					break;
+				case 'user':
+					$asserting_noindex and yield from self::assert_noindex_query_pass( '404' );
+
+					yield 'globals_author' => (bool) Data\Plugin::get_option( "author_$type" );
 			}
 
 		index_protection: if ( $asserting_noindex && ! ( static::$options & ROBOTS_IGNORE_PROTECTION ) ) { // static: allow overrides
@@ -155,7 +164,8 @@ final class Args extends Factory {
 	 * Generates robots assertions for noindex in passes.
 	 *
 	 * @since 4.2.0
-	 * @since 5.2.0 The 404 pass now applies `the_seo_framework_enable_noindex_no_posts`.
+	 * @since 5.2.0 1. The 404 pass now applies `the_seo_framework_enable_noindex_no_posts`.
+	 *              2. The 404 pass now tests whether an author has published posts.
 	 * @generator
 	 *
 	 * @param string $pass The passage to assert.
@@ -166,8 +176,13 @@ final class Args extends Factory {
 		$args = static::$args; // static: allow overrides
 
 		switch ( $pass ) {
-			case '404': // We only tests 404 terms via args.
-				if ( Data\Term::is_term_populated( $args['id'], $args['tax'] ) ) {
+			case '404': // We only test 404 terms and authors via args.
+				$populated =
+					   'user' === get_query_type_from_args( $args )
+					? Data\User::has_published_posts( $args['uid'] )
+					: Data\Term::is_term_populated( $args['id'], $args['tax'] );
+
+				if ( $populated ) {
 					yield '404' => false;
 				} else {
 					/**

@@ -278,6 +278,15 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Breadcrumb shortcode crumbs now wrap as a whole instead of breaking mid-word.
 	* **Connected social pages:**
 		* You can now add a TikTok profile under Schema.org Settings. When that profile is set, it is included in the site's Schema.org `sameAs` links.
+	* **Author archives:**
+		* Profile pages now have General, Social, and Visibility settings for the author archive.
+			* General: meta title, "Remove the site title?", and meta description.
+			* Social: Open Graph title and description, Twitter title, description, and card type, and a social image. Facebook, Fediverse, and X stay under Authorial Info in this section.
+			* Visibility: canonical URL, robots indexing, link following, and archiving, and a 301 redirect.
+		* These values are used on that author's archive. A noindex or a redirect removes the author from the users sitemap. Choosing index includes an author with no posts. The users sitemap stays available when author archives are set to noindex, so an author set to index can still be listed. It still only lists authors who have published posts.
+		* On an author archive, `twitter:creator` and `fediverse:creator` use that author's X handle and Fediverse profile when those fields are set.
+		* These fields are stored once per user, including on Multisite, the same way Authorial Info already is.
+		* The profile SEO settings are 800px wide, like the term edit form. The fields, including Authorial Info, use the same width as the term fields.
 * **Changed:**
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
@@ -342,7 +351,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
-	* Resolved an issue where a backslash in a post or term SEO text field was removed every time it was saved. Now, the input and output are idempotent.
+	* Resolved an issue where a backslash in a post, term, or author profile SEO text field was removed every time it was saved. Now, the input and output are idempotent.
 		* This was already implemented for the site SEO Settings.
 	* An author Fediverse profile is added to Schema.org `sameAs` only when that author has a handle.
 	* A Facebook or X profile entered without a scheme, such as `facebook.com/YourPage`, keeps the path instead of repeating the host.
@@ -417,6 +426,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Added index `counter_type`. Default `3`. A value above `3` is stored as `0`.
 	* Of user meta `autodescription-user-settings` (constant `THE_SEO_FRAMEWORK_USER_OPTIONS`):
 		* The 5.2.0 upgrade copies `counter_type` into `autodescription-user-preferences` and leaves the old index in place. The next save of this meta drops `counter_type`, because it is no longer a known SEO field.
+		* Added indexes `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`. Default empty, except `title_no_blog_name`, `social_image_id`, `noindex`, `nofollow`, and `noarchive`, which default to `0`. An unchecked "Remove the site title?" is stored as `0`.
 * **PHP API notes:**
 	* **Added:**
 		* Pool `tsf()->fediverse()` is now available.
@@ -437,9 +447,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::fully_qualified_url()` (`tsf()->sanitize()->fully_qualified_url()`) turns a path or URL into an absolute http or https address. Other protocols are rejected.
 		* Method `The_SEO_Framework\Data\Post::is_trash()` (`tsf()->data()->post()->is_trash()`) returns whether the post is in the trash.
 		* Constant `THE_SEO_FRAMEWORK_USER_PREFERENCES` is `autodescription-user-preferences`. It stores per-user interface preferences, separate from `THE_SEO_FRAMEWORK_USER_OPTIONS`.
-		* Method `The_SEO_Framework\Admin\Script\Loader::get_author_edit_scripts()` (`tsf()->admin()->scripts()->loader()->get_author_edit_scripts()`) now exists.
+		* Method `The_SEO_Framework\Admin\Script\Loader::get_author_edit_scripts()` (`tsf()->admin()->scripts()->loader()->get_author_edit_scripts()`) now exists. `tsfAuthorL10n.params` includes `additionsForcedDisabled`, `authorPrefix`, `id`, and `nicename`.
+		* Method `The_SEO_Framework\Data\User::has_published_posts()` (`tsf()->data()->user()->has_published_posts()`) returns whether the user has published posts. WordPress author archives query the `post` type unless a theme changes that.
+		* Method `The_SEO_Framework\Sitemap\Utils::is_user_included_in_sitemap()` (`tsf()->sitemap()->utils()->is_user_included_in_sitemap()`) returns whether an author is included in the users sitemap. A per-user noindex or redirect excludes them.
 		* Method `The_SEO_Framework\Helper\Query::is_profile_admin()` (`tsf()->query()->is_profile_admin()`) detects the profile, user-edit, and Add User screens, including their network variants.
 		* Method `The_SEO_Framework\Helper\Query::get_admin_user_id()` (`tsf()->query()->get_admin_user_id()`) returns the user ID being edited on profile and user-edit screens.
+		* Method `The_SEO_Framework\Helper\Query::get_current_author_id()` (`tsf()->query()->get_current_author_id()`) returns the author ID for the current query. Singular queries use the post author. Author archives use the queried author.
 		* Pool `tsf()->user()` is now available.
 			* It contains public method `is_supported()`.
 			* Internally known as `The_SEO_Framework\Helper\User`.
@@ -460,10 +473,21 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
 			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
+		* Methods `The_SEO_Framework\Data\Plugin\User::get_current_post_author_meta_item()` (`tsf()->data()->plugin()->user()->get_current_post_author_meta_item()`) and `The_SEO_Framework\Data\Plugin\User::get_current_post_author_meta()` (`tsf()->data()->plugin()->user()->get_current_post_author_meta()`):
+			1. Now return the queried author's meta on author archives. Singular queries still use the post author.
+			2. Added the `$user_id` parameter. Leave `0` to use the current author.
 		* Method `The_SEO_Framework\Data\Plugin\User::get_default_meta()` (`tsf()->data()->plugin()->user()->get_default_meta()`):
 			1. Added `fediverse_page` and `fediverse_page_url`.
 			2. Now omits `counter_type`. It is stored as a user preference.
+			3. Added `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`.
 		* Method `The_SEO_Framework\Data\Plugin\User::update_single_meta_item()` (`tsf()->data()->plugin()->user()->update_single_meta_item()`) now takes the meta key, the value, and then the user ID. An integer first parameter still uses the old order and raises a deprecation notice.
+		* Methods `The_SEO_Framework\Data\Plugin\User::save_meta()` (`tsf()->data()->plugin()->user()->save_meta()`) and `The_SEO_Framework\Data\Plugin\User::delete_meta()` (`tsf()->data()->plugin()->user()->delete_meta()`) now keep backslashes. The stored value is slash-escaped for `update_user_meta()`, which unslashes before storing.
+		* Methods `The_SEO_Framework\Meta\Title::get_custom_title()` (`tsf()->title()->get_custom_title()`), `The_SEO_Framework\Meta\Description::get_custom_description()` (`tsf()->description()->get_custom_description()`), `The_SEO_Framework\Meta\Open_Graph::get_custom_title()` (`tsf()->open_graph()->get_custom_title()`), `The_SEO_Framework\Meta\Open_Graph::get_custom_description()` (`tsf()->open_graph()->get_custom_description()`), `The_SEO_Framework\Meta\Twitter::get_custom_card_type()` (`tsf()->twitter()->get_custom_card_type()`), `The_SEO_Framework\Meta\Twitter::get_custom_title()` (`tsf()->twitter()->get_custom_title()`), `The_SEO_Framework\Meta\Twitter::get_custom_description()` (`tsf()->twitter()->get_custom_description()`), `The_SEO_Framework\Meta\URI::get_custom_canonical_url()` (`tsf()->uri()->get_custom_canonical_url()`), `The_SEO_Framework\Meta\URI::get_redirect_url()` (`tsf()->uri()->get_redirect_url()`), and `The_SEO_Framework\Meta\Image::generate_custom_image_details()` (`tsf()->image()->generate_custom_image_details()`) now read the matching author archive fields from user meta. Pass `[ 'uid' => $user_id ]` and leave `id` empty. On an author archive, the query path does the same.
+		* Method `The_SEO_Framework\Meta\Title\Conditions::use_branding()` (`tsf()->title()->conditions()->use_branding()`) now removes the site title on an author archive when that user's "Remove the site title?" field is checked.
+		* Method `The_SEO_Framework\Meta\Robots::get_generated_meta()` (`tsf()->robots()->get_generated_meta()`) now reads the per-author indexing, following, and archiving qubits. From arguments, an author with no published posts is treated as an empty archive unless indexing is forced.
+		* Method `The_SEO_Framework\Meta\Schema\Entities\WebPage::build()` (`tsf()->schema()->entities['WebPage']`) now uses `CollectionPage` for author archives generated from arguments.
+		* Method `The_SEO_Framework\Sitemap\WP\Filter::filter_add_provider()` now replaces the `users` provider. A per-user index choice can list an author while author archives are noindexed.
+		* Method `The_SEO_Framework\Admin\Script\Loader::init()` (`tsf()->admin()->scripts()->loader()->init()`) now loads the title, description, social, canonical, media, and counter scripts on the author profile screen.
 		* Methods `The_SEO_Framework\Data\Plugin\User::get_preference()` (`tsf()->data()->plugin()->user()->get_preference()`), `The_SEO_Framework\Data\Plugin\User::get_preference_item()` (`tsf()->data()->plugin()->user()->get_preference_item()`), `The_SEO_Framework\Data\Plugin\User::update_single_preference_item()` (`tsf()->data()->plugin()->user()->update_single_preference_item()`), `The_SEO_Framework\Data\Plugin\User::save_preference()` (`tsf()->data()->plugin()->user()->save_preference()`), and `The_SEO_Framework\Data\Plugin\User::delete_preference()` (`tsf()->data()->plugin()->user()->delete_preference()`) read, write, and delete that preference meta. `get_preference()` includes `counter_type`, default `3`. `update_single_preference_item()` takes the preference key, the value, and then the user ID, and now stores that value through `save_preference()`.
 		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs` when a handle is set.
@@ -541,11 +565,12 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_sitemap_settings_language_endpoints` returns administrative language names keyed by sitemap endpoint ID, used for translated sitemap links in SEO Settings.
-		* `the_seo_framework_supported_user` returns whether a user can carry author SEO. The default is true when that user has the author-info capability.
+		* `the_seo_framework_supported_user` returns whether a user can carry author SEO. The default is true when that user has the author-info capability. Returning false hides the profile SEO fields and blocks saving them.
+		* `the_seo_framework_sitemap_exclude_user_ids` returns user IDs to omit from the users sitemap.
 		* `the_seo_framework_user_preference_defaults` returns the default user preferences. The default includes `counter_type` as `3`.
 		* `the_seo_framework_save_user_preference` returns the user preference data that's going to be saved. The value includes the default preferences.
 	* **Changed:**
-		* `the_seo_framework_enable_noindex_no_posts` now also applies when robots meta are generated from arguments. Empty terms in the SEO Bar, the term editor's Default label, and sitemaps follow the returned value.
+		* `the_seo_framework_enable_noindex_no_posts` now also applies when robots meta are generated from arguments. Empty terms in the SEO Bar, the term editor's Default label, and sitemaps follow the returned value. Empty author archives generated from arguments, including the profile Default label and the users sitemap, follow it as well.
 		* `the_seo_framework_sitemap_post_limit` receives the default option when `sitemap_query_limit` is empty.
 		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
 		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.
@@ -553,8 +578,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* `the_seo_framework_user_meta_defaults`:
 			1. Added `fediverse_page` and `fediverse_page_url`.
 			2. Now omits `counter_type`. It is stored as a user preference.
+			3. Added `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`.
 		* `the_seo_framework_scripts`:
-			1. Now includes the author profile script on user profile screens when user-edit fields are enabled.
+			1. Now includes the author profile script and stylesheet, and the title, description, social, canonical, media, and counter scripts, on user profile screens when user-edit fields are enabled.
 			2. Now includes `tsf-http` for the settings and author screens.
 		* `the_seo_framework_breadcrumb_list` now includes `role` on each crumb. Crumbs you add or replace must include `role`, or `tsf_breadcrumb()` causes a PHP warning.
 		* `the_seo_framework_breadcrumb_shortcode_css`:

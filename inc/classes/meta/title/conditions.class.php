@@ -108,6 +108,7 @@ class Conditions {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `use_title_branding`.
+	 * @since 5.2.0 Now removes the site title on author archives when that user meta is set.
 	 *
 	 * @param ?array      $args   The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                            Leave null to autodetermine query.
@@ -143,8 +144,7 @@ class Conditions {
 						$use = self::use_pta_branding( $args['pta'] );
 						break;
 					case 'user':
-						// Option coming soon. https://github.com/sybrew/the-seo-framework/issues/515
-						$use = ! Data\Plugin::get_option( 'title_rem_additions' );
+						$use = self::use_user_branding( $args['uid'] );
 				}
 			} else {
 				if ( Query::is_real_front_page() ) {
@@ -155,6 +155,8 @@ class Conditions {
 					$use = self::use_term_branding();
 				} elseif ( \is_post_type_archive() ) {
 					$use = self::use_pta_branding();
+				} elseif ( Query::is_author() ) {
+					$use = self::use_user_branding();
 				} else {
 					$use = ! Data\Plugin::get_option( 'title_rem_additions' );
 				}
@@ -229,6 +231,19 @@ class Conditions {
 	 */
 	private static function use_pta_branding( $pta = '' ) {
 		return ! Data\Plugin\PTA::get_meta_item( 'title_no_blog_name', $pta )
+			&& ! Data\Plugin::get_option( 'title_rem_additions' );
+	}
+
+	/**
+	 * Determines whether to add the title tagline for the author archive.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @param int $user_id The user ID. Optional. Leave 0 to use the queried author.
+	 * @return bool
+	 */
+	private static function use_user_branding( $user_id = 0 ) {
+		return ! Data\Plugin\User::get_current_post_author_meta_item( 'title_no_blog_name', $user_id )
 			&& ! Data\Plugin::get_option( 'title_rem_additions' );
 	}
 

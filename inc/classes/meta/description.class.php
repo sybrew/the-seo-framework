@@ -192,6 +192,7 @@ class Description {
 	 * Gets a custom description, based on expected or current query, without escaping.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive description from user meta.
 	 * @see self::get_custom_description()
 	 *
 	 * @return string The custom description.
@@ -212,6 +213,8 @@ class Description {
 			$desc = Data\Plugin\Term::get_meta_item( 'description' );
 		} elseif ( \is_post_type_archive() ) {
 			$desc = Data\Plugin\PTA::get_meta_item( 'description' );
+		} elseif ( Query::is_author() ) {
+			$desc = Data\Plugin\User::get_current_post_author_meta_item( 'description' );
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )
@@ -228,6 +231,7 @@ class Description {
 	 * @since 4.2.0 Now supports the `$args['pta']` index.
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now returns the custom author archive description from user meta.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The custom description.
@@ -254,6 +258,9 @@ class Description {
 				break;
 			case 'pta':
 				$desc = Data\Plugin\PTA::get_meta_item( 'description', $args['pta'] );
+				break;
+			case 'user':
+				$desc = Data\Plugin\User::get_meta_item( 'description', $args['uid'] );
 		}
 
 		if ( isset( $desc ) && \strlen( $desc ) )

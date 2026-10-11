@@ -109,10 +109,6 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 
 			if ( \is_wp_error( $term_link ) ) continue;
 
-			$sitemap_entry = [
-				'loc' => $term_link,
-			];
-
 			/**
 			 * Filters the sitemap entry for an individual term.
 			 *
@@ -124,9 +120,13 @@ class Taxonomies extends \WP_Sitemaps_Taxonomies {
 			 * @param string  $taxonomy      Taxonomy name.
 			 * @param WP_Term $term          Term object.
 			 */
-			$sitemap_entry = \apply_filters( 'wp_sitemaps_taxonomies_entry', $sitemap_entry, $term->term_id, $taxonomy, $term );
-
-			$url_list[] = $sitemap_entry;
+			$url_list[] = \apply_filters(
+				'wp_sitemaps_taxonomies_entry',
+				[ 'loc' => $term_link ],
+				$term->term_id,
+				$taxonomy,
+				$term,
+			);
 		}
 
 		return $url_list;

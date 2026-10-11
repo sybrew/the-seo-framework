@@ -132,7 +132,8 @@ class URI {
 	 * Returns the custom canonical URL, based on query.
 	 *
 	 * @since 5.0.0
-	 * @since 5.2.0 Now makes a relative path absolute.
+	 * @since 5.2.0 1. Now makes a relative path absolute.
+	 *              2. Now returns the custom author archive canonical URL from user meta.
 	 *
 	 * @return string The custom canonical URL, if any.
 	 */
@@ -152,6 +153,8 @@ class URI {
 			$url = Data\Plugin\Term::get_meta_item( 'canonical' );
 		} elseif ( \is_post_type_archive() ) {
 			$url = Data\Plugin\PTA::get_meta_item( 'canonical' );
+		} elseif ( Query::is_author() ) {
+			$url = Data\Plugin\User::get_current_post_author_meta_item( 'canonical' );
 		}
 
 		if ( empty( $url ) )
@@ -167,7 +170,8 @@ class URI {
 	 * Returns the custom canonical URL, based on arguments.
 	 *
 	 * @since 5.0.0
-	 * @since 5.2.0 Now makes a relative path absolute.
+	 * @since 5.2.0 1. Now makes a relative path absolute.
+	 *              2. Now returns the custom author archive canonical URL from user meta.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The custom canonical URL, if any.
@@ -194,6 +198,9 @@ class URI {
 				break;
 			case 'pta':
 				$url = Data\Plugin\PTA::get_meta_item( 'canonical', $args['pta'] );
+				break;
+			case 'user':
+				$url = Data\Plugin\User::get_meta_item( 'canonical', $args['uid'] );
 		}
 
 		if ( empty( $url ) )
@@ -746,6 +753,7 @@ class URI {
 	 * @since 5.0.0 1. Now expects an ID before getting a post meta item.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.1.0 Now supports `homepage_redirect`.
+	 * @since 5.2.0 Now returns the custom author archive redirect from user meta.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
@@ -774,6 +782,9 @@ class URI {
 					break;
 				case 'pta':
 					$url = Data\Plugin\PTA::get_meta_item( 'redirect', $args['pta'] );
+					break;
+				case 'user':
+					$url = Data\Plugin\User::get_meta_item( 'redirect', $args['uid'] );
 			}
 		} else {
 			if ( Query::is_real_front_page() ) {
@@ -790,6 +801,8 @@ class URI {
 				$url = Data\Plugin\Term::get_meta_item( 'redirect' );
 			} elseif ( \is_post_type_archive() ) {
 				$url = Data\Plugin\PTA::get_meta_item( 'redirect' );
+			} elseif ( Query::is_author() ) {
+				$url = Data\Plugin\User::get_current_post_author_meta_item( 'redirect' );
 			}
 		}
 

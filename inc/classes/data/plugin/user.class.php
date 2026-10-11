@@ -58,44 +58,54 @@ class User {
 	private static $preference_memo = [];
 
 	/**
-	 * Returns the current post's author meta item by key.
+	 * Returns the current query's author meta item by key.
+	 *
+	 * Singular queries use the post author. Author archives use the queried author.
 	 * Won't fall back to the logged in user's data.
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.8 Now returns null when no post author can be established.
 	 * @since 5.0.0 1. Removed the second `$use_cache` parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 1. Now returns the queried author's meta on author archives.
+	 *              2. Added the `$user_id` parameter.
 	 *
-	 * @param string $item The user meta item to get. Required.
+	 * @param string $item    The user meta item to get. Required.
+	 * @param int    $user_id The user ID. Leave 0 to use the current author.
 	 * @return ?mixed The author meta item. Null when no author is found.
 	 */
-	public static function get_current_post_author_meta_item( $item ) {
+	public static function get_current_post_author_meta_item( $item, $user_id = 0 ) {
 
-		$user_id = Query::get_post_author_id();
+		$user_id = $user_id ?: Query::get_current_author_id();
 
 		return $user_id
-			? static::get_meta_item( $item, $user_id )
+			? self::get_meta_item( $item, $user_id )
 			: null;
 	}
 
 	/**
-	 * Returns and caches author meta for the current query.
-	 * Memoizes the return value for the current request.
+	 * Returns author meta for the current query.
+	 *
+	 * Singular queries use the post author. Author archives use the queried author.
+	 * Won't fall back to the logged in user's data.
 	 *
 	 * @since 4.1.4
 	 * @since 4.2.7 Removed redundant memoization.
 	 * @since 4.2.8 Now returns null when no post author can be established.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 1. Now returns the queried author's meta on author archives.
+	 *              2. Added the `$user_id` parameter.
 	 * @ignore Unused internally. Public API.
 	 *
+	 * @param int $user_id The user ID. Leave 0 to use the current author.
 	 * @return ?array The current author meta, null when no author is set.
 	 */
-	public static function get_current_post_author_meta() {
+	public static function get_current_post_author_meta( $user_id = 0 ) {
 
-		$user_id = Query::get_post_author_id();
+		$user_id = $user_id ?: Query::get_current_author_id();
 
 		return $user_id
-			? static::get_meta( $user_id )
+			? self::get_meta( $user_id )
 			: null;
 	}
 
@@ -194,6 +204,7 @@ class User {
 	 *              2. Renamed from `get_user_meta_defaults`.
 	 * @since 5.2.0 1. Added `fediverse_page` and `fediverse_page_url`.
 	 *              2. Now omits `counter_type`. It is stored as a user preference.
+	 *              3. Added author archive SEO fields.
 	 *
 	 * @param int $user_id The user ID. Defaults to CURRENT USER, NOT CURRENT POST AUTHOR.
 	 * @return array The user meta defaults.
@@ -203,6 +214,7 @@ class User {
 		 * @since 4.1.4
 		 * @since 5.2.0 1. Added `fediverse_page` and `fediverse_page_url`.
 		 *              2. Now omits `counter_type`. It is stored as a user preference.
+		 *              3. Added author archive SEO fields.
 		 * @param array $defaults
 		 * @param int   $user_id
 		 */
@@ -213,6 +225,21 @@ class User {
 				'fediverse_page'     => '',
 				'fediverse_page_url' => '',
 				'twitter_page'       => '',
+				'doctitle'           => '',
+				'title_no_blog_name' => 0,
+				'description'        => '',
+				'og_title'           => '',
+				'og_description'     => '',
+				'tw_title'           => '',
+				'tw_description'     => '',
+				'tw_card_type'       => '',
+				'social_image_url'   => '',
+				'social_image_id'    => 0,
+				'canonical'          => '',
+				'noindex'            => 0,
+				'nofollow'           => 0,
+				'noarchive'          => 0,
+				'redirect'           => '',
 			],
 			$user_id ?: Query::get_current_user_id(),
 		);
@@ -265,6 +292,7 @@ class User {
 	 * @since 4.2.0 No longer returns the update success state.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `save_user_meta`.
+	 * @since 5.2.0 Now keeps backslashes. The value is slash-escaped for `update_user_meta()`, which unslashes before storing.
 	 *
 	 * @param int   $user_id The user ID.
 	 * @param array $data    The data to save.
@@ -292,7 +320,7 @@ class User {
 
 		unset( static::$meta_memo[ $user_id ] );
 
-		\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
+		\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, \wp_slash( $data ) );
 	}
 
 	/**
@@ -301,6 +329,7 @@ class User {
 	 * or everything when no custom keys are set.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now keeps backslashes in remaining values. The value is slash-escaped for `update_user_meta()`, which unslashes on write.
 	 * @ignore Unused internally. Public API.
 	 *
 	 * @param int $user_id The user ID.
@@ -322,7 +351,7 @@ class User {
 		if ( empty( $data ) ) {
 			\delete_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS );
 		} else {
-			\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, $data );
+			\update_user_meta( $user_id, \THE_SEO_FRAMEWORK_USER_OPTIONS, \wp_slash( $data ) );
 		}
 	}
 

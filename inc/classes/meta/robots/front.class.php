@@ -59,6 +59,7 @@ final class Front extends Factory {
 	 * @since 4.2.0
 	 * @since 4.2.5 1. Removed needlessly duplicate homepage test.
 	 *              2. Moved archive pagination check to index_protection.
+	 * @since 5.2.0 Now reads the per-author robots qubit from user meta.
 	 * @generator
 	 *
 	 * @param string $type The robots generator type (noindex, nofollow...).
@@ -78,6 +79,8 @@ final class Front extends Factory {
 				$qubit = (int) Data\Plugin\Post::get_meta_item( "_genesis_$type" );
 			} elseif ( \is_post_type_archive() ) {
 				$qubit = (int) Data\Plugin\PTA::get_meta_item( $type );
+			} elseif ( Query::is_author() ) {
+				$qubit = (int) Data\Plugin\User::get_current_post_author_meta_item( $type );
 			}
 
 			switch ( isset( $qubit ) ) {

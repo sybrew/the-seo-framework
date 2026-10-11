@@ -329,6 +329,7 @@ class Image {
 	 *
 	 * @since 5.0.0
 	 * @since 5.1.0 Is now public.
+	 * @since 5.2.0 Now yields the custom author archive social image from user meta.
 	 * @generator
 	 *
 	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
@@ -385,6 +386,11 @@ class Image {
 					'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url' ),
 					'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id' ),
 				];
+			} elseif ( Query::is_author() ) {
+				$details = [
+					'url' => Data\Plugin\User::get_current_post_author_meta_item( 'social_image_url' ),
+					'id'  => Data\Plugin\User::get_current_post_author_meta_item( 'social_image_id' ),
+				];
 			}
 		}
 
@@ -401,6 +407,7 @@ class Image {
 	 *
 	 * @since 5.0.0
 	 * @since 5.1.0 Is now public.
+	 * @since 5.2.0 Now yields the custom author archive social image from user meta.
 	 *
 	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @param string $context Caller context. Internally supports 'organization', 'social', and 'oembed'. Default 'social'.
@@ -463,6 +470,12 @@ class Image {
 					$details = [
 						'url' => Data\Plugin\PTA::get_meta_item( 'social_image_url', $args['pta'] ),
 						'id'  => Data\Plugin\PTA::get_meta_item( 'social_image_id', $args['pta'] ),
+					];
+					break;
+				case 'user':
+					$details = [
+						'url' => Data\Plugin\User::get_meta_item( 'social_image_url', $args['uid'] ),
+						'id'  => Data\Plugin\User::get_meta_item( 'social_image_id', $args['uid'] ),
 					];
 			}
 		}

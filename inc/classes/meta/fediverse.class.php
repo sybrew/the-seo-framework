@@ -39,7 +39,8 @@ class Fediverse {
 	/**
 	 * Returns the Fediverse creator handle for the current query.
 	 *
-	 * Prefers the post author's profile, then the site author fallback, then the site profile.
+	 * Prefers the queried author's profile, then the site author fallback, then the site profile.
+	 * Singular queries use the post author. Author archives use the queried author.
 	 *
 	 * @since 5.2.0
 	 *

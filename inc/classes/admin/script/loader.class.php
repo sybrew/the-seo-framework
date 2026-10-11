@@ -85,6 +85,7 @@ class Loader {
 	 * @since 5.2.0 1. Prevents multiple runs.
 	 *              2. Now also loads author profile scripts.
 	 *              3. Now registers `tsf-http` for the settings and author screens.
+	 *              4. Now loads the title, description, social, canonical, media, and counter scripts on the author profile screen.
 	 */
 	public static function init() {
 
@@ -170,8 +171,22 @@ class Loader {
 			$scripts[] = self::get_counter_scripts();
 		} elseif ( Query::is_profile_edit() ) {
 			if ( Data\Plugin::get_option( 'display_user_edit_options' ) ) {
+				self::prepare_media_scripts();
+
 				$scripts[] = self::get_http_scripts();
 				$scripts[] = self::get_author_edit_scripts();
+				$scripts[] = self::get_media_scripts();
+				$scripts[] = self::get_title_scripts();
+				$scripts[] = self::get_description_scripts();
+				$scripts[] = self::get_social_scripts();
+				$scripts[] = self::get_canonical_scripts();
+
+				if (
+					   Data\Plugin::get_option( 'display_pixel_counter' )
+					|| Data\Plugin::get_option( 'display_character_counter' )
+				) {
+					$scripts[] = self::get_counter_scripts();
+				}
 			}
 		}
 
@@ -597,8 +612,6 @@ class Loader {
 		$id       = Query::get_the_real_id();
 		$taxonomy = Query::get_current_taxonomy();
 
-		$additions_forced_disabled = (bool) Data\Plugin::get_option( 'title_rem_additions' );
-
 		if ( Meta\Title\Conditions::use_generated_archive_prefix( \get_term( $id, $taxonomy ) ) ) {
 			$term_prefix = \sprintf(
 				/* translators: %s: Taxonomy singular name. */
@@ -640,7 +653,7 @@ class Loader {
 					'name' => 'tsfTermL10n',
 					'data' => [
 						'params' => [
-							'additionsForcedDisabled' => $additions_forced_disabled,
+							'additionsForcedDisabled' => (bool) Data\Plugin::get_option( 'title_rem_additions' ),
 							'id'                      => $id,
 							'taxonomy'                => $taxonomy,
 							'termPrefix'              => Utils::decode_entities( $term_prefix ),
@@ -664,15 +677,57 @@ class Loader {
 	 * @return array The script params.
 	 */
 	public static function get_author_edit_scripts() {
+
+		$id   = Query::get_admin_user_id();
+		$user = Data\User::get_userdata( $id );
+
+		if (
+			   $user
+			&& Meta\Title\Conditions::use_generated_archive_prefix( $user )
+		) {
+			$author_prefix = \_x( 'Author:', 'author archive title prefix', 'default' );
+		} else {
+			$author_prefix = '';
+		}
+
 		return [
 			[
 				'id'       => 'tsf-author',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt', 'tsf' ],
+				'autoload' => true,
+				'name'     => 'author',
+				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/css/',
+				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			],
+			[
+				'id'       => 'tsf-author',
 				'type'     => 'js',
-				'deps'     => [ 'tsf', 'tsf-http' ],
+				'deps'     => [
+					'tsf',
+					'tsf-canonical',
+					'tsf-description',
+					'tsf-http',
+					'tsf-social',
+					'tsf-title',
+					'tsf-tt',
+					'tsf-utils',
+				],
 				'autoload' => true,
 				'name'     => 'author',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
 				'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+				'l10n'     => [
+					'name' => 'tsfAuthorL10n',
+					'data' => [
+						'params' => [
+							'additionsForcedDisabled' => (bool) Data\Plugin::get_option( 'title_rem_additions' ),
+							'authorPrefix'            => Utils::decode_entities( $author_prefix ),
+							'id'                      => $id,
+							'nicename'                => $user ? $user->user_nicename : '',
+						],
+					],
+				],
 			],
 		];
 	}

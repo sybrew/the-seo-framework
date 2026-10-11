@@ -10,7 +10,10 @@ namespace The_SEO_Framework\Data\Admin;
 
 use function The_SEO_Framework\is_headless;
 
-use The_SEO_Framework\Data;
+use The_SEO_Framework\{
+	Data,
+	Helper,
+};
 
 /**
  * The SEO Framework plugin
@@ -64,7 +67,9 @@ final class User {
 	 * @since 5.0.0 1. Now tests if our POST data is set at all before acting.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
 	 *              3. Renamed from `_update_user_meta`.
-	 * @since 5.2.0 Now returns early when user metadata is headless.
+	 * @since 5.2.0 1. Now returns early when user metadata is headless.
+	 *              2. Now uses `Helper\User::is_supported()` to gate saving.
+	 *              3. Now overwrites the stored meta from the profile form. Omitted fields use their defaults.
 	 * @access private
 	 *
 	 * @param int $user_id The user ID.
@@ -77,18 +82,15 @@ final class User {
 			|| is_headless( 'user' )
 			|| ! isset( $_POST[ self::SAVE_NONCES['user-edit']['name'] ] )
 			|| ! \wp_verify_nonce( $_POST[ self::SAVE_NONCES['user-edit']['name'] ], self::SAVE_NONCES['user-edit']['action'] )
-			|| ! Data\User::user_has_author_info_cap_on_network( $user_id )
+			|| ! Helper\User::is_supported( $user_id )
 		) {
 			return;
 		}
 
-		// We won't reset the data, just overwrite what's given.
-		// This is because we only update a portion of the meta.
-		$data = array_merge(
-			Data\Plugin\User::get_meta( $user_id ),
-			(array) ( $_POST['tsf-user-meta'] ?? [] ),
+		// Trim, sanitize, and save the metadata.
+		Data\Plugin\User::save_meta(
+			$user_id,
+			(array) \wp_unslash( $_POST['tsf-user-meta'] ),
 		);
-
-		Data\Plugin\User::save_meta( $user_id, $data );
 	}
 }

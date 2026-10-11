@@ -78,6 +78,7 @@ class Twitter {
 	 * Gets the custom card type.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive card type from user meta.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
@@ -106,6 +107,9 @@ class Twitter {
 					break;
 				case 'pta':
 					$card = Data\Plugin\PTA::get_meta_item( 'tw_card_type', $args['pta'] );
+					break;
+				case 'user':
+					$card = Data\Plugin\User::get_meta_item( 'tw_card_type', $args['uid'] );
 			}
 		} else {
 			if ( Query::is_real_front_page() ) {
@@ -122,6 +126,8 @@ class Twitter {
 				$card = Data\Plugin\Term::get_meta_item( 'tw_card_type' );
 			} elseif ( \is_post_type_archive() ) {
 				$card = Data\Plugin\PTA::get_meta_item( 'tw_card_type' );
+			} elseif ( Query::is_author() ) {
+				$card = Data\Plugin\User::get_current_post_author_meta_item( 'tw_card_type' );
 			}
 		}
 
@@ -184,9 +190,13 @@ class Twitter {
 	}
 
 	/**
-	 * Returns the Twitter post creator.
+	 * Returns the Twitter creator for the current query.
+	 *
+	 * Singular queries use the post author. Author archives use the queried author.
+	 * Falls back to the site creator.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now uses the queried author's handle on author archives.
 	 *
 	 * @return string
 	 */
@@ -231,6 +241,7 @@ class Twitter {
 	 * Falls back to the Open Graph title when Open Graph tags are enabled, and otherwise to the meta title.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive title from user meta.
 	 *
 	 * @return string Custom twitter Title.
 	 */
@@ -250,6 +261,8 @@ class Twitter {
 			$title = Data\Plugin\Term::get_meta_item( 'tw_title' );
 		} elseif ( \is_post_type_archive() ) {
 			$title = Data\Plugin\PTA::get_meta_item( 'tw_title' );
+		} elseif ( Query::is_author() ) {
+			$title = Data\Plugin\User::get_current_post_author_meta_item( 'tw_title' );
 		}
 
 		if ( ! isset( $title ) )
@@ -269,6 +282,7 @@ class Twitter {
 	 * Falls back to the Open Graph title when Open Graph tags are enabled, and otherwise to the meta title.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive title from user meta.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Twitter Title.
@@ -295,6 +309,9 @@ class Twitter {
 				break;
 			case 'pta':
 				$title = Data\Plugin\PTA::get_meta_item( 'tw_title', $args['pta'] );
+				break;
+			case 'user':
+				$title = Data\Plugin\User::get_meta_item( 'tw_title', $args['uid'] );
 		}
 
 		if ( ! isset( $title ) )
@@ -359,6 +376,7 @@ class Twitter {
 	 * Falls back to the Open Graph description when Open Graph tags are enabled, and otherwise to the meta description.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive description from user meta.
 	 *
 	 * @return string Twitter description.
 	 */
@@ -378,6 +396,8 @@ class Twitter {
 			$desc = Data\Plugin\Term::get_meta_item( 'tw_description' );
 		} elseif ( \is_post_type_archive() ) {
 			$desc = Data\Plugin\PTA::get_meta_item( 'tw_description' );
+		} elseif ( Query::is_author() ) {
+			$desc = Data\Plugin\User::get_current_post_author_meta_item( 'tw_description' );
 		}
 
 		// Do not check empty(). See strlen below.
@@ -398,7 +418,8 @@ class Twitter {
 	 * Falls back to the Open Graph description, or the meta description when Open Graph tags are disabled.
 	 *
 	 * @since 5.0.0
-	 * @since 5.2.0 The arguments path now correctly falls back to the meta description when Open Graph tags are disabled.
+	 * @since 5.2.0 1. The arguments path now correctly falls back to the meta description when Open Graph tags are disabled.
+	 *              2. Now returns the custom author archive description from user meta.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Twitter description.
@@ -425,6 +446,9 @@ class Twitter {
 				break;
 			case 'pta':
 				$desc = Data\Plugin\PTA::get_meta_item( 'tw_description', $args['pta'] );
+				break;
+			case 'user':
+				$desc = Data\Plugin\User::get_meta_item( 'tw_description', $args['uid'] );
 		}
 
 		// Do not check empty(). See strlen below.

@@ -77,7 +77,8 @@ final class WebPage extends Reference {
 
 	/**
 	 * @since 5.0.0
-	 * @since 5.2.0 The front page `about` reference now follows `knowledge_type`.
+	 * @since 5.2.0 1. The front page `about` reference now follows `knowledge_type`.
+	 *              2. Author archives generated from arguments now use `CollectionPage`.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
@@ -134,6 +135,7 @@ final class WebPage extends Reference {
 						static::$type = 'CollectionPage';
 					break;
 				case 'term':
+				case 'user': // Author archives list posts. ProfilePage needs the person as mainEntity.
 					static::$type = 'CollectionPage';
 			}
 		} else {

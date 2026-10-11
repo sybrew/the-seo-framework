@@ -110,6 +110,7 @@ class Open_Graph {
 	 * Falls back to meta title.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive title from user meta.
 	 *
 	 * @return string Open Graph Title.
 	 */
@@ -129,6 +130,8 @@ class Open_Graph {
 			$title = Data\Plugin\Term::get_meta_item( 'og_title' );
 		} elseif ( \is_post_type_archive() ) {
 			$title = Data\Plugin\PTA::get_meta_item( 'og_title' );
+		} elseif ( Query::is_author() ) {
+			$title = Data\Plugin\User::get_current_post_author_meta_item( 'og_title' );
 		}
 
 		if ( ! isset( $title ) )
@@ -146,6 +149,7 @@ class Open_Graph {
 	 * Falls back to meta title.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive title from user meta.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Open Graph Title.
@@ -173,6 +177,8 @@ class Open_Graph {
 			case 'pta':
 				$title = Data\Plugin\PTA::get_meta_item( 'og_title', $args['pta'] );
 				break;
+			case 'user':
+				$title = Data\Plugin\User::get_meta_item( 'og_title', $args['uid'] );
 		}
 
 		// Do not check empty(). See strlen below.
@@ -235,6 +241,7 @@ class Open_Graph {
 	 * Falls back to meta description.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive description from user meta.
 	 *
 	 * @return string Open Graph description.
 	 */
@@ -254,6 +261,8 @@ class Open_Graph {
 			$desc = Data\Plugin\Term::get_meta_item( 'og_description' );
 		} elseif ( \is_post_type_archive() ) {
 			$desc = Data\Plugin\PTA::get_meta_item( 'og_description' );
+		} elseif ( Query::is_author() ) {
+			$desc = Data\Plugin\User::get_current_post_author_meta_item( 'og_description' );
 		}
 
 		if ( ! isset( $desc ) )
@@ -271,6 +280,7 @@ class Open_Graph {
 	 * Falls back to meta description.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.0 Now returns the custom author archive description from user meta.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string Open Graph description.
@@ -298,6 +308,8 @@ class Open_Graph {
 			case 'pta':
 				$desc = Data\Plugin\PTA::get_meta_item( 'og_description', $args['pta'] );
 				break;
+			case 'user':
+				$desc = Data\Plugin\User::get_meta_item( 'og_description', $args['uid'] );
 		}
 
 		// Do not check empty(). See strlen below.

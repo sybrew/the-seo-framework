@@ -9,7 +9,6 @@ namespace The_SEO_Framework\Sitemap\WP;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use The_SEO_Framework\{
-	Data,
 	Helper\Query,
 	Sitemap,
 };
@@ -89,6 +88,7 @@ final class Filter {
 	 * @hook wp_sitemaps_add_provider 9
 	 * @since 4.1.2
 	 * @since 5.0.0 Renamed from `_filter_add_provider`.
+	 * @since 5.2.0 Now replaces the `users` provider. A per-user index choice can list an author while author archives are noindexed.
 	 *
 	 * @param \WP_Sitemaps_Provider $provider Instance of a \WP_Sitemaps_Provider.
 	 * @param string                $name     Name of the sitemap provider.
@@ -108,9 +108,7 @@ final class Filter {
 				$provider = new Taxonomies;
 				break;
 			case 'users':
-				// This option is not reversible through means other than filters.
-				if ( Data\Plugin::get_option( 'author_noindex' ) )
-					$provider = null;
+				$provider = new Users;
 		}
 
 		return $provider;
