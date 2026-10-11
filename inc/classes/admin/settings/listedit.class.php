@@ -67,6 +67,27 @@ final class ListEdit extends Admin\Lists\Table {
 	}
 
 	/**
+	 * Skips column setup on the users list.
+	 *
+	 * @hook current_screen 10
+	 * @since 5.2.0
+	 * @access private
+	 *
+	 * @param \WP_Screen $screen The current screen.
+	 */
+	public function prepare_columns( $screen ) {
+
+		// User screens don't have quick/bulk edit.
+		switch ( $screen->base ) {
+			case 'users':
+			case 'users-network':
+				return;
+		}
+
+		parent::prepare_columns( $screen );
+	}
+
+	/**
 	 * Prepares the quick/bulk edit output.
 	 *
 	 * @hook current_screen 10

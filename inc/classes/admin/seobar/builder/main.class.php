@@ -136,6 +136,7 @@ abstract class Main {
 	 *
 	 * @since 4.2.0
 	 * @since 5.0.0 Renamed from `_run_all_tests`.
+	 * @since 5.2.0 Now accepts `uid` for the user SEO Bar.
 	 * @access private
 	 * @generator
 	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
@@ -143,10 +144,11 @@ abstract class Main {
 	 * @param array $query {
 	 *     The query parameters.
 	 *
-	 *     @type int    $id        Required. The current post or term ID.
+	 *     @type int    $id        The current post or term ID. Required unless `uid` is set.
 	 *     @type string $taxonomy  Optional. If not set, this will interpret it as a post.
 	 *     @type string $post_type Optional. If not set, this will be automatically filled.
-	 *                             This parameter is ignored for taxonomies.
+	 *                             This parameter is ignored for taxonomies and users.
+	 *     @type int    $uid       The user ID. When set with an empty `id`, this runs the user SEO Bar.
 	 * }
 	 * @yield array {
 	 *     @type array {$test} The testing results.
@@ -162,6 +164,8 @@ abstract class Main {
 	 * @since 4.0.0
 	 * @since 4.1.4 No longer clears the query cache.
 	 * @since 5.0.0 Renamed from `_run_test`.
+	 * @since 5.2.0 1. Now accepts `uid` for the user SEO Bar.
+	 *              2. Now keeps only the indexing test when `has_blocking_noindex()` is true.
 	 * @access private
 	 * @generator
 	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
@@ -170,10 +174,11 @@ abstract class Main {
 	 * @param array           $query {
 	 *     The query parameters.
 	 *
-	 *     @type int    $id        Required. The current post or term ID.
+	 *     @type int    $id        The current post or term ID. Required unless `uid` is set.
 	 *     @type string $taxonomy  Optional. If not set, this will interpret it as a post.
 	 *     @type string $post_type Optional. If not set, this will be automatically filled.
-	 *                             This parameter is ignored for taxonomies.
+	 *                             This parameter is ignored for taxonomies and users.
+	 *     @type int    $uid       The user ID. When set with an empty `id`, this runs the user SEO Bar.
 	 * }
 	 * @yield array {
 	 *     @type array {$test} The testing results.
@@ -187,8 +192,17 @@ abstract class Main {
 
 		$this->prime_query_cache();
 
-		if ( \in_array( 'redirect', $tests, true ) && $this->has_blocking_redirect() )
+		if (
+			   \in_array( 'redirect', $tests, true )
+			&& $this->has_blocking_redirect()
+		) {
 			$tests = [ 'redirect' ];
+		} elseif (
+			   \in_array( 'indexing', $tests, true )
+			&& $this->has_blocking_noindex()
+		) {
+			$tests = [ 'indexing' ];
+		}
 
 		foreach ( $tests as $test )
 			yield $test => $this->{"test_$test"}();
@@ -238,4 +252,13 @@ abstract class Main {
 	 * @return bool True if there's a blocking redirect, false otherwise.
 	 */
 	abstract protected function has_blocking_redirect();
+
+	/**
+	 * Tests whether indexing replaces the other tests.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @return bool True when the indexing block replaces the other tests, false otherwise.
+	 */
+	abstract protected function has_blocking_noindex();
 }

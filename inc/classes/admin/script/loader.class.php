@@ -136,7 +136,8 @@ class Loader {
 					$scripts[] = self::get_counter_scripts();
 				}
 			}
-		} elseif ( Query::is_wp_lists_edit() ) {
+		} elseif ( Query::is_wp_lists_edit() && ! Query::is_profile_admin() ) {
+			// User profiles don't have quick edit.
 			if ( Data\Plugin::get_option( 'display_list_edit_options' ) ) {
 				$scripts[] = self::get_list_edit_scripts();
 				$scripts[] = self::get_title_scripts();

@@ -157,6 +157,21 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 
 <table class="form-table tsf-user-meta">
 	<tbody>
+		<?php
+		if ( Data\Plugin::get_option( 'display_seo_bar_metabox' ) ) {
+			?>
+			<tr class=form-field>
+				<th scope=row valign=top><?php \esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
+				<td>
+					<?php
+					echo Admin\SEOBar\Builder::generate_bar( $generator_args );
+					?>
+				</td>
+			</tr>
+			<?php
+		}
+		?>
+
 		<tr class=form-field>
 			<th scope=row valign=top>
 				<label for="tsf-user-meta[doctitle]">
@@ -350,6 +365,7 @@ Input::output_js_social_data(
 			<td>
 				<div class=tsf-user-select-wrap>
 					<?php
+					// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 					echo Form::make_single_select_form( [
 						'id'       => 'tsf-user-meta[tw_card_type]',
 						'name'     => 'tsf-user-meta[tw_card_type]',
@@ -359,6 +375,7 @@ Input::output_js_social_data(
 						),
 						'selected' => $meta['tw_card_type'],
 					] );
+					// phpcs:enable WordPress.Security.EscapeOutput
 					?>
 				</div>
 			</td>
@@ -382,7 +399,9 @@ Input::output_js_social_data(
 				<input type=hidden name="tsf-user-meta[social_image_id]" id=tsf_user_meta_socialimage-id value="<?= \absint( $meta['social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js>
 				<div class="hide-if-no-tsf-js tsf-user-button-wrap">
 					<?php
+					// phpcs:disable WordPress.Security.EscapeOutput -- get_image_uploader_form escapes. (phpcs breaks here, so we use disable)
 					echo Form::get_image_uploader_form( [ 'id' => 'tsf_user_meta_socialimage' ] );
+					// phpcs:enable WordPress.Security.EscapeOutput
 					?>
 				</div>
 			</td>
@@ -474,6 +493,7 @@ foreach ( $authorial_fields as $field => $labels ) {
 					?>
 					<div class=tsf-user-select-wrap>
 						<?php
+						// phpcs:disable WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
 						echo Form::make_single_select_form( [
 							'id'       => $_s['id'],
 							'name'     => $_s['name'],
@@ -490,6 +510,7 @@ foreach ( $authorial_fields as $field => $labels ) {
 								'defaultI18n'        => $_default_i18n,
 							],
 						] );
+						// phpcs:enable WordPress.Security.EscapeOutput
 						?>
 					</div>
 					<?php

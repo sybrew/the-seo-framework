@@ -287,6 +287,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* On an author archive, `twitter:creator` and `fediverse:creator` use that author's X handle and Fediverse profile when those fields are set.
 		* These fields are stored once per user, including on Multisite, the same way Authorial Info already is.
 		* The profile SEO settings are 800px wide, like the term edit form. The fields, including Authorial Info, use the same width as the term fields.
+		* **SEO Bar:**
+			* The users list shows the SEO Bar.
+			* Profile and user-edit show Doing it Right when "Display the SEO Bar in the SEO Settings meta box?" is enabled.
+			* A user who cannot edit posts is not a public author. The SEO Bar shows only the indexing block.
 * **Changed:**
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
@@ -450,7 +454,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Admin\Script\Loader::get_author_edit_scripts()` (`tsf()->admin()->scripts()->loader()->get_author_edit_scripts()`) now exists. `tsfAuthorL10n.params` includes `additionsForcedDisabled`, `authorPrefix`, `id`, and `nicename`.
 		* Method `The_SEO_Framework\Data\User::has_published_posts()` (`tsf()->data()->user()->has_published_posts()`) returns whether the user has published posts. WordPress author archives query the `post` type unless a theme changes that.
 		* Method `The_SEO_Framework\Sitemap\Utils::is_user_included_in_sitemap()` (`tsf()->sitemap()->utils()->is_user_included_in_sitemap()`) returns whether an author is included in the users sitemap. A per-user noindex or redirect excludes them.
-		* Method `The_SEO_Framework\Helper\Query::is_profile_admin()` (`tsf()->query()->is_profile_admin()`) detects the profile, user-edit, and Add User screens, including their network variants.
+		* Method `The_SEO_Framework\Helper\Query::is_profile_admin()` (`tsf()->query()->is_profile_admin()`) detects the users list, profile, user-edit, and Add User screens, including their network variants.
+		* Method `The_SEO_Framework\Helper\Query::is_users_list()` (`tsf()->query()->is_users_list()`) detects the users list, including the network users list.
 		* Method `The_SEO_Framework\Helper\Query::get_admin_user_id()` (`tsf()->query()->get_admin_user_id()`) returns the user ID being edited on profile and user-edit screens.
 		* Method `The_SEO_Framework\Helper\Query::get_current_author_id()` (`tsf()->query()->get_current_author_id()`) returns the author ID for the current query. Singular queries use the post author. Author archives use the queried author.
 		* Pool `tsf()->user()` is now available.
@@ -465,7 +470,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Data\Filter\Sanitize::redirect_url()` (`tsf()->sanitize()->redirect_url()`) now only returns http and https URLs.
 		* Method `The_SEO_Framework\Sitemap\Utils::get_sitemap_post_limit()` (`tsf()->sitemap()->utils()->get_sitemap_post_limit()`) now uses the default option when `sitemap_query_limit` is empty.
 		* Methods `The_SEO_Framework\Meta\URI::get_custom_canonical_url()` (`tsf()->uri()->get_custom_canonical_url()`) and `The_SEO_Framework\Meta\URI::get_canonical_url()` (`tsf()->uri()->get_canonical_url()`) now make a relative canonical path absolute.
-		* Method `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`) now strips HTML tags from tooltip title and reason. The title and reason were already considered trusted (hardcoded input), but this extra hardening mitigates potential oversights from custom integrations.
+		* Method `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`):
+			1. Now strips HTML tags from tooltip title and reason. The title and reason were already considered trusted (hardcoded input), but this extra hardening mitigates potential oversights from custom integrations.
+			2. Now builds the user SEO Bar when `uid` is set and `id` is empty.
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object. Props [Contributolo](https://github.com/Contributolo).
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):
 			1. No longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`
@@ -500,6 +507,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Meta\Title::get_search_query_title()` (`tsf()->title()->get_search_query_title()`) now fetches the search query unescaped; `Sanitize::metadata_content()` already decodes entities.
 		* Methods `The_SEO_Framework\Meta\Title::get_archive_title_from_query()` (`tsf()->title()->get_archive_title_from_query()`) and `The_SEO_Framework\Meta\Title::get_archive_title_from_object()` (`tsf()->title()->get_archive_title_from_object()`) now sanitizes generated archive titles and prefixes if they haven't been sanitized yet.
 		* Method `The_SEO_Framework\Helper\Query::is_seo_settings_page()` (`tsf()->query()->is_seo_settings_page()`): Replaced `$secure` with `'page_hook'` (default) and `'page_query'` (kept backward compatibility for a falsy value). `$secure` was a misnomer that never checked capabilities.
+		* Method `The_SEO_Framework\Helper\Query::is_wp_lists_edit()` (`tsf()->query()->is_wp_lists_edit()`) now includes the users list.
 		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
 		* Method `The_SEO_Framework\RobotsTXT\Main::get_robots_txt()` (`tsf()->robotstxt()->get_robots_txt()`) now lists the optimized sitemap when `The_SEO_Framework\Sitemap\Utils::may_output_optimized_sitemap()` (`tsf()->sitemap()->utils()->may_output_optimized_sitemap()`) is true.
 		* Method `The_SEO_Framework\Sitemap\Cache::get_sitemap_cache_key()` (`tsf()->sitemap()->cache()->get_sitemap_cache_key()`) now returns `false` when `cache_id` is missing or empty.

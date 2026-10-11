@@ -136,6 +136,7 @@ seobar/
 		main.class.php            Abstract base: test-runner loop and shared caching for SEO Bar builders
 		page.class.php            SEO Bar assessments (title, description, indexing, etc.) for posts/pages
 		term.class.php            SEO Bar assessments (title, description, indexing, etc.) for taxonomy terms
+		user.class.php            SEO Bar assessments (title, description, indexing, etc.) for users
 
 settings/
 	listedit.class.php            Quick-edit and bulk-edit SEO fields in post/term list tables

@@ -98,7 +98,7 @@ final class Registry {
 	 *
 	 * @hook admin_enqueue_scripts 0
 	 * @since 5.0.0
-	 * @since 5.2.0 Now registers scripts on profile and user screens when the user is supported.
+	 * @since 5.2.0 Now registers scripts on profile and user screens, including the users list.
 	 *
 	 * @access private
 	 */
@@ -111,7 +111,10 @@ final class Registry {
 			|| (
 				   ! is_headless( 'user' )
 				&& Query::is_profile_admin()
-				&& User::is_supported()
+				&& (
+					   User::is_supported()
+					|| ! Query::is_profile_edit()
+				)
 			)
 			|| (
 				   ! is_headless( 'meta' )

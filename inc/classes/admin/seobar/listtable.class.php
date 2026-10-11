@@ -36,6 +36,7 @@ use The_SEO_Framework\Admin;
  * @since 4.0.0
  * @since 5.0.0 1. Moved from `\The_SEO_Framework\Bridges`.
  *              2. Renamed from `SEOBar`.
+ * @since 5.2.0 Now also adds the SEO Bar column to the users list.
  * @access private
  */
 final class ListTable extends Admin\Lists\Table {
@@ -176,5 +177,27 @@ final class ListTable extends Admin\Lists\Table {
 			'id'  => $term_id,
 			'tax' => $this->taxonomy,
 		] ) . $string;
+	}
+
+	/**
+	 * Returns the SEO Bar for users.
+	 *
+	 * @hook manage_users_custom_column 1
+	 * @since 5.2.0
+	 * @access private
+	 * @NOTE Unlike output_column_contents_for_post(), this is a filter callback.
+	 *       Because of this, the first parameter is a useless string, which must be extended.
+	 *
+	 * @param string $string      Blank string.
+	 * @param string $column_name Name of the column.
+	 * @param int    $user_id     User ID.
+	 * @return string
+	 */
+	public function output_column_contents_for_user( $string, $column_name, $user_id ) {
+
+		if ( $this->column_name !== $column_name )
+			return $string;
+
+		return Builder::generate_bar( [ 'uid' => $user_id ] ) . $string;
 	}
 }

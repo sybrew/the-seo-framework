@@ -437,20 +437,44 @@ class Query {
 	}
 
 	/**
-	 * Detects Post or Archive Lists in Admin.
+	 * Detects post, term, and user lists in WP Admin.
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.0 Now includes the users list.
 	 * @todo should be renamed to is_list_edit()
 	 * @global \WP_Screen $current_screen
 	 *
-	 * @return bool We're on the edit screen.
+	 * @return bool True on a posts, terms, or users list. False otherwise.
 	 */
 	public static function is_wp_lists_edit() {
 
 		switch ( $GLOBALS['current_screen']->base ?? '' ) {
 			case 'edit-tags':
 			case 'edit':
+			case 'users':
+			case 'users-network':
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Detects the users list in WP Admin.
+	 *
+	 * Includes the site users list and the network users list.
+	 *
+	 * @since 5.2.0
+	 * @global \WP_Screen $current_screen
+	 *
+	 * @return bool True on the users list. False otherwise.
+	 */
+	public static function is_users_list() {
+
+		switch ( $GLOBALS['current_screen']->base ?? '' ) {
+			case 'users':
+			case 'users-network':
 				return true;
 		}
 
@@ -460,8 +484,8 @@ class Query {
 	/**
 	 * Detects profile and user screens in WP Admin.
 	 *
-	 * Includes the profile, user-edit, and Add User screens, including their network variants.
-	 * WordPress names the Add User screen base `user` because `user-new` is stored as action `add`.
+	 * Includes the users list, profile, user-edit, and Add User screens, including their network variants.
+	 * The users list base is `users`. WordPress names the Add User screen base `user` because `user-new` is stored as action `add`.
 	 *
 	 * @since 5.2.0
 	 * @global \WP_Screen $current_screen
@@ -471,6 +495,8 @@ class Query {
 	public static function is_profile_admin() {
 
 		switch ( $GLOBALS['current_screen']->base ?? '' ) {
+			case 'users':
+			case 'users-network':
 			case 'profile':
 			case 'profile-network':
 			case 'user':

@@ -148,6 +148,18 @@ final class Page extends Main {
 	}
 
 	/**
+	 * Tests whether indexing replaces the other tests.
+	 *
+	 * @since 5.2.0
+	 * @abstract
+	 *
+	 * @return bool True when the indexing block replaces the other tests, false otherwise.
+	 */
+	protected function has_blocking_noindex() {
+		return false;
+	}
+
+	/**
 	 * Runs title tests.
 	 *
 	 * @since 4.0.0
@@ -167,63 +179,65 @@ final class Page extends Main {
 	 */
 	protected function test_title() {
 
-		$cache = static::get_cache( 'page/title/defaults' ) ?? static::set_cache(
-			'page/title/defaults',
-			[
-				'params'   => [
-					'untitled'        => Meta\Title::get_untitled_title(),
-					'blogname_quoted' => preg_quote(
-						Sanitize::normalize_metadata_content_for_strcmp( Data\Blog::get_public_blog_name() ),
-						'/',
-					),
-					/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
-					'disclaim'        => \__( '%1$s (%2$s)', 'autodescription' ),
-					'estimated'       => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
-				],
-				'assess'   => [
-					'empty'      => \__( 'No title could be fetched.', 'autodescription' ),
-					'untitled'   => \sprintf(
-						/* translators: %s = "Untitled" */
-						\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
-						Meta\Title::get_untitled_title(),
-					),
-					'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
-					'branding'   => [
-						'not'       => \__( "It's not branded. Search engines may ignore your title. Consider adding back the site title.", 'autodescription' ),
-						'manual'    => \__( "It's manually branded.", 'autodescription' ),
-						'automatic' => \__( "It's automatically branded.", 'autodescription' ),
+		$cache =
+			   static::get_cache( 'page/title/defaults' )
+			?? static::set_cache(
+				'page/title/defaults',
+				[
+					'params'   => [
+						'untitled'        => Meta\Title::get_untitled_title(),
+						'blogname_quoted' => preg_quote(
+							Sanitize::normalize_metadata_content_for_strcmp( Data\Blog::get_public_blog_name() ),
+							'/',
+						),
+						/* translators: 1 = An assessment, 2 = Disclaimer, e.g. "take it with a grain of salt" */
+						'disclaim'        => \__( '%1$s (%2$s)', 'autodescription' ),
+						'estimated'       => \__( 'Estimated from the number of characters found. The pixel counter asserts the true length.', 'autodescription' ),
 					],
-					'duplicated' => \__( 'The site title is found multiple times.', 'autodescription' ),
-					'syntax'     => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom title.", 'autodescription' ),
-				],
-				'reason'   => [
-					'incomplete' => \__( 'Incomplete.', 'autodescription' ),
-					'duplicated' => \__( 'The branding is repeated.', 'autodescription' ),
-					'notbranded' => \__( 'Not branded.', 'autodescription' ),
-					'syntax'     => \__( 'Found markup syntax.', 'autodescription' ),
-				],
-				'defaults' => [
-					'generated' => [
-						'symbol' => \_x( 'TG', 'Title Generated', 'autodescription' ),
-						'title'  => \__( 'Title, generated', 'autodescription' ),
-						'status' => Builder::STATE_GOOD,
-						'reason' => \__( 'Automatically generated.', 'autodescription' ),
-						'assess' => [
-							'base' => \__( "It's built from the page title.", 'autodescription' ),
+					'assess'   => [
+						'empty'      => \__( 'No title could be fetched.', 'autodescription' ),
+						'untitled'   => \sprintf(
+							/* translators: %s = "Untitled" */
+							\__( 'No title could be fetched, "%s" is used instead.', 'autodescription' ),
+							Meta\Title::get_untitled_title(),
+						),
+						'protected'  => \__( 'A page protection state is added which increases the length.', 'autodescription' ),
+						'branding'   => [
+							'not'       => \__( "It's not branded. Search engines may ignore your title. Consider adding back the site title.", 'autodescription' ),
+							'manual'    => \__( "It's manually branded.", 'autodescription' ),
+							'automatic' => \__( "It's automatically branded.", 'autodescription' ),
+						],
+						'duplicated' => \__( 'The site title is found multiple times.', 'autodescription' ),
+						'syntax'     => \__( "Markup syntax was found that isn't transformed. Consider rewriting the custom title.", 'autodescription' ),
+					],
+					'reason'   => [
+						'incomplete' => \__( 'Incomplete.', 'autodescription' ),
+						'duplicated' => \__( 'The branding is repeated.', 'autodescription' ),
+						'notbranded' => \__( 'Not branded.', 'autodescription' ),
+						'syntax'     => \__( 'Found markup syntax.', 'autodescription' ),
+					],
+					'defaults' => [
+						'generated' => [
+							'symbol' => \_x( 'TG', 'Title Generated', 'autodescription' ),
+							'title'  => \__( 'Title, generated', 'autodescription' ),
+							'status' => Builder::STATE_GOOD,
+							'reason' => \__( 'Automatically generated.', 'autodescription' ),
+							'assess' => [
+								'base' => \__( "It's built from the page title.", 'autodescription' ),
+							],
+						],
+						'custom'    => [
+							'symbol' => \_x( 'T', 'Title', 'autodescription' ),
+							'title'  => \__( 'Title', 'autodescription' ),
+							'status' => Builder::STATE_GOOD,
+							'reason' => \__( 'Obtained from page SEO meta input.', 'autodescription' ),
+							'assess' => [
+								'base' => \__( "It's built from page SEO meta input.", 'autodescription' ),
+							],
 						],
 					],
-					'custom'    => [
-						'symbol' => \_x( 'T', 'Title', 'autodescription' ),
-						'title'  => \__( 'Title', 'autodescription' ),
-						'status' => Builder::STATE_GOOD,
-						'reason' => \__( 'Obtained from page SEO meta input.', 'autodescription' ),
-						'assess' => [
-							'base' => \__( "It's built from page SEO meta input.", 'autodescription' ),
-						],
-					],
 				],
-			],
-		);
+			);
 
 		$generator_args = [ 'id' => static::$query['id'] ];
 
