@@ -50,6 +50,7 @@ foreach (
 			'polylang/polylang.php'                    => 'polylang',
 			'polylang-pro/polylang.php'                => 'polylang',
 			'sitepress-multilingual-cms/sitepress.php' => 'wpml',
+			'translatepress-multilingual/index.php'    => 'translatepress',
 			'ultimate-member/ultimate-member.php'      => 'ultimatemember',
 			'wpforo/wpforo.php'                        => 'wpforo',
 			'woocommerce/woocommerce.php'              => 'woocommerce',

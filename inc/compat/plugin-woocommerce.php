@@ -303,7 +303,7 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
  * @since 4.2.0 Now supports the `$args['pta']` index.
  * @since 4.2.8 Fixed the taxonomy query for the admin area.
  *
- * @param array      $params {
+ * @param array  $params {
  *     The image generation parameters.
  *
  *     @type string  $size     The image size to use.

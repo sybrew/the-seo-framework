@@ -137,7 +137,7 @@ switch ( $instance ) :
 
 		$character_info = HTML::make_info(
 			\__( 'The character counter is based on guidelines.', 'autodescription' ),
-			'',
+			'https://kb.theseoframework.com/?p=48#character-counters',
 			false,
 		);
 

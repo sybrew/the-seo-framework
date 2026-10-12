@@ -358,6 +358,7 @@ plugin-edd.php                  Easy Digital Downloads: registers download post 
 plugin-elementor.php            Elementor: hides incorrectly-public post types from TSF, forces noindex on them
 plugin-jetpack.php              Jetpack: disables its Open Graph and Twitter Card output when TSF's options are enabled
 plugin-polylang.php             Polylang: per-language sitemaps, pll__ string translation, canonical URL and home URL fixes
+plugin-translatepress.php       TranslatePress: per-language sitemaps, language directories on sitemap URLs, and sitemap cache flushing
 plugin-ultimatemember.php       Ultimate Member: reinstates title support, conditionally disables SEO on profile pages
 plugin-woocommerce.php          WooCommerce: shop page ID, product detection, noindex cart/checkout, primary term links, image params
 plugin-wpforo.php               wpForo: page detection; defers to wpForo SEO when enabled or overrides with TSF's output

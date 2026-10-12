@@ -124,7 +124,7 @@ The SEO Framework works on many things without notifying you, because the best s
 * Output of structured data via Schema.org JSON-LD scripts.
 * Altering oEmbed for improved sharing on Discord.
 * Detection of various other SEO plugins to help you switch graciously.
-* Translation plugins like WPML, Polylang, WPGlobus, and MultilingualPress.
+* Translation plugins like WPML, Polylang, TranslatePress, WPGlobus, and MultilingualPress.
 * E-commerce plugins like WooCommerce and Easy Digital Downloads.
 * Blocking of SEO analysis and AI crawlers for Moz, OpenAI, Apple, and others, [via robots.txt](https://kb.theseoframework.com/?p=263).
 * Forum plugins like bbPress and wpForo.
@@ -355,6 +355,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory twice, including when "Use directory for default language" is enabled, so advertised sitemaps 404'd.
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
+	* **Plugin: TranslatePress:**
+		* Each published language now has its own sitemap. Addresses in that sitemap use the language directory, and robots.txt lists every language except the one served without a directory.
 * **Fixed:**
 	* Resolved an issue where a backslash in a post or term SEO text field was removed every time it was saved. Now, the input and output are idempotent.
 		* This was already implemented for the site SEO Settings.
