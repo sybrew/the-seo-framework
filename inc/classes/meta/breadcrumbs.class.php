@@ -64,7 +64,7 @@ class Breadcrumbs {
 	 *              2. Added the role index to the return value.
 	 *              3. Singular trails now omit post ancestors that aren't publicly viewable.
 	 *              4. Generated archive crumb names now drop their archive title prefix.
-	 *              5. Front-end term archives now include ancestor terms again.
+	 *              5. Front-end term archives now include ancestor terms.
 	 *
 	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                        Leave null to autodetermine query.

@@ -284,7 +284,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* General: meta title, "Remove the site title?", and meta description.
 			* Social: Open Graph title and description, Twitter Card title, description, and card type, and a social image. Facebook, Fediverse, and X stay under Authorial Info in this section.
 			* Visibility: canonical URL, robots indexing, link following, and archiving, and a 301 redirect.
-		* These values are used on that author's archive. A noindex or a redirect removes the author from the users sitemap. Choosing index includes an author with no posts. The users sitemap stays available when author archives are set to noindex, so an author set to index can still be listed. It still only lists authors who have published posts.
+		* These values are used on that author's archive. A noindex or a redirect removes the author from the users sitemap. Choosing index includes an author with no posts. The WordPress users sitemap is no longer removed when author archives are set to noindex, so an author set to index can still be listed. It still only lists authors who have published posts.
 		* On an author archive, `twitter:creator` and `fediverse:creator` use that author's X handle and Fediverse profile when those fields are set.
 		* These fields are stored once per user, including on Multisite, the same way Authorial Info already is.
 		* The profile SEO settings are 800px wide, like the term edit form. The fields, including Authorial Info, use the same width as the term fields.
@@ -297,8 +297,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
 		* Connected social page fields no longer list an example under every input. When a URL does not match that network's profile format, a suggested format is shown, and "Use this" fills it in.
-		* On an author profile, each settings section notes that the values may be shown publicly, instead of the individual fields.
-		* Facebook, Fediverse, and X profile fields on an author profile show an example only when the value does not match. "Use this" writes the correction when one can be read from the field.
+		* Facebook and X profile fields on an author profile show an example only when the value does not match. "Use this" writes the correction when one can be read from the field.
 	* **Twitter Card labels:**
 		* "Twitter Title" is now "Twitter Card Title", and "Twitter Description" is now "Twitter Card Description".
 	* **Archive exclusion:**
@@ -308,35 +307,33 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Homepage descriptions:**
 		* The generated description "Latest posts:" plus the site title is no longer used. That text treated the homepage and the posts page as a blog, and not every site uses those pages that way. A homepage that shows your latest posts has no generated description until you write one. The posts page now uses its own excerpt or content, like any other page.
 	* **Open Graph locales:** We couldn't find any documentation on the languages Facebook supports for Open Graph, so we resorted to scraping their network, testing all 46500 possible locale combinations, and adjusted support accordingly:
-		* **These WordPress locales are no longer supported by Facebook:** Cebuano, Esperanto, Spanish (Chile, Colombia, Mexico, Venezuela), Igbo, Limburgish, Lingala, Luganda, Māori, Romansh, Sanskrit, Silesian, Syriac, Tamazight, Wolof, Xhosa, Yoruba, Zulu.
-			* A fallback locale will be calculated for these languages based on their language code only. For example, `es_MX` (Spanish - Mexico) will fall back to `es_ES` (Spanish - Spain).
+		* **These WordPress locales are no longer supported by Facebook:** Cebuano, Esperanto, Spanish (Chile, Colombia, Mexico, Venezuela), Igbo, Limburgish, Lingala, Luganda, Māori, Romansh, Sanskrit, Silesian, Syriac, Tamazight, Turkmen, Wolof, Xhosa, Yoruba, Zulu.
+			* A fallback locale will be calculated for these languages based on their language code only. For example, `es_MX` (Spanish - Mexico) will fall back to `es_ES` (Spanish - Spain). Languages without another supported locale fall back to `en_US`.
 			* This does not affect your site's language or any other functionality; only Open Graph locale output is affected to conform to Facebook's supported locales.
-		* **The locales are also no longer supported:** Akan, Aymara, Sorani Kurdish, Cherokee, English (India, Pirate, Upside Down), Leet Speak, Classical Greek, Latin, Ndebele, Chewa, Quechua, Northern Sámi, Klingon, Yiddish, Zazaki.
+		* **The locales are also no longer supported:** Akan, Aymara, Sorani Kurdish, Cherokee, English (India, Pirate, Upside Down), Leet Speak, Classical Greek, Japanese (Kansai), Latin, Ndebele, Chewa, Quechua, Northern Sámi, Klingon, Yiddish, Zazaki.
 		* **These locales are now supported, although not by WordPress:** Haitian Creole, Inupiaq, Inuktitut.
 	* **Settings headings:**
-		* "General SEO settings" is now "General Settings" on the SEO settings screen.
 		* "Social SEO Settings" is now "Social Settings" on term-edit screens.
 		* "Visibility SEO Settings" is now "Visibility Settings" on term-edit, Quick Edit, and Bulk Edit screens.
 * **Improved:**
 	* **Tooltips:**
-		* Tooltips now aim to be a little wider to ease reading.
 		* Tooltips now properly dismiss when tapping elsewhere on touch devices. Particularly, added improved support for iOS.
 		* Tooltips now spawn correctly on Android when tapping child elements within tooltip items.
 		* Added `touchcancel` event handling for multi-finger gesture support -- it won't invoke multiple tooltips anymore.
-		* Tooltips now stay when invoking a scroll or pan on touch devices.
 		* The character counter's "Click to change the counter type" hint is now a tooltip and an ARIA label on the count. The count is a link, so pressing Enter changes the counter type.
 		* SEO Bar focus styles now use `:focus-visible` instead of `:focus`, preventing focus rings on touch taps, but still showing them for keyboard navigation.
 	* **Styling:**
-		* The default admin style for WordPress 7.0 is now assumed to be `'modern'` instead of `'fresh'`.
+		* Admin colors now fall back to the `modern` scheme instead of `fresh` when a user has no saved admin color scheme, matching the WordPress 7.0 default.
 		* Updated radio buttons and checkboxes to accommodate for WordPress 7.0.
-		* Fixed a layout issue where hovering title prefix and addition overlays were misaligned in WordPress 7.0 admin input fields.
 		* Admin notices now use the WordPress 7.0 border colors on their icons, at the 20px line height, and the dismiss control matches the 24px notice button.
 		* SEO Settings cards now use the dashboard cards' rounded corners and title spacing.
-	* **Robots.txt:**
-		* Sitemap Hinting now correctly outputs WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled. Props [Contributolo](https://github.com/Contributolo).
+	* **Canonical URL Notation Tracker:**
+		* The tracker now also predicts the canonical URL when the site uses plain permalinks or another query-based URL structure.
+	* **SEO Bar:**
+		* The empty description note now explains that search engines may create a description when there is no usable content for description generation.
 	* **Sitemap settings:**
 		* The Sitemap Styling Settings now link to the knowledge base article about sitemap styles.
-		* When a multilingual plugin is detected, language sitemap links are now listed under "View translated sitemaps," using the language name as the link text. A note that each language has its own sitemap is shown with those links.
+		* When a multilingual plugin is detected, language sitemap links are now listed under "View translated sitemaps," using the language name as the link text. A note that each language has its own sitemap is shown with those links. This replaces the notice that a multilingual plugin may add multiple sitemaps.
 		* Toggling the optimized sitemap now warns that the sitemap links still reflect the saved setting until you save.
 	* **Social images:**
 		* The social image preview no longer sends a Referer header when fetching the URL. This matches our policy of applying `rel=noreferrer` on external links.
@@ -345,15 +342,13 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Descriptions:**
 		* Generated descriptions now fall back to the post content when the excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated.
 * **Compatibility:**
-	* **Plugin: BuddyPress:**
-		* The Fediverse tag pool is now also removed on BuddyPress pages.
 	* **Plugins: Cachify, LiteSpeed Cache, SpeedyCache, Surge, W3 Total Cache, etc.:**
-		* Resolved an issue where cache plugins that do not have specific exclusion rules for sitemap or sitemap stylesheet endpoints could serve an empty sitemap or stylesheet on later visits.
-			* You must flush the entire cache for these plugins in order to make this effective. This update prevents new empty sitemap or stylesheet responses from being stored, but it cannot replace a broken response already written to a page cache, reverse proxy, CDN, or host-level cache before WordPress loads.
+		* Cache plugins that do not have specific exclusion rules for sitemap or sitemap stylesheet endpoints could serve an empty sitemap or stylesheet on later visits. TSF now defines `DONOTCACHEPAGE` before scrubbing the response, so cache plugins that honor it skip storing these responses.
+			* You must flush the entire cache for these plugins in order to make this effective. This update signals that new empty sitemap or stylesheet responses should not be stored, but it cannot replace a broken response already written to a page cache, reverse proxy, CDN, or host-level cache before WordPress loads.
 			* After updating, use the cache plugin's "Purge All," "Clear all cache," or equivalent full-cache action. Do not purge only `sitemap.xml`, `sitemap_index.xml`, `sitemap.xsl`, or `sitemap.css`, because cache plugins may store endpoint variants by host, scheme, compression, mobile view, language, or query state.
 			* Do not rely on the plugin update process to clear these entries. Cachify, SpeedyCache, and W3 Total Cache do not appear to purge all page cache entries on plugin updates; LiteSpeed Cache does so only when its "Purge All On Upgrade" setting is enabled; Surge expires all entries on automatic updates and plugin activation/deactivation, but not reliably on manual updates.
 	* **Plugin: Polylang:**
-		* Resolved an issue where posts excluded from local search could still appear in translated search results.
+		* Resolved an issue where posts excluded from on-site search and archives could still appear in translated results.
 		* Resolved an issue where sitemap URLs in robots.txt could include the current language directory or the static front-page slug, so advertised sitemaps 404'd or redirected to WordPress's sitemap.
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 	* **Plugin: WPML:**
@@ -361,16 +356,17 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where clearing the sitemap cache left other languages cached for up to a week when a persistent object cache was active.
 		* Automatic translations of SEO titles and meta descriptions now stay within recommended character limits.
 * **Fixed:**
-	* Resolved an issue where a backslash in a post, term, or author profile SEO text field was removed every time it was saved. Now, the input and output are idempotent.
+	* Resolved an issue where a backslash in a post or term SEO text field was removed every time it was saved. Now, the input and output are idempotent.
 		* This was already implemented for the site SEO Settings.
-	* An author Fediverse profile is added to Schema.org `sameAs` only when that author has a handle.
-	* An author's X profile in Schema.org `sameAs` uses `x.com`.
-	* A Facebook or X profile entered without a scheme, such as `facebook.com/YourPage`, keeps the path instead of repeating the host.
-	* The notice about multiple SEO plugins stays until every conflicting SEO plugin is deactivated.
-	* Saving SEO Settings no longer clears "Remove the site title?" on a post type archive while site title additions are removed.
-	* A redirect stored on a draft or trashed page warns that it does nothing until the page is published or restored.
-	* An empty Sitemap Query Limit is stored as the default. A stored limit of 0 is read as the default.
-	* Canonical addresses entered as a path are stored as a full URL. Redirect addresses are stored only as http or https.
+	* Resolved an issue where an author's X profile in Schema.org `sameAs` used `twitter.com` instead of `x.com`.
+	* Resolved an issue where a Facebook or X profile entered without a scheme, such as `facebook.com/YourPage`, repeated the host instead of keeping the path.
+	* Resolved an issue where the notice about multiple SEO plugins was cleared after deactivating any conflicting SEO plugin, instead of after deactivating all of them.
+	* Resolved an issue where a redirect stored on a draft or trashed page was shown as active in the SEO Bar. It now warns that it does nothing until the page is published or restored.
+	* Resolved an issue where an empty Sitemap Query Limit was not replaced by the default. A stored limit of 0 is now read as the default.
+	* Resolved an issue where a canonical address entered as a path was stored as a path, and where canonical and redirect addresses could use protocols other than http or https. Canonical addresses are now stored as a full URL.
+	* Resolved an issue where Sitemap Hinting in `robots.txt` output an empty Sitemap directive instead of the WordPress Core sitemap URLs when "Optimized Sitemap" output is disabled. Props [Contributolo](https://github.com/Contributolo).
+	* Resolved an issue where the settings script threw a TypeError when a taxonomy's object types had non-sequential keys. Props [Contributolo](https://github.com/Contributolo).
+	* Resolved an issue where the hovering title prefix and addition overlays were misaligned in admin input fields.
 	* Resolved an issue where the optimized sitemap's timestamp comment said GMT but showed the site's local time.
 	* Resolved an issue where saving the static front page in the Block Editor replaced the Open Graph and Twitter description placeholders with the homepage meta description.
 	* Resolved an issue where clearing a password in Quick Edit kept Indexing on Default (noindex) and hid the canonical placeholder.
@@ -380,7 +376,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where a crafted SEO Settings save could exclude the default post types and taxonomies.
 	* Resolved an issue where Bulk Edit cleared the primary term on every edited post if selected terms mismatched, even when that term was left unchanged.
 	* Resolved an issue where saving in the Block Editor regenerated every SEO preview field, including fields that were not on screen.
-	* Resolved an issue where excluded posts could slip through search-result filtering caused by malformed search queries without a raw search parameter.
+	* Resolved an issue where posts excluded from on-site search could still appear in search results for queries without a raw search parameter.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the homepage URL for hierarchical custom post types, and for post types with rewrite disabled.
 	* Resolved an issue where the Canonical URL Notation Tracker showed the posts permalink prefix as the homepage placeholder when the permalink structure had a static front such as `/blog/%postname%/`.
 	* Resolved an issue where `X-Robots-Tag: noindex` was omitted from the `robots.txt` response unless an output buffer (like a page cache) was active.
@@ -388,7 +384,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where the `[tsf_breadcrumb]` shortcode still output empty `<style></style>` tags when its CSS was filtered away.
 	* Resolved an issue where breadcrumbs included parent pages that visitors cannot view, such as drafts or private pages. Their crumbs linked to a page that returned 404.
 	* Resolved an issue where the generated archive title prefix briefly flickered when typing in Post Type Archive Settings meta title fields.
-	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content.
+	* Resolved an issue where the SEO Bar treated a homepage title or description of `0` as empty, so it attributed the value to the Edit Page screen instead of SEO Settings, and did not recognize a post excerpt of `0` as excerpt content. The admin placeholder for a homepage description of `0` was affected the same way.
 	* Resolved an issue where social image URLs with non-ASCII characters in the filename were not percent-encoded, causing Facebook to ignore the `og:image` tag.
 	* Resolved an issue where a password-protected post in the loop could hide the Schema.org WebPage on a blog page or shop page, or let a protected page still output one.
 	* Resolved an issue where a site set to represent a Person still output an Organization as the homepage's WebPage `about`.
@@ -400,21 +396,17 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where shortlinks on plain permalinks repeated their own query, such as `?p=123&p=123`.
 	* Resolved an issue where a custom taxonomy shortlink used the taxonomy name as its query key, so WordPress could not resolve the link when that taxonomy's query variable was different.
 	* Resolved an issue where Bulk Edit visibility selects wrapped below their labels instead of sitting beside them.
-	* Sitemap post queries now order by modified date.
-	* On-site search filtering now skips queries that are marked as search but have no search term.
-	* WordPress core sitemaps now omit password-protected posts.
-	* The cached list of posts excluded from on-site search and archives now refreshes when a post is saved, including through the REST API and WP-CLI.
-	* Saving or deleting a post now refreshes the sitemap, including through the REST API and WP-CLI.
-	* Creating a post no longer refreshes the sitemap while the post is an auto-draft.
-	* Resolved an issue where changing the character counter cleared saved Facebook, X, and Fediverse profile fields while user metadata was headless.
-	* Resolved an issue where a user profile submission could still change SEO profile fields while user metadata was headless.
+	* Resolved an issue where sitemap post queries ordered by an invalid `lastmod` field, so WordPress fell back to ordering by post date. They now order by modified date.
+	* Resolved an issue where WordPress core sitemaps listed password-protected posts.
+	* Resolved an issue where saving or deleting a post through the REST API or WP-CLI did not refresh the sitemap or the cached list of posts excluded from on-site search and archives.
+	* Resolved an issue where changing the character counter cleared saved Facebook and X profile fields while user metadata was headless.
 	* Resolved an issue where saving SEO Settings turned off each post type archive's "Remove the site title?" choice while "Remove site title from the title?" was on.
 * **Notes:**
 	* WordPress 7.0 is now required, from 6.0. This allowed us to drop some legacy workarounds, benefit from PHP 8.5 polyfills, and not juggle between two different UI principles.
 		* Since WordPress doesn't adhere to Semantic Versioning (SemVer), this is actually a minor bump -- so we didn't bother highlighting it.
 		* Thanks to our anonymized [Troy Server](https://deploytroy.org/docs/troy-server/) data, we found that fewer than 5% of our users are still on WordPress 6.9 or below.
 * **Other:**
-	* Twitter Card help links now point to our [Knowledge Base](https://kb.theseoframework.com/?p=451#card-types) because X removed the original documentation. The explanation on how this works has also been more explicitely defined.
+	* Twitter Card help links now point to our [Knowledge Base](https://kb.theseoframework.com/?p=451#card-types) because X removed the original documentation. The explanation on how this works has also been more explicitly defined.
 
 ## For translators
 
@@ -436,11 +428,13 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 				* `breadcrumb_archive`. Default `[]`. `0` omits that post type's archive crumb from singular breadcrumbs. A missing post type includes the archive when the post type has one.
 				* `breadcrumb_taxonomy`. Default `[]`. A taxonomy slug selects that singular trail, and `-1` removes it. A missing post type uses the first public hierarchical taxonomy, per `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`).
 			3. `knowledge_tiktok`. Default `''`.
+			4. `edit_proposed_values`. Default `1`. The 5.2.0 upgrade sets it to `0` for existing sites.
 * **User data notes:**
 	* Of user meta `autodescription-user-preferences` (constant `THE_SEO_FRAMEWORK_USER_PREFERENCES`):
 		* Added index `counter_type`. Default `3`. A value above `3` is stored as `0`.
 	* Of user meta `autodescription-user-settings` (constant `THE_SEO_FRAMEWORK_USER_OPTIONS`):
 		* The 5.2.0 upgrade copies `counter_type` into `autodescription-user-preferences` and leaves the old index in place. The next save of this meta drops `counter_type`, because it is no longer a known SEO field.
+		* Added indexes `fediverse_page` and `fediverse_page_url`. Default `''`.
 		* Added indexes `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`. Default empty, except `title_no_blog_name`, `social_image_id`, `noindex`, `nofollow`, and `noarchive`, which default to `0`. An unchecked "Remove the site title?" is stored as `0`.
 * **PHP API notes:**
 	* **Added:**
@@ -483,14 +477,14 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Methods `The_SEO_Framework\Meta\URI::get_custom_canonical_url()` (`tsf()->uri()->get_custom_canonical_url()`) and `The_SEO_Framework\Meta\URI::get_canonical_url()` (`tsf()->uri()->get_canonical_url()`) now make a relative canonical path absolute.
 		* Method `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`):
 			1. Now strips HTML tags from tooltip title and reason. The title and reason were already considered trusted (hardcoded input), but this extra hardening mitigates potential oversights from custom integrations.
-			2. Now builds the user SEO Bar when `uid` is set and `id` is empty.
+			2. Now builds the user SEO Bar, via `The_SEO_Framework\Admin\SEOBar\Builder\User`, when `uid` is set and `id` is empty.
 			3. Now reads the post type from the post. `$query['post_type']` is ignored.
 		* Methods `The_SEO_Framework\Helper\Taxonomy::get_post_types()` (`tsf()->taxonomy()->get_post_types()`), `The_SEO_Framework\Helper\Taxonomy::get_all_public()` (`tsf()->taxonomy()->get_all_public()`), `The_SEO_Framework\Helper\Post_Type::get_all_hierarchical()` (`tsf()->post_type()->get_all_hierarchical()`), and `The_SEO_Framework\Helper\Post_Type::get_all_nonhierarchical()` (`tsf()->post_type()->get_all_nonhierarchical()`) now reset the index keys of the return value so JSON encoding returns a list instead of an object. Props [Contributolo](https://github.com/Contributolo).
 		* Method `The_SEO_Framework\Helper\Format\Minify::css()` (`tsf()->format()->minify()->css()`):
 			1. No longer minifies `)` followed by a space, to prevent breaking CSS4 selectors like `:not(a) b`
 			2. No longer minifies spaces around `+`, to prevent breaking `calc()` addition.
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_supported_locales()` (`tsf()->open_graph()->get_supported_locales()`):
-			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
+			1. Removed deprecated locales: `ak_GH`, `ay_BO`, `cb_IQ`, `ck_US`, `cx_PH`, `en_IN`, `en_PI`, `en_UD`, `eo_EO`, `es_CL`, `es_CO`, `es_MX`, `es_VE`, `fb_LT`, `gx_GR`, `ig_NG`, `ja_KS`, `la_VA`, `lg_UG`, `li_NL`, `ln_CD`, `mi_NZ`, `nd_ZW`, `ny_MW`, `qu_PE`, `rm_CH`, `sa_IN`, `se_NO`, `sy_SY`, `sz_PL`, `tk_TM`, `tl_ST`, `tz_MA`, `wo_SN`, `xh_ZA`, `yi_DE`, `yo_NG`, `zu_ZA`, `zz_TR`.
 			2. Added locales: `ht_HT`, `ik_US`, `iu_CA`.
 		* Methods `The_SEO_Framework\Data\Plugin\User::get_current_post_author_meta_item()` (`tsf()->data()->plugin()->user()->get_current_post_author_meta_item()`) and `The_SEO_Framework\Data\Plugin\User::get_current_post_author_meta()` (`tsf()->data()->plugin()->user()->get_current_post_author_meta()`):
 			1. Now return the queried author's meta on author archives. Singular queries still use the post author.
@@ -500,21 +494,19 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			2. Now omits `counter_type`. It is stored as a user preference.
 			3. Added `doctitle`, `title_no_blog_name`, `description`, `og_title`, `og_description`, `tw_title`, `tw_description`, `tw_card_type`, `social_image_url`, `social_image_id`, `canonical`, `noindex`, `nofollow`, `noarchive`, and `redirect`.
 		* Method `The_SEO_Framework\Data\Plugin\User::update_single_meta_item()` (`tsf()->data()->plugin()->user()->update_single_meta_item()`) now takes the meta key, the value, and then the user ID. An integer first parameter still uses the old order and raises a deprecation notice.
-		* Methods `The_SEO_Framework\Data\Plugin\User::save_meta()` (`tsf()->data()->plugin()->user()->save_meta()`) and `The_SEO_Framework\Data\Plugin\User::delete_meta()` (`tsf()->data()->plugin()->user()->delete_meta()`) now keep backslashes. The stored value is slash-escaped for `update_user_meta()`, which unslashes before storing.
+		* Methods `The_SEO_Framework\Data\Plugin\Post::save_meta()` (`tsf()->data()->plugin()->post()->save_meta()`), `The_SEO_Framework\Data\Plugin\Term::save_meta()` (`tsf()->data()->plugin()->term()->save_meta()`), and `The_SEO_Framework\Data\Plugin\Term::delete_meta()` (`tsf()->data()->plugin()->term()->delete_meta()`) now keep backslashes. The stored value is slash-escaped for `update_post_meta()` and `update_term_meta()`, which unslash before storing.
 		* Methods `The_SEO_Framework\Meta\Title::get_custom_title()` (`tsf()->title()->get_custom_title()`), `The_SEO_Framework\Meta\Description::get_custom_description()` (`tsf()->description()->get_custom_description()`), `The_SEO_Framework\Meta\Open_Graph::get_custom_title()` (`tsf()->open_graph()->get_custom_title()`), `The_SEO_Framework\Meta\Open_Graph::get_custom_description()` (`tsf()->open_graph()->get_custom_description()`), `The_SEO_Framework\Meta\Twitter::get_custom_card_type()` (`tsf()->twitter()->get_custom_card_type()`), `The_SEO_Framework\Meta\Twitter::get_custom_title()` (`tsf()->twitter()->get_custom_title()`), `The_SEO_Framework\Meta\Twitter::get_custom_description()` (`tsf()->twitter()->get_custom_description()`), `The_SEO_Framework\Meta\URI::get_custom_canonical_url()` (`tsf()->uri()->get_custom_canonical_url()`), `The_SEO_Framework\Meta\URI::get_redirect_url()` (`tsf()->uri()->get_redirect_url()`), and `The_SEO_Framework\Meta\Image::generate_custom_image_details()` (`tsf()->image()->generate_custom_image_details()`) now read the matching author archive fields from user meta. Pass `[ 'uid' => $user_id ]` and leave `id` empty. On an author archive, the query path does the same.
 		* Method `The_SEO_Framework\Meta\Title\Conditions::use_branding()` (`tsf()->title()->conditions()->use_branding()`) now removes the site title on an author archive when that user's "Remove the site title?" field is checked.
 		* Method `The_SEO_Framework\Meta\Robots::get_generated_meta()` (`tsf()->robots()->get_generated_meta()`) now reads the per-author indexing, following, and archiving qubits. From arguments, an author with no published posts is treated as an empty archive unless indexing is forced.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\WebPage::build()` (`tsf()->schema()->entities['WebPage']`) now uses `CollectionPage` for author archives generated from arguments.
-		* Method `The_SEO_Framework\Sitemap\WP\Filter::filter_add_provider()` now replaces the `users` provider. A per-user index choice can list an author while author archives are noindexed.
-		* Method `The_SEO_Framework\Admin\Script\Loader::init()` (`tsf()->admin()->scripts()->loader()->init()`) now loads the title, description, social, canonical, media, and counter scripts on the author profile screen.
+		* Method `The_SEO_Framework\Sitemap\WP\Filter::filter_add_provider()` now replaces the `users` provider with `The_SEO_Framework\Sitemap\WP\Users`. A per-user index choice can list an author while author archives are noindexed.
 		* Methods `The_SEO_Framework\Data\Plugin\User::get_preference()` (`tsf()->data()->plugin()->user()->get_preference()`), `The_SEO_Framework\Data\Plugin\User::get_preference_item()` (`tsf()->data()->plugin()->user()->get_preference_item()`), `The_SEO_Framework\Data\Plugin\User::update_single_preference_item()` (`tsf()->data()->plugin()->user()->update_single_preference_item()`), `The_SEO_Framework\Data\Plugin\User::save_preference()` (`tsf()->data()->plugin()->user()->save_preference()`), and `The_SEO_Framework\Data\Plugin\User::delete_preference()` (`tsf()->data()->plugin()->user()->delete_preference()`) read, write, and delete that preference meta. `get_preference()` includes `counter_type`, default `3`. `update_single_preference_item()` takes the preference key, the value, and then the user ID, and now stores that value through `save_preference()`.
-		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`):
 			1. Now adds the author's Fediverse profile to `sameAs` when a handle is set.
 			2. Now uses `x.com` for the author's X profile in `sameAs`.
-			3. Now uses the custom SEO description when one is set, and otherwise the biography clamped to 250 characters.
+			3. Now uses the custom SEO description when one is set.
 		* Methods `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`) and `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`) now add the TikTok profile to `sameAs` when `knowledge_tiktok` is set.
-		* Method `The_SEO_Framework\Meta\URI\Utils::get_relative_part_from_url()` (`tsf()->uri()->utils()->get_relative_part_from_url()`) now also strips a schemeless host, such as `facebook.com/YourPage`. `The_SEO_Framework\Data\Filter\Sanitize::facebook_profile_link()` (`tsf()->sanitize()->facebook_profile_link()`) and `The_SEO_Framework\Data\Filter\Sanitize::twitter_profile_handle()` (`tsf()->sanitize()->twitter_profile_handle()`) use that path.
+		* Method `The_SEO_Framework\Meta\URI\Utils::get_relative_part_from_url()` (`tsf()->uri()->utils()->get_relative_part_from_url()`) now strips any scheme and host, so the result is a path with a leading `/`. A bare host returns `/`. `The_SEO_Framework\Data\Filter\Sanitize::facebook_profile_link()` (`tsf()->sanitize()->facebook_profile_link()`) and `The_SEO_Framework\Data\Filter\Sanitize::twitter_profile_handle()` (`tsf()->sanitize()->twitter_profile_handle()`) use that path. `facebook_profile_link()` also trims `@`.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_args()` (`tsf()->description()->excerpt()->get_excerpt_from_args()`) now returns nothing for a latest-posts homepage, and the posts page uses the singular excerpt. `get_excerpt_from_query()` does the same.
 		* Calling `tsf()->description()->excerpt()->get_blog_page_excerpt()` is deprecated and returns an empty string. There is no replacement.
@@ -525,7 +517,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Helper\Query::is_wp_lists_edit()` (`tsf()->query()->is_wp_lists_edit()`) now includes the users list.
 		* Methods `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt_from_query()` (`tsf()->description()->excerpt()->get_excerpt_from_query()`), `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`), `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`), and `The_SEO_Framework\Admin\Script\AJAX::get_post_data()` now keep a string of `0` instead of treating it as empty. `get_public_blog_name()` no longer falls back to the filtered blog name, `Person::build()` and `Organization::build()` no longer fall back to the public blog name for the knowledge name, `AJAX::get_post_data()` no longer falls back to the generated homepage description, and `get_excerpt_from_query()` no longer replaces it with an empty string, matching `get_excerpt_from_args()`. The query path (front-end) was wrong; the args path (back-end) was already correct.
 		* Method `The_SEO_Framework\RobotsTXT\Main::get_robots_txt()` (`tsf()->robotstxt()->get_robots_txt()`) now lists the optimized sitemap when `The_SEO_Framework\Sitemap\Utils::may_output_optimized_sitemap()` (`tsf()->sitemap()->utils()->may_output_optimized_sitemap()`) is true.
-		* Method `The_SEO_Framework\Sitemap\Cache::get_sitemap_cache_key()` (`tsf()->sitemap()->cache()->get_sitemap_cache_key()`) now returns `false` when `cache_id` is missing or empty.
+		* Method `The_SEO_Framework\Sitemap\Cache::get_sitemap_cache_key()` (`tsf()->sitemap()->cache()->get_sitemap_cache_key()`) now returns `false` when `cache_id` is missing or empty. It previously fell back to the endpoint ID, so a sitemap endpoint that omitted `cache_id` was cached.
+		* Method `The_SEO_Framework\Meta\Twitter::get_generated_card_type()` (`tsf()->twitter()->get_generated_card_type()`) now returns `null` when no card type is supported.
 		* Method `The_SEO_Framework\Helper\Query\Exclusion::get_excluded_ids_from_cache()` (`tsf()->query()->exclusion()->get_excluded_ids_from_cache()`) now returns an empty array for `archive` and `search` when meta is headless.
 		* Method `The_SEO_Framework\Data\Plugin\Post::save_meta()` (`tsf()->data()->plugin()->post()->save_meta()`) now refreshes the sitemap after saving.
 		* Methods `The_SEO_Framework\Data\Post::get_latest_post_id()` (`tsf()->data()->post()->get_latest_post_id()`) and `The_SEO_Framework\Data\Term::get_latest_term_id()` (`tsf()->data()->term()->get_latest_term_id()`) now return null when no post or term exists.
@@ -548,7 +541,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Admin\Settings\Layout\Form::output_character_counter_wrap()` (`tsf()->admin()->layout()->form()->output_character_counter_wrap()`):
 			1. Now exposes the click hint as a tooltip and an ARIA label on the count.
 			2. Now outputs the count as a link, so Enter changes the counter type.
-		* Method `The_SEO_Framework\Admin\Script\Loader::init()` (`tsf()->admin()->scripts()->loader()->init()`) now prevents multiple runs.
 	* **Improved:**
 		* Method `The_SEO_Framework\Meta\Open_Graph::get_locale()` (`tsf()->open_graph()->get_locale()`) now derives the Open Graph locale from `The_SEO_Framework\Data\Blog::get_language()` (`tsf()->data()->blog()->get_language()`) instead of calling `get_locale()` directly. Because `get_language()` is memoized, repeated locale filter callbacks on multilingual sites (Polylang, WPML) are avoided.
 		* Method `The_SEO_Framework\Helper\Format\Arrays::array_diff_assoc_recursive()` (`tsf()->format()->arrays()->array_diff_assoc_recursive()`) now uses `array_reduce()` instead of a while-loop for 1.9x faster execution and better readability.
@@ -558,7 +550,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Resolved an issue where taxonomies with `public` set to `true` but `rewrite` set to `false` could cause a PHP warning when viewing the taxonomy term in admin. Props [Ajay D'Souza](https://github.com/ajaydsouza).
 		* Method `The_SEO_Framework\Meta\Twitter::get_custom_description()` (`tsf()->twitter()->get_custom_description()`) no longer calls a missing method when Open Graph tags are disabled and the arguments path has no custom Twitter description. It falls back to the meta description.
 		* Method `The_SEO_Framework\Data\Filter\Plugin::verification_code()` now extracts the content attribute from a pasted verification meta tag.
-		* Method `The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list()` (`tsf()->breadcrumbs()->get_breadcrumb_list()`) includes ancestor terms on front-end term archives again.
+		* Method `The_SEO_Framework\Meta\Breadcrumbs::get_breadcrumb_list()` (`tsf()->breadcrumbs()->get_breadcrumb_list()`) now includes ancestor terms on front-end term archives.
 		* Methods `The_SEO_Framework\Data\Post::is_protected()` (`tsf()->data()->post()->is_protected()`), `The_SEO_Framework\Data\Post::is_password_protected()` (`tsf()->data()->post()->is_password_protected()`), `The_SEO_Framework\Data\Post::is_private()` (`tsf()->data()->post()->is_private()`), and `The_SEO_Framework\Data\Post::is_draft()` (`tsf()->data()->post()->is_draft()`) now use the queried post instead of the loop post when no post is given.
 		* Method `The_SEO_Framework\Meta\Schema\Entities\WebPage::build()` (`tsf()->schema()->entities['WebPage']`) now points the front page `about` reference at a Person when `knowledge_type` is not `organization`.
 		* Method `The_SEO_Framework\Meta\URI::get_generated_shortlink_url()` (`tsf()->uri()->get_generated_shortlink_url()`):
@@ -574,6 +566,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Added:**
 		* Method `tsfCanonical.isQueryStructure()` tests whether a URL structure uses query parameters.
 		* Method `tsfCanonical.canTrackUrlStructure()` reports whether the Canonical URL Notation Tracker can predict URLs for an input.
+		* Object `tsfPropose` is now available. It contains public methods `engage()`, `disengage()`, and `syncProposed( input, proposed )`. Its l10n is `tsfProposeL10n.enabled`.
+		* Object `tsfHTTP` is now available. It contains public methods `parseUrl()` and `isHttp()`.
+		* Object `tsfFediverse` is now available. It contains public methods `sanitizeHandle()`, `sanitizeProfileUrl()`, `urlFromHandle()`, and `bindPair()`.
+		* Object `tsfSocialFormat` is now available. It contains public method `bind( input )`. Its l10n is `tsfSocialFormatL10n`.
 	* **Changed:**
 		* `tsfMediaL10n.labels` and `tsfMediaL10n.warning.i18n` are no longer attribute-escaped. The media script escapes warnings before the tooltip, and the remove-image label before `innerHTML`.
 		* `tsfCL10n.i18n.pixelsUsed` and `tsfCL10n.i18n.guidelines` are no longer attribute-escaped. The counter script escapes them before writing the counter and the pixel tooltip.
@@ -597,7 +593,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* `the_seo_framework_sitemap_post_limit` receives the default option when `sitemap_query_limit` is empty.
 		* `the_seo_framework_meta_generator_pools` now includes `Fediverse` in the default pool list.
 		* `the_seo_framework_social_settings_tabs` now includes a Fediverse tab by default.
-		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, `fediverse_creator_url`, `breadcrumb_archive`, `breadcrumb_taxonomy`, and `knowledge_tiktok`.
+		* `the_seo_framework_default_site_options` now includes `fediverse_site`, `fediverse_site_url`, `fediverse_creator`, `fediverse_creator_url`, `breadcrumb_archive`, `breadcrumb_taxonomy`, `knowledge_tiktok`, and `edit_proposed_values`.
 		* `the_seo_framework_user_meta_defaults`:
 			1. Added `fediverse_page` and `fediverse_page_url`.
 			2. Now omits `counter_type`. It is stored as a user preference.
@@ -606,6 +602,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			1. Now includes the author profile script and stylesheet, and the title, description, social, canonical, media, and counter scripts, on user profile screens when user-edit fields are enabled.
 			2. Now includes `tsf-http` for the settings and author screens.
 			3. Now includes `tsf-socialformat` for the settings and author screens.
+			4. Now includes `tsf-fediverse` for the settings and author screens.
+			5. Now includes `tsf-propose` on SEO Settings, and on post, term, list-edit, and author screens when `edit_proposed_values` is enabled.
 		* `the_seo_framework_breadcrumb_list` now includes `role` on each crumb. Crumbs you add or replace must include `role`, or `tsf_breadcrumb()` causes a PHP warning.
 		* `the_seo_framework_breadcrumb_shortcode_css`:
 			1. The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.
@@ -615,7 +613,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			1. `$style` is now an empty string when the CSS filter returns no rules.
 			2. `$crumbs` may now omit the `home` crumb, rename it, and include an item with role `ellipsis` when `max` collapses the trail. It is still the list rendered in the shortcode.
 			3. Added `$trail`, the generated list before those changes.
-		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`). A null `lock_id` uses the endpoint id. A sitemap is not cached unless `cache_id` is set.
+		* `the_seo_framework_sitemap_endpoint_list` now includes a `css` endpoint (`sitemap.css`). A null `lock_id` uses the endpoint id. A sitemap is not cached unless `cache_id` is set. The Polylang and WPML endpoints now set `regex` and `robots`, and the WPML endpoint IDs changed from `base_wpml_{lang}` to `_base_wpml_{lang}`.
 	* **Fixed:**
 		* `the_seo_framework_settings_update_sanitizers` callbacks for one option now run in order. Each receives the previous callback's return.
 		* `the_seo_framework_title_from_generation` now passes through `0` instead of the untitled fallback.
