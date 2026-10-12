@@ -275,7 +275,7 @@ Input::output_js_social_data(
 		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
 			<th scope=row valign=top>
 				<label for="autodescription-meta[tw_title]">
-					<strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
+					<strong><?php \esc_html_e( 'Twitter Card Title', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				Data\Plugin::get_option( 'display_character_counter' )
@@ -292,7 +292,7 @@ Input::output_js_social_data(
 		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
 			<th scope=row valign=top>
 				<label for="autodescription-meta[tw_description]">
-					<strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
+					<strong><?php \esc_html_e( 'Twitter Card Description', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				Data\Plugin::get_option( 'display_character_counter' )

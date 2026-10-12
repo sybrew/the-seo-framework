@@ -447,6 +447,7 @@ ays.js                          "Are You Sure" unsaved-changes detection for set
 c.js                            Pixel and character counters for SEO input fields
 canonical.js                    Canonical URL field tracking and prediction
 description.js                  Meta description field handling and live previews
+fediverse.js                    Fediverse handle and profile URL sanitizing, paste pairing, and URL-from-handle
 gbc.js                          Gutenberg block editor forwards-compatibility shim
 http.js                         URL parsing helpers (`tsfHTTP`)
 le.js                           List Edit (quick/bulk edit) SEO field adjustments

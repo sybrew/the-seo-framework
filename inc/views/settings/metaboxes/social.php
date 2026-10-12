@@ -147,7 +147,7 @@ switch ( $instance ) :
 			HTML::description( \__( 'Most social sites and third-party services automatically include the website URL inside their embeds. When the site title is described well in the site URL, including it in the social title will be redundant.', 'autodescription' ) );
 
 			$info = HTML::make_info(
-				\__( 'When you provide a custom Open Graph or Twitter title, the site title will be omitted automatically.', 'autodescription' ),
+				\__( 'When you provide a custom Open Graph or Twitter Card title, the site title will be omitted automatically.', 'autodescription' ),
 				'',
 				false,
 			);

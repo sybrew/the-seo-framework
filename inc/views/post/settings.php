@@ -361,7 +361,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for=autodescription_twitter_title class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong></div>
+						<div><strong><?php \esc_html_e( 'Twitter Card Title', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
 					Data\Plugin::get_option( 'display_character_counter' )
@@ -380,7 +380,7 @@ switch ( $instance ) :
 			<div class="tsf-flex-setting-label tsf-flex">
 				<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 					<label for=autodescription_twitter_description class="tsf-flex-setting-label-item tsf-flex">
-						<div><strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong></div>
+						<div><strong><?php \esc_html_e( 'Twitter Card Description', 'autodescription' ); ?></strong></div>
 					</label>
 					<?php
 					Data\Plugin::get_option( 'display_character_counter' )

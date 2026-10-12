@@ -253,6 +253,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* You can set a site profile and an author fallback under Social Meta Settings. Authors can override the fallback on their profile page.
 			* Each profile has a handle and a profile URL. Enter the @username@domain handle from Author attribution. A pasted profile URL fills both fields; correct the handle if the guessed domain is wrong.
 			* The author fallback field shows the website profile as its placeholder.
+			* On an author profile, the handle placeholder is the author fallback or website profile, and the profile URL placeholder follows the handle.
 			* On the credited profile, open Preferences -> Public profile -> Verification. Add this website's domain under Author attribution, and add this website as a website field for the green checkmark.
 			* The author's Fediverse profile is also added to Schema.org `sameAs` when that author has a handle.
 		* You can now enter a Facebook domain verification code in Webmaster Integration Settings. Props [Contributolo](https://github.com/Contributolo).
@@ -278,10 +279,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Breadcrumb shortcode crumbs now wrap as a whole instead of breaking mid-word.
 	* **Connected social pages:**
 		* You can now add a TikTok profile under Schema.org Settings. When that profile is set, it is included in the site's Schema.org `sameAs` links.
-	* **Author archives:**
+	* **Author archives (profiles):**
 		* Profile pages now have General, Social, and Visibility settings for the author archive.
 			* General: meta title, "Remove the site title?", and meta description.
-			* Social: Open Graph title and description, Twitter title, description, and card type, and a social image. Facebook, Fediverse, and X stay under Authorial Info in this section.
+			* Social: Open Graph title and description, Twitter Card title, description, and card type, and a social image. Facebook, Fediverse, and X stay under Authorial Info in this section.
 			* Visibility: canonical URL, robots indexing, link following, and archiving, and a 301 redirect.
 		* These values are used on that author's archive. A noindex or a redirect removes the author from the users sitemap. Choosing index includes an author with no posts. The users sitemap stays available when author archives are set to noindex, so an author set to index can still be listed. It still only lists authors who have published posts.
 		* On an author archive, `twitter:creator` and `fediverse:creator` use that author's X handle and Fediverse profile when those fields are set.
@@ -296,6 +297,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
 		* Connected social page fields no longer list an example under every input. When a URL does not match that network's profile format, a suggested format is shown, and Use this fills it in.
+	* **Twitter Card labels:**
+		* "Twitter Title" is now "Twitter Card Title", and "Twitter Description" is now "Twitter Card Description".
 	* **Archive exclusion:**
 		* Posts excluded from on-site archive listings are now also omitted from the feed.
 	* **SEO Bar:**
@@ -414,6 +417,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 * **Added:**
 	* New sentences have been added.
+* **Changed:**
+	* A few sentences have been changed.
+* **Updated:**
+	* The bundled POT file has been updated.
 
 ## For developers
 

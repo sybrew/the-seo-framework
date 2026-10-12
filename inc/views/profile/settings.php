@@ -98,55 +98,25 @@ $robots_settings = [
 
 $author_fediverse  = $meta['fediverse_page'];
 $creator_fediverse = Data\Plugin::get_option( 'fediverse_creator' );
+$site_fediverse    = Data\Plugin::get_option( 'fediverse_site' );
 
-if ( $author_fediverse ) {
-	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url( $author_fediverse );
-} elseif ( $creator_fediverse ) {
-	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url(
+$fediverse_handle_placeholder = $creator_fediverse ?: $site_fediverse;
+
+$fediverse_url_fallback =
+	   $creator_fediverse
+	? Meta\Fediverse::get_profile_url(
 		$creator_fediverse,
 		Data\Plugin::get_option( 'fediverse_creator_url' ),
-	);
-} else {
-	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url(
-		Data\Plugin::get_option( 'fediverse_site' ),
+	)
+	: Meta\Fediverse::get_profile_url(
+		$site_fediverse,
 		Data\Plugin::get_option( 'fediverse_site_url' ),
 	);
-}
 
-$authorial_fields = [
-	'tsf-user-meta[facebook_page]'      => [
-		'name'    => \__( 'Facebook profile page', 'autodescription' ),
-		'type'    => 'url',
-		'example' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
-		'value'   => $meta['facebook_page'],
-		'class'   => '',
-	],
-	'tsf-user-meta[fediverse_page]'     => [
-		'name'        => \__( 'Fediverse profile', 'autodescription' ),
-		'type'        => 'text',
-		'placeholder' =>
-			   $creator_fediverse
-			?: Data\Plugin::get_option( 'fediverse_site' ),
-		'example'     => \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' ),
-		'value'       => $author_fediverse,
-		'class'       => 'ltr',
-	],
-	'tsf-user-meta[fediverse_page_url]' => [
-		'name'        => \__( 'Fediverse profile URL', 'autodescription' ),
-		'type'        => 'url',
-		'placeholder' => $fediverse_url_placeholder,
-		'example'     => \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' ),
-		'value'       => $meta['fediverse_page_url'],
-		'class'       => 'ltr',
-	],
-	'tsf-user-meta[twitter_page]'       => [
-		'name'    => \__( 'X profile handle', 'autodescription' ),
-		'type'    => 'text',
-		'example' => \_x( '@username', 'X @username', 'autodescription' ),
-		'value'   => $meta['twitter_page'],
-		'class'   => 'ltr',
-	],
-];
+$fediverse_url_placeholder =
+	   $author_fediverse
+	? Meta\Fediverse::get_profile_url( $author_fediverse )
+	: $fediverse_url_fallback;
 
 /* translators: %s = default option value */
 $_default_i18n = \__( 'Default (%s)', 'autodescription' );
@@ -321,7 +291,7 @@ Input::output_js_social_data(
 		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
 			<th scope=row valign=top>
 				<label for="tsf-user-meta[tw_title]">
-					<strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
+					<strong><?php \esc_html_e( 'Twitter Card Title', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				Data\Plugin::get_option( 'display_character_counter' )
@@ -338,7 +308,7 @@ Input::output_js_social_data(
 		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
 			<th scope=row valign=top>
 				<label for="tsf-user-meta[tw_description]">
-					<strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
+					<strong><?php \esc_html_e( 'Twitter Card Description', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				Data\Plugin::get_option( 'display_character_counter' )
@@ -411,35 +381,84 @@ Input::output_js_social_data(
 </table>
 
 <h3><?php \esc_html_e( 'Authorial Info', 'autodescription' ); ?></h3>
-<table class="form-table tsf-user-authorial">
-<?php
-foreach ( $authorial_fields as $field => $labels ) {
-	?>
-	<tr class="user-<?= \esc_attr( $field ) ?>-wrap">
-		<th><label for="<?= \esc_attr( $field ) ?>">
-			<?= \esc_html( $labels['name'] ) ?>
-		</label></th>
-		<td>
-			<input
-				type="<?= \esc_attr( $labels['type'] ) ?>"
-				name="<?= \esc_attr( $field ) ?>"
-				id="<?= \esc_attr( $field ) ?>"
-				value="<?= \esc_attr( $labels['value'] ) ?>"
-				placeholder="<?= \esc_attr( $labels['placeholder'] ?? '' ) ?>"
-				class="regular-text <?= \esc_attr( $labels['class'] ) ?>">
-			<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
-			<?php
-			HTML::description_noesc( \sprintf(
-				/* translators: %s = example value */
-				\esc_html__( 'Example: %s', 'autodescription' ),
-				HTML::code_wrap( $labels['example'] ),
-			) );
-			?>
-		</td>
-	</tr>
-	<?php
-}
-?>
+<table class="form-table tsf-user-meta">
+	<tbody>
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[facebook_page]">
+					<strong><?php \esc_html_e( 'Facebook profile page', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<input type=url name="tsf-user-meta[facebook_page]" id="tsf-user-meta[facebook_page]" value="<?= \esc_attr( $meta['facebook_page'] ) ?>" size=40 autocomplete=off>
+				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
+				<?php
+				HTML::description_noesc( \sprintf(
+					/* translators: %s = example value */
+					\esc_html__( 'Example: %s', 'autodescription' ),
+					HTML::code_wrap( \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ) ),
+				) );
+				?>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[fediverse_page]">
+					<strong><?php \esc_html_e( 'Fediverse profile', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<input type=text name="tsf-user-meta[fediverse_page]" id="tsf-user-meta[fediverse_page]" placeholder="<?= \esc_attr( $fediverse_handle_placeholder ) ?>" value="<?= \esc_attr( $author_fediverse ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_handle_placeholder ) ?>">
+				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
+				<?php
+				HTML::description_noesc( \sprintf(
+					/* translators: %s = example value */
+					\esc_html__( 'Example: %s', 'autodescription' ),
+					HTML::code_wrap( \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' ) ),
+				) );
+				?>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[fediverse_page_url]">
+					<strong><?php \esc_html_e( 'Fediverse profile URL', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<input type=url name="tsf-user-meta[fediverse_page_url]" id="tsf-user-meta[fediverse_page_url]" placeholder="<?= \esc_attr( $fediverse_url_placeholder ) ?>" value="<?= \esc_attr( $meta['fediverse_page_url'] ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_url_placeholder ) ?>" data-tsf-fediverse-fallback="<?= \esc_attr( $fediverse_url_fallback ) ?>">
+				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
+				<?php
+				HTML::description_noesc( \sprintf(
+					/* translators: %s = example value */
+					\esc_html__( 'Example: %s', 'autodescription' ),
+					HTML::code_wrap( \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' ) ),
+				) );
+				?>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[twitter_page]">
+					<strong><?php \esc_html_e( 'X profile handle', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<input type=text name="tsf-user-meta[twitter_page]" id="tsf-user-meta[twitter_page]" value="<?= \esc_attr( $meta['twitter_page'] ) ?>" size=40 autocomplete=off class=ltr>
+				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
+				<?php
+				HTML::description_noesc( \sprintf(
+					/* translators: %s = example value */
+					\esc_html__( 'Example: %s', 'autodescription' ),
+					HTML::code_wrap( \_x( '@username', 'X @username', 'autodescription' ) ),
+				) );
+				?>
+			</td>
+		</tr>
+	</tbody>
 </table>
 
 <h2><?php \esc_html_e( 'Visibility Settings', 'autodescription' ); ?></h2>

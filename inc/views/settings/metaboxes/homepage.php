@@ -415,7 +415,7 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'homepage_twitter_title' ); ?>" class=tsf-toblock>
-				<strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
+				<strong><?php \esc_html_e( 'Twitter Card Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
@@ -438,7 +438,7 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'homepage_twitter_description' ); ?>" class=tsf-toblock>
-				<strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
+				<strong><?php \esc_html_e( 'Twitter Card Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
