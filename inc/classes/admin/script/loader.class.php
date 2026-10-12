@@ -88,6 +88,7 @@ class Loader {
 	 *              4. Now loads the title, description, social, canonical, media, and counter scripts on the author profile screen.
 	 *              5. Now loads `tsf-propose` when `edit_proposed_values` is enabled, and always on SEO Settings.
 	 *              6. Now registers `tsf-fediverse` for the settings and author screens.
+	 *              7. Now registers `tsf-socialformat` for the settings and author screens.
 	 */
 	public static function init() {
 
@@ -173,6 +174,7 @@ class Loader {
 			$scripts[] = self::get_propose_scripts();
 			$scripts[] = self::get_http_scripts();
 			$scripts[] = self::get_fediverse_scripts();
+			$scripts[] = self::get_socialformat_scripts();
 			$scripts[] = self::get_seo_settings_scripts();
 			$scripts[] = self::get_tabs_scripts();
 			$scripts[] = self::get_media_scripts();
@@ -193,6 +195,7 @@ class Loader {
 
 				$scripts[] = self::get_http_scripts();
 				$scripts[] = self::get_fediverse_scripts();
+				$scripts[] = self::get_socialformat_scripts();
 				$scripts[] = self::get_author_edit_scripts();
 				$scripts[] = self::get_media_scripts();
 				$scripts[] = self::get_title_scripts();
@@ -445,7 +448,7 @@ class Loader {
 	/**
 	 * Returns HTTP helper script params.
 	 *
-	 * Registered only. `tsf-settings`, `tsf-author`, and `tsf-fediverse` load it as a dependency.
+	 * Registered only. `tsf-settings`, `tsf-author`, `tsf-fediverse`, and `tsf-socialformat` load it as a dependency.
 	 *
 	 * @since 5.2.0
 	 *
@@ -485,12 +488,44 @@ class Loader {
 	}
 
 	/**
+	 * Returns social profile URL format hint script params.
+	 *
+	 * Registered only. `tsf-settings` and `tsf-author` load it as a dependency.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @return array The script params.
+	 */
+	public static function get_socialformat_scripts() {
+		return [
+			'id'       => 'tsf-socialformat',
+			'type'     => 'js',
+			'deps'     => [ 'tsf-http' ],
+			'autoload' => false,
+			'name'     => 'socialformat',
+			'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
+			'ver'      => \THE_SEO_FRAMEWORK_VERSION,
+			'l10n'     => [
+				'name' => 'tsfSocialFormatL10n',
+				'data' => [
+					'i18n' => [
+						/* translators: %s = suggested profile URL */
+						'socialFormatSuggested' => \__( 'Suggested format: %s', 'autodescription' ),
+						/* translators: %s = example value */
+						'socialFormatExample'    => \__( 'Example: %s', 'autodescription' ),
+					],
+				],
+			],
+		];
+	}
+
+	/**
 	 * Returns the SEO Settings page script params.
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.0 Updated l10n.data.
-	 * @since 5.2.0 1. Added `i18n.socialFormatSuggested`.
-	 *              2. Now depends on `tsf-fediverse`.
+	 * @since 5.2.0 1. Now depends on `tsf-fediverse`.
+	 *              2. Now depends on `tsf-socialformat`.
 	 *
 	 * @return array The script params.
 	 */
@@ -521,6 +556,7 @@ class Loader {
 					'tsf-fediverse',
 					'tsf-http',
 					'tsf-social',
+					'tsf-socialformat',
 					'tsf-tabs',
 					'tsf-title',
 					'tsf-tt',
@@ -537,10 +573,6 @@ class Loader {
 						'states' => [
 							'isFrontPrivate'   => $front_id && Data\Post::is_private( $front_id ),
 							'isFrontProtected' => $front_id && Data\Post::is_password_protected( $front_id ),
-						],
-						'i18n'   => [
-							/* translators: %s = suggested profile URL */
-							'socialFormatSuggested' => \__( 'Suggested format: %s', 'autodescription' ),
 						],
 					],
 				],
@@ -753,6 +785,7 @@ class Loader {
 					'tsf-fediverse',
 					'tsf-http',
 					'tsf-social',
+					'tsf-socialformat',
 					'tsf-title',
 					'tsf-tt',
 					'tsf-utils',

@@ -318,6 +318,10 @@ input.tsf-disabled {
 	transition: color .165s ease-in, text-shadow .165s ease-in;
 }
 
+.tsf-social-format-apply {
+	margin-inline-start: .5em;
+}
+
 @keyframes tsf-spin {
 	0% {
 		transform: rotate( 0deg );

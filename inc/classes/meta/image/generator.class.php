@@ -255,8 +255,7 @@ final class Generator {
 			$image_id = $image->attachment_id ?? 0;
 
 			// attachment_id isn't stored by default.
-			$url =
-				   $image_id
+			$url = $image_id
 				? \wp_get_attachment_image_url( $image_id, $size )
 				: ( $image->url ?? '' );
 

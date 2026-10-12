@@ -296,7 +296,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 * **Changed:**
 	* **Social and webmaster fields:**
 		* Examples now sit under the field. A placeholder is shown only when it is the value used if the field is left empty.
-		* Connected social page fields no longer list an example under every input. When a URL does not match that network's profile format, a suggested format is shown, and Use this fills it in.
+		* Connected social page fields no longer list an example under every input. When a URL does not match that network's profile format, a suggested format is shown, and "Use this" fills it in.
+		* On an author profile, each settings section notes that the values may be shown publicly, instead of the individual fields.
+		* Facebook, Fediverse, and X profile fields on an author profile show an example only when the value does not match. "Use this" writes the correction when one can be read from the field.
 	* **Twitter Card labels:**
 		* "Twitter Title" is now "Twitter Card Title", and "Twitter Description" is now "Twitter Card Description".
 	* **Archive exclusion:**
@@ -362,6 +364,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* Resolved an issue where a backslash in a post, term, or author profile SEO text field was removed every time it was saved. Now, the input and output are idempotent.
 		* This was already implemented for the site SEO Settings.
 	* An author Fediverse profile is added to Schema.org `sameAs` only when that author has a handle.
+	* An author's X profile in Schema.org `sameAs` uses `x.com`.
 	* A Facebook or X profile entered without a scheme, such as `facebook.com/YourPage`, keeps the path instead of repeating the host.
 	* The notice about multiple SEO plugins stays until every conflicting SEO plugin is deactivated.
 	* Saving SEO Settings no longer clears "Remove the site title?" on a post type archive while site title additions are removed.
@@ -506,7 +509,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* Method `The_SEO_Framework\Admin\Script\Loader::init()` (`tsf()->admin()->scripts()->loader()->init()`) now loads the title, description, social, canonical, media, and counter scripts on the author profile screen.
 		* Methods `The_SEO_Framework\Data\Plugin\User::get_preference()` (`tsf()->data()->plugin()->user()->get_preference()`), `The_SEO_Framework\Data\Plugin\User::get_preference_item()` (`tsf()->data()->plugin()->user()->get_preference_item()`), `The_SEO_Framework\Data\Plugin\User::update_single_preference_item()` (`tsf()->data()->plugin()->user()->update_single_preference_item()`), `The_SEO_Framework\Data\Plugin\User::save_preference()` (`tsf()->data()->plugin()->user()->save_preference()`), and `The_SEO_Framework\Data\Plugin\User::delete_preference()` (`tsf()->data()->plugin()->user()->delete_preference()`) read, write, and delete that preference meta. `get_preference()` includes `counter_type`, default `3`. `update_single_preference_item()` takes the preference key, the value, and then the user ID, and now stores that value through `save_preference()`.
 		* Method `The_SEO_Framework\Meta\Fediverse::get_profile_url()` (`tsf()->fediverse()->get_profile_url()`) prefers an optional stored profile URL, then builds `https://{handle-domain}/@{user}` from the handle.
-		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`) now adds the author's Fediverse profile to `sameAs` when a handle is set.
+		* Method `The_SEO_Framework\Meta\Schema\Entities\Author::build()` (`tsf()->schema()->entities['Author']`):
+			1. Now adds the author's Fediverse profile to `sameAs` when a handle is set.
+			2. Now uses `x.com` for the author's X profile in `sameAs`.
+			3. Now uses the custom SEO description when one is set, and otherwise the biography clamped to 250 characters.
 		* Methods `The_SEO_Framework\Meta\Schema\Entities\Organization::build()` (`tsf()->schema()->entities['Organization']`) and `The_SEO_Framework\Meta\Schema\Entities\Person::build()` (`tsf()->schema()->entities['Person']`) now add the TikTok profile to `sameAs` when `knowledge_tiktok` is set.
 		* Method `The_SEO_Framework\Meta\URI\Utils::get_relative_part_from_url()` (`tsf()->uri()->utils()->get_relative_part_from_url()`) now also strips a schemeless host, such as `facebook.com/YourPage`. `The_SEO_Framework\Data\Filter\Sanitize::facebook_profile_link()` (`tsf()->sanitize()->facebook_profile_link()`) and `The_SEO_Framework\Data\Filter\Sanitize::twitter_profile_handle()` (`tsf()->sanitize()->twitter_profile_handle()`) use that path.
 		* Method `The_SEO_Framework\Meta\Description\Excerpt::get_excerpt()` (`tsf()->description()->excerpt()->get_excerpt()`) now falls back to the post content when a singular excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated. `get_post_excerpt()`, `get_excerpt_from_query()`, and `get_excerpt_from_args()` share this behavior.
@@ -599,6 +605,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* `the_seo_framework_scripts`:
 			1. Now includes the author profile script and stylesheet, and the title, description, social, canonical, media, and counter scripts, on user profile screens when user-edit fields are enabled.
 			2. Now includes `tsf-http` for the settings and author screens.
+			3. Now includes `tsf-socialformat` for the settings and author screens.
 		* `the_seo_framework_breadcrumb_list` now includes `role` on each crumb. Crumbs you add or replace must include `role`, or `tsf_breadcrumb()` causes a PHP warning.
 		* `the_seo_framework_breadcrumb_shortcode_css`:
 			1. The default CSS for the `nav.$class ol` selector now includes `padding-inline-start:0`.

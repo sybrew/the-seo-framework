@@ -102,8 +102,7 @@ $site_fediverse    = Data\Plugin::get_option( 'fediverse_site' );
 
 $fediverse_handle_placeholder = $creator_fediverse ?: $site_fediverse;
 
-$fediverse_url_fallback =
-	   $creator_fediverse
+$fediverse_url_fallback = $creator_fediverse
 	? Meta\Fediverse::get_profile_url(
 		$creator_fediverse,
 		Data\Plugin::get_option( 'fediverse_creator_url' ),
@@ -113,8 +112,7 @@ $fediverse_url_fallback =
 		Data\Plugin::get_option( 'fediverse_site_url' ),
 	);
 
-$fediverse_url_placeholder =
-	   $author_fediverse
+$fediverse_url_placeholder = $author_fediverse
 	? Meta\Fediverse::get_profile_url( $author_fediverse )
 	: $fediverse_url_fallback;
 
@@ -124,6 +122,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 ?>
 <div class="tsf-user-settings">
 <h2><?php \esc_html_e( 'General SEO Settings', 'autodescription' ); ?></h2>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 
 <table class="form-table tsf-user-meta">
 	<tbody>
@@ -231,6 +230,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 </table>
 
 <h2><?php \esc_html_e( 'Social Settings', 'autodescription' ); ?></h2>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 <?php
 
 Input::output_js_social_data(
@@ -381,6 +381,17 @@ Input::output_js_social_data(
 </table>
 
 <h3><?php \esc_html_e( 'Authorial Info', 'autodescription' ); ?></h3>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
+<?php
+$social_format_hint = \sprintf(
+	'<p class="tsf-social-format-hint hidden"><span class=description><span class=tsf-social-format-label></span>%s</span></p>',
+	\sprintf(
+		'<button type=button class="button button-small tsf-social-format-apply hidden">%s</button>',
+		/* translators: Action button. Writes a suggested profile URL into the field. */
+		\esc_html__( 'Use this', 'autodescription' ),
+	),
+);
+?>
 <table class="form-table tsf-user-meta">
 	<tbody>
 		<tr class=form-field>
@@ -390,15 +401,18 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="tsf-user-meta[facebook_page]" id="tsf-user-meta[facebook_page]" value="<?= \esc_attr( $meta['facebook_page'] ) ?>" size=40 autocomplete=off>
-				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 				<?php
-				HTML::description_noesc( \sprintf(
-					/* translators: %s = example value */
-					\esc_html__( 'Example: %s', 'autodescription' ),
-					HTML::code_wrap( \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ) ),
-				) );
+				$facebook_format  = 'https://www.facebook.com/{username}';
+				$facebook_pattern = '^(' . str_replace(
+					'\{username\}',
+					'([^/?#]+)',
+					preg_quote( $facebook_format, '/' ),
+				) . ')/?$';
 				?>
+				<div class=tsf-social-format-field>
+					<input type=url name="tsf-user-meta[facebook_page]" id="tsf-user-meta[facebook_page]" value="<?= \esc_attr( $meta['facebook_page'] ) ?>" size=40 autocomplete=off data-social-formats="<?= \esc_attr( \wp_json_encode( [ $facebook_format ] ) ) ?>" data-social-pattern="<?= \esc_attr( $facebook_pattern ) ?>">
+					<?= $social_format_hint ?>
+				</div>
 			</td>
 		</tr>
 
@@ -409,15 +423,10 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=text name="tsf-user-meta[fediverse_page]" id="tsf-user-meta[fediverse_page]" placeholder="<?= \esc_attr( $fediverse_handle_placeholder ) ?>" value="<?= \esc_attr( $author_fediverse ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_handle_placeholder ) ?>">
-				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
-				<?php
-				HTML::description_noesc( \sprintf(
-					/* translators: %s = example value */
-					\esc_html__( 'Example: %s', 'autodescription' ),
-					HTML::code_wrap( \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' ) ),
-				) );
-				?>
+				<div class=tsf-social-format-field>
+					<input type=text name="tsf-user-meta[fediverse_page]" id="tsf-user-meta[fediverse_page]" placeholder="<?= \esc_attr( $fediverse_handle_placeholder ) ?>" value="<?= \esc_attr( $author_fediverse ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_handle_placeholder ) ?>" data-social-kind=fediverse-handle data-social-example="<?= \esc_attr( \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' ) ) ?>">
+					<?= $social_format_hint ?>
+				</div>
 			</td>
 		</tr>
 
@@ -428,15 +437,10 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="tsf-user-meta[fediverse_page_url]" id="tsf-user-meta[fediverse_page_url]" placeholder="<?= \esc_attr( $fediverse_url_placeholder ) ?>" value="<?= \esc_attr( $meta['fediverse_page_url'] ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_url_placeholder ) ?>" data-tsf-fediverse-fallback="<?= \esc_attr( $fediverse_url_fallback ) ?>">
-				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
-				<?php
-				HTML::description_noesc( \sprintf(
-					/* translators: %s = example value */
-					\esc_html__( 'Example: %s', 'autodescription' ),
-					HTML::code_wrap( \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' ) ),
-				) );
-				?>
+				<div class=tsf-social-format-field>
+					<input type=url name="tsf-user-meta[fediverse_page_url]" id="tsf-user-meta[fediverse_page_url]" placeholder="<?= \esc_attr( $fediverse_url_placeholder ) ?>" value="<?= \esc_attr( $meta['fediverse_page_url'] ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_url_placeholder ) ?>" data-tsf-fediverse-fallback="<?= \esc_attr( $fediverse_url_fallback ) ?>" data-social-kind=fediverse-url data-social-example="<?= \esc_attr( \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' ) ) ?>">
+					<?= $social_format_hint ?>
+				</div>
 			</td>
 		</tr>
 
@@ -447,21 +451,17 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=text name="tsf-user-meta[twitter_page]" id="tsf-user-meta[twitter_page]" value="<?= \esc_attr( $meta['twitter_page'] ) ?>" size=40 autocomplete=off class=ltr>
-				<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
-				<?php
-				HTML::description_noesc( \sprintf(
-					/* translators: %s = example value */
-					\esc_html__( 'Example: %s', 'autodescription' ),
-					HTML::code_wrap( \_x( '@username', 'X @username', 'autodescription' ) ),
-				) );
-				?>
+				<div class=tsf-social-format-field>
+					<input type=text name="tsf-user-meta[twitter_page]" id="tsf-user-meta[twitter_page]" value="<?= \esc_attr( $meta['twitter_page'] ) ?>" size=40 autocomplete=off class=ltr data-social-kind=x data-social-example="<?= \esc_attr( \_x( '@username', 'X @username', 'autodescription' ) ) ?>">
+					<?= $social_format_hint ?>
+				</div>
 			</td>
 		</tr>
 	</tbody>
 </table>
 
 <h2><?php \esc_html_e( 'Visibility Settings', 'autodescription' ); ?></h2>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 
 <table class="form-table tsf-user-meta">
 	<tbody>

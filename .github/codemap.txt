@@ -460,6 +460,7 @@ pt-gb.js                        Primary Term selection for the Gutenberg block e
 pt-le.js                        Primary Term selection in List Edit (quick/bulk edit)
 settings.js                     Global SEO Settings admin page logic
 social.js                       Social (Open Graph / Twitter) meta input field handling
+socialformat.js                 Suggested profile format hint and Use this
 tabs.js                         UI tab navigation component (no jQuery)
 term.js                         Term (taxonomy) editor SEO settings logic
 termslugs.js                    Term slug fetching and caching via REST API
