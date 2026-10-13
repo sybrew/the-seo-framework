@@ -342,6 +342,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Descriptions:**
 		* Generated descriptions now fall back to the post content when the excerpt is unusable after HTML tags are parsed. The excerpt and content are not concatenated.
 * **Compatibility:**
+	* **Theme: Bricks:**
+		* Resolved an issue where a page edited with Bricks got no generated description. The text stored in Text and Section elements on the page is now used when the excerpt is empty. Header and footer templates are not used, and the page is not rendered. A hidden element and the elements inside it are skipped, as is an element shown only for a user login, role, or ID.
 	* **Plugins: Cachify, LiteSpeed Cache, SpeedyCache, Surge, W3 Total Cache, etc.:**
 		* Cache plugins that do not have specific exclusion rules for sitemap or sitemap stylesheet endpoints could serve an empty sitemap or stylesheet on later visits. TSF now defines `DONOTCACHEPAGE` before scrubbing the response, so cache plugins that honor it skip storing these responses.
 			* You must flush the entire cache for these plugins in order to make this effective. This update signals that new empty sitemap or stylesheet responses should not be stored, but it cannot replace a broken response already written to a page cache, reverse proxy, CDN, or host-level cache before WordPress loads.
