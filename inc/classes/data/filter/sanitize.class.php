@@ -581,7 +581,7 @@ class Sanitize {
 	 *
 	 * @since 5.2.0
 	 *
-	 * @param mixed $card The card type.
+	 * @param string $card The card type.
 	 * @return string A supported card type, or an empty string for the default selection.
 	 */
 	public static function twitter_card( $card ) {

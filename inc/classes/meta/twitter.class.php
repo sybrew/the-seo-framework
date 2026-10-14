@@ -131,7 +131,9 @@ class Twitter {
 			}
 		}
 
-		return Sanitize::twitter_card( $card );
+		return isset( $card )
+			? Sanitize::twitter_card( $card )
+			: '';
 	}
 
 	/**
