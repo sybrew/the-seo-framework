@@ -86,6 +86,8 @@ class Twitter {
 	 */
 	public static function get_custom_card_type( $args = null ) {
 
+		$card = '';
+
 		if ( isset( $args ) ) {
 			normalize_generation_args( $args );
 
