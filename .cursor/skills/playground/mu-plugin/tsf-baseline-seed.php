@@ -23,7 +23,11 @@ defined( 'ABSPATH' ) or die;
  */
 
 add_action( 'init', 'wpr_tsf_register_types', 0 );
+add_action( 'init', 'wpr_tsf_register_custom_route', 1 );
 add_action( 'init', 'wpr_tsf_seed_content', 20 );
+add_filter( 'query_vars', 'wpr_tsf_custom_route_var' );
+add_action( 'pre_get_posts', 'wpr_tsf_custom_route_query' );
+add_filter( 'redirect_canonical', 'wpr_tsf_custom_route_canonical' );
 add_filter(
 	'wp_plugin_regression_frame',
 	'wpr_tsf_apply_frame',
@@ -253,6 +257,90 @@ function wpr_tsf_seed_content() {
 	delete_option( 'rewrite_rules' );
 	$GLOBALS['wp_rewrite']->flush_rules( false );
 	update_option( 'wpr_tsf_baseline_ready', 1 );
+	update_option( 'wpr_tsf_custom_route', 1 );
+}
+
+/**
+ * Registers a public route that is not a post, term, author, date, or archive.
+ *
+ * @since 5.2.1
+ */
+function wpr_tsf_register_custom_route() {
+
+	add_rewrite_rule( '^wpr-custom/?$', 'index.php?wpr_custom=1', 'top' );
+
+	if (
+		   ! get_option( 'wpr_tsf_baseline_ready' )
+		|| get_option( 'wpr_tsf_custom_route' )
+	) {
+		return;
+	}
+
+	delete_option( 'rewrite_rules' );
+	$GLOBALS['wp_rewrite']->flush_rules( false );
+	update_option( 'wpr_tsf_custom_route', 1 );
+}
+
+/**
+ * Adds the custom route query variable.
+ *
+ * @since 5.2.1
+ *
+ * @param string[] $vars Public query variables.
+ * @return string[]
+ */
+function wpr_tsf_custom_route_var( $vars ) {
+
+	$vars[] = 'wpr_custom';
+
+	return $vars;
+}
+
+/**
+ * Keeps the custom route off every query branch that has its own SEO fields.
+ *
+ * @since 5.2.1
+ *
+ * @param WP_Query $query Main query.
+ */
+function wpr_tsf_custom_route_query( $query ) {
+
+	if ( ! $query->is_main_query() || is_admin() ) return;
+
+	if ( '1' !== (string) $query->get( 'wpr_custom' ) ) return;
+
+	$query->is_404               = false;
+	$query->is_archive           = false;
+	$query->is_attachment        = false;
+	$query->is_author            = false;
+	$query->is_category          = false;
+	$query->is_date              = false;
+	$query->is_front_page        = false;
+	$query->is_home              = false;
+	$query->is_page              = false;
+	$query->is_post_type_archive = false;
+	$query->is_posts_page        = false;
+	$query->is_search            = false;
+	$query->is_single            = false;
+	$query->is_singular          = false;
+	$query->is_tag               = false;
+	$query->is_tax               = false;
+}
+
+/**
+ * Stops WordPress from redirecting the custom route to the front page.
+ *
+ * @since 5.2.1
+ *
+ * @param string|false $redirect Canonical redirect URL.
+ * @return string|false
+ */
+function wpr_tsf_custom_route_canonical( $redirect ) {
+
+	if ( '1' === (string) get_query_var( 'wpr_custom' ) )
+		return false;
+
+	return $redirect;
 }
 
 /**

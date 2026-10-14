@@ -211,6 +211,13 @@
 		"redirect": [ "redirect" ],
 		"oembed": [ "oembed" ]
 	},
+	"occasional": [
+		"404",
+		"search",
+		"date-day",
+		"login",
+		"custom"
+	],
 	"entries": [
 		{ "id": "front-blog", "type": "front-blog", "path": "/", "frame": "blog" },
 		{ "id": "front-page", "type": "front-page", "path": "/", "frame": "static" },
@@ -230,6 +237,8 @@
 		{ "id": "author", "type": "author", "path": "/author/admin/" },
 		{ "id": "search", "type": "search", "path": "/?s=test" },
 		{ "id": "404", "type": "404", "path": "/this-does-not-exist-tsf/" },
+		{ "id": "login", "type": "login", "path": "/wp-login.php", "markers": false },
+		{ "id": "custom", "type": "custom", "path": "/wpr-custom/" },
 		{ "id": "paged", "type": "paged", "path": "/page/2/", "frame": "blog" },
 		{ "id": "multipage", "type": "multipage", "path": "/wpr-multipage/" },
 		{ "id": "multipage-2", "type": "multipage", "path": "/wpr-multipage/2/" },

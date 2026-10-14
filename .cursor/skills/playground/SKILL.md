@@ -112,7 +112,11 @@ Playwright MCP must load `.cursor/skills/playground/playwright.mcp.json` (`--con
 
 Mutate the live site by writing mu-plugins under `~/.wordpress-playground/tests/autodescription/<version>/<site>/mu-plugins/`, or `harness --json-file <path>`. Do not pass `--json "{...}"` from PowerShell; it strips the quotes. Do not add `eval`.
 
-The catalog is `plugin.json` `entries`, `surfaces`, and `surfaceLines`. One capture writes `.local/playground/captures/<label>.json` — the full walkable dump (status, headers, marker block, plus `headTags`). It is a local gold file, not a CI gate. Do not hand-edit it. Regenerate when the seed or catalog changes. `compare --feature` needs those entries in both bundles; recapture with the same `--feature`.
+The catalog is `plugin.json` `entries`, `surfaces`, `occasional`, and `surfaceLines`. One capture writes `.local/playground/captures/<label>.json` — the full walkable dump (status, headers, marker block, plus `headTags`). It is a local gold file, not a CI gate. Do not hand-edit it. Regenerate when the seed or catalog changes. `compare --feature` needs those entries in both bundles; recapture with the same `--feature`.
+
+A `--feature` or `--types` walk also requests one `occasional` entry that walk does not already include (login, search, 404, a date archive, or the custom route). Which one follows the feature's index in the sorted surface list, so the same feature always adds the same page and a before/after pair stays aligned. A capture with no `--feature` and no `--types` requests every entry, including those pages. `login` sets `markers: false` because `wp-login.php` does not print the plugin head block.
+
+Playground leaves `WP_DEBUG_DISPLAY` off, so an undefined variable never shows up in the head block. Capture reads new `debug.log` lines under the plugin directory and stores them on the entry. Compare always diffs those lines, including under `--feature`. Capture writes the bundle, then exits non-zero when any were found. Compare fails when either side has them. That is a plugin failure. Do not strip the check to get a green diff.
 
 On output-affecting work:
 
@@ -122,7 +126,7 @@ On output-affecting work:
 
 `--types=post,page` narrows to page types. `--paths` still appends extra URLs to capture and compare. A full compare (no `--feature`) diffs the whole extracted block.
 
-Seeded types: front as blog, static front, posts page, post, page, `?p=` query, category, empty category, tag, date (day/month/year), author, search, 404, paged blog / posts page / category, multipage post, hierarchical CPT + child, non-hierarchical CPT, both CPT archives, a taxonomy on two CPTs, a taxonomy on one CPT, sitemap, robots.txt, site/post/category/author/CPT/comments feeds, post/term redirects, oEmbed. Attachment, preview, comment-paged, and WooCommerce shop/product are not seeded.
+Seeded types: front as blog, static front, posts page, post, page, `?p=` query, category, empty category, tag, date (day/month/year), author, search, 404, login, custom route (`/wpr-custom/`, not a post, term, author, date, or archive), paged blog / posts page / category, multipage post, hierarchical CPT + child, non-hierarchical CPT, both CPT archives, a taxonomy on two CPTs, a taxonomy on one CPT, sitemap, robots.txt, site/post/category/author/CPT/comments feeds, post/term redirects, oEmbed. Attachment, preview, comment-paged, and WooCommerce shop/product are not seeded.
 
 The seed waits for `THE_SEO_FRAMEWORK_PRESENT` and `is_blog_installed()`. Install requests must not mark the catalog ready. Redirect meta must be an http(s) URL (`home_url( '/sample-page/' )`); TSF strips relative paths when resolving the redirect.
 

@@ -53,7 +53,7 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 				makepot.php         Runs makepot-tsf against language/autodescription.pot
 		playground/                 Local WordPress Playground regression via wp-plugin-regression
 			SKILL.md                Permission, engine clone, launch/capture/compare, WP versions, A/B, Playwright for admin/REST
-			plugin.json             TSF slug, mounts, head markers, entries, surfaces
+			plugin.json             TSF slug, mounts, head markers, entries, surfaces, occasional pages
 			playwright.mcp.json     Playwright MCP: drop AutomationControlled flag; send admin header
 			scripts/
 				playground.js       Runs wp-plugin-regression against this repo
@@ -67,6 +67,8 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 			SKILL.md                Lone year becomes a range; a stale range end year advances
 			scripts/
 				update-copyright-year.ps1  Dry run by default; -Apply writes; -Since and -SinceTag
+		pre-release/                Release checklist: Stable tag, full catalog capture, changelog controls
+			SKILL.md                Aligns readme Stable tag; captures every page type; flicks changelog settings
 
 .github/
 	codemap.txt                   This file
