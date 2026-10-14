@@ -345,7 +345,7 @@ Global and namespaced function definitions.
 
 api.php                         Defines global tsf() and the_seo_framework() factory functions plus namespaced helpers (memo, umemo, has_run)
 deprecated.php                  Holds deprecated global API functions to prevent fatal errors; emptied after deprecation cycles
-upgrade-suggestion.php          Shows a one-time admin notice suggesting the TSF Extension Manager plugin after upgrades
+upgrade-suggestion.php          Registers a dismissible admin notice after an upgrade. The active suggestion is chosen by hand.
 
 
 Compatibility (inc/compat/)

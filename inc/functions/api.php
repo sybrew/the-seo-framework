@@ -225,8 +225,9 @@ namespace {
 					'margin-inline-start:0',
 					'padding-inline-start:0',
 				],
-				"nav.$class ol li"                         => [ // We could combine with above; but this is easier for other devs.
+				"nav.$class ol li"                         => [
 					'white-space:nowrap',
+					'list-style:none',
 				],
 				"nav.$class ol li:not(:last-child)::after" => [
 					"content:'$sep'",

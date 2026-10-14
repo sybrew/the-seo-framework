@@ -1057,12 +1057,8 @@ function _do_upgrade_5200() {
 				)
 				: $row->meta_value;
 
-			if (
-				! \is_array( $meta )
-				|| ! isset( $meta['counter_type'] )
-			) {
+			if ( ! \is_array( $meta ) || ! isset( $meta['counter_type'] ) )
 				continue;
-			}
 
 			\add_user_meta(
 				(int) $row->user_id,

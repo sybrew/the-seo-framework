@@ -58,6 +58,7 @@ _prepare( $previous_version, $current_version );
  * @since 4.1.3 Commented out sale notification conditions, as those can't be met anyway.
  * @since 4.2.1 No longer tests WP and PHP requirements for Extension Manager.
  * @since 4.2.7 Removed test for Extension Manager upgrade.
+ * @since 5.2.0 Now suggests sponsorship instead of the temporary sale.
  * @access private
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
@@ -78,13 +79,14 @@ function _prepare( $previous_version, $current_version ) {
 	// 2
 	if ( ! \is_main_site() ) return;
 
-	$show_sale = true;
+	$show_notification = true;
 	if ( \function_exists( 'tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
-		$show_sale = ! \tsf_extension_manager()->is_connected_user();
+		$show_notification = ! \tsf_extension_manager()->is_connected_user();
 	}
-	if ( $show_sale ) {
+	if ( $show_notification ) {
+		// _suggest_temp_sale( $previous_version, $current_version );
 		// phpcs:ignore TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-		_suggest_temp_sale( $previous_version, $current_version );
+		_suggest_sponsorship( $previous_version, $current_version );
 	}
 }
 
@@ -130,4 +132,43 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 			],
 		);
 	}
+}
+
+/**
+ * Registers a sponsorship notification for applicable plugin users on upgrade.
+ *
+ * @since 5.2.0
+ * @access private
+ *
+ * @param string $previous_version The previous version the site upgraded from, if any.
+ * @param string $current_version  The current version of the site.
+ */
+function _suggest_sponsorship( $previous_version, $current_version ) {
+	// 5140 is the last shipped database version. 5150 was never released.
+	if ( $previous_version < '5150' && $current_version < '5210' )
+		Admin\Notice\Persistent::register_notice(
+			Markdown::convert(
+				\sprintf(
+					'<p>You\'re now on The SEO Framework v5.2.0 &mdash; thanks for sticking with us!</p><p>Full author SEO controls are here. [See what else is new](%s). If TSF saves you time, [sponsor its continued development on GitHub](%s).</p><p>This notice disappears when dismissed.</p>',
+					'https://theseoframework.com/?p=4681',
+					'https://github.com/sponsors/sybrew',
+				),
+				[ 'a' ],
+				[ 'a_internal' => false ],
+			),
+			'suggest-sponsorship',
+			[
+				'type'   => 'info',
+				'icon'   => false,
+				'escape' => false,
+			],
+			[
+				'screens'      => [],
+				'excl_screens' => [ 'update-core', 'post', 'term', 'upload', 'media', 'plugin-editor', 'plugin-install', 'themes', 'widgets', 'user', 'nav-menus', 'theme-editor', 'profile', 'export', 'site-health', 'export-personal-data', 'erase-personal-data' ],
+				'capability'   => 'install_plugins',
+				'user'         => 0,
+				'count'        => 42,
+				'timeout'      => strtotime( 'November 2nd, 2026, 23:00GMT+1' ) - time(),
+			],
+		);
 }
