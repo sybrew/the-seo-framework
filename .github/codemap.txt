@@ -63,6 +63,10 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 				tsf-playwright-admin.php Logs in admin when Playwright sends X-TSF-Playground-Admin
 		instruction-trial/          Trials instruction wording on Composer 2.5 until terse text still scores
 			SKILL.md                Swarm, rubric, compress loop; write the file only after 3 of 4 pass
+		copyright/                  Updates copyright years on files changed since 1 January
+			SKILL.md                Lone year becomes a range; a stale range end year advances
+			scripts/
+				update-copyright-year.ps1  Dry run by default; -Apply writes; -Since and -SinceTag
 
 .github/
 	codemap.txt                   This file
