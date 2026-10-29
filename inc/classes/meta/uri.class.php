@@ -275,7 +275,7 @@ class URI {
 				$url = self::get_bare_author_url( $args['uid'] );
 		}
 
-		return $url ?: '';
+		return $url ?? '' ?: '';
 	}
 
 	/**

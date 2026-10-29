@@ -244,6 +244,40 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+### 5.2.1
+
+**For everyone**
+
+* **Improved:**
+	* **Performance:**
+		* **Front-end timings:** On our Apple M4 Mac mini, TSF, in its entirety, now adds under 1 ms to the median response on each of the seven front-end routes we tested. With this update, we measured the difference between median response times on matched clean WordPress 7.1.3 installs with and without TSF 5.2.1.
+			* 0.2 ms for RSS feeds.
+			* 0.6 ms for 404 pages.
+			* 0.7 ms for a single page.
+			* 0.9 ms for a single post.
+			* 0.6 ms for search results.
+			* 0.8 ms for a blog homepage.
+			* 0.6 ms for a static homepage.
+		* **Preparing SEO metadata:** TSF now normalizes tabs, line breaks, and non-breaking spaces in titles and descriptions in one pass. In a test against the previous sanitizer, the routine processes titles 6.7% faster and descriptions 7.2% faster at the median. The WordPress admin and public pages both use the faster routine.
+		* **Rendering the SEO Bar and Quick Edit:** TSF now reuses results when generating robots directives, simplifies Quick Edit data escaping, and escapes each distinct SEO Bar symbol once per request.
+			* In a test with 100 posts on screen, these columns render 2.7% faster at the median.
+			* In a separate clean WordPress test of the full update, TSF handles its part of the Posts list response 9.8% faster, and the full median response is 1.3% faster. We measure TSF's part by subtracting the matched WordPress-only median response time from each TSF build's median.
+		* **Collapsing repeated spaces:** TSF now uses a simpler replacement for text without non-ASCII spaces. In tests on short strings with repeated ordinary spaces, the routine runs over 60% faster at the median. Faster space cleanup contributes to a 22.2% speedup in TSF's part of the Pages list response and a 4.0% faster median response overall.
+		* **Reusing computed values:** TSF now uses simpler cache keys to look up values it has already computed during a request. With the full update, TSF handles its part of the RSS response 32.3% faster, and the full median feed response is 0.9% faster.
+* **Fixed:**
+	* Fixed a PHP warning when trying to access a Twitter Card type on a non-editable archive.
+
+**For developers**
+
+* **PHP API notes:**
+	* **Changed:**
+		* `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Title::get_bare_generated_title()` (`tsf()->title()->get_bare_generated_title()`), `The_SEO_Framework\Meta\Title::get_addition()` (`tsf()->title()->get_addition()`), `The_SEO_Framework\Meta\Title::get_addition_for_front_page()` (`tsf()->title()->get_addition_for_front_page()`), and `The_SEO_Framework\Meta\Title::get_separator()` (`tsf()->title()->get_separator()`) now memoize per site for the duration of the request.
+* **Improved:**
+	* SEO Bar symbols are now escaped once per request instead of on every block.
+		* `The_SEO_Framework\Helper\Query\Cache::memo()` (`tsf()->query()->cache()->memo()`) now requires a caller frame.
+	* **Fixed:**
+		* Fixes a diagnostic error when an unregistered getter reaches the robots generator.
+
 ### 5.2.0 - Complete
 
 *Pray take care, Glaucon, that your daring ambition doesn't lead to a fall! Don't you see how risky it is to say or do what you don't understand? - [Xenophon](https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0208:book=3)*

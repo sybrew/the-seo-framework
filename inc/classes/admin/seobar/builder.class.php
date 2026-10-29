@@ -260,6 +260,7 @@ class Builder {
 	 *
 	 * @since 4.0.0
 	 * @since 5.2.0 Now strips HTML tags from title and reason before interpolating them into the tooltip HTML and ARIA text.
+	 * @since 5.2.1 Now escapes each distinct SEO Bar symbol once per request and reuses it across blocks.
 	 * @generator
 	 * FIXME? The data herein is obtained via `builders/seobar-{type}.php`. If they escape their cache before we do here, it'd be much quicker.
 	 *        Provided, however, that there are fewer items cached (130~137) than SEOBar blocks outputted (240 on most sites).
@@ -273,6 +274,7 @@ class Builder {
 	private static function generate_seo_bar_blocks( $items ) {
 
 		static $gettext, $use_symbols;
+		static $symbols = [];
 
 		$gettext ??= [
 			/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */
@@ -323,7 +325,7 @@ class Builder {
 						$symbol = '--';
 				}
 			} else {
-				$symbol = $item['symbol'];
+				$symbol = $symbols[ $item['symbol'] ] ??= \esc_html( $item['symbol'] );
 			}
 
 			$title  = \wp_strip_all_tags( $item['title'] );
@@ -370,10 +372,10 @@ class Builder {
 
 			yield \sprintf(
 				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
-				$status,
+				$status, // Hardcoded text.
 				\esc_attr( $aria ),
 				\esc_attr( $html ),
-				\esc_html( $symbol ),
+				$symbol, // Pre-escaped above or hardcoded text.
 			);
 		}
 	}

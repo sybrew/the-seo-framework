@@ -5,7 +5,7 @@ WordPress SEO plugin focused on performance, best SEO practices, and user experi
 Automates meta tags, sitemaps, Schema.org, robots directives, and social media output.
 Requires PHP 7.4+, WordPress 7.0+. Text domain: autodescription.
 
-Files named index.php are direct-access guards (empty PHP files).
+Files named index.php are direct-access guards (no executable code; many contain thematic quotations).
 Files ending in .min.js or .min.css are minified mirrors of their source counterparts.
 
 
@@ -14,6 +14,7 @@ Root
 .editorconfig                   Editor config: tabs (4-wide), LF endings, UTF-8, trim trailing whitespace
 .gitattributes                  Line-ending normalization, binary markers, export-ignore rules for dev files
 .gitignore                      Ignores archives, logs, OS artifacts, vendor/, .venv/
+CLAUDE.md                       Claude entry point to existing Cursor rules and shared repository instructions
 autodescription.php             Main plugin file: header metadata, version/path constants, bootstraps the plugin
 composer.json                   Composer manifest: PHP/WP dependencies and dev tooling (PHPCS, PHP Compatibility)
 cspell.json                     CSpell dictionary with project-specific allowed words
@@ -26,11 +27,11 @@ security.txt                    Security disclosure info pointing to GitHub Secu
 wpml-config.xml                 WPML/Polylang config declaring translatable custom fields and settings
 
 .cursor/
-	rules/                        Cursor rule files. Most attach Copilot instruction files via @file references; git.mdc is Cursor-only
+	rules/                        Maintained Cursor rule files; most attach shared .github instructions
 		core.mdc                    Always-applied rule attaching .github/copilot-instructions.md
 		css.mdc                     CSS-scoped rule attaching css.instructions.md
 		docs.mdc                    Readme-scoped rule attaching docs.instructions.md
-		git.mdc                     Always-applied: refuse git/GitHub state mutations; Cursor-only
+		git.mdc                     Always-applied: refuse git/GitHub state mutations
 		javascript.mdc              JavaScript-scoped rule attaching javascript.instructions.md
 		local.mdc                   Always-applied: gitignored .local search workaround; attaches local.instructions.md
 		php.mdc                     PHP-scoped rule attaching php.instructions.md
@@ -349,7 +350,7 @@ Functions (inc/functions/)
 --------------------------
 Global and namespaced function definitions.
 
-api.php                         Defines global tsf() and the_seo_framework() factory functions plus namespaced helpers (memo, umemo, has_run)
+api.php                         Defines global tsf() and the_seo_framework() factory functions plus namespaced helpers (memo, umemo, msmemo, msumemo, has_run)
 deprecated.php                  Holds deprecated global API functions to prevent fatal errors; emptied after deprecation cycles
 upgrade-suggestion.php          Registers a dismissible admin notice after an upgrade. The active suggestion is chosen by hand.
 

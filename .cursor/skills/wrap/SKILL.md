@@ -53,10 +53,10 @@ PHP 7.4+ on `PATH`. If `php` is missing, say so and do not invent a width.
 | Same, vis > 80, condition has `&&` / `\|\|` | yes | Wrap at those operators (first operand padded 3 spaces), braces. Do not wrap only the terminator |
 | Valued `return` after `if` | no | Next line, unbraced. Line length is not the trigger |
 | Assignment, ternary, coalesce | no | Stay one line unless another rule already forces a wrap |
-| Ternary/coalesce RHS already multiline | no | Break after `=`, pad first operand 3 spaces so `?` / `:` / `??` align |
+| Ternary/coalesce already wrapped | no | First operand's existing tabs plus 3 spaces. Operator on the next line at those tabs, not the containing call's tabs. A `return` line gets no pad |
 | Call arguments > 30 characters **total** | no (30) | Wrap those arguments |
 | Array/object/closure among several arguments | no | Every argument of that call on its own line |
-| Assigned `?:` / `??` whose first operand is a multi-parameter call | no | Each parameter on its own line. Indent the call one tab, and put the operator at that same indent. Do not pad the call by 3 spaces. Keep each later operand on one line |
+| Wrapped `?:` / `??` whose first operand is a multi-parameter call | no | Each parameter on its own line, one tab deeper than that operand's keyword. Keep the operator on that keyword's tabs. No 3-space pad. Keep each later operand on one line |
 | SQL over 80 | SQL 80 | SQL clause rules, not compact-if |
 | PHP attribute + symbol vis > 80 | yes | Attribute on the line above. If the attribute itself vis > 80, wrap its arguments like a call |
 | Function `{` blank | n/a | Functions/closures only, 2+ statements. Never after `if` / loop / `try` / labeled `{` |
@@ -68,7 +68,7 @@ PHP 7.4+ on `PATH`. If `php` is missing, say so and do not invent a width.
 - Treat 80 as a max line length for assignments, HTML, CSS-in-PHP, or comments.
 - Wrap a single-expression condition to make room for `return;`.
 - Break `$a = $cond ? $b : $c;` only because vis > 80.
-- Pad a `return` that is not an assignment.
+- Pad the `return` keyword line. A wrapped `??` or `?:` that is the returned value still requires the 3-space pad.
 - Insert a function-body blank after `if` / `elseif` / `else` / loop / `try` / labeled `{`.
 - Treat `do_action` / `apply_filters` as a wrap or 80-column case. Hook-doc isolation is sibling-statement spacing in php.instructions; glue the docblock to the call.
 
