@@ -264,6 +264,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			* In a separate clean WordPress test of the full update, TSF handles its part of the Posts list response 9.8% faster, and the full median response is 1.3% faster. We measure TSF's part by subtracting the matched WordPress-only median response time from each TSF build's median.
 		* **Collapsing repeated spaces:** TSF now uses a simpler replacement for text without non-ASCII spaces. In tests on short strings with repeated ordinary spaces, the routine runs over 60% faster at the median. Faster space cleanup contributes to a 22.2% speedup in TSF's part of the Pages list response and a 4.0% faster median response overall.
 		* **Reusing computed values:** TSF now uses simpler cache keys to look up values it has already computed during a request. With the full update, TSF handles its part of the RSS response 32.3% faster, and the full median feed response is 0.9% faster.
+	* **Accessibility:**
+		* You can now press Space as well as Enter to change the character counter type when focused on it.
+		* Screen reader announcements for character counter changes have been improved.
 * **Fixed:**
 	* Fixed a PHP warning when trying to access a Twitter Card type on a non-editable archive.
 
@@ -271,11 +274,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 * **PHP API notes:**
 	* **Changed:**
-		* `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Title::get_bare_generated_title()` (`tsf()->title()->get_bare_generated_title()`), `The_SEO_Framework\Meta\Title::get_addition()` (`tsf()->title()->get_addition()`), `The_SEO_Framework\Meta\Title::get_addition_for_front_page()` (`tsf()->title()->get_addition_for_front_page()`), and `The_SEO_Framework\Meta\Title::get_separator()` (`tsf()->title()->get_separator()`) now memoize per site for the duration of the request.
-* **Improved:**
-	* SEO Bar symbols are now escaped once per request instead of on every block.
 		* `The_SEO_Framework\memo()` now identifies callers by class and function and requires a named function or method caller. Closures must use `The_SEO_Framework\umemo()` with an explicit key.
 		* `The_SEO_Framework\Meta\Title::get_addition()` (`tsf()->title()->get_addition()`) now memoizes its return value for the duration of the request.
+		* `The_SEO_Framework\Admin\Notice::generate_notice()` (`tsf()->admin()->notice()->generate_notice()`) now outputs the dismiss control as a button.
+		* `The_SEO_Framework\Admin\Settings\Layout\Form::output_character_counter_wrap()` (`tsf()->admin()->layout()->form()->output_character_counter_wrap()`) now outputs the count as a button.
 		* `The_SEO_Framework\Helper\Query\Cache::memo()` (`tsf()->query()->cache()->memo()`) now requires a caller frame.
 
 ### 5.2.0 - Complete

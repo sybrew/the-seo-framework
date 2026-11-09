@@ -16,6 +16,12 @@
 	color: inherit;
 	cursor: pointer;
 	text-decoration: none;
+	background: none;
+	border: 0;
+	padding: 0;
+	font: inherit;
+	line-height: inherit;
+	vertical-align: baseline;
 }
 
 .tsf-counter .tsf-count-bad {
