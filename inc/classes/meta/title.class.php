@@ -1045,19 +1045,20 @@ class Title {
 	 * @return string The Separator.
 	 */
 	public static function get_separator() {
-		return umemo( __METHOD__ ) ?? umemo(
-			__METHOD__,
-			/**
-			 * @since 2.3.9
-			 * @param string $separator The title separator.
-			 */
-			(string) \apply_filters(
-				'the_seo_framework_title_separator',
-				(
-					   Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
-					?? '&#x2d;'
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				/**
+				 * @since 2.3.9
+				 * @param string $separator The title separator.
+				 */
+				(string) \apply_filters(
+					'the_seo_framework_title_separator',
+					(
+						Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
+						?? '&#x2d;'
+					),
 				),
-			),
-		);
+			);
 	}
 }

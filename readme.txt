@@ -274,9 +274,9 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* `The_SEO_Framework\Data\Blog::get_public_blog_name()` (`tsf()->data()->blog()->get_public_blog_name()`), `The_SEO_Framework\Meta\Title::get_bare_generated_title()` (`tsf()->title()->get_bare_generated_title()`), `The_SEO_Framework\Meta\Title::get_addition()` (`tsf()->title()->get_addition()`), `The_SEO_Framework\Meta\Title::get_addition_for_front_page()` (`tsf()->title()->get_addition_for_front_page()`), and `The_SEO_Framework\Meta\Title::get_separator()` (`tsf()->title()->get_separator()`) now memoize per site for the duration of the request.
 * **Improved:**
 	* SEO Bar symbols are now escaped once per request instead of on every block.
+		* `The_SEO_Framework\memo()` now identifies callers by class and function and requires a named function or method caller. Closures must use `The_SEO_Framework\umemo()` with an explicit key.
+		* `The_SEO_Framework\Meta\Title::get_addition()` (`tsf()->title()->get_addition()`) now memoizes its return value for the duration of the request.
 		* `The_SEO_Framework\Helper\Query\Cache::memo()` (`tsf()->query()->cache()->memo()`) now requires a caller frame.
-	* **Fixed:**
-		* Fixes a diagnostic error when an unregistered getter reaches the robots generator.
 
 ### 5.2.0 - Complete
 
