@@ -50,10 +50,13 @@ class Cache {
 	 * Memoizes queries.
 	 * Should not be used on methods that aren't final.
 	 *
+	 * Requires a caller frame. The caller's function name identifies the cache entry.
+	 *
 	 * The first parameter might not get retrieved in a later call, for this method
 	 * also tests whether the query is setup correctly at the time of the call.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.1 Now requires a caller frame.
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiate queries.

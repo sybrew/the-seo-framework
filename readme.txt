@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4.0
-Stable tag: 5.2.0
+Stable tag: 5.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -246,39 +246,19 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 ### 5.2.1
 
-**For everyone**
+This update reduces the time TSF spends building the SEO Bar, preparing Quick Edit data, and cleaning up titles and descriptions. The character counter now responds to Space as well as Enter. We also fixed a PHP warning when determining the Twitter Card type for archives without editable SEO settings.
 
-* **Improved:**
-	* **Performance:**
-		* **Front-end timings:** On our Apple M4 Mac mini, TSF, in its entirety, now adds under 1 ms to the median response on each of the seven front-end routes we tested. With this update, we measured the difference between median response times on matched clean WordPress 7.1.3 installs with and without TSF 5.2.1.
-			* 0.2 ms for RSS feeds.
-			* 0.6 ms for 404 pages.
-			* 0.7 ms for a single page.
-			* 0.9 ms for a single post.
-			* 0.6 ms for search results.
-			* 0.8 ms for a blog homepage.
-			* 0.6 ms for a static homepage.
-		* **Preparing SEO metadata:** TSF now normalizes tabs, line breaks, and non-breaking spaces in titles and descriptions in one pass. In a test against the previous sanitizer, the routine processes titles 6.7% faster and descriptions 7.2% faster at the median. The WordPress admin and public pages both use the faster routine.
-		* **Rendering the SEO Bar and Quick Edit:** TSF now reuses results when generating robots directives, simplifies Quick Edit data escaping, and escapes each distinct SEO Bar symbol once per request.
-			* In a test with 100 posts on screen, these columns render 2.7% faster at the median.
-			* In a separate clean WordPress test of the full update, TSF handles its part of the Posts list response 9.8% faster, and the full median response is 1.3% faster. We measure TSF's part by subtracting the matched WordPress-only median response time from each TSF build's median.
-		* **Collapsing repeated spaces:** TSF now uses a simpler replacement for text without non-ASCII spaces. In tests on short strings with repeated ordinary spaces, the routine runs over 60% faster at the median. Faster space cleanup contributes to a 22.2% speedup in TSF's part of the Pages list response and a 4.0% faster median response overall.
-		* **Reusing computed values:** TSF now uses simpler cache keys to look up values it has already computed during a request. With the full update, TSF handles its part of the RSS response 32.3% faster, and the full median feed response is 0.9% faster.
-	* **Accessibility:**
-		* You can now press Space as well as Enter to change the character counter type when focused on it.
-		* Screen reader announcements for character counter changes have been improved.
-* **Fixed:**
-	* Fixed a PHP warning when trying to access a Twitter Card type on a non-editable archive.
+In our benchmark, TSF adds 21% less time to the All Pages screen and 11.7% less to a static homepage. The estimated time TSF 5.2.1 adds to the median response time is under 1 ms on every public route we tested.
 
-**For developers**
+* 0.7 ms for a single page.
+* 0.9 ms for a single post.
+* 0.6 ms for search results.
+* 0.6 ms for a blog homepage.
+* 0.7 ms for a static homepage.
+* 0.6 ms for a 404 page.
+* 0.4 ms for the site's main posts RSS feed.
 
-* **PHP API notes:**
-	* **Changed:**
-		* `The_SEO_Framework\memo()` now identifies callers by class and function and requires a named function or method caller. Closures must use `The_SEO_Framework\umemo()` with an explicit key.
-		* `The_SEO_Framework\Meta\Title::get_addition()` (`tsf()->title()->get_addition()`) now memoizes its return value for the duration of the request.
-		* `The_SEO_Framework\Admin\Notice::generate_notice()` (`tsf()->admin()->notice()->generate_notice()`) now outputs the dismiss control as a button.
-		* `The_SEO_Framework\Admin\Settings\Layout\Form::output_character_counter_wrap()` (`tsf()->admin()->layout()->form()->output_character_counter_wrap()`) now outputs the count as a button.
-		* `The_SEO_Framework\Helper\Query\Cache::memo()` (`tsf()->query()->cache()->memo()`) now requires a caller frame.
+TSF is the first [full-featured sub-millisecond SEO plugin](https://theseoframework.com/?p=4692#detailed).
 
 ### 5.2.0 - Complete
 

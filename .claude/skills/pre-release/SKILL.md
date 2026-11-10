@@ -53,6 +53,10 @@ Open `wp-admin/admin.php?page=theseoframework-settings`, or the post, term, or u
 
 A control you cannot find is a failed item. If Playwright is not connected, say so. Do not claim the controls were flicked.
 
+## Translation template
+
+Run the [Makepot skill](../makepot/SKILL.md) last, after the release header and Stable tag are final and the other checks are complete. Compare the generated message strings with the previous template and verify the template header uses the release version.
+
 ## Report
 
 List each item as pass or fail: the release version, `Stable tag`, the compare summary, and each control you flicked with the effect you saw.

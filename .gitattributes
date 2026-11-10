@@ -24,21 +24,14 @@
 *.woff binary
 *.woff2 binary
 
-# GitHub baggage for development.
-.claude export-ignore
-.cursor export-ignore
-.cursorignore export-ignore
-.editorconfig export-ignore
-.gitattributes export-ignore
-.github export-ignore
-.gitignore export-ignore
-.vscode export-ignore
+# Left out of release archives (git archive and the WordPress.org zip).
+# Every root path that starts with a dot: .claude, .codex, .cursor, .github, .local, .vscode, and the rest.
+/.* export-ignore
+
+# Root development files that do not start with a dot.
 AGENTS.md export-ignore
 AGENTS.override.md export-ignore
 README.md export-ignore
-
-# Our baggage for development.
-.local export-ignore
 composer.json export-ignore
 cspell.json export-ignore
 phpcs.xml export-ignore
