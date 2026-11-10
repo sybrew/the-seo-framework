@@ -1,5 +1,5 @@
 ---
-description: "Use when editing PHP, WordPress PHP, SQL-in-PHP, or mixed PHP and HTML template files in this repository. Covers TSF PHP style, namespace rules, SQL formatting, and template formatting."
+description: "TSF PHP and WordPress rules for namespaces, SQL, templates, and PHPDoc."
 applyTo: "**/*.php"
 ---
 
@@ -9,10 +9,7 @@ applyTo: "**/*.php"
 
 # PHP and WordPress Rules
 
-- Use PHP 7.4+.
-- Use WordPress coding standards, except where this file narrows them.
 - Write PHP attributes inline on the symbol they annotate, for example `function foo( #[\SensitiveParameter] $x )`. If the attribute plus that symbol would exceed 80 visual columns (tab = 4), put the attribute on the line above. If the attribute itself exceeds 80, wrap its arguments like a function call.
-- Never add phpcs comments. That includes `phpcs:disable`, `phpcs:enable`, `phpcs:ignore`, `phpcs:set`, and any `-- phpcs:` annotation. Do not copy them from existing files into new or edited code. Existing comments in unmodified files stay.
 - Avoid functions `wp_sprintf`, except with `%l` lists, `wp_json_encode`, and `status_header`.
 - Never add hooks in class constructs.
 - In `add_filter()` and `add_action()`, write each argument on a new line when implementing anonymous functions.
@@ -25,7 +22,7 @@ applyTo: "**/*.php"
 - Never use strict typing unless required.
 - Short Echo Tags, HereDoc, and NowDoc are permitted.
 - Use `(s|v)printf` for complex strings when variables still need to be escaped.
-- Align array key/value separators with spaces before the separator.
+- Align array key/value separators with spaces before the separator. This overrides the global array alignment rule.
 - Do not pad array access strings with spaces.
 - Avoid output buffering.
 - You may use `str_starts_with`, `str_ends_with`, and `str_contains`; WordPress provides these.
@@ -36,12 +33,8 @@ applyTo: "**/*.php"
 - Use `or` / `and` for statement-level short-circuit, for example `isset( $x ) or $x = ...` or `get_cache() or set_cache()`. Do not use `??` as a statement.
 - Pass-through wrappers stay on the opener line; the inner call whose arguments exceed 30 characters starts on the next line. After the coalesce or ternary break, a remaining single nested call may stay compact, for example `?? Query\Cache::memo( self::is_menu_page( Admin\Menu::get_page_hook_name() ) )`.
 - Keep a coalesce of two wrappers on one line when the right-hand call is a single-argument pass-through, for example `memo() ?? memo( array_values(`.
-- When a `??` or `?:` expression wraps, the first operand requires its existing tabs plus 3 spaces, including after `=`, as a function argument, or as the value of a `return`. Requires `??` or `?:` on the next line with those same existing tabs. Requires not using the tabs of the call that contains the expression. When that first operand is a call with multiple parameters, put each parameter on its own line, one tab deeper than that operand's keyword. Requires `??` or `?:` kept on the same tabs as that operand's keyword line. That operand requires no 3-space pad. Keep each later operand on one line.
 - A single-property array that is the only argument stays on the opener, for example `get_post_types( [ 'public' => true ] )`. That is not the multi-argument wrap trigger. If the only argument is a multi-property array, keep `fn( [` and wrap the properties.
 - Wrap a Boolean `&&` / `||` function argument so phpcs treats it as one argument.
-- Compact `if` / `elseif`: keep a void `return;`, `continue;`, or `break;` on the same line when that line is at most 80 columns (tab = 4). Put a `return` with a value on the next line, unbraced. If that compact void line exceeds 80, put the terminator on the next line, unbraced. Do not wrap a single expression (no `&&` / `||`) just to make room for the terminator. If an `&&` / `||` condition line exceeds 80, wrap at those operators (first operand padded by 3 spaces) and use braces. Do not wrap only the `return`.
-- After a function opening `{`, insert a blank line when the body has two or more statements. A single-statement body stays tight. A leading comment is not a statement: comment plus a single `return` or `yield` stays tight, comment on the first interior line. With two or more statements, the blank line comes first so that comment sits on the next interior line. Do not insert that blank after `if`, `elseif`, `else`, loop, `try`, or labeled `{` (`label: {`) braces.
-- A `return` or `yield` that ends that interior always has a blank line before it if that interior has two or more statements. Early `return` / `yield` inside `if` / `else` count: the blank is a visual split that this path ends there. A single-statement interior that is only a `return` or `yield` stays tight. Own-line comments immediately above that `return` or `yield` stay attached to it; the blank line goes before that comment group. Do not insert that blank before `continue` or `break`. After an early `return`, `continue`, or `break` guard, insert a blank line before the next sibling statement, including another guard.
 - Inside a function, isolate a required in-body docblock from sibling statements: a blank line before the docblock and a blank line after the statement it documents. Keep the docblock glued to that expression. Consecutive documented units share one blank between them. The function-opening blank already counts as the before-blank. Do not add a blank before `}`. This is for WordPress hook documentation on sibling `do_action`, `apply_filters`, `do_action_ref_array`, `apply_filters_ref_array`, `do_action_deprecated`, and `apply_filters_deprecated`. Glue the docblock to that call. An `if` or `return` may carry the doc when that hook is the entire condition or the returned expression. If the hook is an operand of a compound `if`, keep that one `if` (cheap tests first so the hook still short-circuits). Put the doc immediately above the call, grouping the call in parentheses when `!` or a line-start `&&` / `||` would otherwise sit between the doc and the call. Do not split the `if` into extra guards to isolate the doc. It is not for undocumented hook calls. It is not for a hook doc that annotates a function argument: glue that docblock to that argument; argument wrap already isolates it. It is not for `/* translators: */`, which stays immediately above the gettext call, including when that string is an argument. It is not for other interior `/**` (closure parameter docs, explanatory comments).
 - When outside global namespace:
 	1. Namespace-escape only these native PHP functions: `strlen`, `is_null`, `is_bool`, `is_long`, `is_int`, `is_integer`, `is_float`, `is_double`, `is_string`, `is_array`, `is_object`, `is_resource`, `is_scalar`, `boolval`, `intval`, `floatval`, `doubleval`, `strval`, `defined`, `chr`, `ord`, `call_user_func_array`, `call_user_func`, `in_array`, `count`, `sizeof`, `get_class`, `get_called_class`, `gettype`, `func_num_args`, `func_get_args`, `array_slice`, `array_key_exists`, `sprintf`, `constant`, `function_exists`, `is_callable`, `extension_loaded`, `dirname`, `define`.
@@ -64,3 +57,8 @@ applyTo: "**/*.php"
 - Use double quotes for HTML attribute values.
 - Do not self-close void elements.
 - Do not use quote marks on literal string attribute values unless necessary.
+
+## PHPDoc
+
+- Keep implementation details and isolated helper measurements in the relevant PHPDoc. Omit PHP version numbers from benchmark prose.
+- For docblock-only PHP edits, run PHP lint and compare executable tokens before and after the edit.

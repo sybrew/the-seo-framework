@@ -45,9 +45,9 @@ Override paths with `BABEL_TSF_DIR` and `CLEANCSS_TSF_DIR` only when the user se
 From the repo root:
 
 ```powershell
-node .cursor/skills/minify/scripts/minify.js --js
-node .cursor/skills/minify/scripts/minify.js --css
-node .cursor/skills/minify/scripts/minify.js
+node .claude/skills/minify/scripts/minify.js --js
+node .claude/skills/minify/scripts/minify.js --css
+node .claude/skills/minify/scripts/minify.js
 ```
 
 `--js` and `--css` limit the run. No flags minifies both.

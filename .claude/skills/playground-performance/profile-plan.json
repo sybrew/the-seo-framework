@@ -1,0 +1,14 @@
+{
+	"wp": "7.1.3",
+	"php": "8.3",
+	"warmups": 3,
+	"profiles": 1,
+	"scenarios": [ "home-blog", "home-static", "blog-page", "post", "page" ],
+	"plugin": {
+		"slug": "autodescription",
+		"path": ".",
+		"mainFile": "autodescription.php",
+		"frontContains": [ "The SEO Framework" ],
+		"mounts": [ "autodescription.php", "index.php", "bootstrap", "inc", "lib", "language", "readme.txt", "wpml-config.xml", "license.txt" ]
+	}
+}

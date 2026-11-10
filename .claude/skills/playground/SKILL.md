@@ -58,24 +58,24 @@ Public source of truth:
 
 If permission is `True` and `run.js` is missing, clone that repo and run `npm install` in it. Do not copy the engine from elsewhere; clone the public repo above.
 
-Override the path with `WP_PLUGIN_REGRESSION_DIR` only when the user sets it (local engine clone, e.g. `C:\GitHub\wp-plugin-regression`).
+Override the path with `WP_PLUGIN_REGRESSION_DIR` only when the user supplies an existing engine location. Keep workstation-specific values in the local environment or ignored configuration, never in this public skill.
 
 ## Command
 
 From the repo root:
 
 ```
-node .cursor/skills/playground/scripts/playground.js launch
-node .cursor/skills/playground/scripts/playground.js launch --pair
-node .cursor/skills/playground/scripts/playground.js stop
-node .cursor/skills/playground/scripts/playground.js stop --port=9001
-node .cursor/skills/playground/scripts/playground.js stop --all
-node .cursor/skills/playground/scripts/playground.js capture --label before
-node .cursor/skills/playground/scripts/playground.js capture --label after --feature=title
-node .cursor/skills/playground/scripts/playground.js compare --before before --after after --feature=title
-node .cursor/skills/playground/scripts/playground.js surfaces
-node .cursor/skills/playground/scripts/playground.js harness --action ping
-node .cursor/skills/playground/scripts/playground.js harness --json-file .local/playground/payload.json
+node .claude/skills/playground/scripts/playground.js launch
+node .claude/skills/playground/scripts/playground.js launch --pair
+node .claude/skills/playground/scripts/playground.js stop
+node .claude/skills/playground/scripts/playground.js stop --port=9001
+node .claude/skills/playground/scripts/playground.js stop --all
+node .claude/skills/playground/scripts/playground.js capture --label before
+node .claude/skills/playground/scripts/playground.js capture --label after --feature=title
+node .claude/skills/playground/scripts/playground.js compare --before before --after after --feature=title
+node .claude/skills/playground/scripts/playground.js surfaces
+node .claude/skills/playground/scripts/playground.js harness --action ping
+node .claude/skills/playground/scripts/playground.js harness --json-file .local/playground/payload.json
 ```
 
 Optional launch flags: `--wp=latest`, `--php=8.3`, `--site=default`, `--plugin=working|wporg`, `--port`, `--port-before`, `--port-after`, `--pair`, `--keep`, `--workers=<n|auto>`, `--extra-plugin-zip=<path>`. Launch picks the next free port in `9001`–`9099`. `--pair` picks the next two consecutive ports (`before` / `after`). Pin with `--port` or `--port-before` / `--port-after`. `--keep` reuses persist instead of wiping. `--workers` defaults to `max(6, os.cpus().length - 1)`. `--extra-plugin-zip` is repeatable. Extracts land in `~/.wordpress-playground/extra-plugins/`, never under this repo. Use `WP_PLUGIN_REGRESSION_DIR` when the engine clone that has this flag is not the `.local` checkout.
@@ -108,7 +108,7 @@ Same `--feature` (or `--types`) on both captures. `surfaces` first. Do not git c
 
 Front-end SEO A/B is HTTP `capture` / `compare`. Admin SEO UI, settings, and REST-from-the-browser A/B is Playwright MCP against the live Playground URL after `launch`. The engine does not drive a browser. `playwright.env` in Cursor settings is the Test extension, not the agent. Cursor’s built-in Browser Automation conflicts with Playwright MCP; use the MCP. Default captures stay logged-out.
 
-Playwright MCP must load `.cursor/skills/playground/playwright.mcp.json` (`--config` in `%USERPROFILE%\.cursor\mcp.json`). That file strips Chrome's `--disable-blink-features=AutomationControlled` flag and sends `X-TSF-Playground-Admin: 1`. For admin/REST, navigate to the live origin from launch or `runs.json` (`http://127.0.0.1:<port>/wp-admin/` or `/wp-json/`). Do not fill `admin` / `password` — Cursor Auto-review blocks that. `tsf-playwright-admin.php` calls `wp_set_auth_cookie()` when the header is present. That is the login. Do not add `.cursor/permissions.json`. Do not pass Playground `--login` or a blueprint `login` step (HTTP capture would share that session). Front-end HTML stays logged-out. Restart the Playwright MCP server after changing `mcp.json` or the config.
+Playwright MCP must load `.cursor/skills/playground/playwright.mcp.json` through `--config` in the MCP client's user configuration. Keep any client-required absolute path in that private configuration. The repository config strips Chrome's `--disable-blink-features=AutomationControlled` flag and sends `X-TSF-Playground-Admin: 1`. For admin/REST, navigate to the live origin from launch or `runs.json` (`http://127.0.0.1:<port>/wp-admin/` or `/wp-json/`). Do not fill `admin` / `password` — Cursor Auto-review blocks that. `tsf-playwright-admin.php` calls `wp_set_auth_cookie()` when the header is present. That is the login. Do not add `.cursor/permissions.json`. Do not pass Playground `--login` or a blueprint `login` step (HTTP capture would share that session). Front-end HTML stays logged-out. Restart the Playwright MCP server after changing the user configuration or repository config.
 
 Mutate the live site by writing mu-plugins under `~/.wordpress-playground/tests/autodescription/<version>/<site>/mu-plugins/`, or `harness --json-file <path>`. Do not pass `--json "{...}"` from PowerShell; it strips the quotes. Do not add `eval`.
 

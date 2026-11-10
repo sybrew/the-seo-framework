@@ -7,7 +7,7 @@ description: >-
 ---
 # Trailing commas
 
-Source of truth: `.github/copilot-instructions.md` — trailing commas at the end of multiline object/array properties and function arguments when the language supports it.
+Source of truth: `.github/instructions/code-style.instructions.md` defines trailing commas at the end of multiline object/array properties and function arguments when the language supports it.
 
 ## PHP 7.4
 
@@ -73,8 +73,8 @@ function f( a, b ) {}    // yes — JS parameters may
 PHP only. Same command on Windows (PowerShell or cmd), macOS, and Linux. PHP 7.4+ on `PATH`. Reports; does not rewrite.
 
 ```
-php .cursor/skills/trailing-comma/scripts/find-missing.php path/to/file.php
-php .cursor/skills/trailing-comma/scripts/find-missing.php inc
+php .claude/skills/trailing-comma/scripts/find-missing.php path/to/file.php
+php .claude/skills/trailing-comma/scripts/find-missing.php inc
 ```
 
 Output: `path:line: missing trailing comma before )` (or `]`). Line is the last argument. Exit 1 if any hit. A docblock or comment with a newline after `(` counts as multiline.

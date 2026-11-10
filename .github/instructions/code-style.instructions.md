@@ -1,0 +1,33 @@
+---
+description: "TSF formatting, wrapping, whitespace, and docblocks shared by PHP and JavaScript."
+applyTo: "**/*.php, **/*.js"
+---
+
+# PHP and JavaScript style
+
+- Interpolate variables in strings when possible.
+- Use single quotes for strings unless interpolating.
+- Align object and array key/value separators with spaces after the separator.
+- When creating an object or array with a single property, put that property on a single line.
+- When creating an object or array with a single property whose value contains an operator, put that property on a new line.
+- Place multiline operators at the start of new lines, including in conditional checks and coalescing. When a line must split, break at ternary or coalesce first (`??`, `? :`), then at the innermost remaining call. Do not use a call-count threshold; nested wrapper pipelines would trip it.
+- Keep a coalesce of two wrappers on one line when the right-hand call takes a single argument with no assignment, comparison, or logic operators and that argument continues below as a pass-through wrapper. Nested calls and pass-through wrappers do not count as extra arguments. Break before `??` when the right-hand call takes multiple arguments, when its own argument contains assignment, comparison, or logic operators, or when packing the coalescing expression on one line would nest further calls inside the wrapped value.
+- Put function arguments on a new line when they are over 30 characters in total.
+- Put multiple function arguments on new lines when any argument is an anonymous function, array, or object. A compact single-property array or object is not that trigger. If an array or object is the only argument and has multiple properties, keep the opener with the call and wrap the properties. If an array, object, or closure is one of multiple arguments, put every argument of that call on its own line.
+- Add trailing commas at the end of multiline object or array properties and function arguments if the language supports it.
+- Pad brackets and braces with spaces around arguments.
+- Align consecutive variable assignments at the equal signs.
+- Do not write inline comments that state the obvious.
+- Add a short inline comment next to or above magic numbers.
+- Write detailed docblocks for all functions, classes, and methods.
+- Dynamic array docblock: braces name the loop key only. Pattern: `foreach ( $items as $link => $data )` documents `{$link}`, never `{$data}`. `for ( const id in rows )` documents `{id}`, never `{$id}`. Use the names in the code, not these pattern names. A quoted key `'archive'` stays `$archive`. Every dynamic key requires one tag whose name is the parameter or return that holds the array, not the loop key: "@example $items `[ 'https://example.com/' => [ 'priority' => 1 ] ]`" or "@example rows `{ home: {} }`". Place that tag with `@since` / `@deprecated` / `@see`, before `@param` / `@return` / `@yield`. Backticks sit on that tag and hold one real entry shaped like the array. When the value has known keys: `@type array {$link} {` then `@type` lines for those real keys. JSDoc also writes `@property {Object} rows.{id}`.
+- After a function opening `{`, insert a blank line when the body has two or more statements. A single-statement body stays tight. A leading comment is not a statement: comment plus a single `return` or `yield` stays tight, comment on the first interior line. With two or more statements, the blank line comes first so that comment sits on the next interior line. Do not insert that blank after `if`, `elseif`, `else`, loop, `try`, or labeled `{` (`label: {`) braces.
+- A `return` or `yield` that ends that interior always has a blank line before it if that interior has two or more statements. Early `return` / `yield` inside `if` / `else` count: the blank is a visual split that this path ends there. A single-statement interior that is only a `return` or `yield` stays tight. Own-line comments immediately above that `return` or `yield` stay attached to it; the blank line goes before that comment group. Do not insert that blank before `continue` or `break`. After an early `return`, `continue`, or `break` guard, insert a blank line before the next sibling statement, including another guard.
+- Continuation indent is one tab. A wrapped `??` or `?:` requires the first operand's existing tabs plus 3 spaces, including after `=`, as a function argument, or as the value of a `return`. Requires `??` or `?:` on the next line with those same existing tabs. Requires not using the tabs of the call that contains the expression. When that first operand is a call with multiple parameters, put each parameter on its own line, one tab deeper than that operand's keyword. Requires `??` or `?:` kept on the same tabs as that operand's keyword line. That operand requires no 3-space pad. Keep each later operand on one line. A `return` line requires no pad.
+- When a ternary or coalesce branch is a complex `&&` / `||` chain, wrap that branch in parentheses. Pad the first operand by 3 spaces so the operators align at the start of continuation lines. Use the same wrapping when that Boolean is a function argument, so the linter treats it as one argument. When there is an operator in an argument of a multi-argument call, split all arguments into separate lines. A single Boolean or coalesce argument may stay on the opener if it fits.
+- Use braces with branching control structures when the condition is multiline, when the body has more than one statement, or when the structure has a paired `else`, `elseif` / `else if`, or `do`/`while`. Keep `{` on the closing `)` line.
+- Do not use braces when the condition is one line, the body is a single statement, and the structure has no paired `else`, `elseif` / `else if`, or `do`/`while`. Wrapping that statement across lines does not require braces.
+- Compact `if` / `elseif` / `else if`: keep a void `return;`, `continue;`, or `break;` on the same line when that line is at most 80 columns (tab = 4). Put a `return` with a value on the next line, unbraced.
+- If that compact void line exceeds 80, put the terminator on the next line, unbraced. Do not wrap a single expression (no `&&` / `||`) just to make room for the terminator.
+- If an `&&` / `||` condition line exceeds 80, wrap at those operators (first operand padded by 3 spaces) and use braces. Do not wrap only the `return`.
+- Coalesce two control structures when the first contains only the second, for example `} else foreach {` or `} else for {`.

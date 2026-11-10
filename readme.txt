@@ -397,7 +397,7 @@ We also built and published open-source tools:
 * [wp-plugin-regression](https://github.com/theseoframework/wp-plugin-regression) runs WordPress Playground sites and compares plugin output before and after changes.
 * [makepot-tsf](https://github.com/theseoframework/makepot-tsf) generates translation templates using WP-CLI's internationalization tools, without requiring a WordPress installation.
 
-We published the accompanying AI workflows for [regression testing](https://github.com/sybrew/the-seo-framework/tree/master/.cursor/skills/playground) and [translation template generation](https://github.com/sybrew/the-seo-framework/tree/master/.cursor/skills/makepot), too. Our expanded [coding instructions](https://github.com/sybrew/the-seo-framework/tree/master/.github/instructions) guide AI assistants toward the conventions we use throughout TSF.
+We published the accompanying AI workflows for [regression testing](https://github.com/sybrew/the-seo-framework/tree/master/.claude/skills/playground) and [translation template generation](https://github.com/sybrew/the-seo-framework/tree/master/.claude/skills/makepot), too. Our expanded [coding instructions](https://github.com/sybrew/the-seo-framework/tree/master/.github/instructions) guide AI assistants toward the conventions we use throughout TSF.
 
 We can now build features we previously considered too costly to maintain. Bricks description generation and TranslatePress sitemap support are two results. There's a lot more to come.
 

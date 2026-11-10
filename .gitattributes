@@ -25,12 +25,16 @@
 *.woff2 binary
 
 # GitHub baggage for development.
+.claude export-ignore
 .cursor export-ignore
 .cursorignore export-ignore
 .editorconfig export-ignore
 .gitattributes export-ignore
 .github export-ignore
 .gitignore export-ignore
+.vscode export-ignore
+AGENTS.md export-ignore
+AGENTS.override.md export-ignore
 README.md export-ignore
 
 # Our baggage for development.

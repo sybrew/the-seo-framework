@@ -10,7 +10,7 @@ description: >-
 
 Do not guess column counts. Tabs are 1 character in editors and in `.length`. House width is **tab = 4**.
 
-Source of truth: `.github/copilot-instructions.md`, `.github/instructions/php.instructions.md`, and `.github/instructions/javascript.instructions.md`. This skill only stops misreads.
+Source of truth: `.github/instructions/code-style.instructions.md`, `.github/instructions/php.instructions.md`, and `.github/instructions/javascript.instructions.md`. This skill only stops misreads.
 
 Width measurement works on any text. `--compact-if` is the 80-column void `if` / `elseif` / `else if` terminator.
 
@@ -19,9 +19,9 @@ Width measurement works on any text. `--compact-if` is the 80-column void `if` /
 From the repo root. Same command on Windows (PowerShell or cmd), macOS, and Linux:
 
 ```
-php .cursor/skills/wrap/scripts/visual-width.php path/to/file.php
-php .cursor/skills/wrap/scripts/visual-width.php --line 85 path/to/file.php
-php .cursor/skills/wrap/scripts/visual-width.php --compact-if --gt 80 path/to/file.php
+php .claude/skills/wrap/scripts/visual-width.php path/to/file.php
+php .claude/skills/wrap/scripts/visual-width.php --line 85 path/to/file.php
+php .claude/skills/wrap/scripts/visual-width.php --compact-if --gt 80 path/to/file.php
 ```
 
 `--line N` one 1-based line. `--gt N` only lines wider than N. `--compact-if` only same-line void `if` / `elseif` / `else if ( … ) return;` / `continue;` / `break;`. Output is `path:line:width`. Files only; directories are not scanned.
@@ -31,13 +31,13 @@ Pipe a snippet:
 Windows PowerShell:
 
 ```
-"if ( ! `$x ) return;" | php .cursor/skills/wrap/scripts/visual-width.php
+"if ( ! `$x ) return;" | php .claude/skills/wrap/scripts/visual-width.php
 ```
 
 macOS / Linux:
 
 ```
-printf '%s\n' 'if ( ! $x ) return;' | php .cursor/skills/wrap/scripts/visual-width.php
+printf '%s\n' 'if ( ! $x ) return;' | php .claude/skills/wrap/scripts/visual-width.php
 ```
 
 PHP 7.4+ on `PATH`. If `php` is missing, say so and do not invent a width.

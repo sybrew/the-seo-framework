@@ -2,10 +2,10 @@
 	"slug": "autodescription",
 	"wporgSlug": "autodescription",
 	"mainFile": "autodescription.php",
-	"shim": ".cursor/skills/playground/mu-plugin/tsf-option-shim.php",
+	"shim": ".claude/skills/playground/mu-plugin/tsf-option-shim.php",
 	"shims": [
-		".cursor/skills/playground/mu-plugin/tsf-baseline-seed.php",
-		".cursor/skills/playground/mu-plugin/tsf-playwright-admin.php"
+		".claude/skills/playground/mu-plugin/tsf-baseline-seed.php",
+		".claude/skills/playground/mu-plugin/tsf-playwright-admin.php"
 	],
 	"mounts": [
 		"autodescription.php",
