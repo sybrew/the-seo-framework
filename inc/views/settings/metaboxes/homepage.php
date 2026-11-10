@@ -51,6 +51,7 @@ switch ( $instance ) :
 
 		if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
 			$_multilingual_warning = \esc_html__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' );
+
 			if ( $home_id ) {
 				$_multilingual_warning .= '<br>' . Markdown::convert(
 					\sprintf(
@@ -597,6 +598,7 @@ switch ( $instance ) :
 		<?php
 
 		$checked_home = '';
+
 		/**
 		 * Shows user that the setting is set on the homepage.
 		 * Adds starting - with space to maintain readability.

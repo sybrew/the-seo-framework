@@ -176,6 +176,7 @@ class HTML {
 		}
 
 		$parse = umemo( __METHOD__ . '/parse', null, $args['space'], $args['clear'] );
+
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
 		if ( ! $parse ) {
 			// Void elements never have content. 'param', 'source', 'track',

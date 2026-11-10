@@ -99,6 +99,7 @@ class Factory {
 			case 'noarchive':
 				foreach ( static::assert_no( $sender ) as $key => $value ) {
 					yield $key => $value;
+
 					if ( $value ) {
 						yield static::HALT;
 						break;

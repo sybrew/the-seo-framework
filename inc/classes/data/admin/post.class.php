@@ -131,6 +131,7 @@ final class Post {
 		if ( ! \current_user_can( 'edit_post', $post_id ) ) return;
 
 		$post_type = \get_post_type( $post_id );
+
 		// Can this even fail?
 		if ( empty( $post_type ) ) return;
 
@@ -327,6 +328,7 @@ final class Post {
 		if ( ! \current_user_can( 'edit_post', $post_id ) ) return;
 
 		static $verified_referer = false;
+
 		// Memoize the referer check--if it passes (and doesn't exit/die PHP), we're good to execute subsequently.
 		if ( ! $verified_referer ) {
 			\check_admin_referer( 'bulk-posts' );

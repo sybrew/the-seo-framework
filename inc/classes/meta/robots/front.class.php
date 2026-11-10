@@ -146,6 +146,7 @@ final class Front extends Factory {
 			} elseif ( Query::is_archive() || Query::is_singular_archive() ) {
 				yield from static::assert_noindex_query_pass( 'paged' ); // static: allow overrides
 			}
+
 			if ( Query::is_singular() ) {
 				yield from static::assert_noindex_query_pass( 'protected' ); // static: allow overrides
 

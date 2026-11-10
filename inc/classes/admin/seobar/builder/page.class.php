@@ -748,6 +748,7 @@ final class Page extends Main {
 			$canonical = Meta\URI::get_canonical_url( [
 				'id' => static::$query['id'],
 			] );
+
 			if ( $permalink !== $canonical ) {
 				$item['status'] = Builder::STATE_UNKNOWN;
 				$item['reason'] = $cache['reason']['canonicalurl'];

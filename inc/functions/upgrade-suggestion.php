@@ -69,6 +69,7 @@ function _prepare( $previous_version, $current_version ) {
 	// 0
 	// phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- might be mixed types.
 	if ( $previous_version == $current_version ) return;
+
 	// 1
 	if (
 		   \defined( 'TSF_DISABLE_SUGGESTIONS' )
@@ -76,13 +77,16 @@ function _prepare( $previous_version, $current_version ) {
 	) {
 		return;
 	}
+
 	// 2
 	if ( ! \is_main_site() ) return;
 
 	$show_notification = true;
+
 	if ( \function_exists( 'tsf_extension_manager' ) && method_exists( \tsf_extension_manager(), 'is_connected_user' ) ) {
 		$show_notification = ! \tsf_extension_manager()->is_connected_user();
 	}
+
 	if ( $show_notification ) {
 		// _suggest_temp_sale( $previous_version, $current_version );
 		// phpcs:ignore TSF.Performance.Opcodes.ShouldHaveNamespaceEscape

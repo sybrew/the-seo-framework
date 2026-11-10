@@ -661,6 +661,7 @@ final class Term extends Main {
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
 			$_post_type_noindex_set[] = ! empty( $robots_global['posttype']['noindex'][ $_post_type ] );
 		}
+
 		if ( ! \in_array( false, $_post_type_noindex_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
@@ -689,6 +690,7 @@ final class Term extends Main {
 				'id'  => static::$query['id'],
 				'tax' => static::$query['tax'],
 			] );
+
 			if ( $permalink !== $canonical ) {
 				$item['status'] = Builder::STATE_UNKNOWN;
 				$item['reason'] = $cache['reason']['canonicalurl'];
@@ -814,6 +816,7 @@ final class Term extends Main {
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
 			$_post_type_nofollow_set[] = ! empty( $robots_global['posttype']['nofollow'][ $_post_type ] );
 		}
+
 		if ( ! \in_array( false, $_post_type_nofollow_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];
@@ -941,6 +944,7 @@ final class Term extends Main {
 		foreach ( $this->query_cache['states']['posttypes'] as $_post_type ) {
 			$_post_type_noarchive_set[] = ! empty( $robots_global['posttype']['noarchive'][ $_post_type ] );
 		}
+
 		if ( ! \in_array( false, $_post_type_noarchive_set, true ) ) {
 			// Status is already set.
 			$item['assess']['posttypes'] = $cache['assess']['posttypes'];

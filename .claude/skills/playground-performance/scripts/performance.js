@@ -19,6 +19,7 @@ function allowedPath( file ) {
 
 	const absolute = path.resolve( file );
 	const forbidden = /(?:^|[\\/])\.local[\\/]\.cursor(?:[\\/]|$)/i;
+
 	if ( forbidden.test( absolute ) )
 		throw new Error( 'The private Cursor directory is outside this workflow.' );
 
@@ -40,10 +41,12 @@ function allowedPath( file ) {
 function readPermission() {
 
 	const file = allowedPath( path.join( ROOT, '.local/playground/permission.txt' ) );
+
 	if ( ! fs.existsSync( file ) )
 		throw new Error( 'Missing .local/playground/permission.txt. Ask the user for PLAYGROUND=True|False before installing or launching.' );
 
 	const text = fs.readFileSync( file, 'utf8' ).trim();
+
 	if ( ! [ 'PLAYGROUND=True', 'PLAYGROUND=False' ].includes( text ) )
 		throw new Error( 'permission.txt must contain exactly PLAYGROUND=True or PLAYGROUND=False.' );
 
@@ -63,6 +66,7 @@ function engineDirectory() {
 		ROOT,
 		process.env.WP_PLUGIN_PERFORMANCE_DIR || settings.directory || '.local/playground/wp-plugin-performance',
 	) );
+
 	if ( ! fs.existsSync( path.join( directory, 'run.js' ) ) )
 		throw new Error( `wp-plugin-performance is missing at ${directory}. Follow the skill's permission and installation steps.` );
 
@@ -82,6 +86,7 @@ function main( argv = process.argv.slice( 2 ) ) {
 		return;
 	}
 	const offline = [ 'hotspots', 'prune', 'report', 'export', 'doctor', 'test' ].includes( argv[0] );
+
 	if ( ! offline && ! readPermission() ) {
 		console.log( 'Performance tests skipped (PLAYGROUND=False).' );
 
@@ -91,6 +96,7 @@ function main( argv = process.argv.slice( 2 ) ) {
 	const command = args[0].startsWith( '--' ) ? 'run' : args[0];
 	const hasConfig = args.some( item => '--config' === item || item.startsWith( '--config=' ) );
 	const hasSession = args.some( item => '--session' === item || item.startsWith( '--session=' ) );
+
 	if ( [ 'profile', 'run', 'prepare' ].includes( command ) && ! hasConfig && ! hasSession ) {
 		const plan = 'profile' === command ? '../profile-plan.json' : '../plan.json';
 		args.push(
@@ -106,6 +112,7 @@ function main( argv = process.argv.slice( 2 ) ) {
 		[ path.join( directory, 'run.js' ), ...args ],
 		{ cwd: directory, stdio: 'inherit', windowsHide: true },
 	);
+
 	if ( child.error ) throw child.error;
 
 	if ( child.signal ) throw new Error( `Performance engine terminated by ${child.signal}.` );

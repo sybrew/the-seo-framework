@@ -359,6 +359,7 @@ class Image {
 						'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
 						'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
 					];
+
 					if ( ! $details['url'] ) {
 						$details = [
 							'url' => Data\Plugin\Post::get_meta_item( '_social_image_url' ),
@@ -533,6 +534,7 @@ class Image {
 						$cbs = [
 							'featured' => [ $generator, 'generate_featured_image_details' ],
 						];
+
 						if ( 'social' === $context ) {
 							$cbs['content'] = [ $generator, 'generate_content_image_details' ];
 						}

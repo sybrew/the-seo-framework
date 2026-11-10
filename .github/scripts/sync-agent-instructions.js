@@ -30,6 +30,7 @@ function read( file ) {
 function document( file ) {
 
 	const parsed = /^---\n([\s\S]+?)\n---\n([\s\S]*)$/.exec( read( file ) );
+
 	if ( ! parsed || ! parsed[2].trim() )
 		throw new Error( `Missing frontmatter or body in ${file}` );
 
@@ -46,9 +47,11 @@ function document( file ) {
 function field( source, key ) {
 
 	const match = new RegExp( `^${key}: ([^\\n]+)((?:\\n[ \\t]+[^\\n]+)*)`, 'm' ).exec( source.metadata );
+
 	if ( ! match ) return;
 
 	const [ , value, continuation ] = match;
+
 	if ( value === '>-' && continuation )
 		return continuation.trim().split( /\n[ \t]+/ ).join( ' ' );
 
@@ -77,6 +80,7 @@ function outputs() {
 		const rule = document( `${SCOPES}/${entry}` );
 		const desc = field( rule, 'description' );
 		const globs = field( rule, 'applyTo' )?.split( ',' ).map( glob => glob.trim() );
+
 		if ( ! desc || ! globs?.length || globs.some( glob => ! glob ) )
 			throw new Error( `Expected description and file patterns in ${rule.file}` );
 
@@ -99,6 +103,7 @@ function outputs() {
 
 		const skill = document( file );
 		const desc  = field( skill, 'description' );
+
 		if ( field( skill, 'name' ) !== name || ! desc )
 			throw new Error( `Expected matching skill name and description in ${file}` );
 
@@ -132,6 +137,7 @@ function staleRules( files ) {
 
 		for ( const entry of fs.readdirSync( full, { withFileTypes: true } ) ) {
 			const relative = `${directory}/${entry.name}`;
+
 			if ( entry.isFile() && /\.mdc?$/.test( entry.name ) && ! files.has( relative )
 				&& read( relative ).startsWith( `---\n# ${NOTICE}\n` )
 			) stale.push( relative );
@@ -149,11 +155,13 @@ function staleRules( files ) {
 function main( args ) {
 
 	const [ mode = '--check' ] = args;
+
 	if ( args.length > 1 || ! [ '--check', '--write' ].includes( mode ) )
 		throw new Error( 'Usage: node .github/scripts/sync-agent-instructions.js [--check|--write]' );
 
 	const files = outputs();
 	const stale = staleRules( files );
+
 	if ( stale.length )
 		throw new Error( `Remove stale generated rules:\n${stale.join( '\n' )}` );
 
@@ -163,11 +171,13 @@ function main( args ) {
 		if ( fs.existsSync( full ) && fs.readFileSync( full, 'utf8' ) === expected ) continue;
 
 		changed.push( file );
+
 		if ( mode === '--write' ) {
 			fs.mkdirSync( path.dirname( full ), { recursive: true } );
 			fs.writeFileSync( full, expected, 'utf8' );
 		}
 	}
+
 	if ( mode === '--check' && changed.length )
 		throw new Error( `Generated instructions need --write:\n${changed.join( '\n' )}` );
 

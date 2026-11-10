@@ -178,6 +178,7 @@ class Cache {
 		// Backtrace debugging, just once per request.
 		$depth = 10;
 		static $_more = true;
+
 		if ( $_more ) {
 			error_log( var_export( debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
 			$_more = false;

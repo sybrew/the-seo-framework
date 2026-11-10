@@ -539,6 +539,7 @@ class Sanitize {
 			// Don't "ai"-trim if under, it's unlikely to always be a sentence. Trim to 417 to account for plausibly appended "...".
 			$alt = \strlen( $alt ) > 420 ? Strings::clamp_sentence( $alt, 0, 417 ) : $alt;
 		}
+
 		if ( $caption ) {
 			$caption = \wp_strip_all_tags( $caption, true );
 		}

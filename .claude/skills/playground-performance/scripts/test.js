@@ -60,6 +60,7 @@ function main( engine ) {
 				env: { ...process.env, WP_PLUGIN_PERFORMANCE_DIR: '', WP_PLUGIN_PERFORMANCE_ROOT: '', WP_PLUGIN_REGRESSION_DIR: '' },
 			},
 		);
+
 		if ( result.error ) throw result.error;
 
 		return result;
@@ -98,6 +99,7 @@ function main( engine ) {
 			assert.equal( recorded[0], command );
 			assert.equal( recorded.includes( '--config' ), false );
 		}
+
 		if ( null === decision ) assert.equal( fs.existsSync( permission ), false );
 	}
 	fs.writeFileSync( permission, 'PLAYGROUND=True\n' );
@@ -125,6 +127,7 @@ function main( engine ) {
 
 		linkedConsumerSkip = error.code;
 	}
+
 	if ( ! linkedConsumerSkip ) {
 		const linked = forwarded(
 			[ 'profile' ],
