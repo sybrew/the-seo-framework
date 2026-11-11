@@ -486,11 +486,13 @@ class Utils {
 				}
 
 				$_query = parse_url( $url, \PHP_URL_QUERY );
+
 				// Remove queries, add them back later.
 				if ( $_query )
 					$url = strtok( $url, '?' );
 
 				$pos = strrpos( $url, $find );
+
 				// Defensive programming, only remove if $find matches the stack length, without query arguments.
 				if ( $pos && $pos + \strlen( $find ) === \strlen( $url ) ) {
 					$url = substr( $url, 0, $pos );

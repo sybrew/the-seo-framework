@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4.0
-Stable tag: 5.2.0
+Stable tag: 5.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -244,6 +244,22 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+### 5.2.1
+
+This update reduces the time TSF spends building the SEO Bar, preparing Quick Edit data, and cleaning up titles and descriptions. The character counter now responds to Space as well as Enter. We also fixed a PHP warning when determining the Twitter Card type for archives without editable SEO settings.
+
+In our benchmark, TSF adds 21% less time to the All Pages screen and 11.7% less to a static homepage. The estimated time TSF 5.2.1 adds to the median response time is under 1 ms on every public route we tested.
+
+* 0.7 ms for a single page.
+* 0.9 ms for a single post.
+* 0.6 ms for search results.
+* 0.6 ms for a blog homepage.
+* 0.7 ms for a static homepage.
+* 0.6 ms for a 404 page.
+* 0.4 ms for the site's main posts RSS feed.
+
+TSF is the first [full-featured sub-millisecond SEO plugin](https://theseoframework.com/?p=4692#detailed).
+
 ### 5.2.0 - Complete
 
 *Pray take care, Glaucon, that your daring ambition doesn't lead to a fall! Don't you see how risky it is to say or do what you don't understand? - [Xenophon](https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0208:book=3)*
@@ -361,7 +377,7 @@ We also built and published open-source tools:
 * [wp-plugin-regression](https://github.com/theseoframework/wp-plugin-regression) runs WordPress Playground sites and compares plugin output before and after changes.
 * [makepot-tsf](https://github.com/theseoframework/makepot-tsf) generates translation templates using WP-CLI's internationalization tools, without requiring a WordPress installation.
 
-We published the accompanying AI workflows for [regression testing](https://github.com/sybrew/the-seo-framework/tree/master/.cursor/skills/playground) and [translation template generation](https://github.com/sybrew/the-seo-framework/tree/master/.cursor/skills/makepot), too. Our expanded [coding instructions](https://github.com/sybrew/the-seo-framework/tree/master/.github/instructions) guide AI assistants toward the conventions we use throughout TSF.
+We published the accompanying AI workflows for [regression testing](https://github.com/sybrew/the-seo-framework/tree/master/.claude/skills/playground) and [translation template generation](https://github.com/sybrew/the-seo-framework/tree/master/.claude/skills/makepot), too. Our expanded [coding instructions](https://github.com/sybrew/the-seo-framework/tree/master/.github/instructions) guide AI assistants toward the conventions we use throughout TSF.
 
 We can now build features we previously considered too costly to maintain. Bricks description generation and TranslatePress sitemap support are two results. There's a lot more to come.
 

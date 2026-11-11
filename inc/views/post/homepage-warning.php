@@ -35,6 +35,7 @@ namespace The_SEO_Framework;
 				<span>
 					<?php
 					\esc_html_e( 'The fields below may be overwritten by the Homepage Settings found on the SEO Settings page.', 'autodescription' );
+
 					if ( \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) )
 						printf(
 							' &mdash; <a href="%s" target=_blank>%s</a>',

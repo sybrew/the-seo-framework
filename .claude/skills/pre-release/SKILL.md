@@ -12,7 +12,9 @@ description: >-
 
 Run when cutting a release, or when the user asks for this checklist. Do not strip `-dev` or move `Stable tag` during ordinary development.
 
-Follow the playground skill for launch, capture, compare, and Playwright. Follow the copyright, minify, and makepot skills for those steps. Do not tag, commit, or push.
+Follow the [Playground](../playground/SKILL.md), [copyright](../copyright/SKILL.md), [minify](../minify/SKILL.md), and [Makepot](../makepot/SKILL.md) skills for their respective checks. Do not tag, commit, or push.
+
+For an explicit release benchmark or timing revalidation request, select the matching [workspace instructions](../../../.github/instructions/local.instructions.md#load-local-instruction-files). Use verified archived evidence for drafting.
 
 ## Version headers
 
@@ -45,11 +47,15 @@ Capture both labels with no `--feature` and no `--types`. That walks every `plug
 
 Read this version's changelog section. List every checkbox, select, radio, or field it names. Skip bullets that name no control.
 
-On the after site, use the playground skill's Playwright path. Do not type a password.
+On the after site, use the [Playground skill's Playwright path](../playground/SKILL.md). Do not type a password.
 
 Open `wp-admin/admin.php?page=theseoframework-settings`, or the post, term, or user screen the changelog names. Flick each control to the value the changelog describes, save, and confirm the effect. Use `capture --paths` when the effect is front-end output. Flick it back when a later check needs the default.
 
 A control you cannot find is a failed item. If Playwright is not connected, say so. Do not claim the controls were flicked.
+
+## Translation template
+
+Run the [Makepot skill](../makepot/SKILL.md) last, after the release header and Stable tag are final and the other checks are complete. Compare the generated message strings with the previous template and verify the template header uses the release version.
 
 ## Report
 

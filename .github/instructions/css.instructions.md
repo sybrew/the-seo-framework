@@ -1,5 +1,5 @@
 ---
-description: "Use when editing CSS files in this repository. Covers TSF stylesheet conventions and layout-debugging expectations."
+description: "TSF stylesheet conventions, layout debugging, and minification after source edits."
 applyTo: "**/*.css"
 ---
 
@@ -9,4 +9,4 @@ applyTo: "**/*.css"
 - Use lowercase hex colors.
 - Remove the zero before decimal points.
 - Close the last property with a semicolon.
-- Do not create, edit, read, grep, search, or `git diff` `*.min.js` or `*.min.css`, including after minify exit code 0.
+- After editing unminified `lib/css` sources, follow the [minify skill](../../.claude/skills/minify/SKILL.md) using the recorded CSS permission.

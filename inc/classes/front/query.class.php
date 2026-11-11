@@ -281,6 +281,7 @@ final class Query {
 
 		if ( \wp_is_serving_rest_request() ) {
 			$referer = \wp_get_referer();
+
 			if ( str_contains( $referer, 'post.php' ) || str_contains( $referer, 'post-new.php' ) ) {
 				/**
 				 * WordPress should've authenticated the user at

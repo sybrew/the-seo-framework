@@ -50,10 +50,13 @@ class Cache {
 	 * Memoizes queries.
 	 * Should not be used on methods that aren't final.
 	 *
+	 * Requires a caller frame. The caller's function name identifies the cache entry.
+	 *
 	 * The first parameter might not get retrieved in a later call, for this method
 	 * also tests whether the query is setup correctly at the time of the call.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.1 Now requires a caller frame.
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiate queries.
@@ -71,7 +74,10 @@ class Cache {
 		}
 
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions -- This is the only efficient way.
-		$caller = debug_backtrace( \DEBUG_BACKTRACE_IGNORE_ARGS, 2 )[1]['function'] ?? '';
+		$caller = debug_backtrace(
+			\DEBUG_BACKTRACE_IGNORE_ARGS,
+			2, // The current call and its caller.
+		)[1]['function'];
 
 		// We need not serialize the caller; waste of processing if we'd merge with $args.
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
@@ -175,6 +181,7 @@ class Cache {
 		// Backtrace debugging, just once per request.
 		$depth = 10;
 		static $_more = true;
+
 		if ( $_more ) {
 			error_log( var_export( debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
 			$_more = false;

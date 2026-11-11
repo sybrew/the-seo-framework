@@ -114,6 +114,7 @@ function _do_upgrade() {
 	$timeout = 5 * \MINUTE_IN_SECONDS; // Same as WP Core, function update_core().
 
 	$lock = _set_upgrade_lock( $timeout );
+
 	// Lock failed to create--probably because it was already locked (or the database failed us).
 	if ( ! $lock ) return;
 
@@ -125,6 +126,7 @@ function _do_upgrade() {
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
 	$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
+
 	if ( 0 !== $ini_max_execution_time && \function_exists( 'set_time_limit' ) )
 		set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
@@ -661,6 +663,7 @@ function _do_upgrade_2900() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
 		$card_type = trim( Data\Plugin::get_option( 'twitter_card' ) );
+
 		if ( 'photo' === $card_type ) {
 			Data\Plugin::update_option( 'twitter_card', 'summary_large_image' );
 			_add_upgrade_notice(
@@ -684,6 +687,7 @@ function _do_upgrade_3001() {
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
 		// Only show notice if old option exists. Falls back to default upgrader otherwise.
 		$sitemap_timestamps = Data\Plugin::get_option( 'sitemap_timestamps' );
+
 		if ( '' !== $sitemap_timestamps ) {
 			Data\Plugin::update_option( 'timestamps_format', (string) (int) $sitemap_timestamps );
 			_add_upgrade_notice(
@@ -772,6 +776,7 @@ function _do_upgrade_3300() {
 
 		// Flip the homepage title location to make it in line with all other titles.
 		$home_title_location = Data\Plugin::get_option( 'home_title_location' );
+
 		if ( 'left' === $home_title_location ) {
 			Data\Plugin::update_option( 'home_title_location', 'right' );
 		} else {
@@ -839,6 +844,7 @@ function _do_upgrade_4103() {
 
 			if ( $_category_option )
 				$_value['category'] = $_category_option;
+
 			if ( $_post_tag_option )
 				$_value['post_tag'] = $_post_tag_option;
 
@@ -908,6 +914,7 @@ function _do_upgrade_5001() {
 		);
 
 		$site_cache = \get_option( 'autodescription-updates-cache' ) ?: [];
+
 		if ( $site_cache ) {
 			// Try to use the options API as much as possible, instead of using $wpdb->update().
 			\update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache, true );

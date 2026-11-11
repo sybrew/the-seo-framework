@@ -1,10 +1,6 @@
 ---
-description: Private workspace guidance and gitignored .local search (Grep/Glob are blind)
+description: Cursor search behavior for gitignored workspace files
 alwaysApply: true
 ---
 
-Follow the local workspace rules in @.github/instructions/local.instructions.md when handling `.local/` content, support inquiries, or private workspace context.
-
-`.local/` is gitignored (`/.local/*`). `.cursorignore` `!.local/**` only helps indexing and @ mentions. Agent Grep and Glob still return zero results, even with an explicit `.local` path. Do not conclude the folder is empty. Use Read/Write with an explicit path, or Shell to list/search (`Get-ChildItem`, `Select-String`, `rg --no-ignore-vcs`).
-
-To load `.local/.instructions/*.instructions.md`, extract YAML frontmatter with the commands in that file, then Read only the matches. Do not Read every instruction file up front.
+Cursor's Grep and Glob can miss gitignored `.local/` files even with `!.local/**` in `.cursorignore`. Use Read or Write with an explicit path, or Shell (`Get-ChildItem`, `Select-String`, `rg --no-ignore-vcs`). Empty search results do not establish that a directory is empty.

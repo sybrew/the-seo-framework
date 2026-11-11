@@ -193,6 +193,7 @@ switch ( $instance ) :
 					<label for=autodescription_title_no_blogname>
 						<?php
 						$title_no_blogname_value = $meta['_tsf_title_no_blogname'];
+
 						if ( $is_static_front_page ) {
 							// Disable the input, and hide the previously stored value.
 							?>

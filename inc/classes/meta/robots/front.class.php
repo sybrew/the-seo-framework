@@ -71,8 +71,6 @@ final class Front extends Factory {
 		// We assert options here for a jump to meta_settings might be unaware.
 		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) { // static: allow overrides
 
-			$qubit = null;
-
 			if ( Query::is_editable_term() ) {
 				$qubit = (int) Data\Plugin\Term::get_meta_item( $type );
 			} elseif ( Query::is_singular() ) {
@@ -148,6 +146,7 @@ final class Front extends Factory {
 			} elseif ( Query::is_archive() || Query::is_singular_archive() ) {
 				yield from static::assert_noindex_query_pass( 'paged' ); // static: allow overrides
 			}
+
 			if ( Query::is_singular() ) {
 				yield from static::assert_noindex_query_pass( 'protected' ); // static: allow overrides
 

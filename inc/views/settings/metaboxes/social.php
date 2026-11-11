@@ -105,6 +105,7 @@ switch ( $instance ) :
 			] ),
 			true,
 		);
+
 		if ( $active_conflicting_plugins_types['open_graph'] )
 			HTML::attention_description( \__( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
@@ -127,6 +128,7 @@ switch ( $instance ) :
 			] ),
 			true,
 		);
+
 		if ( $active_conflicting_plugins_types['twitter_card'] )
 			HTML::attention_description( \__( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 

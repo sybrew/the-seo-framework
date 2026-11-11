@@ -18,7 +18,7 @@ Only tracked files with a commit since 1 January of the current year, or since `
 Dry run is the default. When the user asks to update, run `-Apply`.
 
 ```
-powershell -NoProfile -File .cursor/skills/copyright/scripts/update-copyright-year.ps1
-powershell -NoProfile -File .cursor/skills/copyright/scripts/update-copyright-year.ps1 -Apply
-powershell -NoProfile -File .cursor/skills/copyright/scripts/update-copyright-year.ps1 -SinceTag v5.1.0 -Apply
+powershell -NoProfile -File .claude/skills/copyright/scripts/update-copyright-year.ps1
+powershell -NoProfile -File .claude/skills/copyright/scripts/update-copyright-year.ps1 -Apply
+powershell -NoProfile -File .claude/skills/copyright/scripts/update-copyright-year.ps1 -SinceTag v5.1.0 -Apply
 ```

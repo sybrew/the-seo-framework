@@ -95,6 +95,7 @@ class Exclusion {
 
 		$join  = '';
 		$where = '';
+
 		if ( $supported_post_types !== $public_post_types ) {
 			// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
 			$post_type__in = "'" . implode( "','", array_map( 'esc_sql', $supported_post_types ) ) . "'";

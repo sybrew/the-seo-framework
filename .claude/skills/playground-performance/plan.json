@@ -1,0 +1,31 @@
+{
+	"wp": [ "7.1.3" ],
+	"php": [ "8.3" ],
+	"samples": 100,
+	"rounds": 1,
+	"warmups": 12,
+	"workers": 6,
+	"opcacheMode": "auto",
+	"scenarios": [ "home-blog", "home-static", "blog-page", "post", "page" ],
+	"baselineCandidate": "core",
+	"fastestCount": 1000,
+	"outlierReference": "median",
+	"outlierFraction": 0.8,
+	"candidates": [
+		{
+			"id": "core",
+			"baseline": true,
+			"slug": "autodescription",
+			"mainFile": "autodescription.php",
+			"path": ".",
+			"mounts": [ "autodescription.php", "index.php", "bootstrap", "inc", "lib", "language", "readme.txt", "wpml-config.xml", "license.txt" ]
+		},
+		{
+			"id": "tsf-working",
+			"slug": "autodescription",
+			"mainFile": "autodescription.php",
+			"path": ".",
+			"mounts": [ "autodescription.php", "index.php", "bootstrap", "inc", "lib", "language", "readme.txt", "wpml-config.xml", "license.txt" ]
+		}
+	]
+}

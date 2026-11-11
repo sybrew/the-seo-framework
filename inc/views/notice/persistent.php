@@ -45,18 +45,18 @@ switch ( $args['type'] ) {
 		$args['type'] = "notice-{$args['type']}";
 }
 
-$dismiss_title_i18n = \__( 'Dismiss this notice', 'default' );
+$dismiss_title_i18n = \__( 'Dismiss this notice.', 'default' );
 
 $nonce_action = Admin\Notice\Persistent::_get_dismiss_nonce_action( $sanitized_key );
 
 $button_js = \sprintf(
-	'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s" %s></a>',
-	\esc_attr( $dismiss_title_i18n ),
+	'<button type=button class="hide-if-no-tsf-js tsf-dismiss"%s><span class=screen-reader-text>%s</span></button>',
 	HTML::make_data_attributes( [
 		'key'   => $sanitized_key,
 		// Is this the best nonce key key? Capability validation already happened. See `output_dismissible_persistent_notices()`.
 		'nonce' => \wp_create_nonce( $nonce_action ),
 	] ),
+	\esc_html( $dismiss_title_i18n ),
 );
 // We'll display this button even if this notice no longer repeats. This aligns with the user's expectation and offers control.
 $button_nojs = vsprintf(
