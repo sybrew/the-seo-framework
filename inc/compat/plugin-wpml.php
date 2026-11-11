@@ -37,6 +37,8 @@ use The_SEO_Framework\{
  *                 when the sitemap base path is the unfiltered home.
  *              3. Now registers a non-advertised directory alias for the default language
  *                 when "Use directory for default language" is enabled.
+ * @since 5.2.1 Now uses the WPML URL code for directory endpoints.
+ * @link https://wpml.org/wpml-hook/wpml_language_codes_map/
  * @example $list `[ 'base' => [ 'endpoint' => 'sitemap.xml', 'robots' => true ] ]`
  * @param array[] $list {
  *     A list of sitemap endpoints keyed by ID.
@@ -105,11 +107,17 @@ function _wpml_register_sitemap_languages( $list ) {
 			$default         = $sitepress->get_default_language();
 			$dir_for_default = ! empty( $sitepress->get_setting( 'urls' )['directory_for_default_language'] );
 
-			foreach ( $language_codes as $language ) {
+			// WPML 5.0+ serves a language from its URL code, which may differ from its code.
+			$url_codes = \apply_filters(
+				'wpml_language_codes_map',
+				array_combine( $language_codes, $language_codes ),
+			);
+
+			foreach ( $url_codes as $language => $url_code ) {
 				// Skip when the default language has no directory (checkbox off).
 				if ( $language === $default && ! $dir_for_default ) continue;
 
-				$endpoint = "$language/{$list['base']['endpoint']}";
+				$endpoint = "$url_code/{$list['base']['endpoint']}";
 
 				$list[ "_base_wpml_$language" ] = [
 					'endpoint' => $endpoint,
