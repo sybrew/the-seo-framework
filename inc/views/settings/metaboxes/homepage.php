@@ -24,7 +24,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2016 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2016 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -51,6 +51,7 @@ switch ( $instance ) :
 
 		if ( Compatibility::get_active_conflicting_plugin_types()['multilingual'] ) {
 			$_multilingual_warning = \esc_html__( 'A multilingual plugin has been detected and text entered below may not be translated.', 'autodescription' );
+
 			if ( $home_id ) {
 				$_multilingual_warning .= '<br>' . Markdown::convert(
 					\sprintf(
@@ -128,7 +129,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p class=tsf-title-wrap>
-			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off>
+			<input type=text name="<?php Input::field_name( 'homepage_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title' ) ) ) ?>" autocomplete=off data-tsf-proposed="">
 			<?php
 			$post_meta_title = $home_id ? Sanitize::metadata_content( Data\Plugin\Post::get_meta_item( '_genesis_title', $home_id ) ) : '';
 
@@ -185,7 +186,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( 'homepage_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_description' ); ?>" rows=3 cols=70><?= \esc_attr( Data\Plugin::get_option( 'homepage_description' ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_description' ); ?>" rows=3 cols=70 data-tsf-proposed=""><?= \esc_attr( Data\Plugin::get_option( 'homepage_description' ) ) ?></textarea>
 			<?php
 			Input::output_js_description_data(
 				Input::get_field_id( 'homepage_description' ),
@@ -241,7 +242,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= \esc_html( Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ) ) ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title_tagline' ) ) ) ?>" autocomplete=off>
+			<input type=text name="<?php Input::field_name( 'homepage_title_tagline' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_title_tagline' ); ?>" placeholder="<?= \esc_html( Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ) ) ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_title_tagline' ) ) ) ?>" autocomplete=off data-tsf-proposed="<?= \esc_attr( Sanitize::metadata_content( Data\Blog::get_filtered_blog_description() ) ) ?>">
 		</p>
 
 		<div class=tsf-title-tagline-toggle>
@@ -379,7 +380,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_og_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle>
+			<input type=text name="<?php Input::field_name( 'homepage_og_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_og_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogTitle data-tsf-proposed="">
 		</p>
 		<?php
 		if ( \strlen( $custom_og_title ) ) {
@@ -402,7 +403,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( 'homepage_og_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc><?= \esc_attr( Data\Plugin::get_option( 'homepage_og_description' ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_og_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_og_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=ogDesc data-tsf-proposed=""><?= \esc_attr( Data\Plugin::get_option( 'homepage_og_description' ) ) ?></textarea>
 		</p>
 		<?php
 		if ( \strlen( $custom_og_desc ) ) {
@@ -415,7 +416,7 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'homepage_twitter_title' ); ?>" class=tsf-toblock>
-				<strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
+				<strong><?php \esc_html_e( 'Twitter Card Title', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
@@ -426,7 +427,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle>
+			<input type=text name="<?php Input::field_name( 'homepage_twitter_title' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_title' ); ?>" value="<?= \esc_html( Sanitize::metadata_content( Data\Plugin::get_option( 'homepage_twitter_title' ) ) ) ?>" autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twTitle data-tsf-proposed="">
 		</p>
 		<?php
 		if ( \strlen( $custom_og_title ) || \strlen( $custom_tw_title ) ) {
@@ -438,7 +439,7 @@ switch ( $instance ) :
 
 		<p>
 			<label for="<?php Input::field_id( 'homepage_twitter_description' ); ?>" class=tsf-toblock>
-				<strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
+				<strong><?php \esc_html_e( 'Twitter Card Description', 'autodescription' ); ?></strong>
 			</label>
 		</p>
 		<?php
@@ -449,7 +450,7 @@ switch ( $instance ) :
 		);
 		?>
 		<p>
-			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc><?= \esc_attr( Data\Plugin::get_option( 'homepage_twitter_description' ) ) ?></textarea>
+			<textarea name="<?php Input::field_name( 'homepage_twitter_description' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_twitter_description' ); ?>" rows=3 cols=70 autocomplete=off data-tsf-social-group=homepage_social_settings data-tsf-social-type=twDesc data-tsf-proposed=""><?= \esc_attr( Data\Plugin::get_option( 'homepage_twitter_description' ) ) ?></textarea>
 		</p>
 		<?php
 		if ( \strlen( $custom_og_desc ) || \strlen( $custom_tw_desc ) ) {
@@ -517,7 +518,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input class=large-text type=url name="<?php Input::field_name( 'homepage_social_image_url' ); ?>" id=tsf_homepage_socialimage-url placeholder="<?= \esc_url( $image_placeholder ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_social_image_url' ) ) ?>">
+			<input class=large-text type=url name="<?php Input::field_name( 'homepage_social_image_url' ); ?>" id=tsf_homepage_socialimage-url placeholder="<?= \esc_url( $image_placeholder ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_social_image_url' ) ) ?>" data-tsf-proposed="<?= \esc_url( $image_placeholder ) ?>">
 			<input type=hidden name="<?php Input::field_name( 'homepage_social_image_id' ); ?>" id=tsf_homepage_socialimage-id value="<?= \absint( Data\Plugin::get_option( 'homepage_social_image_id' ) ) ?>" disabled class=tsf-enable-media-if-js>
 		</p>
 		<p class=hide-if-no-tsf-js>
@@ -590,13 +591,14 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( 'homepage_canonical' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_canonical' ); ?>" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_canonical' ) ) ?>" autocomplete=off>
+			<input type=url name="<?php Input::field_name( 'homepage_canonical' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_canonical' ); ?>" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_canonical' ) ) ?>" autocomplete=off data-tsf-proposed="<?= \esc_url( $default_canonical ) ?>">
 		</p>
 
 		<hr>
 		<?php
 
 		$checked_home = '';
+
 		/**
 		 * Shows user that the setting is set on the homepage.
 		 * Adds starting - with space to maintain readability.
@@ -734,7 +736,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( 'homepage_redirect' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_redirect' ); ?>" placeholder="<?= \esc_url( $redirect_post ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_redirect' ) ) ?>" autocomplete=off>
+			<input type=url name="<?php Input::field_name( 'homepage_redirect' ); ?>" class=large-text id="<?php Input::field_id( 'homepage_redirect' ); ?>" placeholder="<?= \esc_url( $redirect_post ) ?>" value="<?= \esc_url( Data\Plugin::get_option( 'homepage_redirect' ) ) ?>" autocomplete=off data-tsf-proposed="<?= \esc_url( $redirect_post ) ?>">
 		</p>
 		<?php
 endswitch;

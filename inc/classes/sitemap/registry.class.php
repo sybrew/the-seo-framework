@@ -25,7 +25,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2019 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2019 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -94,6 +94,7 @@ class Registry {
 		if ( $path_info['use_query_var'] ) {
 			foreach ( self::get_sitemap_endpoint_list() as $_id => $_data ) {
 				$_regex = '/^' . preg_quote( $_id, '/' ) . '/i';
+
 				// Yes, we know. It's not really checking for standardized query-variables.
 				if ( preg_match( $_regex, $stripped_uri ) ) {
 					$sitemap_id = $_id;

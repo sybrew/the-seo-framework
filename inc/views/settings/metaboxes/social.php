@@ -22,7 +22,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2016 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2016 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -105,6 +105,7 @@ switch ( $instance ) :
 			] ),
 			true,
 		);
+
 		if ( $active_conflicting_plugins_types['open_graph'] )
 			HTML::attention_description( \__( 'Note: Another Open Graph plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
@@ -127,6 +128,7 @@ switch ( $instance ) :
 			] ),
 			true,
 		);
+
 		if ( $active_conflicting_plugins_types['twitter_card'] )
 			HTML::attention_description( \__( 'Note: Another Twitter Card plugin has been detected. These meta tags might conflict.', 'autodescription' ) );
 
@@ -147,7 +149,7 @@ switch ( $instance ) :
 			HTML::description( \__( 'Most social sites and third-party services automatically include the website URL inside their embeds. When the site title is described well in the site URL, including it in the social title will be redundant.', 'autodescription' ) );
 
 			$info = HTML::make_info(
-				\__( 'When you provide a custom Open Graph or Twitter title, the site title will be omitted automatically.', 'autodescription' ),
+				\__( 'When you provide a custom Open Graph or Twitter Card title, the site title will be omitted automatically.', 'autodescription' ),
 				'',
 				false,
 			);
@@ -466,7 +468,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( 'fediverse_site_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site_url' ); ?>" placeholder="<?= \esc_attr( $fv_site_url_placeholder ) ?>" value="<?= \esc_attr( $fv_site_url ) ?>">
+			<input type=url name="<?php Input::field_name( 'fediverse_site_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_site_url' ); ?>" placeholder="<?= \esc_attr( $fv_site_url_placeholder ) ?>" value="<?= \esc_attr( $fv_site_url ) ?>" data-tsf-proposed="<?= \esc_attr( $fv_site_url_placeholder ) ?>">
 		</p>
 		<?php
 		HTML::description_noesc( \sprintf(
@@ -490,7 +492,7 @@ switch ( $instance ) :
 		</p>
 		<?php HTML::description( \__( 'Authors can override this option on their profile page.', 'autodescription' ) ); ?>
 		<p>
-			<input type=text name="<?php Input::field_name( 'fediverse_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator' ); ?>" placeholder="<?= \esc_attr( $fv_site ) ?>" value="<?= \esc_attr( $fv_creator ) ?>">
+			<input type=text name="<?php Input::field_name( 'fediverse_creator' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator' ); ?>" placeholder="<?= \esc_attr( $fv_site ) ?>" value="<?= \esc_attr( $fv_creator ) ?>" data-tsf-proposed="<?= \esc_attr( $fv_site ) ?>">
 		</p>
 		<?php
 		HTML::description_noesc( \sprintf(
@@ -512,7 +514,7 @@ switch ( $instance ) :
 			</label>
 		</p>
 		<p>
-			<input type=url name="<?php Input::field_name( 'fediverse_creator_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator_url' ); ?>" placeholder="<?= \esc_attr( $fv_creator_url_placeholder ) ?>" value="<?= \esc_attr( $fv_creator_url ) ?>">
+			<input type=url name="<?php Input::field_name( 'fediverse_creator_url' ); ?>" class="large-text ltr" id="<?php Input::field_id( 'fediverse_creator_url' ); ?>" placeholder="<?= \esc_attr( $fv_creator_url_placeholder ) ?>" value="<?= \esc_attr( $fv_creator_url ) ?>" data-tsf-proposed="<?= \esc_attr( $fv_creator_url_placeholder ) ?>">
 		</p>
 		<?php
 		HTML::description_noesc( \sprintf(

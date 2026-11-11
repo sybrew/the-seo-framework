@@ -46,7 +46,7 @@ Override the path with `MAKEPOT_TSF_DIR` only when the user sets it.
 From the repo root:
 
 ```
-php .cursor/skills/makepot/scripts/makepot.php
+php .claude/skills/makepot/scripts/makepot.php
 ```
 
 If the script exits non-zero, fix the failure. Do not hand-write the POT as a fallback.

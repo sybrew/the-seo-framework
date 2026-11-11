@@ -1,6 +1,0 @@
----
-description: Repository coding standards and conventions for AI assistants
-alwaysApply: true
----
-
-Read and follow all rules in @.github/copilot-instructions.md before doing any work. They apply to every task in this repository.

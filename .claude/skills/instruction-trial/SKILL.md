@@ -14,12 +14,14 @@ Write the shortest telegraphic rule that still scores. A passing essay is not do
 
 Run this when changing what an agent must do in:
 
-- `.github/copilot-instructions.md`
+- `AGENTS.md`
 - `.github/instructions/*.instructions.md`
-- `.cursor/rules/*.mdc`
+- Cursor-only rules in `.cursor/rules/`
 - any other instruction or style rule
 
 Skip typos, link fixes, and edits that do not change the required action.
+
+Edit the shared sources before regenerating the native rules with `node .github/scripts/sync-agent-instructions.js --write`.
 
 ## Rubric first
 

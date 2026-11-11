@@ -16,7 +16,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2021 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2021 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -143,6 +143,7 @@ class Form {
 	 * @since 4.1.4
 	 * @since 5.2.0 1. Now exposes the click hint as a tooltip and an ARIA label on the count.
 	 *              2. Now outputs the count as a link, so Enter changes the counter type.
+	 * @since 5.2.1 Now outputs the count as a button, so Enter and Space change the counter type.
 	 *
 	 * @param string $input_id The input ID it's for.
 	 * @param bool   $display  Whether to display the counter. (options page gimmick)
@@ -157,7 +158,7 @@ class Form {
 					/* translators: %s = number */
 					\esc_html__( 'Characters: %s', 'autodescription' ),
 					\sprintf(
-						'<span class=tsf-tooltip-wrap><a id="%1$s" class=tsf-tooltip-item href="javascript:;" data-desc="%2$s" aria-label="%2$s">%3$s</a></span>',
+						'<span class=tsf-tooltip-wrap><button type=button id="%1$s" class=tsf-tooltip-item data-desc="%2$s" aria-label="%2$s">%3$s</button></span>',
 						\esc_attr( "{$input_id}_chars" ),
 						\esc_attr__( 'Click to change the counter type', 'autodescription' ),
 						'0',

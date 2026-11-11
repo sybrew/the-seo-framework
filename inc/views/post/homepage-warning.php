@@ -12,7 +12,7 @@ namespace The_SEO_Framework;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -35,6 +35,7 @@ namespace The_SEO_Framework;
 				<span>
 					<?php
 					\esc_html_e( 'The fields below may be overwritten by the Homepage Settings found on the SEO Settings page.', 'autodescription' );
+
 					if ( \current_user_can( \THE_SEO_FRAMEWORK_SETTINGS_CAP ) )
 						printf(
 							' &mdash; <a href="%s" target=_blank>%s</a>',

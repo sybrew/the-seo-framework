@@ -17,7 +17,7 @@ use The_SEO_Framework\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -95,6 +95,7 @@ class Exclusion {
 
 		$join  = '';
 		$where = '';
+
 		if ( $supported_post_types !== $public_post_types ) {
 			// Post types can be registered arbitrarily through other plugins, even manually by non-super-admins. Prepare!
 			$post_type__in = "'" . implode( "','", array_map( 'esc_sql', $supported_post_types ) ) . "'";

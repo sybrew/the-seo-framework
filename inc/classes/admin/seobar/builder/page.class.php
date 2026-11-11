@@ -26,7 +26,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2019 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2019 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -101,6 +101,7 @@ final class Page extends Main {
 	 *
 	 * @since 4.0.0
 	 * @since 5.0.0 Removed first parameter.
+	 * @since 5.2.0 Now caches the post type.
 	 * @abstract
 	 */
 	protected function prime_query_cache() {
@@ -116,6 +117,7 @@ final class Page extends Main {
 				'isprotected'  => Data\Post::is_protected( $post ),
 				'isdraft'      => Data\Post::is_draft( $post ),
 				'istrashed'    => Data\Post::is_trash( $post ),
+				'posttype'     => $post->post_type ?? '',
 				'robotsmeta'   => array_merge(
 					[
 						'noindex'   => false,
@@ -734,7 +736,7 @@ final class Page extends Main {
 			}
 		}
 
-		if ( ! empty( $robots_global['posttype']['noindex'][ static::$query['post_type'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['noindex'][ $this->query_cache['states']['posttype'] ] ) ) {
 			// Status is already set.
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
@@ -746,6 +748,7 @@ final class Page extends Main {
 			$canonical = Meta\URI::get_canonical_url( [
 				'id' => static::$query['id'],
 			] );
+
 			if ( $permalink !== $canonical ) {
 				$item['status'] = Builder::STATE_UNKNOWN;
 				$item['reason'] = $cache['reason']['canonicalurl'];
@@ -893,7 +896,7 @@ final class Page extends Main {
 			}
 		}
 
-		if ( ! empty( $robots_global['posttype']['nofollow'][ static::$query['post_type'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['nofollow'][ $this->query_cache['states']['posttype'] ] ) ) {
 			// Status is already set.
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}
@@ -1044,7 +1047,7 @@ final class Page extends Main {
 			}
 		}
 
-		if ( ! empty( $robots_global['posttype']['noarchive'][ static::$query['post_type'] ] ) ) {
+		if ( ! empty( $robots_global['posttype']['noarchive'][ $this->query_cache['states']['posttype'] ] ) ) {
 			// Status is already set.
 			$item['assess']['posttype'] = $cache['assess']['posttype'];
 		}

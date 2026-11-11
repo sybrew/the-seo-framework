@@ -17,7 +17,7 @@ use The_SEO_Framework\Data\Filter\Sanitize;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2017 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2017 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -98,55 +98,23 @@ $robots_settings = [
 
 $author_fediverse  = $meta['fediverse_page'];
 $creator_fediverse = Data\Plugin::get_option( 'fediverse_creator' );
+$site_fediverse    = Data\Plugin::get_option( 'fediverse_site' );
 
-if ( $author_fediverse ) {
-	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url( $author_fediverse );
-} elseif ( $creator_fediverse ) {
-	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url(
+$fediverse_handle_placeholder = $creator_fediverse ?: $site_fediverse;
+
+$fediverse_url_fallback = $creator_fediverse
+	? Meta\Fediverse::get_profile_url(
 		$creator_fediverse,
 		Data\Plugin::get_option( 'fediverse_creator_url' ),
-	);
-} else {
-	$fediverse_url_placeholder = Meta\Fediverse::get_profile_url(
-		Data\Plugin::get_option( 'fediverse_site' ),
+	)
+	: Meta\Fediverse::get_profile_url(
+		$site_fediverse,
 		Data\Plugin::get_option( 'fediverse_site_url' ),
 	);
-}
 
-$authorial_fields = [
-	'tsf-user-meta[facebook_page]'      => [
-		'name'    => \__( 'Facebook profile page', 'autodescription' ),
-		'type'    => 'url',
-		'example' => \_x( 'https://www.facebook.com/YourPersonalProfile', 'Example Facebook Personal URL', 'autodescription' ),
-		'value'   => $meta['facebook_page'],
-		'class'   => '',
-	],
-	'tsf-user-meta[fediverse_page]'     => [
-		'name'        => \__( 'Fediverse profile', 'autodescription' ),
-		'type'        => 'text',
-		'placeholder' =>
-			   $creator_fediverse
-			?: Data\Plugin::get_option( 'fediverse_site' ),
-		'example'     => \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' ),
-		'value'       => $author_fediverse,
-		'class'       => 'ltr',
-	],
-	'tsf-user-meta[fediverse_page_url]' => [
-		'name'        => \__( 'Fediverse profile URL', 'autodescription' ),
-		'type'        => 'url',
-		'placeholder' => $fediverse_url_placeholder,
-		'example'     => \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' ),
-		'value'       => $meta['fediverse_page_url'],
-		'class'       => 'ltr',
-	],
-	'tsf-user-meta[twitter_page]'       => [
-		'name'    => \__( 'X profile handle', 'autodescription' ),
-		'type'    => 'text',
-		'example' => \_x( '@username', 'X @username', 'autodescription' ),
-		'value'   => $meta['twitter_page'],
-		'class'   => 'ltr',
-	],
-];
+$fediverse_url_placeholder = $author_fediverse
+	? Meta\Fediverse::get_profile_url( $author_fediverse )
+	: $fediverse_url_fallback;
 
 /* translators: %s = default option value */
 $_default_i18n = \__( 'Default (%s)', 'autodescription' );
@@ -154,6 +122,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 ?>
 <div class="tsf-user-settings">
 <h2><?php \esc_html_e( 'General SEO Settings', 'autodescription' ); ?></h2>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 
 <table class="form-table tsf-user-meta">
 	<tbody>
@@ -164,6 +133,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 				<th scope=row valign=top><?php \esc_html_e( 'Doing it Right', 'autodescription' ); ?></th>
 				<td>
 					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- generate_bar escapes.
 					echo Admin\SEOBar\Builder::generate_bar( $generator_args );
 					?>
 				</td>
@@ -193,7 +163,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 			</th>
 			<td>
 				<div class=tsf-title-wrap>
-					<input type=text name="tsf-user-meta[doctitle]" id="tsf-user-meta[doctitle]" value="<?= \esc_html( Sanitize::metadata_content( $meta['doctitle'] ) ) ?>" size=40 autocomplete=off data-form-type=other>
+					<input type=text name="tsf-user-meta[doctitle]" id="tsf-user-meta[doctitle]" value="<?= \esc_html( Sanitize::metadata_content( $meta['doctitle'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-proposed="">
 					<?php
 					Input::output_js_title_data(
 						'tsf-user-meta[doctitle]',
@@ -241,7 +211,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 				?>
 			</th>
 			<td>
-				<textarea name="tsf-user-meta[description]" id="tsf-user-meta[description]" rows=4 cols=50 class=large-text autocomplete=off><?= \esc_html( Sanitize::metadata_content( $meta['description'] ) ) ?></textarea>
+				<textarea name="tsf-user-meta[description]" id="tsf-user-meta[description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-proposed=""><?= \esc_html( Sanitize::metadata_content( $meta['description'] ) ) ?></textarea>
 				<?php
 				Input::output_js_description_data(
 					'tsf-user-meta[description]',
@@ -260,6 +230,7 @@ $_default_i18n = \__( 'Default (%s)', 'autodescription' );
 </table>
 
 <h2><?php \esc_html_e( 'Social Settings', 'autodescription' ); ?></h2>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 <?php
 
 Input::output_js_social_data(
@@ -297,7 +268,7 @@ Input::output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-og-title-wrap>
-					<input name="tsf-user-meta[og_title]" id="tsf-user-meta[og_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['og_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=ogTitle>
+					<input name="tsf-user-meta[og_title]" id="tsf-user-meta[og_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['og_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=ogTitle data-tsf-proposed="">
 				</div>
 			</td>
 		</tr>
@@ -313,14 +284,14 @@ Input::output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="tsf-user-meta[og_description]" id="tsf-user-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=ogDesc><?= \esc_html( Sanitize::metadata_content( $meta['og_description'] ) ) ?></textarea>
+				<textarea name="tsf-user-meta[og_description]" id="tsf-user-meta[og_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=ogDesc data-tsf-proposed=""><?= \esc_html( Sanitize::metadata_content( $meta['og_description'] ) ) ?></textarea>
 			</td>
 		</tr>
 
 		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
 			<th scope=row valign=top>
 				<label for="tsf-user-meta[tw_title]">
-					<strong><?php \esc_html_e( 'Twitter Title', 'autodescription' ); ?></strong>
+					<strong><?php \esc_html_e( 'Twitter Card Title', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				Data\Plugin::get_option( 'display_character_counter' )
@@ -329,7 +300,7 @@ Input::output_js_social_data(
 			</th>
 			<td>
 				<div id=tsf-tw-title-wrap>
-					<input name="tsf-user-meta[tw_title]" id="tsf-user-meta[tw_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['tw_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=twTitle>
+					<input name="tsf-user-meta[tw_title]" id="tsf-user-meta[tw_title]" type=text value="<?= \esc_html( Sanitize::metadata_content( $meta['tw_title'] ) ) ?>" size=40 autocomplete=off data-form-type=other data-tsf-social-group=tsf_user_social data-tsf-social-type=twTitle data-tsf-proposed="">
 				</div>
 			</td>
 		</tr>
@@ -337,7 +308,7 @@ Input::output_js_social_data(
 		<tr class=form-field <?= $show_tw ? '' : 'style=display:none' ?>>
 			<th scope=row valign=top>
 				<label for="tsf-user-meta[tw_description]">
-					<strong><?php \esc_html_e( 'Twitter Description', 'autodescription' ); ?></strong>
+					<strong><?php \esc_html_e( 'Twitter Card Description', 'autodescription' ); ?></strong>
 				</label>
 				<?php
 				Data\Plugin::get_option( 'display_character_counter' )
@@ -345,7 +316,7 @@ Input::output_js_social_data(
 				?>
 			</th>
 			<td>
-				<textarea name="tsf-user-meta[tw_description]" id="tsf-user-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=twDesc><?= \esc_html( Sanitize::metadata_content( $meta['tw_description'] ) ) ?></textarea>
+				<textarea name="tsf-user-meta[tw_description]" id="tsf-user-meta[tw_description]" rows=4 cols=50 class=large-text autocomplete=off data-tsf-social-group=tsf_user_social data-tsf-social-type=twDesc data-tsf-proposed=""><?= \esc_html( Sanitize::metadata_content( $meta['tw_description'] ) ) ?></textarea>
 			</td>
 		</tr>
 
@@ -395,7 +366,7 @@ Input::output_js_social_data(
 				</label>
 			</th>
 			<td>
-				<input type=url name="tsf-user-meta[social_image_url]" id=tsf_user_meta_socialimage-url placeholder="<?= \esc_attr( $image_placeholder ) ?>" value="<?= \esc_attr( $meta['social_image_url'] ) ?>" size=40 autocomplete=off>
+				<input type=url name="tsf-user-meta[social_image_url]" id=tsf_user_meta_socialimage-url placeholder="<?= \esc_attr( $image_placeholder ) ?>" value="<?= \esc_attr( $meta['social_image_url'] ) ?>" size=40 autocomplete=off data-tsf-proposed="<?= \esc_attr( $image_placeholder ) ?>">
 				<input type=hidden name="tsf-user-meta[social_image_id]" id=tsf_user_meta_socialimage-id value="<?= \absint( $meta['social_image_id'] ) ?>" disabled class=tsf-enable-media-if-js>
 				<div class="hide-if-no-tsf-js tsf-user-button-wrap">
 					<?php
@@ -410,60 +381,112 @@ Input::output_js_social_data(
 </table>
 
 <h3><?php \esc_html_e( 'Authorial Info', 'autodescription' ); ?></h3>
-<table class="form-table tsf-user-authorial">
-	<tr class="user-tsf-user-meta[author_type]-wrap">
-		<th><label for="tsf-user-meta[author_type]">
-			<?= \esc_html_x( 'This author represents:', '...Organization or Person.', 'autodescription' ) ?>
-		</label></th>
-		<td>
-			<select name="tsf-user-meta[author_type]" id="tsf-user-meta[author_type]">
-				<?php
-				foreach ( [
-					'person'       => \__( 'A Person', 'autodescription' ),
-					'organization' => \__( 'An Organization', 'autodescription' ),
-				] as $value => $name )
-					printf(
-						'<option value="%s" %s>%s</option>',
-						\esc_attr( $value ),
-						\selected( $meta['author_type'], $value, false ),
-						\esc_html( $name ),
-					);
-				?>
-			</select>
-			<p class=description><?php \esc_html_e( 'Structured data credits posts by this author to this person or organization.', 'autodescription' ); ?></p>
-		</td>
-	</tr>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 <?php
-foreach ( $authorial_fields as $field => $labels ) {
-	?>
-	<tr class="user-<?= \esc_attr( $field ) ?>-wrap">
-		<th><label for="<?= \esc_attr( $field ) ?>">
-			<?= \esc_html( $labels['name'] ) ?>
-		</label></th>
-		<td>
-			<input
-				type="<?= \esc_attr( $labels['type'] ) ?>"
-				name="<?= \esc_attr( $field ) ?>"
-				id="<?= \esc_attr( $field ) ?>"
-				value="<?= \esc_attr( $labels['value'] ) ?>"
-				placeholder="<?= \esc_attr( $labels['placeholder'] ?? '' ) ?>"
-				class="regular-text <?= \esc_attr( $labels['class'] ) ?>">
-			<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
-			<?php
-			HTML::description_noesc( \sprintf(
-				/* translators: %s = example value */
-				\esc_html__( 'Example: %s', 'autodescription' ),
-				HTML::code_wrap( $labels['example'] ),
-			) );
-			?>
-		</td>
-	</tr>
-	<?php
-}
+$social_format_hint = \sprintf(
+	'<p class="tsf-social-format-hint hidden"><span class=description><span class=tsf-social-format-label></span>%s</span></p>',
+	\sprintf(
+		'<button type=button class="button button-small tsf-social-format-apply hidden">%s</button>',
+		/* translators: Action button. Writes a suggested profile URL into the field. */
+		\esc_html__( 'Use this', 'autodescription' ),
+	),
+);
 ?>
+<table class="form-table tsf-user-meta">
+	<tbody>
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[author_type]">
+					<strong><?= \esc_html_x( 'This author represents:', '...Organization or Person.', 'autodescription' ) ?></strong>
+				</label>
+			</th>
+			<td>
+				<select name="tsf-user-meta[author_type]" id="tsf-user-meta[author_type]">
+					<?php
+					foreach ( [
+						'person'       => \__( 'A Person', 'autodescription' ),
+						'organization' => \__( 'An Organization', 'autodescription' ),
+					] as $value => $name )
+						printf(
+							'<option value="%s" %s>%s</option>',
+							\esc_attr( $value ),
+							\selected( $meta['author_type'], $value, false ),
+							\esc_html( $name ),
+						);
+					?>
+				</select>
+				<p class=description><?php \esc_html_e( 'Structured data credits posts by this author to this person or organization.', 'autodescription' ); ?></p>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[facebook_page]">
+					<strong><?php \esc_html_e( 'Facebook profile page', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<?php
+				$facebook_format  = 'https://www.facebook.com/{username}';
+				$facebook_pattern = '^(' . str_replace(
+					'\{username\}',
+					'([^/?#]+)',
+					preg_quote( $facebook_format, '/' ),
+				) . ')/?$';
+				?>
+				<div class=tsf-social-format-field>
+					<input type=url name="tsf-user-meta[facebook_page]" id="tsf-user-meta[facebook_page]" value="<?= \esc_attr( $meta['facebook_page'] ) ?>" size=40 autocomplete=off data-social-formats="<?= \esc_attr( \wp_json_encode( [ $facebook_format ] ) ) ?>" data-social-pattern="<?= \esc_attr( $facebook_pattern ) ?>">
+					<?= $social_format_hint ?>
+				</div>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[fediverse_page]">
+					<strong><?php \esc_html_e( 'Fediverse profile', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<div class=tsf-social-format-field>
+					<input type=text name="tsf-user-meta[fediverse_page]" id="tsf-user-meta[fediverse_page]" placeholder="<?= \esc_attr( $fediverse_handle_placeholder ) ?>" value="<?= \esc_attr( $author_fediverse ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_handle_placeholder ) ?>" data-social-kind=fediverse-handle data-social-example="<?= \esc_attr( \_x( '@your-username@example.social', 'Fediverse handle', 'autodescription' ) ) ?>">
+					<?= $social_format_hint ?>
+				</div>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[fediverse_page_url]">
+					<strong><?php \esc_html_e( 'Fediverse profile URL', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<div class=tsf-social-format-field>
+					<input type=url name="tsf-user-meta[fediverse_page_url]" id="tsf-user-meta[fediverse_page_url]" placeholder="<?= \esc_attr( $fediverse_url_placeholder ) ?>" value="<?= \esc_attr( $meta['fediverse_page_url'] ) ?>" size=40 autocomplete=off class=ltr data-tsf-proposed="<?= \esc_attr( $fediverse_url_placeholder ) ?>" data-tsf-fediverse-fallback="<?= \esc_attr( $fediverse_url_fallback ) ?>" data-social-kind=fediverse-url data-social-example="<?= \esc_attr( \_x( 'https://example.social/@your-username', 'Fediverse profile URL', 'autodescription' ) ) ?>">
+					<?= $social_format_hint ?>
+				</div>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
+				<label for="tsf-user-meta[twitter_page]">
+					<strong><?php \esc_html_e( 'X profile handle', 'autodescription' ); ?></strong>
+				</label>
+			</th>
+			<td>
+				<div class=tsf-social-format-field>
+					<input type=text name="tsf-user-meta[twitter_page]" id="tsf-user-meta[twitter_page]" value="<?= \esc_attr( $meta['twitter_page'] ) ?>" size=40 autocomplete=off class=ltr data-social-kind=x data-social-example="<?= \esc_attr( \_x( '@username', 'X @username', 'autodescription' ) ) ?>">
+					<?= $social_format_hint ?>
+				</div>
+			</td>
+		</tr>
+	</tbody>
 </table>
 
 <h2><?php \esc_html_e( 'Visibility Settings', 'autodescription' ); ?></h2>
+<p class=description><?php \esc_html_e( 'This may be shown publicly.', 'autodescription' ); ?></p>
 
 <table class="form-table tsf-user-meta">
 	<tbody>
@@ -481,7 +504,7 @@ foreach ( $authorial_fields as $field => $labels ) {
 				</label>
 			</th>
 			<td>
-				<input type=url name="tsf-user-meta[canonical]" id="tsf-user-meta[canonical]" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off>
+				<input type=url name="tsf-user-meta[canonical]" id="tsf-user-meta[canonical]" placeholder="<?= \esc_url( $default_canonical ) ?>" value="<?= \esc_attr( $meta['canonical'] ) ?>" size=40 autocomplete=off data-tsf-proposed="<?= \esc_url( $default_canonical ) ?>">
 				<?php
 				Input::output_js_canonical_data(
 					'tsf-user-meta[canonical]',

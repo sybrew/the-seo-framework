@@ -12,7 +12,7 @@ use The_SEO_Framework\Admin; // Yes, it is legal to share class and namespace.
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -80,6 +80,7 @@ class Notice {
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Shifted all second and later parameter into `$args`.
 	 *              3. Renamed from `generate_dismissible_notice`.
+	 * @since 5.2.1 Now outputs the dismiss control as a button.
 	 *
 	 * @param string $message The notice message. Expected to be escaped if `$args['escape']` is `false`.
 	 *                        When the message contains HTML, it must start with a <p> tag,
@@ -129,8 +130,8 @@ class Notice {
 					$args['escape'] ? \esc_html( $message ) : $message,
 				),
 				\sprintf(
-					'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s"></a>',
-					\esc_attr__( 'Dismiss this notice', 'default' ),
+					'<button type=button class="hide-if-no-tsf-js tsf-dismiss"><span class=screen-reader-text>%s</span></button>',
+					\esc_html__( 'Dismiss this notice.', 'default' ),
 				),
 			],
 		);

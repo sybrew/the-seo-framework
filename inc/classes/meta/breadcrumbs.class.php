@@ -25,7 +25,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -64,7 +64,7 @@ class Breadcrumbs {
 	 *              2. Added the role index to the return value.
 	 *              3. Singular trails now omit post ancestors that aren't publicly viewable.
 	 *              4. Generated archive crumb names now drop their archive title prefix.
-	 *              5. Front-end term archives now include ancestor terms again.
+	 *              5. Front-end term archives now include ancestor terms.
 	 *
 	 * @param ?array $args    The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                        Leave null to autodetermine query.

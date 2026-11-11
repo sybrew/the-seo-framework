@@ -58,24 +58,24 @@ Public source of truth:
 
 If permission is `True` and `run.js` is missing, clone that repo and run `npm install` in it. Do not copy the engine from elsewhere; clone the public repo above.
 
-Override the path with `WP_PLUGIN_REGRESSION_DIR` only when the user sets it (local engine clone, e.g. `C:\GitHub\wp-plugin-regression`).
+Override the path with `WP_PLUGIN_REGRESSION_DIR` only when the user supplies an existing engine location. Keep workstation-specific values in the local environment or ignored configuration, never in this public skill.
 
 ## Command
 
 From the repo root:
 
 ```
-node .cursor/skills/playground/scripts/playground.js launch
-node .cursor/skills/playground/scripts/playground.js launch --pair
-node .cursor/skills/playground/scripts/playground.js stop
-node .cursor/skills/playground/scripts/playground.js stop --port=9001
-node .cursor/skills/playground/scripts/playground.js stop --all
-node .cursor/skills/playground/scripts/playground.js capture --label before
-node .cursor/skills/playground/scripts/playground.js capture --label after --feature=title
-node .cursor/skills/playground/scripts/playground.js compare --before before --after after --feature=title
-node .cursor/skills/playground/scripts/playground.js surfaces
-node .cursor/skills/playground/scripts/playground.js harness --action ping
-node .cursor/skills/playground/scripts/playground.js harness --json-file .local/playground/payload.json
+node .claude/skills/playground/scripts/playground.js launch
+node .claude/skills/playground/scripts/playground.js launch --pair
+node .claude/skills/playground/scripts/playground.js stop
+node .claude/skills/playground/scripts/playground.js stop --port=9001
+node .claude/skills/playground/scripts/playground.js stop --all
+node .claude/skills/playground/scripts/playground.js capture --label before
+node .claude/skills/playground/scripts/playground.js capture --label after --feature=title
+node .claude/skills/playground/scripts/playground.js compare --before before --after after --feature=title
+node .claude/skills/playground/scripts/playground.js surfaces
+node .claude/skills/playground/scripts/playground.js harness --action ping
+node .claude/skills/playground/scripts/playground.js harness --json-file .local/playground/payload.json
 ```
 
 Optional launch flags: `--wp=latest`, `--php=8.3`, `--site=default`, `--plugin=working|wporg`, `--port`, `--port-before`, `--port-after`, `--pair`, `--keep`, `--workers=<n|auto>`, `--extra-plugin-zip=<path>`. Launch picks the next free port in `9001`–`9099`. `--pair` picks the next two consecutive ports (`before` / `after`). Pin with `--port` or `--port-before` / `--port-after`. `--keep` reuses persist instead of wiping. `--workers` defaults to `max(6, os.cpus().length - 1)`. `--extra-plugin-zip` is repeatable. Extracts land in `~/.wordpress-playground/extra-plugins/`, never under this repo. Use `WP_PLUGIN_REGRESSION_DIR` when the engine clone that has this flag is not the `.local` checkout.
@@ -108,11 +108,15 @@ Same `--feature` (or `--types`) on both captures. `surfaces` first. Do not git c
 
 Front-end SEO A/B is HTTP `capture` / `compare`. Admin SEO UI, settings, and REST-from-the-browser A/B is Playwright MCP against the live Playground URL after `launch`. The engine does not drive a browser. `playwright.env` in Cursor settings is the Test extension, not the agent. Cursor’s built-in Browser Automation conflicts with Playwright MCP; use the MCP. Default captures stay logged-out.
 
-Playwright MCP must load `.cursor/skills/playground/playwright.mcp.json` (`--config` in `%USERPROFILE%\.cursor\mcp.json`). That file strips Chrome's `--disable-blink-features=AutomationControlled` flag and sends `X-TSF-Playground-Admin: 1`. For admin/REST, navigate to the live origin from launch or `runs.json` (`http://127.0.0.1:<port>/wp-admin/` or `/wp-json/`). Do not fill `admin` / `password` — Cursor Auto-review blocks that. `tsf-playwright-admin.php` calls `wp_set_auth_cookie()` when the header is present. That is the login. Do not add `.cursor/permissions.json`. Do not pass Playground `--login` or a blueprint `login` step (HTTP capture would share that session). Front-end HTML stays logged-out. Restart the Playwright MCP server after changing `mcp.json` or the config.
+Playwright MCP must load `.cursor/skills/playground/playwright.mcp.json` through `--config` in the MCP client's user configuration. Keep any client-required absolute path in that private configuration. The repository config strips Chrome's `--disable-blink-features=AutomationControlled` flag and sends `X-TSF-Playground-Admin: 1`. For admin/REST, navigate to the live origin from launch or `runs.json` (`http://127.0.0.1:<port>/wp-admin/` or `/wp-json/`). Do not fill `admin` / `password` — Cursor Auto-review blocks that. `tsf-playwright-admin.php` calls `wp_set_auth_cookie()` when the header is present. That is the login. Do not add `.cursor/permissions.json`. Do not pass Playground `--login` or a blueprint `login` step (HTTP capture would share that session). Front-end HTML stays logged-out. Restart the Playwright MCP server after changing the user configuration or repository config.
 
 Mutate the live site by writing mu-plugins under `~/.wordpress-playground/tests/autodescription/<version>/<site>/mu-plugins/`, or `harness --json-file <path>`. Do not pass `--json "{...}"` from PowerShell; it strips the quotes. Do not add `eval`.
 
-The catalog is `plugin.json` `entries`, `surfaces`, and `surfaceLines`. One capture writes `.local/playground/captures/<label>.json` — the full walkable dump (status, headers, marker block, plus `headTags`). It is a local gold file, not a CI gate. Do not hand-edit it. Regenerate when the seed or catalog changes. `compare --feature` needs those entries in both bundles; recapture with the same `--feature`.
+The catalog is `plugin.json` `entries`, `surfaces`, `occasional`, and `surfaceLines`. One capture writes `.local/playground/captures/<label>.json` — the full walkable dump (status, headers, marker block, plus `headTags`). It is a local gold file, not a CI gate. Do not hand-edit it. Regenerate when the seed or catalog changes. `compare --feature` needs those entries in both bundles; recapture with the same `--feature`.
+
+A `--feature` or `--types` walk also requests one `occasional` entry that walk does not already include (login, search, 404, a date archive, or the custom route). Which one follows the feature's index in the sorted surface list, so the same feature always adds the same page and a before/after pair stays aligned. A capture with no `--feature` and no `--types` requests every entry, including those pages. `login` sets `markers: false` because `wp-login.php` does not print the plugin head block.
+
+Playground leaves `WP_DEBUG_DISPLAY` off, so an undefined variable never shows up in the head block. Capture reads new `debug.log` lines under the plugin directory and stores them on the entry. Compare always diffs those lines, including under `--feature`. Capture writes the bundle, then exits non-zero when any were found. Compare fails when either side has them. That is a plugin failure. Do not strip the check to get a green diff.
 
 On output-affecting work:
 
@@ -122,7 +126,7 @@ On output-affecting work:
 
 `--types=post,page` narrows to page types. `--paths` still appends extra URLs to capture and compare. A full compare (no `--feature`) diffs the whole extracted block.
 
-Seeded types: front as blog, static front, posts page, post, page, `?p=` query, category, empty category, tag, date (day/month/year), author, search, 404, paged blog / posts page / category, multipage post, hierarchical CPT + child, non-hierarchical CPT, both CPT archives, a taxonomy on two CPTs, a taxonomy on one CPT, sitemap, robots.txt, site/post/category/author/CPT/comments feeds, post/term redirects, oEmbed. Attachment, preview, comment-paged, and WooCommerce shop/product are not seeded.
+Seeded types: front as blog, static front, posts page, post, page, `?p=` query, category, empty category, tag, date (day/month/year), author, search, 404, login, custom route (`/wpr-custom/`, not a post, term, author, date, or archive), paged blog / posts page / category, multipage post, hierarchical CPT + child, non-hierarchical CPT, both CPT archives, a taxonomy on two CPTs, a taxonomy on one CPT, sitemap, robots.txt, site/post/category/author/CPT/comments feeds, post/term redirects, oEmbed. Attachment, preview, comment-paged, and WooCommerce shop/product are not seeded.
 
 The seed waits for `THE_SEO_FRAMEWORK_PRESENT` and `is_blog_installed()`. Install requests must not mark the catalog ready. Redirect meta must be an http(s) URL (`home_url( '/sample-page/' )`); TSF strips relative paths when resolving the redirect.
 

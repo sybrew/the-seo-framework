@@ -10,7 +10,7 @@ namespace The_SEO_Framework;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -50,6 +50,7 @@ foreach (
 			'polylang/polylang.php'                    => 'polylang',
 			'polylang-pro/polylang.php'                => 'polylang',
 			'sitepress-multilingual-cms/sitepress.php' => 'wpml',
+			'translatepress-multilingual/index.php'    => 'translatepress',
 			'ultimate-member/ultimate-member.php'      => 'ultimatemember',
 			'wpforo/wpforo.php'                        => 'wpforo',
 			'woocommerce/woocommerce.php'              => 'woocommerce',

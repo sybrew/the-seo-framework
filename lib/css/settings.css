@@ -276,7 +276,3 @@ body.js .tsf-nav-tab-content.tsf-nav-tab-content-active {
 #tsf-sitemap-view-links summary {
 	cursor: pointer;
 }
-
-.tsf-social-format-apply {
-	margin-inline-start: .5em;
-}

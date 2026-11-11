@@ -24,7 +24,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -70,8 +70,6 @@ final class Front extends Factory {
 
 		// We assert options here for a jump to meta_settings might be unaware.
 		meta_settings: if ( ! ( static::$options & ROBOTS_IGNORE_SETTINGS ) ) { // static: allow overrides
-
-			$qubit = null;
 
 			if ( Query::is_editable_term() ) {
 				$qubit = (int) Data\Plugin\Term::get_meta_item( $type );
@@ -148,6 +146,7 @@ final class Front extends Factory {
 			} elseif ( Query::is_archive() || Query::is_singular_archive() ) {
 				yield from static::assert_noindex_query_pass( 'paged' ); // static: allow overrides
 			}
+
 			if ( Query::is_singular() ) {
 				yield from static::assert_noindex_query_pass( 'protected' ); // static: allow overrides
 

@@ -45,7 +45,7 @@
 	content: "\f147";
 }
 
-/* Specific because common.css overrides via `.updated a`. */
+/* Matches core `.notice-dismiss`. */
 .tsf-notice .tsf-dismiss {
 	position: absolute;
 	top: 12px;

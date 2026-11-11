@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Meta\Schema\Entities;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function The_SEO_Framework\normalize_generation_args;
+use function The_SEO_Framework\{
+	coalesce_strlen,
+	normalize_generation_args,
+};
 
 use The_SEO_Framework\{
 	Data,
@@ -21,7 +24,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -112,7 +115,9 @@ final class Author extends Reference {
 	/**
 	 * @since 5.0.0
 	 * @since 5.2.0 1. Now adds the author's Fediverse profile to `sameAs` when a handle is set.
-	 *              2. Now uses `Organization` as the type when the author represents an organization.
+	 *              2. Now uses `x.com` for the author's X profile in `sameAs`.
+	 *              3. Now uses the custom user description when one is set, and otherwise the biography clamped to 250 characters.
+	 *              4. Now uses `Organization` as the type when the author represents an organization.
 	 *
 	 * @param ?array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 *                     Leave null to autodetermine query.
@@ -146,14 +151,22 @@ final class Author extends Reference {
 			);
 
 		if ( $user_meta['twitter_page'] )
-			$entity['sameAs'][] = \sanitize_url( 'https://twitter.com/' . ltrim( $user_meta['twitter_page'], '@' ) );
+			$entity['sameAs'][] = \sanitize_url( 'https://x.com/' . ltrim( $user_meta['twitter_page'], '@' ) );
 
-		if ( ! empty( $user_data->description ) )
-			$entity['description'] = Strings::clamp_sentence(
-				\wp_strip_all_tags( $user_data->description ),
-				1,
-				250, // Magic number: https://developer.yoast.com/features/schema/pieces/person/#optional-properties.
+		$description =
+			   coalesce_strlen( Meta\Description::get_custom_description( [ 'uid' => $author_id ] ) )
+			?? (
+				! empty( $user_data->description )
+					? Strings::clamp_sentence(
+						\wp_strip_all_tags( $user_data->description ),
+						1,
+						250, // Magic number: https://developer.yoast.com/features/schema/pieces/person/#optional-properties.
+					)
+					: ''
 			);
+
+		if ( \strlen( $description ) )
+			$entity['description'] = $description;
 
 		return $entity;
 	}

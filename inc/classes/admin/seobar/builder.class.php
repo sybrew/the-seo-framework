@@ -17,7 +17,7 @@ use The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2019 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2019 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -89,18 +89,10 @@ class Builder {
 	 *
 	 * @since 4.0.0
 	 * @since 4.1.4 Now manages the builder, too.
-	 * @since 5.2.0 Now builds a user SEO Bar when `uid` is set and `id` is empty.
+	 * @since 5.2.0 1. Now builds a user SEO Bar when `uid` is set and `id` is empty.
+	 *              2. Now reads the post type from the post. `$query['post_type']` is ignored.
 	 *
-	 * @param array $query {
-	 *     The query arguments for the SEO Bar.
-	 *
-	 *     @type int    $id        The current post or term ID. Required unless `uid` is set.
-	 *     @type string $tax       Optional. If not set, this will interpret it as a post.
-	 *     @type string $pta       Not implemented. Do not populate.
-	 *     @type string $post_type Optional. If not set, this will be automatically filled.
-	 *                             This parameter is ignored for taxonomies and users.
-	 *     @type int    $uid       The user ID. When set with an empty `id`, this builds the user SEO Bar.
-	 * }
+	 * @param array $query The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The SEO Bar.
 	 */
 	public static function generate_bar( $query ) {
@@ -124,8 +116,6 @@ class Builder {
 
 			case 'single':
 				$builder = Builder\Page::get_instance();
-
-				$query['post_type'] = ( $query['post_type'] ?? '' ) ?: \get_post_type( $query['id'] );
 				break;
 
 			default:
@@ -270,6 +260,7 @@ class Builder {
 	 *
 	 * @since 4.0.0
 	 * @since 5.2.0 Now strips HTML tags from title and reason before interpolating them into the tooltip HTML and ARIA text.
+	 * @since 5.2.1 Now escapes each distinct SEO Bar symbol once per request and reuses it across blocks.
 	 * @generator
 	 * FIXME? The data herein is obtained via `builders/seobar-{type}.php`. If they escape their cache before we do here, it'd be much quicker.
 	 *        Provided, however, that there are fewer items cached (130~137) than SEOBar blocks outputted (240 on most sites).
@@ -283,6 +274,7 @@ class Builder {
 	private static function generate_seo_bar_blocks( $items ) {
 
 		static $gettext, $use_symbols;
+		static $symbols = [];
 
 		$gettext ??= [
 			/* translators: 1 = SEO Bar type title, 2 = Status reason. 3 = Assessments */
@@ -333,7 +325,7 @@ class Builder {
 						$symbol = '--';
 				}
 			} else {
-				$symbol = $item['symbol'];
+				$symbol = $symbols[ $item['symbol'] ] ??= \esc_html( $item['symbol'] );
 			}
 
 			$title  = \wp_strip_all_tags( $item['title'] );
@@ -380,10 +372,10 @@ class Builder {
 
 			yield \sprintf(
 				'<span class="tsf-seo-bar-section-wrap tsf-tooltip-wrap"><span class="tsf-seo-bar-item tsf-tooltip-item tsf-seo-bar-%1$s" title="%2$s" aria-label="%2$s" data-desc="%3$s" tabindex=0>%4$s</span></span>',
-				$status,
+				$status, // Hardcoded text.
 				\esc_attr( $aria ),
 				\esc_attr( $html ),
-				\esc_html( $symbol ),
+				$symbol, // Pre-escaped above or hardcoded text.
 			);
 		}
 	}

@@ -1,0 +1,6 @@
+{
+	"chat.useClaudeMdFile": false,
+	"chat.instructionsFilesLocations": {
+		".claude/rules": false
+	}
+}

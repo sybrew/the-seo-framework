@@ -21,7 +21,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -184,6 +184,7 @@ final class Plugin {
 			'display_seo_bar_tables'       => 'checkbox',
 			'display_term_edit_options'    => 'checkbox',
 			'display_user_edit_options'    => 'checkbox',
+			'edit_proposed_values'         => 'checkbox',
 			'excerpt_the_feed'             => 'checkbox',
 			'facebook_author'              => 'facebook_profile_link',
 			'facebook_publisher'           => 'facebook_profile_link',

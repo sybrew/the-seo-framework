@@ -1,0 +1,4 @@
+interface:
+  display_name: "Playground hotspot profiling"
+  short_description: "Find TSF hotspots with Xdebug in WordPress Playground"
+  default_prompt: "Use $playground-performance to profile TSF with Xdebug, inspect self time and caller/callee costs, and deliver an offline hotspot report. Explain that Playground diagnostics do not predict production performance."

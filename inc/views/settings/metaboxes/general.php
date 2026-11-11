@@ -22,7 +22,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2016 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2016 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -137,7 +137,7 @@ switch ( $instance ) :
 
 		$character_info = HTML::make_info(
 			\__( 'The character counter is based on guidelines.', 'autodescription' ),
-			'',
+			'https://kb.theseoframework.com/?p=48#character-counters',
 			false,
 		);
 
@@ -190,6 +190,26 @@ switch ( $instance ) :
 		);
 
 		HTML::description( \__( 'Note: Hiding option fields does not remove the data once stored in them.', 'autodescription' ) );
+
+		?>
+		<hr>
+		<?php
+		HTML::header_title( \__( 'Editing Settings', 'autodescription' ) );
+
+		$editing_info = HTML::make_info(
+			\__( 'Clicking an empty input field keeps the blurred placeholder and places the cursor where you clicked. Editing makes it normal text. Clearing the field returns the placeholder.', 'autodescription' ),
+			'',
+			false,
+		);
+
+		HTML::wrap_fields(
+			Input::make_checkbox( [
+				'id'     => 'edit_proposed_values',
+				'label'  => \esc_html__( 'Edit generated values directly?', 'autodescription' ) . " $editing_info",
+				'escape' => false,
+			] ),
+			true,
+		);
 		break;
 
 	case 'performance':

@@ -14,7 +14,7 @@ use The_SEO_Framework\Admin\Settings\Layout\HTML;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2021 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2021 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -32,23 +32,6 @@ use The_SEO_Framework\Admin\Settings\Layout\HTML;
 // See _output_dismissible_persistent_notices
 [ $message, $key, $args ] = $view_args;
 
-/**
- * The SEO Framework plugin
- * Copyright (C) 2015 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 as published
- * by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 if ( ! $message ) return;
 
 $sanitized_key = \sanitize_key( $key );
@@ -62,18 +45,18 @@ switch ( $args['type'] ) {
 		$args['type'] = "notice-{$args['type']}";
 }
 
-$dismiss_title_i18n = \__( 'Dismiss this notice', 'default' );
+$dismiss_title_i18n = \__( 'Dismiss this notice.', 'default' );
 
 $nonce_action = Admin\Notice\Persistent::_get_dismiss_nonce_action( $sanitized_key );
 
 $button_js = \sprintf(
-	'<a class="hide-if-no-tsf-js tsf-dismiss" href="javascript:;" title="%s" %s></a>',
-	\esc_attr( $dismiss_title_i18n ),
+	'<button type=button class="hide-if-no-tsf-js tsf-dismiss"%s><span class=screen-reader-text>%s</span></button>',
 	HTML::make_data_attributes( [
 		'key'   => $sanitized_key,
 		// Is this the best nonce key key? Capability validation already happened. See `output_dismissible_persistent_notices()`.
 		'nonce' => \wp_create_nonce( $nonce_action ),
 	] ),
+	\esc_html( $dismiss_title_i18n ),
 );
 // We'll display this button even if this notice no longer repeats. This aligns with the user's expectation and offers control.
 $button_nojs = vsprintf(

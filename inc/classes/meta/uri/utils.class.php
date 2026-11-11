@@ -22,7 +22,7 @@ use The_SEO_Framework\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -486,11 +486,13 @@ class Utils {
 				}
 
 				$_query = parse_url( $url, \PHP_URL_QUERY );
+
 				// Remove queries, add them back later.
 				if ( $_query )
 					$url = strtok( $url, '?' );
 
 				$pos = strrpos( $url, $find );
+
 				// Defensive programming, only remove if $find matches the stack length, without query arguments.
 				if ( $pos && $pos + \strlen( $find ) === \strlen( $url ) ) {
 					$url = substr( $url, 0, $pos );

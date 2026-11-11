@@ -1,5 +1,5 @@
 ---
-description: "Use when editing README.md, readme.txt, or other user-facing documentation for this repository. Covers readme wording constraints, WordPress readme format, changelog prose style, and public API naming requirements."
+description: "TSF readme format, release-note wording, public API names, and performance claims."
 applyTo: "README.md, readme.txt"
 ---
 
@@ -20,3 +20,16 @@ applyTo: "README.md, readme.txt"
 - Preserve the existing nested list and indentation style in `readme.txt` changelogs, including bold category labels and indented follow-up bullets or numbered lists where the current format uses them.
 - When copying content from code, such as docblocks, comments, or commit notes, into `readme.txt` or other user-facing docs, preserve the essence verbatim. Only minor prose tweaks for readability are allowed. Do not add details that are not present in the source.
 - A symbol introduced in the unreleased version gets one changelog introduction. Do not add a later entry for edits made to it before release.
+- When mentioning a public class method or property, use the fully qualified name, then the API accessor in parentheses. For example, `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`).
+
+## Release-note audience
+
+- **For everyone** covers user-visible changes and general improvements, including performance.
+- **For developers** covers public API additions and changes to caller requirements, output, or other observable behavior. Include conveniences and fixes on paths used only by developers. Keep implementation details and isolated method timings in PHPDoc.
+- Also mention a fix for a developer path under **For everyone** when it affects users of a plugin with 10,000+ installs. If both sections apply, describe the practical effect for users and the technical detail for developers.
+
+## Performance claims
+
+- Use present tense for improvements. Pair each verified figure with a short explanation of what changes. Name the screen or operation in plain language. Omit PHP version numbers from release-note benchmark prose.
+- Prefer full HTTP response timing on clean WordPress installs. Identify column rendering and isolated method timings separately. Use matched WordPress-only controls when estimating the time TSF adds. Use unprofiled native hosting for release timing claims and keep those results separate from Playground diagnostics.
+- Revalidate on the actual release candidate before using figures from a different package or runtime. Keep raw results, test fixtures, reports, and private paths local. Give readers enough context to understand what a verified figure measures.

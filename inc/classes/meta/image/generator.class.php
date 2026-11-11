@@ -16,7 +16,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -255,8 +255,7 @@ final class Generator {
 			$image_id = $image->attachment_id ?? 0;
 
 			// attachment_id isn't stored by default.
-			$url =
-				   $image_id
+			$url = $image_id
 				? \wp_get_attachment_image_url( $image_id, $size )
 				: ( $image->url ?? '' );
 

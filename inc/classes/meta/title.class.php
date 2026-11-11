@@ -11,8 +11,8 @@ namespace The_SEO_Framework\Meta;
 use function The_SEO_Framework\{
 	coalesce_strlen,
 	get_query_type_from_args,
-	memo,
 	normalize_generation_args,
+	umemo,
 };
 
 use The_SEO_Framework\{
@@ -27,7 +27,7 @@ use The_SEO_Framework\Helper\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -211,7 +211,7 @@ class Title {
 		isset( $args ) and normalize_generation_args( $args );
 
 		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( null !== $memo = memo( null, $args ) )
+		if ( null !== $memo = umemo( __METHOD__, null, $args ) )
 			return $memo;
 
 		Title\Utils::remove_default_title_filters( false, $args );
@@ -240,7 +240,8 @@ class Title {
 			$args,
 		);
 
-		return memo(
+		return umemo(
+			__METHOD__,
 			\strlen( $title ) ? Sanitize::metadata_content( $title ) : '',
 			$args,
 		);
@@ -976,11 +977,18 @@ class Title {
 	 * the title additions output solely, whereas the other one has a mixed usage.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.1 Now memoizes for the duration of the request.
 	 *
 	 * @return string The trimmed blog name.
 	 */
 	public static function get_addition() {
-		return Sanitize::metadata_content( Data\Blog::get_public_blog_name() );
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				Sanitize::metadata_content(
+					Data\Blog::get_public_blog_name(),
+				),
+			);
 	}
 
 	/**
@@ -993,10 +1001,14 @@ class Title {
 	 * @return string The trimmed tagline.
 	 */
 	public static function get_addition_for_front_page() {
-		return memo() ?? memo( Sanitize::metadata_content(
-			   coalesce_strlen( Data\Plugin::get_option( 'homepage_title_tagline' ) )
-			?? Data\Blog::get_filtered_blog_description(),
-		) );
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				Sanitize::metadata_content(
+					   coalesce_strlen( Data\Plugin::get_option( 'homepage_title_tagline' ) )
+					?? Data\Blog::get_filtered_blog_description(),
+				),
+			);
 	}
 
 	/**
@@ -1033,18 +1045,20 @@ class Title {
 	 * @return string The Separator.
 	 */
 	public static function get_separator() {
-		return memo() ?? memo(
-			/**
-			 * @since 2.3.9
-			 * @param string $separator The title separator.
-			 */
-			(string) \apply_filters(
-				'the_seo_framework_title_separator',
-				(
-					   Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
-					?? '&#x2d;'
+		return umemo( __METHOD__ )
+			?? umemo(
+				__METHOD__,
+				/**
+				 * @since 2.3.9
+				 * @param string $separator The title separator.
+				 */
+				(string) \apply_filters(
+					'the_seo_framework_title_separator',
+					(
+						Title\Utils::get_separator_list()[ Data\Plugin::get_option( 'title_separator' ) ]
+						?? '&#x2d;'
+					),
 				),
-			),
-		);
+			);
 	}
 }

@@ -21,7 +21,7 @@ use The_SEO_Framework\{
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -359,6 +359,7 @@ class Image {
 						'url' => Data\Plugin::get_option( 'homepage_social_image_url' ),
 						'id'  => Data\Plugin::get_option( 'homepage_social_image_id' ),
 					];
+
 					if ( ! $details['url'] ) {
 						$details = [
 							'url' => Data\Plugin\Post::get_meta_item( '_social_image_url' ),
@@ -533,6 +534,7 @@ class Image {
 						$cbs = [
 							'featured' => [ $generator, 'generate_featured_image_details' ],
 						];
+
 						if ( 'social' === $context ) {
 							$cbs['content'] = [ $generator, 'generate_content_image_details' ];
 						}

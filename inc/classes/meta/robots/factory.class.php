@@ -12,7 +12,7 @@ use The_SEO_Framework\Data;
 
 /**
  * The SEO Framework plugin
- * Copyright (C) 2023 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2023 - 2026 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -86,6 +86,7 @@ class Factory {
 	 * Generates robots assertions.
 	 *
 	 * @since 4.2.0
+	 * @since 5.2.1 Reports invalid getters without accessing an undeclared property.
 	 * @access private
 	 * @generator
 	 */
@@ -98,6 +99,7 @@ class Factory {
 			case 'noarchive':
 				foreach ( static::assert_no( $sender ) as $key => $value ) {
 					yield $key => $value;
+
 					if ( $value ) {
 						yield static::HALT;
 						break;
@@ -113,7 +115,7 @@ class Factory {
 				break;
 
 			default:
-				static::$tsf->_doing_it_wrong(
+				\tsf()->_doing_it_wrong(
 					__METHOD__,
 					\sprintf( 'Unregistered robots-generator getter provided: <code>%s</code>.', \esc_html( $sender ) ),
 					'4.2.0',

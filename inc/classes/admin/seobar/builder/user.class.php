@@ -294,8 +294,7 @@ final class User extends Main {
 
 		$strcmp_title = Sanitize::normalize_metadata_content_for_strcmp( $title );
 
-		$brand_count =
-			   \strlen( $cache['params']['blogname_quoted'] )
+		$brand_count = \strlen( $cache['params']['blogname_quoted'] )
 			? preg_match_all(
 				"/{$cache['params']['blogname_quoted']}/ui",
 				$strcmp_title,
