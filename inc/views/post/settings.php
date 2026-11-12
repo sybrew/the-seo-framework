@@ -283,7 +283,7 @@ switch ( $instance ) :
 			];
 
 			$_twitter_card = Data\Plugin::get_option( 'homepage_twitter_card_type' )
-						  ?: Meta\Twitter::get_generated_card_type( $generator_args );
+				?: Meta\Twitter::get_generated_card_type( $generator_args );
 		} else {
 			$_social_title       = [
 				'og' => Meta\Open_Graph::get_generated_title( $generator_args ),
@@ -442,7 +442,7 @@ switch ( $instance ) :
 		// Fetch image placeholder.
 		if ( $is_static_front_page ) {
 			$image_placeholder = Data\Plugin::get_option( 'homepage_social_image_url' )
-							  ?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
+				?: Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 		} else {
 			$image_placeholder = Meta\Image::get_first_generated_image_url( $generator_args, 'social' );
 		}

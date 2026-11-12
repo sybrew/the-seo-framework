@@ -95,7 +95,7 @@ class Main {
 			'5.1.0 of The SEO Framework',
 			'the_seo_framework_robots_txt_sections',
 		) ? '/*?*'
-		  : '';
+			: '';
 
 		$sitemaps = [];
 
