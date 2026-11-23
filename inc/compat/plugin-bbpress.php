@@ -322,29 +322,27 @@ function _bbpress_filter_robots( $meta, $args ) {
  * @since 5.2.0 1. Now removes the indexing override assessment.
  *              2. Now compares the forum post type with `bbp_get_forum_post_type()`.
  *              3. Now reads the post type from the SEO Bar query cache.
+ * @since 5.2.2 Now bails on any blocking item and non-page SEO Bars.
  *
  * @param string $interpreter The interpreter class name.
  * @param object $builder     The builder's class instance.
  */
 function _assert_bbpress_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
-	if ( $interpreter::$query['tax'] ) return;
-
-	if ( ! Compatibility::can_i_use( [
-		'functions' => [
-			'bbp_get_forum_post_type',
-			'bbp_get_topic_post_type',
-			'bbp_get_reply_post_type',
-			'bbp_is_forum_public',
-		],
-	] ) ) {
+	if (
+		   'single' !== $builder::TYPE
+		|| $interpreter::has_blocking_item()
+		|| ! Compatibility::can_i_use( [
+			'functions' => [
+				'bbp_get_forum_post_type',
+				'bbp_get_topic_post_type',
+				'bbp_get_reply_post_type',
+				'bbp_is_forum_public',
+			],
+		] )
+	) {
 		return;
 	}
-
-	$items = $interpreter::collect_seo_bar_items();
-
-	// Don't do anything if there's a blocking redirect.
-	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
 
 	$forum_post_type = \bbp_get_forum_post_type();
 	$post_type       = $builder->get_query_cache()['states']['posttype'] ?? '';

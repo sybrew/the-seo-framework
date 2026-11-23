@@ -280,6 +280,8 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 		* `The_SEO_Framework\Helper\Taxonomy\Base_URL::strip_taxonomy_base()` (`tsf()->taxonomy()->base_url()->strip_taxonomy_base()`) removes the registered base from a taxonomy permalink structure while retaining its permalink front and root.
 		* `The_SEO_Framework\Meta\URI\Utils::get_term_slug_path()` (`tsf()->uri()->utils()->get_term_slug_path()`) gets the term's slug path using its taxonomy rewrite hierarchy.
 		* The term SEO Bar's `urlconflict` assessment checks shortened URL conflicts wherever the bar is generated. The `redirect` test continues to assess configured redirects only.
+		* `The_SEO_Framework\Admin\SEOBar\Builder::has_blocking_item()` (`$interpreter::has_blocking_item()`) reports whether any registered SEO Bar assessment is marked as blocking.
+		* SEO Bar builders passed to `the_seo_framework_prepare_seo_bar` and `the_seo_framework_seo_bar` expose `$builder::TYPE` (`'single'`, `'term'`, or `'user'`, defaulting to `null`).
 	* **Changed:**
 		* `The_SEO_Framework\Data\Plugin::update_option()` (`tsf()->data()->plugin()->update_option()`):
 			1. Now uses the same WordPress settings sanitization in admin, front-end, and REST requests after TSF initializes. This prepares settings writes for the [planned Gutenberg sidebar integration](https://github.com/sybrew/the-seo-framework/issues/387).
@@ -311,6 +313,7 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			1. Now refreshes post type archive meta when WordPress adds or updates the settings option.
 			2. Now returns false while a database upgrade is pending.
 		* Settings sanitization preserves the stored option when given an empty or malformed payload, even if the stored value is malformed.
+		* `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` now uses the matching builder when generating post, term, and user SEO Bars in the same request.
 * **Option notes:**
 	* **Added:**
 		* `remove_taxonomy_bases` maps selected taxonomy names to `1`. Omit a taxonomy to deselect it. TSF settings sanitization discards unselected entries. The option defaults to an empty array and is registered as such for upgraded sites at database version `5220`.
@@ -318,7 +321,6 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 	* **Changed:**
 		* `the_seo_framework_upgraded` and `the_seo_framework_downgraded` now fire only after the settings and database version are verified.
 		* On `the_seo_framework_prepare_seo_bar`, `$builder::$tests` now controls regular assessments. Each builder runs its blocking checks independently.
-		* `the_seo_framework_seo_bar` now passes whether a built-in blocking test matched as its third parameter.
 * **Filter notes:**
 	* **Added:**
 		* `the_seo_framework_get_term_home_url` filters the home URL used to interpret stored term rewrite rules. It receives the stored home URL and the term URL being checked.

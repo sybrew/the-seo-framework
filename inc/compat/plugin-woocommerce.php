@@ -262,6 +262,7 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
  *
  * @hook the_seo_framework_seo_bar 10
  * @since 4.1.4
+ * @since 5.2.2 Now bails on any blocking item and non-page SEO Bars.
  *
  * @param string $interpreter The interpreter class name.
  * @param object $builder     The builder's class instance.
@@ -269,7 +270,8 @@ function _set_wc_noindex_defaults( $meta, $args, $options ) {
 function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
 
 	if (
-		   $interpreter::$query['tax']
+		   'single' !== $builder::TYPE
+		|| $interpreter::has_blocking_item()
 		|| ! \function_exists( 'wc_get_page_id' )
 	) {
 		return;
@@ -281,11 +283,6 @@ function _assert_wc_noindex_defaults_seo_bar( $interpreter, $builder ) {
 		$page_ids = array_filter( [ \wc_get_page_id( 'cart' ), \wc_get_page_id( 'checkout' ), \wc_get_page_id( 'myaccount' ) ] );
 
 	if ( ! \in_array( $interpreter::$query['id'], $page_ids, true ) ) return;
-
-	$items = $interpreter::collect_seo_bar_items();
-
-	// Don't do anything if there's a blocking redirect.
-	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
 
 	$index_item           = &$interpreter::edit_seo_bar_item( 'indexing' );
 	$index_item['status'] = 0 !== Sanitize::qubit( $builder->get_query_cache()['meta']['_genesis_noindex'] )

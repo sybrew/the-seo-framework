@@ -21,7 +21,7 @@ The SEO Framework is a WordPress SEO plugin. Use PHP 7.4+ and follow WordPress c
 - For workspace-only work, including an explicit native release benchmark or timing revalidation, inspect only the frontmatter of `.local/.instructions/*.instructions.md`, then read matches. Use the description for entries without `applyTo`. Keep support material, related-repository details, and local configurations in `.local/`.
 - Use built-in tools for changes. Skills can require their own commands. Account for the platform when running commands.
 - Keep code procedural and simple. Avoid SOLID abstractions. Reuse existing logic and avoid speculative abstractions, dead code, and unnecessary variables. Fix the cause and choose the smallest safe change.
-- Record issues outside the requested scope in `.local/side-quest.md`. Include a stable number, the chat title (or subject if unavailable), and a timestamp with its time zone. Defer each issue until the operator requests it.
+- Record issues outside the requested scope, including pre-existing bugs hit only by synthetic tests, in `.local/side-quest.md` (stable number, chat title or subject, timestamp with time zone). Defer production fixes until requested; isolate synthetic tests to real flows instead.
 - Verify facts when asked. Ask before making broad assumptions. Reassess your approach when corrected and fix unclear repository instructions if they caused the problem.
 - Answer directly with plain punctuation. Use Markdown when it helps. Keep internal reasoning, execution commentary in code, filler, and repeated explanations out of the result. Preserve the meaning of existing comments.
 

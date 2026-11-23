@@ -400,6 +400,14 @@ switch ( $instance ) :
 
 		if ( $checkboxes )
 			HTML::wrap_fields( $checkboxes, true );
+
+		HTML::description_noesc(
+			\sprintf(
+				'<a href="%s" target=_blank rel="noreferrer noopener">%s</a>',
+				'https://kb.theseoframework.com/?p=521',
+				\esc_html__( 'Learn about taxonomy base removal.', 'autodescription' ),
+			),
+		);
 		?>
 		<hr>
 		<?php

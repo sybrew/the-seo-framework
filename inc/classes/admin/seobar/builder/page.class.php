@@ -54,6 +54,12 @@ use The_SEO_Framework\Helper\{
 final class Page extends Main {
 
 	/**
+	 * @since 5.2.2
+	 * @var string The SEO Bar query type handled by this builder.
+	 */
+	public const TYPE = 'single';
+
+	/**
 	 * @since 4.0.0
 	 * @since 5.2.2 Now controls regular assessments only.
 	 * @abstract
@@ -1085,7 +1091,6 @@ final class Page extends Main {
 					'assess' => [
 						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
 					],
-					'meta'   => [ 'blocking' => true ],
 				],
 			);
 

@@ -56,6 +56,12 @@ use The_SEO_Framework\Helper\{
 final class Term extends Main {
 
 	/**
+	 * @since 5.2.2
+	 * @var string The SEO Bar query type handled by this builder.
+	 */
+	public const TYPE = 'term';
+
+	/**
 	 * @since 4.0.0
 	 * @since 5.2.2 Now controls regular assessments only.
 	 * @abstract
@@ -989,7 +995,6 @@ final class Term extends Main {
 					'assess' => [
 						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
 					],
-					'meta'   => [ 'blocking' => true ],
 				],
 			);
 	}
@@ -1086,7 +1091,6 @@ final class Term extends Main {
 				'conflict' => $conflict,
 				'settings' => \__( "The term's SEO settings cannot take effect at the shortened URL.", 'autodescription' ),
 			],
-			'meta'   => [ 'blocking' => true ],
 		];
 
 		if ( ! empty( $this->query_cache['meta']['redirect'] ) )

@@ -138,10 +138,9 @@ class Builder {
 		 */
 		\do_action( 'the_seo_framework_prepare_seo_bar', self::class, $builder );
 
-		$items   = &self::collect_seo_bar_items();
-		$results = $builder->run_tests( $query );
+		$items = &self::collect_seo_bar_items();
 
-		foreach ( $results as $key => $data )
+		foreach ( $builder->run_tests( $query ) as $key => $data )
 			$items[ $key ] = $data;
 
 		/**
@@ -150,18 +149,11 @@ class Builder {
 		 * @link Example: https://gist.github.com/sybrew/59130560fcbeb98f7580dc11c54ba174
 		 * @since 4.0.0
 		 * @since 5.0.0 Added the builder's instance as the second parameter.
-		 * @since 5.2.2 Added the `$has_blocking_test` parameter.
 		 *
-		 * @param string $interpreter       The interpreter class name.
-		 * @param object $builder           The builder's class instance.
-		 * @param bool   $has_blocking_test Whether a built-in blocking test replaced the regular assessments.
+		 * @param string $interpreter The interpreter class name.
+		 * @param object $builder     The builder's class instance.
 		 */
-		\do_action(
-			'the_seo_framework_seo_bar',
-			self::class,
-			$builder,
-			$results->getReturn(),
-		);
+		\do_action( 'the_seo_framework_seo_bar', self::class, $builder );
 
 		$bar = self::create_seo_bar( self::$items );
 
@@ -194,6 +186,24 @@ class Builder {
 	}
 
 	/**
+	 * Determines whether a blocking assessment is registered for the current SEO Bar.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @return bool True if any registered item marks itself as blocking.
+	 */
+	public static function has_blocking_item() {
+
+		// Stop at the first registered assessment marked as blocking.
+		foreach ( self::$items as $item ) {
+			if ( ! empty( $item['meta']['blocking'] ) )
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Registers or overwrites an SEO Bar item.
 	 *
 	 * @since 4.0.0
@@ -208,6 +218,7 @@ class Builder {
 	 *     @type string    $reason Required. The final assessment: The reason for the $status.
 	 *     @type string[]  $assess Required. The assessments on why the reason is set. Keep it short and concise!
 	 *                             Does not accept HTML for performant ARIA support.
+	 *     @type array     $meta   Optional. Item metadata. Set `[ 'blocking' => true ]` for blocking assessments.
 	 * }
 	 */
 	public static function register_seo_bar_item( $key, $item ) {

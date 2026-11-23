@@ -47,6 +47,14 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
 abstract class Main {
 
 	/**
+	 * The SEO Bar query type handled by this builder.
+	 *
+	 * @since 5.2.2
+	 * @var ?string One of 'single', 'term', 'user', or null when unset.
+	 */
+	public const TYPE = null;
+
+	/**
 	 * @since 4.0.0
 	 * @since 5.2.2 Now controls regular assessments only.
 	 * @abstract
@@ -85,11 +93,10 @@ abstract class Main {
 	protected $query_cache = [];
 
 	/**
-	 * @since 4.0.0
-	 * Not shared between instances
-	 * @var static $instance The instance.
+	 * @since 5.2.2
+	 * @var array<class-string<static>,static> Builder instances indexed by class name.
 	 */
-	protected static $instance;
+	private static $instances = [];
 
 	/**
 	 * Constructor.
@@ -106,11 +113,12 @@ abstract class Main {
 	 * Returns this instance.
 	 *
 	 * @since 4.0.0
+	 * @since 5.2.2 Now caches instances per builder class.
 	 *
 	 * @return static
 	 */
 	final public static function get_instance() {
-		return static::$instance ??= new static; // static: allow overrides
+		return self::$instances[ static::class ] ??= new static; // static: allow overrides
 	}
 
 	/**
@@ -147,8 +155,8 @@ abstract class Main {
 	 * @since 5.0.0 Renamed from `_run_all_tests`.
 	 * @since 5.2.0 Now accepts `uid` for the user SEO Bar.
 	 * @since 5.2.2 1. Renamed from `run_all_tests`.
-	 *              2. Now yields the first matching blocking assessment, or runs the regular tests if none matches.
-	 *              3. The generator now returns whether a blocker matched.
+	 *              2. Now yields the first matching blocking assessment (marked blocking in meta),
+	 *                 or runs the regular tests if none matches.
 	 * @access private
 	 * @generator
 	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
@@ -157,7 +165,6 @@ abstract class Main {
 	 * @yield array {
 	 *     @type array {$test} The testing results.
 	 * }
-	 * @return \Generator The assessments and a Boolean return value indicating whether a blocker matched.
 	 */
 	final public function run_tests( $query ) {
 
@@ -171,15 +178,15 @@ abstract class Main {
 
 			if ( null === $item ) continue;
 
+			$item['meta']['blocking'] = true;
+
 			yield $test => $item;
 
-			return true;
+			return;
 		}
 
 		foreach ( static::$tests as $test ) // static: allow override
 			yield $test => $this->{"test_$test"}();
-
-		return false;
 	}
 
 	/**

@@ -11,7 +11,7 @@ namespace The_SEO_Framework;
 
 use The_SEO_Framework\Meta;
 
-\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\_assert_wpforo_page_seo_bar' );
+\add_action( 'the_seo_framework_seo_bar', __NAMESPACE__ . '\_assert_wpforo_page_seo_bar', 10, 2 );
 \add_action( 'wpforo_before_init', __NAMESPACE__ . '\_wpforo_fix_page' );
 
 /**
@@ -112,27 +112,33 @@ function _wpforo_filter_pre_title( $title, $args ) {
  *
  * @hook the_seo_framework_seo_bar 10
  * @since 4.2.8
+ * @since 5.2.2 1. Now bails on any blocking item and non-page SEO Bars.
+ *              2. Added the `$builder` parameter.
  *
  * @param string $interpreter The interpreter class name.
+ * @param object $builder     The builder's class instance.
  */
-function _assert_wpforo_page_seo_bar( $interpreter ) {
+function _assert_wpforo_page_seo_bar( $interpreter, $builder ) {
 
-	if ( $interpreter::$query['tax'] ) return;
+	if (
+		   'single' !== $builder::TYPE
+		|| $interpreter::has_blocking_item()
+	) {
+		return;
+	}
 
 	$meta_enabled  = _wpforo_seo_meta_enabled();  // phpcs:ignore TSF.Performance.Opcodes -- is local.
 	$title_enabled = _wpforo_seo_title_enabled(); // phpcs:ignore TSF.Performance.Opcodes -- is local.
 
 	if ( ! $meta_enabled && ! $title_enabled ) return;
 
-	$items = &$interpreter::collect_seo_bar_items();
-
-	// Don't do anything if there's a blocking redirect.
-	if ( ! empty( $items['redirect']['meta']['blocking'] ) ) return;
-
 	// Skip if we're not dealing with the wpForo page.
 	if ( ! \has_shortcode( Data\Post::get_content( $interpreter::$query['id'] ), 'wpforo' ) )
 		return;
 
+	$items = &$interpreter::collect_seo_bar_items();
+
+	// Mark each wpForo-managed SEO Bar assessment as undefined while keeping redirect assessments intact.
 	foreach ( $items as $id => &$item ) {
 		switch ( $id ) {
 			case 'redirect':
