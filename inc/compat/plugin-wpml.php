@@ -21,7 +21,9 @@ use The_SEO_Framework\{
 \add_action( 'the_seo_framework_sitemap_header', __NAMESPACE__ . '\_wpml_sitemap_filter_display_translatables' );
 \add_action( 'the_seo_framework_sitemap_hpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
 \add_action( 'the_seo_framework_sitemap_nhpt_query_args', __NAMESPACE__ . '\_wpml_sitemap_filter_non_translatables' );
+\add_filter( 'the_seo_framework_get_term_home_url', __NAMESPACE__ . '\_wpml_get_term_home_url', 10, 2 );
 \add_filter( 'wpml_tm_adjust_translation_fields', __NAMESPACE__ . '\_wpml_adjust_translation_fields' );
+\add_filter( 'the_seo_framework_term_route_context', __NAMESPACE__ . '\_wpml_term_route_context' );
 
 /**
  * Registers per-language sitemaps for robots.txt and request matching.
@@ -201,6 +203,53 @@ function _wpml_fix_sitemap_base_path( $path ) {
 		return $path;
 
 	return rtrim( parse_url( $home, \PHP_URL_PATH ) ?: '', '/' );
+}
+
+/**
+ * Uses the language home that WPML removes before matching rewrite rules.
+ *
+ * A term list can contain URLs in a language other than the current one.
+ *
+ * @hook the_seo_framework_get_term_home_url 10
+ * @since 5.2.2
+ *
+ * @global \SitePress $sitepress The WPML instance.
+ *
+ * @param string $home The stored home URL.
+ * @param string $url  The term URL being checked.
+ * @return string The home URL for the term URL's language, or the supplied home URL if unavailable.
+ */
+function _wpml_get_term_home_url( $home, $url ) {
+
+	global $sitepress;
+
+	if (
+		   empty( $sitepress )
+		|| ! Compatibility::can_i_use( [
+			'methods' => [
+				[ $sitepress, 'get_language_from_url' ],
+				[ $sitepress, 'language_url' ],
+			],
+		] )
+	) {
+		return $home;
+	}
+
+	return $sitepress->language_url( $sitepress->get_language_from_url( $url ) ) ?: $home;
+}
+
+/**
+ * Carries WPML's language parameter into the shortened term query.
+ * The parameter selects a language for any route, including an otherwise unmatched path.
+ *
+ * @hook the_seo_framework_term_route_context 10
+ * @since 5.2.2
+ *
+ * @param array<string,true> $context Query variable names as keys.
+ * @return array<string,true> The context including WPML's language.
+ */
+function _wpml_term_route_context( $context ) {
+	return $context + [ 'lang' => true ];
 }
 
 /**

@@ -42,6 +42,21 @@ use The_SEO_Framework\Data;
 class Taxonomy {
 
 	/**
+	 * Determines whether URL base removal is enabled for a taxonomy.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @param string $taxonomy The taxonomy name. Defaults to the current taxonomy.
+	 * @return bool Whether the taxonomy's base-removal option is set.
+	 */
+	public static function is_base_removal_enabled( $taxonomy = '' ) {
+		return (bool) Data\Plugin::get_option(
+			'remove_taxonomy_bases',
+			$taxonomy ?: Query::get_current_taxonomy(),
+		);
+	}
+
+	/**
 	 * Checks if the taxonomy isn't disabled, and that at least one taxonomy
 	 * objects post type supports The SEO Framework.
 	 *

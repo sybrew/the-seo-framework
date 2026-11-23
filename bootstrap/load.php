@@ -84,8 +84,13 @@ function _load_tsf() {
 function _init_tsf() {
 
 	/**
+	 * Runs before TSF initializes its shared and request-specific hooks.
+	 *
+	 * Use this action to register hooks needed during initialization. TSF's
+	 * settings-dependent setup is still pending. Use `the_seo_framework_after_init`
+	 * for code that depends on the initialized plugin.
+	 *
 	 * @since 2.8.0
-	 * Runs before the plugin is initialized.
 	 */
 	\do_action( 'the_seo_framework_init' );
 
@@ -130,9 +135,12 @@ function _init_tsf() {
 	}
 
 	/**
+	 * Runs after TSF initializes its shared and request-specific hooks.
+	 *
+	 * Use this action to interact with the initialized plugin or remove its
+	 * filters and actions.
+	 *
 	 * @since 3.1.0
-	 * Runs after the plugin is initialized.
-	 * Use this to remove filters and actions.
 	 */
 	\do_action( 'the_seo_framework_after_init' );
 }

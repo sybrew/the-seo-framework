@@ -244,6 +244,89 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+### In development
+
+**For everyone**
+
+* **Added:**
+	* You can now remove URL bases separately for public hierarchical taxonomies under General Settings > Canonical. Term URL hierarchy and permalink prefixes are preserved. Original term URLs remain available. The default canonical URL uses the shortened URL. Shortened archives support feeds and pagination through both their permalink paths and the `feed` and `paged` query arguments. WooCommerce catalog sorting works on shortened product category URLs. Native public pages, posts, and archives take precedence. Unpublished posts and pages leave the shortened term URL available to visitors who cannot view that content. Between shortened term URLs, taxonomies are tested in name order, as listed in the settings. Conflicts do not change generated term links.
+	* Taxonomy base removal is disabled by default for new and existing sites. Its settings explain the navigation benefit, when to leave it disabled, and when plain permalinks prevent it from taking effect. Non-hierarchical taxonomies, including Tags, are unaffected.
+	* The canonical URL preview in term edit and Quick Edit follows the taxonomy's URL base setting when you change a term slug.
+	* The SEO Bar now shows a full-width red "Term URL conflict" warning (!!!) in the term list and editor when a shortened term URL conflicts with a public post, page, custom post type, post type archive, or another term archive. The standard term lists batch checks for the rows they display. The check recognizes custom rewrites registered for term archives. It includes the designated posts page when a static front page is selected. The warning's tooltip explains that configured redirects remain active at the original term URL.
+* **Compatibility:**
+	* **Plugin: Multisite Language Switcher:**
+		* On PHP 8.1 and later, category hreflang links follow the destination site's category base setting, whether the current site keeps or removes its own. On PHP 8.0 and 7.4, links reuse the current site's setting instead, which [causes a 404 when a site that removes its base links to one that keeps it](https://github.com/sybrew/the-seo-framework/issues/784).
+	* **Plugin: Polylang:**
+		* Shortened term URLs retain their language when requested with a language query parameter.
+	* **Plugin: WPML:**
+		* Shortened term URLs preserve language directories and language query parameters, and work with WPML's term-link cache.
+* **Fixed:**
+	* Resolved an edge-case issue where database upgrades could discard legacy settings before migrations finished, overwrite source settings in a secondary language, or mark an upgrade complete before verifying the saved value.
+	* Resolved a rare issue where database downgrades kept settings that only the newer version recognized instead of pruning them.
+	* Resolved an edge-case issue where saving or resetting SEO settings during a pending database upgrade could fail silently instead of showing a retry message.
+* **Notes:**
+	* On multisite, if a blog switch is already active when TSF starts an upgrade or downgrade, TSF defers it until the next eligible request to that site.
+	* When restoring a taxonomy base, set up permanent (301) redirects from the shortened term URLs to the restored URLs. For example, redirect `/guides/weekends/` to `/category/guides/weekends/`. Keep any shortened paths that already serve pages, posts, or other archives available for that content.
+
+**For developers**
+
+* **PHP API notes:**
+	* **Added:**
+		* `The_SEO_Framework\flag()` reads or sets a named flag shared across functions for the current request. Omit the value or pass `null` to read. An unset flag returns `null`.
+		* `The_SEO_Framework\Helper\Taxonomy::is_base_removal_enabled()` (`tsf()->taxonomy()->is_base_removal_enabled()`) reads the per-taxonomy base-removal setting, defaulting to the current taxonomy.
+		* `The_SEO_Framework\Helper\Taxonomy\Base_URL::get_taxonomies()` (`tsf()->taxonomy()->base_url()->get_taxonomies()`) lists public hierarchical taxonomies with viewable rewrite URLs, sorted by taxonomy name.
+		* `The_SEO_Framework\Helper\Taxonomy\Base_URL::supports_base_removal()` (`tsf()->taxonomy()->base_url()->supports_base_removal()`) checks whether a registered taxonomy supports base removal. It accepts a taxonomy name or object.
+		* `The_SEO_Framework\Helper\Taxonomy\Base_URL::should_remove_taxonomy_base()` (`tsf()->taxonomy()->base_url()->should_remove_taxonomy_base()`) checks whether base removal applies to the named taxonomy under the current permalink structure and settings.
+		* `The_SEO_Framework\Helper\Taxonomy\Base_URL::strip_taxonomy_base()` (`tsf()->taxonomy()->base_url()->strip_taxonomy_base()`) removes the registered base from a taxonomy permalink structure while retaining its permalink front and root.
+		* `The_SEO_Framework\Meta\URI\Utils::get_term_slug_path()` (`tsf()->uri()->utils()->get_term_slug_path()`) gets the term's slug path using its taxonomy rewrite hierarchy.
+		* The term SEO Bar's `urlconflict` assessment checks shortened URL conflicts wherever the bar is generated. The `redirect` test continues to assess configured redirects only.
+	* **Changed:**
+		* `The_SEO_Framework\Data\Plugin::update_option()` (`tsf()->data()->plugin()->update_option()`):
+			1. Now uses the same WordPress settings sanitization in admin, front-end, and REST requests after TSF initializes. This prepares settings writes for the [planned Gutenberg sidebar integration](https://github.com/sybrew/the-seo-framework/issues/387).
+			2. Now merges changes into defaults when the saved settings value is a non-array.
+			3. Now refreshes settings and post type archive meta on WordPress's post-write actions.
+			4. Now returns false while a database upgrade is pending.
+		* TSF's option-specific pre-update filter checks the site's database version on each ordinary WordPress `update_option()` call and returns the stored settings while an upgrade is pending.
+		* `The_SEO_Framework\Data\Plugin\Setup::get_default_options()` (`tsf()->data()->plugin()->setup()->get_default_options()`) added `remove_taxonomy_bases`, disabled by default.
+		* `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`) now accounts for taxonomy base removal when predicting term URLs.
+		* `The_SEO_Framework\Helper\Query::get_the_real_id()` (`tsf()->query()->get_the_real_id()`) now waits for the `wp` action before caching the front-end ID.
+		* `The_SEO_Framework\Helper\Query::get_the_front_page_id()` (`tsf()->query()->get_the_front_page_id()`) now caches per site and waits for the `wp` action before caching the front-end front page ID.
+		* `The_SEO_Framework\Helper\Query::is_static_front_page()` (`tsf()->query()->is_static_front_page()`) now caches per site and waits for the `wp` action before caching the front-end front page ID.
+		* `The_SEO_Framework\Helper\Query::is_sitemap()` (`tsf()->query()->is_sitemap()`) now uses the shared `is_sitemap_query` flag.
+		* `The_SEO_Framework\Helper\Query\Cache::memo()` (`tsf()->query()->cache()->memo()`):
+			1. Now waits for the `wp` action before caching front-end queries.
+			2. Now skips serialization when no extra arguments are passed.
+		* `The_SEO_Framework\Helper\Query\Cache::can_cache_query()` (`tsf()->query()->cache()->can_cache_query()`):
+			1. Now waits for the `wp` action before caching front-end queries.
+			2. Now omits the debug notice for early query reads.
+		* `The_SEO_Framework\Helper\Query\Utils::using_pretty_permalinks()` (`tsf()->query()->utils()->using_pretty_permalinks()`) now caches per site.
+		* `The_SEO_Framework\Helper\Query\Utils::query_supports_seo()` (`tsf()->query()->utils()->query_supports_seo()`) now waits for the `wp` action before caching front-end SEO support.
+		* `The_SEO_Framework\Helper\Query\Utils::is_query_exploited()` (`tsf()->query()->utils()->is_query_exploited()`) now waits for the `wp` action before caching front-end query protection.
+	* **Fixed:**
+		* `The_SEO_Framework\Data\Plugin::get_options()` (`tsf()->data()->plugin()->get_options()`) now falls back to defaults when WordPress returns a non-array settings value.
+		* `The_SEO_Framework\Data\Plugin::flush_cache()` (`tsf()->data()->plugin()->flush_cache()`):
+			1. Now refreshes the settings and post type archive caches after successful additions, updates, and deletions of the settings option.
+			2. Now runs on admin, front-end, and REST requests.
+		* `The_SEO_Framework\Data\Plugin\Setup::reset_options()` (`tsf()->data()->plugin()->setup()->reset_options()`):
+			1. Now refreshes post type archive meta when WordPress adds or updates the settings option.
+			2. Now returns false while a database upgrade is pending.
+		* Settings sanitization preserves the stored option when given an empty or malformed payload, even if the stored value is malformed.
+* **Option notes:**
+	* **Added:**
+		* `remove_taxonomy_bases` maps selected taxonomy names to `1`. Omit a taxonomy to deselect it. TSF settings sanitization discards unselected entries. The option defaults to an empty array and is registered as such for upgraded sites at database version `5220`.
+* **Action notes:**
+	* **Changed:**
+		* `the_seo_framework_upgraded` and `the_seo_framework_downgraded` now fire only after the settings and database version are verified.
+		* On `the_seo_framework_prepare_seo_bar`, `$builder::$tests` now controls regular assessments. Each builder runs its blocking checks independently.
+		* `the_seo_framework_seo_bar` now passes whether a built-in blocking test matched as its third parameter.
+* **Filter notes:**
+	* **Added:**
+		* `the_seo_framework_get_term_home_url` filters the home URL used to interpret stored term rewrite rules. It receives the stored home URL and the term URL being checked.
+		* `the_seo_framework_term_route_context` filters the query variables that qualify a shortened term request without claiming its path. Add their names as keys with a value of `true` to carry their request values over to the winning term query.
+		* WordPress's `{$taxonomy}_rewrite_rules` filter also adjusts request-local patterns when taxonomy base removal resolves an unclaimed path. These patterns are not stored as rewrite rules.
+	* **Changed:**
+		* `the_seo_framework_settings_update_sanitizers` now also runs for WordPress writes to TSF settings outside the admin.
+
 ### 5.2.1
 
 This update reduces the time TSF spends building the SEO Bar, preparing Quick Edit data, and cleaning up titles and descriptions. The character counter now responds to Space as well as Enter. We also fixed a PHP warning when determining the Twitter Card type for archives without editable SEO settings.

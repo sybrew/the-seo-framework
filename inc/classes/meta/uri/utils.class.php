@@ -15,9 +15,10 @@ use function The_SEO_Framework\{
 	umemo,
 };
 
-use The_SEO_Framework\{
-	Data,
-	Helper\Query,
+use The_SEO_Framework\Data;
+use The_SEO_Framework\Helper\{
+	Query,
+	Taxonomy\Base_URL,
 };
 
 /**
@@ -369,6 +370,34 @@ class Utils {
 	}
 
 	/**
+	 * Gets the term's slug path using its taxonomy rewrite hierarchy.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @param \WP_Term $term The term whose path to get.
+	 * @return string The term's slug path, or an empty string on failure.
+	 */
+	public static function get_term_slug_path( $term ) {
+
+		if (
+			   ! $term->parent
+			|| '' === $term->slug
+			|| empty( \get_taxonomy( $term->taxonomy )->rewrite['hierarchical'] )
+		) {
+			return $term->slug;
+		}
+
+		$slugs = array_column(
+			Data\Term::get_term_parents( $term->term_id, $term->taxonomy ),
+			'slug',
+		);
+
+		$slugs[] = $term->slug;
+
+		return implode( '/', $slugs );
+	}
+
+	/**
 	 * Makes a fully qualified URL from any input.
 	 *
 	 * @since 5.0.0
@@ -557,6 +586,7 @@ class Utils {
 	 *                 `get_post_permalink()`, instead of the page permastruct.
 	 *              3. Now returns the site root for the static front page and the blog-on-front homepage,
 	 *                 matching `get_page_link()` / `home_url( '/' )`, instead of `$wp_rewrite->front`.
+	 * @since 5.2.2 Now accounts for taxonomy base removal when predicting term URLs.
 	 *
 	 * @param array $args The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
 	 * @return string The URL permastructure for the given query.
@@ -645,8 +675,11 @@ class Utils {
 			case 'term':
 				$permastruct = $wp_rewrite->get_extra_permastruct( $args['tax'] );
 
-				if ( empty( $permastruct ) )
+				if ( empty( $permastruct ) ) {
 					$permastruct = self::get_query_permastruct_for_taxonomy( $args['tax'] );
+				} elseif ( Base_URL::should_remove_taxonomy_base( $args['tax'] ) ) {
+					$permastruct = Base_URL::strip_taxonomy_base( $permastruct, $args['tax'] );
+				}
 				break;
 			case 'pta':
 				$permastruct = $wp_rewrite->get_extra_permastruct( $args['pta'] );

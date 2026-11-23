@@ -13,9 +13,12 @@ paths:
 - Write PHP attributes inline on the symbol they annotate, for example `function foo( #[\SensitiveParameter] $x )`. If the attribute plus that symbol would exceed 80 visual columns (tab = 4), put the attribute on the line above. If the attribute itself exceeds 80, wrap its arguments like a function call.
 - Avoid functions `wp_sprintf`, except with `%l` lists, `wp_json_encode`, and `status_header`.
 - Never add hooks in class constructs.
+- File-scope `add_filter()` calls in `inc/compat/` require named callbacks with PHPDoc explaining their purpose.
 - In `add_filter()` and `add_action()`, write each argument on a new line when implementing anonymous functions.
+- For new `add_action()` and `add_filter()` calls, pass `0` as the fourth argument (`$accepted_args`) when the callback needs no hook arguments.
 - Do not mark anonymous functions or arrow functions `static` except in instance methods. `static` only prevents binding `$this`.
 - Do not create `validate_callbacks` for REST routes. Validate and sanitize parameters directly in the route callback.
+- Keep gettext calls with only string literal arguments on one line, for example `\__( 'A post type archive already uses this term URL.', 'autodescription' )`.
 - Use short array syntax.
 - Always delimit regular expressions with `/`. Escape slashes in the pattern. Do not use `#` or other preg delimiters.
 - Add trailing commas on multiline array items and function calls. Do not add them on function, method, closure, or `fn()` parameter lists, closure `use (` lists, or control-structure conditions (PHP 8.0).
@@ -28,11 +31,12 @@ paths:
 - Avoid output buffering.
 - You may use `str_starts_with`, `str_ends_with`, and `str_contains`; WordPress provides these.
 - Refrain from colon syntax for conditionals and loops.
+- Every `foreach` requires a short `//` comment of intent immediately above it, unless its body has fewer than 3 lines and is a plain copy, filter, or call.
 - You may use logical operators like `and`, `or`, and `xor`, but not in conditional expressions.
 - Use `??` (or `??=`) when the coalesced value is assigned or returned. The miss value must be `null`.
 - Use `?:` when any empty value is a miss and a string of `0` is not a valid keep.
 - Use `or` / `and` for statement-level short-circuit, for example `isset( $x ) or $x = ...` or `get_cache() or set_cache()`. Do not use `??` as a statement.
-- Pass-through wrappers stay on the opener line; the inner call whose arguments exceed 30 characters starts on the next line. After the coalesce or ternary break, a remaining single nested call may stay compact, for example `?? Query\Cache::memo( self::is_menu_page( Admin\Menu::get_page_hook_name() ) )`.
+- Pass-through wrappers stay on the opener line; the inner call whose arguments exceed 40 characters starts on the next line. After the coalesce or ternary break, a remaining single nested call may stay compact, for example `?? Query\Cache::memo( self::is_menu_page( Admin\Menu::get_page_hook_name() ) )`.
 - Keep a coalesce of two wrappers on one line when the right-hand call is a single-argument pass-through, for example `memo() ?? memo( array_values(`.
 - A single-property array that is the only argument stays on the opener, for example `get_post_types( [ 'public' => true ] )`. That is not the multi-argument wrap trigger. If the only argument is a multi-property array, keep `fn( [` and wrap the properties.
 - Wrap a Boolean `&&` / `||` function argument so phpcs treats it as one argument.
@@ -61,5 +65,6 @@ paths:
 
 ## PHPDoc
 
+- Every `@internal` tag requires the reason on the same line.
 - Keep implementation details and isolated helper measurements in the relevant PHPDoc. Omit PHP version numbers from benchmark prose.
 - For docblock-only PHP edits, run PHP lint and compare executable tokens before and after the edit.

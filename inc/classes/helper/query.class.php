@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Helper;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use function The_SEO_Framework\umemo;
+use function The_SEO_Framework\{
+	flag,
+	umemo,
+};
 
 use The_SEO_Framework\{
 	Admin,
@@ -90,15 +93,14 @@ class Query {
 
 	/**
 	 * Get the real page ID, also from CPT, archives, author, blog, etc.
-	 * Memoizes the return value.
-	 *
-	 * Uses `umemo()` instead of `Query\Cache::memo()`, for it is faster.
+	 * Memoizes the front-end ID after WordPress resolves the main query.
 	 *
 	 * @since 2.5.0
 	 * @since 3.1.0 No longer checks if we can cache the query when $use_cache is false.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.2 Now waits for the `wp` action before caching the front-end ID.
 	 *
-	 * @param bool $use_cache Whether to use the cache or not.
+	 * @param bool $use_cache Whether to use the cached ID when available.
 	 * @return int|false The ID.
 	 */
 	public static function get_the_real_id( $use_cache = true ) {
@@ -106,12 +108,12 @@ class Query {
 		if ( \is_admin() )
 			return self::get_the_real_admin_id();
 
-		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
-		if ( $use_cache && ( null !== $memo = umemo( __METHOD__ ) ) )
-			return $memo;
+		static $memo;
 
-		// Try to get ID from plugins or feed when caching is available.
 		if ( $use_cache ) {
+			if ( isset( $memo ) )
+				return $memo;
+
 			/**
 			 * @since 2.5.0
 			 * @param int $id
@@ -125,7 +127,7 @@ class Query {
 		/**
 		 * @since 2.6.2
 		 * @param int  $id        Can be either the Post ID, or the Term ID.
-		 * @param bool $use_cache Whether this value is stored in runtime caching.
+		 * @param bool $use_cache Whether the caller requested a cached ID.
 		 */
 		$id = (int) \apply_filters(
 			'the_seo_framework_current_object_id',
@@ -133,9 +135,8 @@ class Query {
 			$use_cache,
 		);
 
-		// Do not overwrite cache when not requested. Otherwise, we'd have two "initial" states, causing incongruities.
-		return $use_cache
-			? umemo( __METHOD__, $id )
+		return $use_cache && Query\Cache::can_cache_query()
+			? $memo = $id
 			: $id;
 	}
 
@@ -169,17 +170,29 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.2 1. Now waits for the `wp` action before caching the front-end front page ID.
+	 *              2. Now caches per site.
+	 * @global int $blog_id
 	 *
 	 * @return int the ID.
 	 */
 	public static function get_the_front_page_id() {
-		return umemo( __METHOD__ )
-			?? umemo(
-				__METHOD__,
-				Query\Utils::has_page_on_front()
-					? (int) \get_option( 'page_on_front' )
-					: 0,
-			);
+
+		static $memo = [];
+
+		$blog_id = $GLOBALS['blog_id'];
+
+		if ( isset( $memo[ $blog_id ] ) )
+			return $memo[ $blog_id ];
+
+		$id = Query\Utils::has_page_on_front()
+			? (int) \get_option( 'page_on_front' )
+			: 0;
+
+		// Wait for `wp`: Polylang's content-based language mode attaches its `option_page_on_front` filter at `wp` (priority 5).
+		return Query\Cache::can_cache_query()
+			? $memo[ $blog_id ] = $id
+			: $id;
 	}
 
 	/**
@@ -878,22 +891,17 @@ class Query {
 	 * Detects the static front page.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.2 1. Now waits for the `wp` action before caching the front-end front page ID.
+	 *              2. Now caches per site.
 	 *
 	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
 	 * @return bool True when homepage is static and given/current ID matches.
 	 */
 	public static function is_static_front_page( $id = 0 ) {
 
-		// Memo this slow part separately; Query\Cache::memo() isn't fast enough.
-		$front_id = umemo( __METHOD__ )
-			?? umemo(
-				__METHOD__,
-				Query\Utils::has_assigned_page_on_front()
-					? (int) \get_option( 'page_on_front' )
-					: false,
-			);
+		$front_id = self::get_the_front_page_id();
 
-		return false !== $front_id
+		return $front_id
 			&& ( $id ?: self::get_the_real_id() ) === $front_id;
 	}
 
@@ -1325,18 +1333,21 @@ class Query {
 	}
 
 	/**
-	 * Determines whether we're on The SEO Framework's sitemap or not.
-	 * Memoizes the return value once set.
+	 * Determines whether the current request has been marked as a sitemap.
 	 *
 	 * @since 2.9.2
 	 * @since 4.0.0 Now memoizes instead of populating class properties.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.2 Now uses the shared `is_sitemap_query` flag.
 	 *
-	 * @param bool $set Whether to set "doing sitemap".
+	 * @param bool $set True to mark the request as a sitemap. False to read the flag.
 	 * @return bool
 	 */
 	public static function is_sitemap( $set = false ) {
-		return umemo( __METHOD__, $set ?: null ) ?? false;
+		return flag(
+			'is_sitemap_query',
+			$set ?: null,
+		) ?? false;
 	}
 
 	/**

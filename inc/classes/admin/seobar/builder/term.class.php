@@ -10,6 +10,8 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
 
 use const The_SEO_Framework\ROBOTS_ASSERT;
 
+use function The_SEO_Framework\flag;
+
 use The_SEO_Framework\{
 	Admin\SEOBar\Builder,
 	Data,
@@ -55,10 +57,20 @@ final class Term extends Main {
 
 	/**
 	 * @since 4.0.0
+	 * @since 5.2.2 Now controls regular assessments only.
 	 * @abstract
-	 * @var array All known tests.
+	 * @var string[] The regular test names.
 	 */
 	public static $tests = [ 'title', 'description', 'indexing', 'following', 'archiving', 'redirect' ];
+
+	/**
+	 * @since 5.2.2
+	 * @var array<string,string> Blocking assessment method names in evaluation order.
+	 */
+	protected const BLOCKING_TESTS = [
+		'urlconflict' => 'test_urlconflict',
+		'redirect'    => 'test_blocking_redirect',
+	];
 
 	/**
 	 * Primes the cache.
@@ -136,30 +148,6 @@ final class Term extends Main {
 				'robotsassert' => Meta\Robots::get_collected_meta_assertions(),
 			],
 		];
-	}
-
-	/**
-	 * Tests for blocking redirection.
-	 *
-	 * @since 4.0.0
-	 * @abstract
-	 *
-	 * @return bool True if there's a blocking redirect, false otherwise.
-	 */
-	protected function has_blocking_redirect() {
-		return ! empty( $this->query_cache['meta']['redirect'] );
-	}
-
-	/**
-	 * Tests whether indexing replaces the other tests.
-	 *
-	 * @since 5.2.0
-	 * @abstract
-	 *
-	 * @return bool True when the indexing block replaces the other tests, false otherwise.
-	 */
-	protected function has_blocking_noindex() {
-		return false;
 	}
 
 	/**
@@ -980,9 +968,37 @@ final class Term extends Main {
 	}
 
 	/**
-	 * Runs redirect tests.
+	 * Assesses a configured redirect.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @return ?array The blocking assessment if a redirect is configured, otherwise null.
+	 */
+	protected function test_blocking_redirect() {
+
+		if ( empty( $this->query_cache['meta']['redirect'] ) ) return;
+
+		return static::get_cache( 'term/redirect/default/1' )
+			?? static::set_cache(
+				'term/redirect/default/1',
+				[
+					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
+					'title'  => \__( 'Redirection', 'autodescription' ),
+					'status' => Builder::STATE_UNKNOWN,
+					'reason' => \__( 'Term redirects visitors.', 'autodescription' ),
+					'assess' => [
+						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
+					],
+					'meta'   => [ 'blocking' => true ],
+				],
+			);
+	}
+
+	/**
+	 * Assesses a term without a redirect.
 	 *
 	 * @since 4.0.0
+	 * @since 5.2.2 Now runs only for terms without a configured redirect.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar redirect item.
@@ -996,25 +1012,6 @@ final class Term extends Main {
 	 * }
 	 */
 	protected function test_redirect() {
-
-		if ( $this->has_blocking_redirect() )
-			return static::get_cache( 'term/redirect/default/1' )
-				?? static::set_cache(
-					'term/redirect/default/1',
-					[
-						'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
-						'title'  => \__( 'Redirection', 'autodescription' ),
-						'status' => Builder::STATE_UNKNOWN,
-						'reason' => \__( 'Term redirects visitors.', 'autodescription' ),
-						'assess' => [
-							'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
-						],
-						'meta'   => [
-							'blocking' => true,
-						],
-					],
-				);
-
 		return static::get_cache( 'term/redirect/default/0' )
 			?? static::set_cache(
 				'term/redirect/default/0',
@@ -1031,5 +1028,70 @@ final class Term extends Main {
 					],
 				],
 			);
+	}
+
+	/**
+	 * Builds the blocking assessment when another route owns the shortened term URL.
+	 *
+	 * Reads the batch result for this row, which accounts for the designated
+	 * posts page and registered native term rewrite rules. When a redirect is
+	 * configured, the assessment notes that it remains active at the original URL.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @return ?array The blocking assessment if the URL conflicts, otherwise null.
+	 */
+	protected function test_urlconflict() {
+
+		if ( ! Taxonomy\Base_URL::should_remove_taxonomy_base( static::$query['tax'] ) ) // static: use the builder's query
+			return;
+
+		$term = $this->query_cache['term'];
+
+		if ( ! $term instanceof \WP_Term ) return;
+
+		$conflicts = flag( 'term_list_url_conflicts' ) ?? [];
+
+		// A null entry means the batch already checked this term and found no conflict.
+		if ( ! \array_key_exists( $term->term_id, $conflicts ) )
+			$conflicts = Taxonomy\Base_URL\Conflicts::get_term_url_conflicts( [ $term ] );
+
+		$conflicting_route = $conflicts[ $term->term_id ];
+
+		if ( null === $conflicting_route ) return;
+
+		if ( \is_int( $conflicting_route ) ) {
+			$conflict = \sprintf(
+				/* translators: %d = Post ID. */
+				\__( 'The term URL resolves to another page or post (ID %d).', 'autodescription' ),
+				$conflicting_route,
+			);
+		} elseif ( \is_string( $conflicting_route ) ) {
+			$conflict = \__( 'A post type archive already uses this term URL.', 'autodescription' );
+		} else {
+			$conflict = \sprintf(
+				/* translators: 1 = Singular taxonomy label, 2 = Term ID. */
+				\__( 'A %1$s archive already uses this URL (term ID %2$d).', 'autodescription' ),
+				\esc_html( Taxonomy::get_label( $conflicting_route->taxonomy ) ),
+				$conflicting_route->term_id,
+			);
+		}
+
+		$item = [
+			'symbol' => '!!!',
+			'title'  => \__( 'Term URL conflict', 'autodescription' ),
+			'status' => Builder::STATE_BAD,
+			'reason' => \__( 'The shortened URL is already in use.', 'autodescription' ),
+			'assess' => [
+				'conflict' => $conflict,
+				'settings' => \__( "The term's SEO settings cannot take effect at the shortened URL.", 'autodescription' ),
+			],
+			'meta'   => [ 'blocking' => true ],
+		];
+
+		if ( ! empty( $this->query_cache['meta']['redirect'] ) )
+			$item['assess']['original'] = \__( 'The configured redirect remains active at the original term URL.', 'autodescription' );
+
+		return $item;
 	}
 }

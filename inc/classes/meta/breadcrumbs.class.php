@@ -552,7 +552,7 @@ class Breadcrumbs {
 		} else {
 			$crumbs[] = [
 				'url'  => Meta\URI::get_bare_author_url(),
-				'name' => self::get_breadcrumb_title(), // NOTE: has no meta title (yet), but we'll add that in 5.2.0
+				'name' => self::get_breadcrumb_title(),
 				'role' => 'current',
 			];
 		}

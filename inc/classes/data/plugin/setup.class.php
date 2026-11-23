@@ -55,20 +55,24 @@ class Setup {
 	private static $warned_options;
 
 	/**
-	 * Resets the options and flushes all pertaining caches for the current request.
+	 * Resets the options to their defaults.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.2 1. Now refreshes post type archive meta when WordPress adds or updates the settings option.
+	 *              2. Now returns false while a database upgrade is pending.
 	 *
-	 * @return bool True on success, false on failure.
+	 * @return bool True if WordPress saved a changed value, false otherwise.
 	 */
 	public static function reset_options() {
 
-		$success = \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, static::get_default_options(), true );
+		if ( Data\Plugin::is_upgrade_pending() )
+			return false;
 
-		if ( $success )
-			Data\Plugin::refresh_static_properties();
-
-		return $success;
+		return \update_option(
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			static::get_default_options(),
+			true, // autoload
+		);
 	}
 
 	/**
@@ -128,6 +132,7 @@ class Setup {
 	 *              2. Added `breadcrumb_archive` and `breadcrumb_taxonomy`.
 	 *              3. Added `knowledge_tiktok`.
 	 *              4. Added `edit_proposed_values`.
+	 * @since 5.2.2 Added `remove_taxonomy_bases`, disabled by default.
 	 *
 	 * @return array Default site options.
 	 */
@@ -171,7 +176,8 @@ class Setup {
 				'edit_proposed_values' => 1, // Edit generated values directly.
 
 				// General. Canonical.
-				'canonical_scheme' => 'automatic', // Canonical URL scheme.
+				'canonical_scheme'      => 'automatic', // Canonical URL scheme.
+				'remove_taxonomy_bases' => [], // Remove selected taxonomy URL bases.
 
 				// General. Timestamps.
 				'timestamps_format' => 1, // Timestamp format, numeric string.

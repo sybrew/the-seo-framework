@@ -56,10 +56,58 @@ class Plugin {
 	private static $site_cache_memo;
 
 	/**
+	 * Determines whether settings writes must wait for a verified database upgrade.
+	 *
+	 * @since 5.2.2
+	 * @internal TSF's settings writers use this check to defer writes until the database version matches.
+	 *
+	 * @return bool Whether settings writes are blocked.
+	 */
+	public static function is_upgrade_pending() {
+		return \THE_SEO_FRAMEWORK_DB_VERSION !== \the_seo_framework_db_version();
+	}
+
+	/**
+	 * Sanitizes ordinary settings writes once the database version matches.
+	 *
+	 * @hook "sanitize_option_ . \THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
+	 * @since 5.2.2
+	 * @internal Defers pending upgrade writes to the option-specific pre-update guard.
+	 *
+	 * @param mixed  $value  The proposed settings.
+	 * @param string $option The option name.
+	 * @return mixed The value for WordPress's pre-update filters.
+	 */
+	public static function sanitize_option_update( $value, $option ) {
+		return self::is_upgrade_pending()
+			? $value
+			: Filter\Plugin::filter_settings_update( $value, $option );
+	}
+
+	/**
+	 * Preserves the stored settings while the database upgrade is pending.
+	 *
+	 * @hook "pre_update_option_ . \THE_SEO_FRAMEWORK_SITE_OPTIONS" PHP_INT_MAX
+	 * @since 5.2.2
+	 * @internal Relies on the previous value WordPress supplies to its pre-update filter to cancel a rejected write.
+	 *
+	 * @param mixed $value    The proposed settings.
+	 * @param mixed $previous The stored settings supplied by WordPress.
+	 * @return mixed The value to save.
+	 */
+	public static function guard_option_update( $value, $previous ) {
+		return self::is_upgrade_pending() ? $previous : $value;
+	}
+
+	/**
 	 * Flushes all option runtime cache.
 	 *
+	 * @hook "add_option_ . \THE_SEO_FRAMEWORK_SITE_OPTIONS" 0
 	 * @hook "update_option_ . \THE_SEO_FRAMEWORK_SITE_OPTIONS" 0
+	 * @hook "delete_option_ . \THE_SEO_FRAMEWORK_SITE_OPTIONS" 0
 	 * @since 5.0.0
+	 * @since 5.2.2 1. Now refreshes the settings and post type archive caches after successful additions, updates, and deletions of the settings option.
+	 *              2. Now runs on admin, front-end, and REST requests.
 	 */
 	public static function flush_cache() {
 
@@ -98,6 +146,7 @@ class Plugin {
 	 * Returns option array. Does not merge with defaults.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.2 Now falls back to defaults if the saved settings are not an array.
 	 *
 	 * @return array Options.
 	 */
@@ -109,6 +158,7 @@ class Plugin {
 		static::register_automated_refresh( 'options_memo' );
 
 		$is_headless = is_headless( 'settings' );
+		$options     = $is_headless ? Plugin\Setup::get_default_options() : self::get_stored_options();
 
 		/**
 		 * @since 2.0.0
@@ -121,25 +171,38 @@ class Plugin {
 		 */
 		return self::$options_memo = \apply_filters(
 			'the_seo_framework_get_options',
-			$is_headless
-				? Plugin\Setup::get_default_options()
-				: (
-					// May be empty during setup, let's return the defaults.
-					\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) ?: Plugin\Setup::get_default_options()
-				),
+			$options,
 			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			$is_headless,
 		);
 	}
 
 	/**
-	 * Updates options. Also updates the option cache if the settings aren't headless.
+	 * Reads the settings before TSF applies its settings filter, falling back to defaults for an empty or non-array value.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @return array The stored settings or defaults.
+	 */
+	private static function get_stored_options() {
+
+		$stored = \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS );
+
+		return $stored && \is_array( $stored ) ? $stored : Plugin\Setup::get_default_options();
+	}
+
+	/**
+	 * Updates selected options.
 	 *
 	 * @since 2.9.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.0.2 Now falls back to default for merge: If the option disappears for some reason, we won't crash.
 	 * @since 5.1.0 No longer considers headlessness. The headless filters are ought
 	 *              to stay in place throughout the request, affecting `get_option()`.
+	 * @since 5.2.2 1. Now uses the same WordPress settings sanitization in admin, front-end, and REST requests after TSF initializes.
+	 *              2. Now merges changes into defaults when the saved settings value is a non-array.
+	 *              3. Now refreshes settings and post type archive meta on WordPress's post-write actions.
+	 *              4. Now returns false while a database upgrade is pending.
 	 *
 	 * @param string|array $option The option key, or an array of key and value pairs.
 	 * @param mixed        $value  The option value. Ignored when $option is an array.
@@ -147,18 +210,17 @@ class Plugin {
 	 */
 	public static function update_option( $option, $value = '' ) {
 
-		// Get the latest known revision from the database.
-		$options = array_merge(
-			\get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS ) ?: Plugin\Setup::get_default_options(),
-			\is_array( $option ) ? $option : [ $option => $value ],
+		if ( self::is_upgrade_pending() )
+			return false;
+
+		return \update_option(
+			\THE_SEO_FRAMEWORK_SITE_OPTIONS,
+			array_merge(
+				self::get_stored_options(),
+				\is_array( $option ) ? $option : [ $option => $value ],
+			),
+			true, // autoload
 		);
-
-		// Selectively reset one property.
-		static::$options_memo = null;
-		// But reset everything for PTA, because those rely entirely on the plugin options.
-		Plugin\PTA::refresh_static_properties();
-
-		return \update_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, $options, true );
 	}
 
 	/**
@@ -215,7 +277,11 @@ class Plugin {
 
 		static::$site_cache_memo = null;
 
-		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache, true );
+		return \update_option(
+			\THE_SEO_FRAMEWORK_SITE_CACHE,
+			$site_cache,
+			true, // autoload
+		);
 	}
 
 	/**
@@ -236,6 +302,10 @@ class Plugin {
 
 		static::$site_cache_memo = null;
 
-		return \update_option( \THE_SEO_FRAMEWORK_SITE_CACHE, $site_cache, true );
+		return \update_option(
+			\THE_SEO_FRAMEWORK_SITE_CACHE,
+			$site_cache,
+			true, // autoload
+		);
 	}
 }

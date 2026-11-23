@@ -30,6 +30,7 @@ use The_SEO_Framework\{
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\_defunct_badly_coded_polylang_script', 11 );
 \add_filter( 'the_seo_framework_seo_column_keys_order', __NAMESPACE__ . '\_polylang_seo_column_keys_order' );
 \add_filter( 'the_seo_framework_supported_taxonomy', __NAMESPACE__ . '\_polylang_support_language_taxonomy', 10, 2 );
+\add_filter( 'the_seo_framework_term_route_context', __NAMESPACE__ . '\_polylang_term_route_context' );
 \add_action( 'pre_get_posts', __NAMESPACE__ . '\_polylang_translate_query_exclusions', 10000 );
 
 /**
@@ -352,6 +353,20 @@ function _polylang_support_language_taxonomy( $supported, $taxonomy ) {
 		return $supported;
 
 	return true;
+}
+
+/**
+ * Carries Polylang's language into the shortened term query.
+ * Polylang can otherwise treat an unmatched path with only a language as its homepage.
+ *
+ * @hook the_seo_framework_term_route_context 10
+ * @since 5.2.2
+ *
+ * @param array<string,true> $context Query variable names as keys.
+ * @return array<string,true> The context including Polylang's language.
+ */
+function _polylang_term_route_context( $context ) {
+	return $context + [ 'lang' => true ];
 }
 
 /**

@@ -408,7 +408,7 @@ Input::output_js_social_data(
 							'refCanonicalLocked' => false,
 							'defaultCanonical'   => \esc_url( $default_canonical ),
 							'preferredScheme'    => Meta\URI\Utils::get_preferred_url_scheme(),
-							'urlStructure'       => Meta\URI\Utils::get_url_permastruct( $generator_args ),
+							'urlStructure'       => $permastruct,
 							'parentTermSlugs'    => $parent_term_slugs,
 							'isHierarchical'     => $is_taxonomy_hierarchical,
 						],

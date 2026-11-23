@@ -46,44 +46,47 @@ final class Plugin {
 
 	/**
 	 * @since 5.0.0
-	 * @var array<string, callable[]> The option filter sanitization callbacks.
+	 * @var array<string,callable[]> The option filter sanitization callbacks.
 	 */
 	private static $sanitizers = [];
 
 	/**
-	 * Filters the settings whenever updated.
-	 * Only hooked in admin.
+	 * Sanitizes the settings before they are saved.
 	 *
-	 * @hook "sanitize_option . THE_SEO_FRAMEWORK_SITE_OPTIONS" 10
 	 * @since 2.2.2
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `sanitize`.
 	 * @since 5.2.0 Now passes each sanitizer the previous sanitizer's return.
+	 * @since 5.2.2 1. Now preserves the stored option on empty or malformed input.
+	 *              2. Removed the third parameter, `$original_value`.
+	 *              3. Now sanitizes settings writes outside the admin.
 	 *
-	 * @param mixed  $value          The sanitized [sic] option value.
-	 * @param string $option         The option name.
-	 * @param string $original_value The original value passed to the function.
-	 * @return mixed The actually sanitized option value.
+	 * @param mixed  $value  The proposed settings.
+	 * @param string $option The option name.
+	 * @return mixed The settings value to persist.
 	 */
-	public static function filter_settings_update( $value, $option, $original_value ) {
+	public static function filter_settings_update( $value, $option ) {
 
-		// Revert on erroneous input.
 		if ( empty( $value ) || ! \is_array( $value ) )
-			return $original_value;
+			return \get_option(
+				$option,
+				Data\Plugin\Setup::get_default_options(),
+			);
 
-		self::register_sanitizers_jit();
-
-		// Use our filterable options as a fallback instead.
-		$original_value = array_merge(
+		// Use our filterable options as a fallback.
+		$previous = array_merge(
 			Data\Plugin\Setup::get_default_options(),
 			Data\Plugin::get_options(),
 		);
 
+		self::register_sanitizers_jit();
+
 		/**
 		 * @since 5.0.0
 		 * @since 5.2.0 Callbacks for one option now run in order. Each receives the previous return.
+		 * @since 5.2.2 Now also runs for WordPress settings writes outside the admin.
 		 * @example $sanitizers `[ 'title_separator' => [ 'sanitize_text_field' ] ]`
-		 * @param array<string, callable[]> $sanitizers {
+		 * @param array<string,callable[]> $sanitizers {
 		 *     A map of option sanitizers and their callbacks.
 		 *
 		 *     @type callable[] {$option} The callback to sanitize the option indexed by option name.
@@ -102,7 +105,7 @@ final class Plugin {
 					$callback,
 					[
 						$store[ $sub_option ] ?? $value[ $sub_option ] ?? '', // If no value is sent, the form field was empty.
-						$original_value[ $sub_option ], // If this fails, the option isn't registered properly. Error is good.
+						$previous[ $sub_option ], // If this fails, the option isn't registered properly. Error is good.
 						$sub_option,
 					],
 				);
@@ -114,9 +117,9 @@ final class Plugin {
 
 	/**
 	 * Add sanitization filters to sub-options.
-	 * Will only set filters if they don't already exists. This allows for other
-	 * developers to add their custom filters before we do --- use filter
-	 * `'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS`.
+	 * Sets only unregistered sanitizers. Register custom sanitizers before the
+	 * first settings write, or adjust the map via
+	 * `the_seo_framework_settings_update_sanitizers`.
 	 *
 	 * @since 5.0.0
 	 * @example $filters `[ 'title_separator' => 'sanitize_text_field' ]`
@@ -149,6 +152,7 @@ final class Plugin {
 	 * @since 3.1.0 Added caching, preventing duplicate registrations.
 	 * @since 5.0.0 1. Moved from `\The_SEO_Framework\Load`.
 	 *              2. Renamed from `init_sanitizer_filters`.
+	 * @since 5.2.2 Added `remove_taxonomy_bases`.
 	 */
 	public static function register_sanitizers_jit() {
 
@@ -249,6 +253,7 @@ final class Plugin {
 			'prev_next_frontpage'          => 'checkbox',
 			'prev_next_posts'              => 'checkbox',
 			'pta'                          => 'pta_meta',
+			'remove_taxonomy_bases'        => 'only_checked_array',
 			'robotstxt_block_ai'           => 'checkbox',
 			'robotstxt_block_seo'          => 'checkbox',
 			'search_noarchive'             => 'checkbox',
@@ -454,6 +459,18 @@ final class Plugin {
 			$val = Sanitize::boolean_integer( $val );
 
 		return $value;
+	}
+
+	/**
+	 * Normalizes checkbox values and keeps only checked entries.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @param mixed $value An unsanitized checkbox map.
+	 * @return int[] Selected entries, each set to 1.
+	 */
+	public static function only_checked_array( $value ) {
+		return array_filter( self::checkbox_array( $value ) );
 	}
 
 	/**

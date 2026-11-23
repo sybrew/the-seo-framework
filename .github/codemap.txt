@@ -70,7 +70,11 @@ wpml-config.xml                 WPML/Polylang config declaring translatable cust
 				performance.js      TSF dispatcher for the shared engine, with profile and timing plan defaults
 				test.js             Offline consent, routing, root isolation, and plan schema checks
 		pre-release/
-			SKILL.md                Release versions, full route captures, and changelog controls
+			SKILL.md                Release versions, full route captures, WooCommerce checks, and changelog controls
+			fixtures/
+				woocommerce.php     Isolated commerce fixtures with authenticated control and reversible setup
+			scripts/
+				woocommerce.js      WooCommerce permalink, routing, canonical, breadcrumb, sitemap, and collision matrix
 		trailing-comma/
 			SKILL.md                Trailing commas in PHP and JavaScript
 			scripts/
@@ -129,8 +133,8 @@ init-admin.php                  Admin hooks: sitemap refresh, post/term meta sav
 init-admin-ajax.php             Registers wp_ajax_* handlers (notice dismiss, image cropping, counter updates, Gutenberg data, slug fetching)
 init-compat.php                 Loads theme/plugin compatibility files by matching active themes and plugins against a known list
 init-cron.php                   Hooks sitemap pre-rendering to the cron event when output and cron options are enabled
-init-front.php                  Front-end setup: removes default WP head tags, registers sitemap routing, redirects, meta tags, robots headers
-init-global.php                 Shared hooks: text domain, XMLRPC noindex headers, primary-term filter, robots.txt override, breadcrumb shortcode
+init-front.php                  Front-end setup: removes default WP head tags, registers sitemap and taxonomy URL fallback routing, redirects, meta tags, robots headers
+init-global.php                 Shared hooks: settings writes, text domain, XMLRPC noindex, primary terms, taxonomy link shortening, robots.txt, breadcrumbs
 plugin-activation.php           Activation: checks for conflicting plugins, enables options autoloading
 plugin-deactivation.php         Deactivation: disables options autoloading
 upgrade.php                     Incremental database migrations and version upgrades with notices
@@ -171,10 +175,11 @@ script/
 seobar/
 	builder.class.php             Interprets SEO Bar test results (good/okay/bad/unknown) into rendered HTML bar items
 	listtable.class.php           Adds the SEO Bar column to post/term list tables and renders output per row
+	terms-list-table.class.php    Batches shortened URL conflict checks for the term rows WordPress selects
 	builder/
-		main.class.php            Abstract base: test-runner loop and shared caching for SEO Bar builders
+		main.class.php            Abstract base: optional/blocking test selection and shared SEO Bar caching
 		page.class.php            SEO Bar assessments (title, description, indexing, etc.) for posts/pages
-		term.class.php            SEO Bar assessments (title, description, indexing, etc.) for taxonomy terms
+		term.class.php            Taxonomy SEO Bar assessments, including shortened term URL conflicts
 		user.class.php            SEO Bar assessments (title, description, indexing, etc.) for users
 
 settings/
@@ -194,7 +199,7 @@ Data (inc/classes/data/)
 Data access layer: reading, saving, filtering, and sanitizing plugin options, post/term/user meta.
 
 blog.class.php                  Blog/site data helpers (public blog name, site title)
-plugin.class.php                Core data interface for TSF plugin options/settings and site cache storage
+plugin.class.php                TSF settings and site cache storage, settings write guards during database migrations, runtime cache refresh after settings writes
 post.class.php                  Post data helpers (excerpts, content, timestamps)
 term.class.php                  Term data helpers (latest term ID by taxonomy)
 user.class.php                  User data helpers (capability checks, user data retrieval)
@@ -261,7 +266,7 @@ migrate.class.php               Detects and transforms unprocessed syntax from o
 post-type.class.php             Determines whether a post type is disabled, supported, or forced-supported for SEO
 query.class.php                 Comprehensive WordPress query interpretation helpers (post type, ID resolution, archive/singular checks)
 redirect.class.php              Filterable check for whether external 301 redirects are allowed
-taxonomy.class.php              Determines whether a taxonomy is disabled, supported, or available for SEO
+taxonomy.class.php              Taxonomy support, labels, and the per-taxonomy URL base-removal setting
 template.class.php              Secure view/template loader with secret token to prevent unauthorized inclusion
 user.class.php                  Determines whether a user is supported for author SEO
 
@@ -279,6 +284,12 @@ query/
 	exclusion.class.php           Builds and caches lists of post IDs excluded from search/archives by per-post settings
 	filter.class.php              Filters post permalink category links to use the primary term set via the plugin
 	utils.class.php               Query utility checks: pretty permalinks, SEO support, taxonomy/post-type validation
+
+taxonomy/
+	base-url.class.php            Lists eligible taxonomies, checks base removal, and shortens permalink structures
+	base-url/
+		conflicts.class.php         Matches native rewrites and checks competing URLs for SEO Bar term batches
+		rewrite.class.php           Filters term links, resolves unclaimed requests, and parses rewrite patterns and queries
 
 
 Internal (inc/classes/internal/)
@@ -382,7 +393,7 @@ Functions (inc/functions/)
 --------------------------
 Global and namespaced function definitions.
 
-api.php                         Defines global tsf() and the_seo_framework() factory functions plus namespaced helpers (memo, umemo, msmemo, msumemo, has_run)
+api.php                         Defines global tsf() and the_seo_framework() factory functions plus namespaced helpers (flag, has_run, memo, umemo)
 deprecated.php                  Holds deprecated global API functions to prevent fatal errors; emptied after deprecation cycles
 upgrade-suggestion.php          Registers a dismissible admin notice after an upgrade. The active suggestion is chosen by hand.
 
@@ -401,7 +412,7 @@ plugin-translatepress.php       TranslatePress: per-language sitemaps, language 
 plugin-ultimatemember.php       Ultimate Member: reinstates title support, conditionally disables SEO on profile pages
 plugin-woocommerce.php          WooCommerce: shop page ID, product detection, noindex cart/checkout, primary term links, image params
 plugin-wpforo.php               wpForo: page detection; defers to wpForo SEO when enabled or overrides with TSF's output
-plugin-wpml.php                 WPML: per-language sitemaps, sitemap cache flushing, translatable post filtering, SEO field purpose for ATE character limits
+plugin-wpml.php                 WPML: per-language sitemaps, term rewrite home URLs, sitemap cache flushing, translatable post filtering, SEO field purpose for ATE character limits
 theme-avada.php                 Avada: disables conflicting Open Graph, rich snippets, and hides its SEO meta box tab
 theme-bricks.php                Bricks Builder: removes non-public template post types/taxonomies from TSF's public lists
 theme-genesis.php               Genesis: disables Genesis SEO features, migrates Genesis term meta into TSF's defaults

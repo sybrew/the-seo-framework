@@ -44,7 +44,7 @@ use The_SEO_Framework\Helper\{
 final class Plugin {
 
 	/**
-	 * Register the database settings for saving and sanitizing via standard WordPress hooks.
+	 * Registers the plugin settings array with the WordPress Settings API.
 	 *
 	 * @hook admin_init 0
 	 * @since 2.2.2
@@ -70,6 +70,7 @@ final class Plugin {
 	 *
 	 * @hook admin_action_update 10
 	 * @since 5.0.0
+	 * @since 5.2.2 Now rejects saves and resets while a settings upgrade is pending.
 	 */
 	public static function process_settings_update() {
 
@@ -85,6 +86,16 @@ final class Plugin {
 
 		// This is also handled in /wp-admin/options.php. Nevertheless, one might register outside of scope.
 		\check_admin_referer( \THE_SEO_FRAMEWORK_SITE_OPTIONS . '-options', '_wpnonce' );
+
+		if ( Data\Plugin::is_upgrade_pending() )
+			\wp_die(
+				\esc_html__( 'The SEO settings are being upgraded. Try again in a moment.', 'autodescription' ),
+				'',
+				[
+					'response'  => 503, // Service Unavailable.
+					'back_link' => true,
+				],
+			);
 
 		if ( ! empty( $_POST[ \THE_SEO_FRAMEWORK_SITE_OPTIONS ]['tsf-settings-reset'] ) ) {
 			self::process_settings_reset();
@@ -128,6 +139,7 @@ final class Plugin {
 	 * @since 3.1.0 Now always flushes the cache, even before the options are updated.
 	 * @since 4.1.0 1. Renamed from 'handle_update_post' to 'process_settings_submission'
 	 *              2. Is now a protected method.
+	 * @since 5.2.2 Now lets the upgrader manage the database version.
 	 */
 	private static function process_settings_submission() {
 
@@ -143,13 +155,6 @@ final class Plugin {
 		);
 		*/
 
-		// This submission uses WordPress built-in option stores, bypassing Data\Plugin. Hence, we flush:
-		\add_action(
-			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[ Data\Plugin::class, 'flush_cache' ],
-			0,
-		);
-
 		// Sets that the options are unchanged, preemptively.
 		Data\Plugin::update_site_cache( 'settings_notice', 'unchanged' );
 		// But, if this action fires, we can assure that the settings have been changed (according to WP).
@@ -158,12 +163,6 @@ final class Plugin {
 		\add_action(
 			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
 			[ self::class, 'set_option_updated_notice' ],
-		);
-
-		\add_action(
-			'update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-			[ self::class, 'update_db_version' ],
-			12,
 		);
 
 		\add_action(
@@ -187,20 +186,6 @@ final class Plugin {
 	 */
 	public static function set_option_updated_notice() {
 		Data\Plugin::update_site_cache( 'settings_notice', 'updated' );
-	}
-
-	/**
-	 * Updates the database version to the defined one.
-	 *
-	 * This prevents errors when users go back to an earlier version, where options
-	 * might be different from a future (or past, since v4.1.0) one.
-	 *
-	 * @hook "update_option_ . THE_SEO_FRAMEWORK_SITE_OPTIONS" 12
-	 * @since 3.0.6
-	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 */
-	public static function update_db_version() {
-		\update_option( 'the_seo_framework_upgraded_db_version', \THE_SEO_FRAMEWORK_DB_VERSION, true );
 	}
 
 	/**

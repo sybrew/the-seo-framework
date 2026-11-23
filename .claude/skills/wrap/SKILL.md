@@ -54,7 +54,7 @@ PHP 7.4+ on `PATH`. If `php` is missing, say so and do not invent a width.
 | Valued `return` after `if` | no | Next line, unbraced. Line length is not the trigger |
 | Assignment, ternary, coalesce | no | Stay one line unless another rule already forces a wrap |
 | Ternary/coalesce already wrapped | no | One continuation tab. Operator on the next line. No spaces in that indent. A `return` line gets no pad |
-| Call arguments > 30 characters **total** | no (30) | Wrap those arguments |
+| Call arguments > 40 characters **total** | no (40) | Wrap those arguments. PHP gettext calls with only string literal arguments stay on one line |
 | Array/object/closure among several arguments | no | Every argument of that call on its own line |
 | Wrapped `?:` / `??` whose first operand is a multi-parameter call | no | Each parameter on its own line, one tab deeper than that operand's keyword. Keep the operator on that keyword's tabs. Keep each later operand on one line |
 | SQL over 80 | SQL 80 | SQL clause rules, not compact-if |

@@ -12,7 +12,7 @@ applyTo: "**/*.php, **/*.js"
 - When creating an object or array with a single property whose value contains an operator, put that property on a new line.
 - Place multiline operators at the start of new lines, including in conditional checks and coalescing. When a line must split, break at ternary or coalesce first (`??`, `? :`), then at the innermost remaining call. Do not use a call-count threshold; nested wrapper pipelines would trip it.
 - Keep a coalesce of two wrappers on one line when the right-hand call takes a single argument with no assignment, comparison, or logic operators and that argument continues below as a pass-through wrapper. Nested calls and pass-through wrappers do not count as extra arguments. Break before `??` when the right-hand call takes multiple arguments, when its own argument contains assignment, comparison, or logic operators, or when packing the coalescing expression on one line would nest further calls inside the wrapped value.
-- Put function arguments on a new line when they are over 30 characters in total.
+- Put function arguments on a new line when they are over 40 characters in total.
 - Put multiple function arguments on new lines when any argument is an anonymous function, array, or object. A compact single-property array or object is not that trigger. If an array or object is the only argument and has multiple properties, keep the opener with the call and wrap the properties. If an array, object, or closure is one of multiple arguments, put every argument of that call on its own line.
 - Add trailing commas at the end of multiline object or array properties and function arguments if the language supports it.
 - Pad brackets and braces with spaces around arguments.

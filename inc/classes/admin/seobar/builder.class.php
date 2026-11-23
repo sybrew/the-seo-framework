@@ -125,20 +125,23 @@ class Builder {
 		/**
 		 * Adjust interpreter and builder items here, before the tests have run.
 		 *
-		 * The only use we can think of here is removing items from `$builder::$tests`,
-		 * and reading `$builder::$query{_cache}`. Do not add tests here. Do not alter the query.
+		 * Remove regular assessments through `$builder::$tests` and read `$builder::$query{_cache}`.
+		 * Each builder runs its blocking checks independently. Do not add tests here. Do not alter the query.
 		 *
 		 * @link Example: https://gist.github.com/sybrew/03dd428deadc860309879e1d5208e1c4
 		 * @see related (recommended) action 'the_seo_framework_seo_bar'
 		 * @since 4.0.0
+		 * @since 5.2.2 Now applies `$builder::$tests` to regular assessments only.
+		 *
 		 * @param string                                       $interpreter The current class name.
 		 * @param \The_SEO_Framework\Admin\SEOBar\Builder\Main $builder     The builder object.
 		 */
 		\do_action( 'the_seo_framework_prepare_seo_bar', self::class, $builder );
 
-		$items = &self::collect_seo_bar_items();
+		$items   = &self::collect_seo_bar_items();
+		$results = $builder->run_tests( $query );
 
-		foreach ( $builder->run_all_tests( $query ) as $key => $data )
+		foreach ( $results as $key => $data )
 			$items[ $key ] = $data;
 
 		/**
@@ -146,11 +149,19 @@ class Builder {
 		 *
 		 * @link Example: https://gist.github.com/sybrew/59130560fcbeb98f7580dc11c54ba174
 		 * @since 4.0.0
-		 * @since 5.0.0 Added the builder's instance as the third parameter.
-		 * @param string $interpreter The interpreter class name.
-		 * @param object $builder     The builder's class instance.
+		 * @since 5.0.0 Added the builder's instance as the second parameter.
+		 * @since 5.2.2 Added the `$has_blocking_test` parameter.
+		 *
+		 * @param string $interpreter       The interpreter class name.
+		 * @param object $builder           The builder's class instance.
+		 * @param bool   $has_blocking_test Whether a built-in blocking test replaced the regular assessments.
 		 */
-		\do_action( 'the_seo_framework_seo_bar', self::class, $builder );
+		\do_action(
+			'the_seo_framework_seo_bar',
+			self::class,
+			$builder,
+			$results->getReturn(),
+		);
 
 		$bar = self::create_seo_bar( self::$items );
 

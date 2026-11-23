@@ -33,7 +33,7 @@ namespace The_SEO_Framework\Admin\SEOBar\Builder;
  *
  * @link <https://www.php.net/manual/en/language.oop5.late-static-bindings.php>
  *
- * Implements test_{$*}, see property $tests and method `run_test()` for what $* may be.
+ * Implements test_{$*}. See $tests and BLOCKING_TESTS for the test names.
  *
  * @since 4.0.0
  * @since 4.2.0 Renamed from `SeoBar`.
@@ -48,11 +48,20 @@ abstract class Main {
 
 	/**
 	 * @since 4.0.0
+	 * @since 5.2.2 Now controls regular assessments only.
 	 * @abstract
 	 * Shared between instances. But, should be overwritten.
-	 * @var array All known tests.
+	 * @var string[] The regular test names.
 	 */
 	public static $tests = [];
+
+	/**
+	 * Maps test names to blocking assessments in evaluation order.
+	 *
+	 * @since 5.2.2
+	 * @var array<string,string> Blocking assessment method names indexed by test name.
+	 */
+	protected const BLOCKING_TESTS = [];
 
 	/**
 	 * @since 4.0.0
@@ -132,11 +141,14 @@ abstract class Main {
 	}
 
 	/**
-	 * Runs all SEO bar tests.
+	 * Runs this builder's blocking checks before the regular SEO Bar tests.
 	 *
 	 * @since 4.2.0
 	 * @since 5.0.0 Renamed from `_run_all_tests`.
 	 * @since 5.2.0 Now accepts `uid` for the user SEO Bar.
+	 * @since 5.2.2 1. Renamed from `run_all_tests`.
+	 *              2. Now yields the first matching blocking assessment, or runs the regular tests if none matches.
+	 *              3. The generator now returns whether a blocker matched.
 	 * @access private
 	 * @generator
 	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
@@ -145,51 +157,29 @@ abstract class Main {
 	 * @yield array {
 	 *     @type array {$test} The testing results.
 	 * }
+	 * @return \Generator The assessments and a Boolean return value indicating whether a blocker matched.
 	 */
-	public function run_all_tests( $query ) {
-		yield from $this->run_test( static::$tests, $query );
-	}
-
-	/**
-	 * Runs one or more SEO bar tests.
-	 *
-	 * @since 4.0.0
-	 * @since 4.1.4 No longer clears the query cache.
-	 * @since 5.0.0 Renamed from `_run_test`.
-	 * @since 5.2.0 1. Now accepts `uid` for the user SEO Bar.
-	 *              2. Now keeps only the indexing test when `has_blocking_noindex()` is true.
-	 * @access private
-	 * @generator
-	 * @example $test `[ 'title' => [ 'symbol' => 'T', 'status' => 0b1000 ] ]`
-	 *
-	 * @param string|string[] $tests The test(s) to perform.
-	 * @param array           $query The query arguments. Accepts 'id', 'tax', 'pta', and 'uid'.
-	 * @yield array {
-	 *     @type array {$test} The testing results.
-	 * }
-	 */
-	final public function run_test( $tests, $query ) {
-
-		$tests = array_intersect( static::$tests, (array) $tests ); // static: allow overrides
+	final public function run_tests( $query ) {
 
 		static::$query = $query; // static: allow overrides
 
 		$this->prime_query_cache();
 
-		if (
-			   \in_array( 'redirect', $tests, true )
-			&& $this->has_blocking_redirect()
-		) {
-			$tests = [ 'redirect' ];
-		} elseif (
-			   \in_array( 'indexing', $tests, true )
-			&& $this->has_blocking_noindex()
-		) {
-			$tests = [ 'indexing' ];
+		// Stop at the first blocking assessment that applies to this query.
+		foreach ( static::BLOCKING_TESTS as $test => $callback ) { // static: allow override
+			$item = $this->{$callback}();
+
+			if ( null === $item ) continue;
+
+			yield $test => $item;
+
+			return true;
 		}
 
-		foreach ( $tests as $test )
+		foreach ( static::$tests as $test ) // static: allow override
 			yield $test => $this->{"test_$test"}();
+
+		return false;
 	}
 
 	/**
@@ -227,22 +217,4 @@ abstract class Main {
 	 * @since 5.0.0 Removed first parameter.
 	 */
 	abstract protected function prime_query_cache();
-
-	/**
-	 * Tests for blocking redirection.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @return bool True if there's a blocking redirect, false otherwise.
-	 */
-	abstract protected function has_blocking_redirect();
-
-	/**
-	 * Tests whether indexing replaces the other tests.
-	 *
-	 * @since 5.2.0
-	 *
-	 * @return bool True when the indexing block replaces the other tests, false otherwise.
-	 */
-	abstract protected function has_blocking_noindex();
 }

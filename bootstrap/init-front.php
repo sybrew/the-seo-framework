@@ -8,7 +8,10 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\Helper\Headers;
+use The_SEO_Framework\Helper\{
+	Headers,
+	Taxonomy\Base_URL\Rewrite,
+};
 
 /**
  * The SEO Framework plugin
@@ -52,6 +55,15 @@ if ( Sitemap\Utils::may_output_optimized_sitemap() ) {
 	// We miss the proper hooks. https://github.com/sybrew/the-seo-framework/issues/610#issuecomment-1300191500
 	\add_filter( 'wp_sitemaps_posts_query_args', [ Sitemap\WP\Filter::class, 'trick_filter_doing_sitemap' ], 11 );
 }
+
+// Resolve shortened taxonomy URLs after native routes and earlier pre_handle_404 handlers leave a path unclaimed.
+if ( Data\Plugin::get_option( 'remove_taxonomy_bases' ) )
+	\add_filter(
+		'pre_handle_404',
+		[ Rewrite::class, 'resolve_request' ],
+		99,
+		2,
+	);
 
 // Initialize 301 redirects.
 \add_action( 'template_redirect', [ Front\Redirect::class, 'init_meta_setting_redirect' ] );

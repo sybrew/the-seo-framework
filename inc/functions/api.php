@@ -413,6 +413,27 @@ namespace The_SEO_Framework {
 	}
 
 	/**
+	 * Reads or sets a named flag shared across functions for the current request.
+	 *
+	 * @since 5.2.2
+	 * @see umemo() -- memoizes values within the caller.
+	 * @api
+	 *
+	 * @param string $name  A unique name shared by the flag's readers and writers.
+	 * @param mixed  $value The value to set. Omit or pass null to read the flag.
+	 * @return mixed The flag's value, or null if it has never been set.
+	 */
+	function flag( $name, $value = null ) {
+
+		static $flags = [];
+
+		if ( isset( $value ) )
+			return $flags[ $name ] = $value;
+
+		return $flags[ $name ] ?? null;
+	}
+
+	/**
 	 * Stores and returns memoized values for the caller.
 	 *
 	 * Requires a named function or method caller. Closures must use umemo() with
@@ -504,12 +525,12 @@ namespace The_SEO_Framework {
 	 *
 	 * @since 4.2.0
 	 * @since 5.2.1 Now indexes keys directly and serializes only extra arguments.
+	 * @see flag() -- shares a named value across functions.
 	 * @see memo() -- sacrifices performance for cleanliness.
 	 * @see fmemo() -- sacrifices everything for readability.
 	 * @api
 	 *
-	 * @param string $key          The key you want to use to memoize. It's best to use the method name.
-	 *                             You can share a unique key between various functions.
+	 * @param string $key          A key unique to the caller, such as the method name.
 	 * @param mixed  $value_to_set The value to set.
 	 * @param mixed  ...$args      Extra arguments, that are used to differentiate callbacks.
 	 *                             Arguments may not contain \Closure()s.

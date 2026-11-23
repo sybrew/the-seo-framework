@@ -8,11 +8,15 @@ namespace The_SEO_Framework;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
+use The_SEO_Framework\{
+	Data,
+	Sitemap,
+};
 use The_SEO_Framework\Helper\{
 	Headers,
 	Query,
+	Taxonomy\Base_URL\Rewrite,
 };
-use The_SEO_Framework\Sitemap;
 
 /**
  * The SEO Framework plugin
@@ -38,12 +42,44 @@ use The_SEO_Framework\Sitemap;
 	\dirname( \THE_SEO_FRAMEWORK_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language',
 );
 
+\add_filter(
+	'pre_update_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+	[ Data\Plugin::class, 'guard_option_update' ],
+	\PHP_INT_MAX,
+	2,
+);
+
+// Core fires these option-specific actions after updating its option cache.
+foreach ( [ 'add', 'update', 'delete' ] as $event )
+	\add_action(
+		"{$event}_option_" . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+		[ Data\Plugin::class, 'flush_cache' ],
+		0,
+		0,
+	);
+
+\add_filter(
+	'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+	[ Data\Plugin::class, 'sanitize_option_update' ],
+	10,
+	2,
+);
+
 // Output noindex headers when an XMLRPC request is detected. There are no hooks, test inline.
 if ( \defined( 'XMLRPC_REQUEST' ) && \XMLRPC_REQUEST )
 	Headers::output_robots_noindex_headers();
 
 // Adjust category link to accommodate primary term.
 \add_filter( 'post_link_category', [ Query\Filter::class, 'filter_post_link_category' ], 10, 3 );
+
+// Switched sites can shorten their term links even when the request's site keeps its bases.
+if ( Data\Plugin::get_option( 'remove_taxonomy_bases' ) || \is_multisite() )
+	\add_filter(
+		'term_link',
+		[ Rewrite::class, 'filter_term_link' ],
+		20,
+		2,
+	);
 
 // Overwrite the robots.txt output.
 \add_filter( 'robots_txt', [ RobotsTXT\Main::class, 'get_robots_txt' ], 10, 2 );

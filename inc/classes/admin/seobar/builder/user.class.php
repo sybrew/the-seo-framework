@@ -52,9 +52,19 @@ final class User extends Main {
 
 	/**
 	 * @since 5.2.0
-	 * @var string[] All known tests.
+	 * @since 5.2.2 Now controls regular assessments only.
+	 * @var string[] The regular test names.
 	 */
 	public static $tests = [ 'title', 'description', 'indexing', 'following', 'archiving', 'redirect' ];
+
+	/**
+	 * @since 5.2.2
+	 * @var array<string,string> Blocking assessment method names in evaluation order.
+	 */
+	protected const BLOCKING_TESTS = [
+		'redirect' => 'test_blocking_redirect',
+		'indexing' => 'test_blocking_indexing',
+	];
 
 	/**
 	 * Primes the cache.
@@ -133,28 +143,6 @@ final class User extends Main {
 				'robotsassert' => Meta\Robots::get_collected_meta_assertions(),
 			],
 		];
-	}
-
-	/**
-	 * Tests for blocking redirection.
-	 *
-	 * @since 5.2.0
-	 *
-	 * @return bool True if there's a blocking redirect, false otherwise.
-	 */
-	protected function has_blocking_redirect() {
-		return ! empty( $this->query_cache['meta']['redirect'] );
-	}
-
-	/**
-	 * Tests whether indexing replaces the other tests.
-	 *
-	 * @since 5.2.0
-	 *
-	 * @return bool True when the indexing block replaces the other tests, false otherwise.
-	 */
-	protected function has_blocking_noindex() {
-		return empty( $this->query_cache['states']['public'] );
 	}
 
 	/**
@@ -544,9 +532,36 @@ final class User extends Main {
 	}
 
 	/**
-	 * Runs indexing tests.
+	 * Assesses indexing for users without a public author archive.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @return ?array The blocking assessment if the author archive is not public, otherwise null.
+	 */
+	protected function test_blocking_indexing() {
+
+		if ( ! empty( $this->query_cache['states']['public'] ) ) return;
+
+		return static::get_cache( 'user/indexing/notpublic' )
+			?? static::set_cache(
+				'user/indexing/notpublic',
+				[
+					'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
+					'title'  => \__( 'Indexing', 'autodescription' ),
+					'status' => Builder::STATE_UNKNOWN,
+					'reason' => \__( 'Author may not be indexed.', 'autodescription' ),
+					'assess' => [
+						'notpublic' => \__( 'This user is not a public author.', 'autodescription' ),
+					],
+				],
+			);
+	}
+
+	/**
+	 * Assesses indexing for public author archives.
 	 *
 	 * @since 5.2.0
+	 * @since 5.2.2 Now runs only for public author archives.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar robots indexing item.
@@ -560,21 +575,6 @@ final class User extends Main {
 	 * }
 	 */
 	protected function test_indexing() {
-
-		if ( empty( $this->query_cache['states']['public'] ) )
-			return static::get_cache( 'user/indexing/notpublic' )
-				?? static::set_cache(
-					'user/indexing/notpublic',
-					[
-						'symbol' => \_x( 'I', 'Indexing', 'autodescription' ),
-						'title'  => \__( 'Indexing', 'autodescription' ),
-						'status' => Builder::STATE_UNKNOWN,
-						'reason' => \__( 'Author may not be indexed.', 'autodescription' ),
-						'assess' => [
-							'notpublic' => \__( 'This user is not a public author.', 'autodescription' ),
-						],
-					],
-				);
 
 		$cache =
 			   static::get_cache( 'user/indexing/defaults' )
@@ -917,9 +917,37 @@ final class User extends Main {
 	}
 
 	/**
-	 * Runs redirect tests.
+	 * Assesses a configured redirect.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @return ?array The blocking assessment if a redirect is configured, otherwise null.
+	 */
+	protected function test_blocking_redirect() {
+
+		if ( empty( $this->query_cache['meta']['redirect'] ) ) return;
+
+		return static::get_cache( 'user/redirect/default/1' )
+			?? static::set_cache(
+				'user/redirect/default/1',
+				[
+					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
+					'title'  => \__( 'Redirection', 'autodescription' ),
+					'status' => Builder::STATE_UNKNOWN,
+					'reason' => \__( 'Author redirects visitors.', 'autodescription' ),
+					'assess' => [
+						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
+					],
+					'meta'   => [ 'blocking' => true ],
+				],
+			);
+	}
+
+	/**
+	 * Assesses an author archive without a redirect.
 	 *
 	 * @since 5.2.0
+	 * @since 5.2.2 Now runs only for author archives without a configured redirect.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar redirect item.
@@ -933,25 +961,6 @@ final class User extends Main {
 	 * }
 	 */
 	protected function test_redirect() {
-
-		if ( $this->has_blocking_redirect() )
-			return static::get_cache( 'user/redirect/default/1' )
-				?? static::set_cache(
-					'user/redirect/default/1',
-					[
-						'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
-						'title'  => \__( 'Redirection', 'autodescription' ),
-						'status' => Builder::STATE_UNKNOWN,
-						'reason' => \__( 'Author redirects visitors.', 'autodescription' ),
-						'assess' => [
-							'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
-						],
-						'meta'   => [
-							'blocking' => true,
-						],
-					],
-				);
-
 		return static::get_cache( 'user/redirect/default/0' )
 			?? static::set_cache(
 				'user/redirect/default/0',

@@ -35,6 +35,10 @@ Until that commit, `Version:` keeps its `-dev-{number}` suffix and `Stable tag:`
 
 If `bootstrap/upgrade.php` gained a `_do_upgrade_{id}` function, `{id}` is in the `$versions` list and `THE_SEO_FRAMEWORK_DB_VERSION` is `{id}`. Otherwise leave the database version.
 
+## WPML Compatibility
+
+Email WPML before release if any changes affect how TSF works with WPML.
+
 ## Every page type
 
 `launch --pair`. wordpress.org is before, the working tree is after. Do not compare against `baseline.json`.
@@ -42,6 +46,19 @@ If `bootstrap/upgrade.php` gained a `_do_upgrade_{id}` function, `{id}` is in th
 Capture both labels with no `--feature` and no `--types`. That walks every `plugin.json` entry: both front frames, posts, pages, archives, search, 404, login, the custom route, sitemap, robots.txt, feeds, redirects, and oEmbed.
 
 `compare` the two bundles with no `--feature`. A PHP diagnostic is a blocker. A diff the changelog does not describe is a blocker. If wordpress.org is still the previous release because `Stable tag` was never updated, say so.
+
+## WooCommerce
+
+Every release requires a fresh Playground pair with the same current stable WooCommerce ZIP mounted via `--extra-plugin-zip`. Use `--site-before=woocommerce-before --site-after=woocommerce-after`, then run:
+
+```
+node .claude/skills/pre-release/scripts/woocommerce.js --site=woocommerce-before --output=.local/playground/captures/woocommerce-before.json
+node .claude/skills/pre-release/scripts/woocommerce.js --site=woocommerce-after --output=.local/playground/captures/woocommerce-after.json
+```
+
+Both runs must complete; the after run must pass. A baseline failure is acceptable only when the changelog describes it and the after run demonstrates its fix. Compare the reports and startup logs; an unexplained difference or new PHP diagnostic blocks release.
+
+The runner checks commerce URLs, canonicals, breadcrumbs, uncached sitemaps, permalink changes, category URL collisions, and independent base removal for categories and product categories, including product-category feeds and pagination. Older TSF releases without taxonomy base removal run the commerce baseline. It restores its changed settings and removes its fixture objects afterward, and verifies that cleanup succeeded.
 
 ## Changelog buttons
 
@@ -59,4 +76,4 @@ Run the [Makepot skill](../makepot/SKILL.md) last, after the release header and 
 
 ## Report
 
-List each item as pass or fail: the release version, `Stable tag`, the compare summary, and each control you flicked with the effect you saw.
+List each item as pass or fail: the release version, `Stable tag`, the compare summary, both WooCommerce reports with the tested versions, and each control you flicked with the effect you saw.

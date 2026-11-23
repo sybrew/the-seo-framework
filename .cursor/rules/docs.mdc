@@ -23,6 +23,7 @@ alwaysApply: false
 - When copying content from code, such as docblocks, comments, or commit notes, into `readme.txt` or other user-facing docs, preserve the essence verbatim. Only minor prose tweaks for readability are allowed. Do not add details that are not present in the source.
 - A symbol introduced in the unreleased version gets one changelog introduction. Do not add a later entry for edits made to it before release.
 - When mentioning a public class method or property, use the fully qualified name, then the API accessor in parentheses. For example, `The_SEO_Framework\Admin\SEOBar\Builder::generate_bar()` (`tsf()->admin()->seobar()->generate_bar()`).
+- In `PHP API notes`, copy each method's changes from its `@since` entry for the active release. For multiple changes, end the signature and accessor bullet with `:` and indent one numbered item per change in PHPDoc order.
 
 ## Release-note audience
 

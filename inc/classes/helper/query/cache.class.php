@@ -36,7 +36,7 @@ class Cache {
 
 	/**
 	 * @since 5.0.0
-	 * @var ?true $can_cache_query
+	 * @var ?bool $can_cache_query Whether query results may be cached.
 	 */
 	private static $can_cache_query;
 
@@ -50,13 +50,15 @@ class Cache {
 	 * Memoizes queries.
 	 * Should not be used on methods that aren't final.
 	 *
-	 * Requires a caller frame. The caller's function name identifies the cache entry.
+	 * Reserved for Helper\Query methods. The caller's function name identifies the cache entry.
 	 *
 	 * The first parameter might not get retrieved in a later call, for this method
 	 * also tests whether the query is setup correctly at the time of the call.
 	 *
 	 * @since 5.0.0
 	 * @since 5.2.1 Now requires a caller frame.
+	 * @since 5.2.2 1. Now waits for the `wp` action before caching front-end queries.
+	 *              2. Now skips serialization when no extra arguments are passed.
 	 *
 	 * @param mixed $value_to_set The value to set.
 	 * @param mixed ...$args      Extra arguments, that are used to differentiate queries.
@@ -79,18 +81,17 @@ class Cache {
 			2, // The current call and its caller.
 		)[1]['function'];
 
-		// We need not serialize the caller; waste of processing if we'd merge with $args.
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- No objects are inserted, nor is this ever unserialized.
-		$hash = "$caller/" . serialize( $args );
+		$hash = $args ? serialize( $args ) : 0;
 
 		if ( isset( $value_to_set ) )
-			return self::$memo[ $hash ] = $value_to_set;
+			return self::$memo[ $caller ][ $hash ] = $value_to_set;
 
-		return self::$memo[ $hash ] ?? null;
+		return self::$memo[ $caller ][ $hash ] ?? null;
 	}
 
 	/**
-	 * Checks whether $wp_query or $current_screen is set.
+	 * Checks whether the front-end route or admin query is ready to cache.
 	 * Memoizes the return value once we're sure it won't change.
 	 *
 	 * @since 2.6.1
@@ -101,10 +102,12 @@ class Cache {
 	 * @since 3.2.2 No longer spits out errors on production websites.
 	 * @since 5.0.0 1. No longer accepts the $method parameter.
 	 *              2. Moved from `\The_SEO_Framework\Load`.
+	 * @since 5.2.2 1. Now waits for the `wp` action before caching front-end queries.
+	 *              2. Now omits the debug notice for early query reads.
 	 * @global \WP_Query   $wp_query
 	 * @global ?\WP_Screen $current_screen
 	 *
-	 * @return bool True when wp_query or current_screen has been initialized.
+	 * @return bool Whether query results may be cached.
 	 */
 	public static function can_cache_query() {
 
@@ -115,77 +118,19 @@ class Cache {
 			return self::$can_cache_query = false;
 
 		if (
-			   isset( $GLOBALS['wp_query']->query )
-			|| isset( $GLOBALS['current_screen'] )
+			   \did_action( 'wp' )
+			|| (
+				   \is_admin()
+				&& (
+					   isset( $GLOBALS['wp_query']->query )
+					|| isset( $GLOBALS['current_screen'] )
+				)
+			)
 		) {
 			return self::$can_cache_query = true;
 		}
 
-		if ( \THE_SEO_FRAMEWORK_DEBUG )
-			self::do_query_error_notice();
-
-		// Don't set yet.
+		// The front-end route can still change in pre_handle_404.
 		return false;
 	}
-
-	// phpcs:disable -- method unused in production.
-	/**
-	 * Outputs a doing it wrong notice if an error occurs in the current query.
-	 *
-	 * @since 3.0.0
-	 * @since 5.0.0 1. No longer accepts the method parameter.
-	 *              2. Moved from `\The_SEO_Framework\Load`.
-	 *
-	 * @param string $method The original caller method.
-	 */
-	private static function do_query_error_notice() {
-
-		$backtrace = debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, 8 );
-
-		if ( ! $backtrace )
-			return [];
-
-		/**
-		 * 0 = caller of this func
-		 * 1 = Query Cacher
-		 * 2 = Query Callee
-		 * 3 = Query Caller (internal issue)
-		 */
-		$error = $backtrace[3];
-
-		/**
-		 * Search from the bottom up, for we want the first caller, not the last.
-		 *
-		 * This is unlike `The_SEO_Framework\Internal/Debug::get_error()` that searches
-		 * from top to bottom, because there we expect the user to directly call a
-		 * broken function in TSF; we clean up internal deprecations before public release.
-		 **/
-		foreach ( array_reverse( \array_slice( $backtrace, 3 ) ) as $trace ) {
-			if (
-				   isset( $trace['object'] )
-				&& is_a( $trace['object'], \the_seo_framework_class(), false )
-			) {
-				$error = $trace;
-				break;
-			}
-		}
-
-		$message = "You've initiated a method that uses queries too early.";
-
-		if ( ! empty( $error ) ) {
-			$message .= " - In file: {$error['file']}";
-			$message .= " - On line: {$error['line']}";
-		}
-		\tsf()->_doing_it_wrong( \esc_html( $error['function'] ?? '' ), \esc_html( $message ), '2.9.0' );
-
-		// Backtrace debugging, just once per request.
-		$depth = 10;
-		static $_more = true;
-
-		if ( $_more ) {
-			error_log( var_export( debug_backtrace( \DEBUG_BACKTRACE_PROVIDE_OBJECT, $depth ), true ) );
-			$_more = false;
-		}
-	}
-	// phpcs:enable -- Method unused in production.
 }

@@ -8,7 +8,10 @@ namespace The_SEO_Framework\Admin\SEOBar;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\Admin;
+use The_SEO_Framework\{
+	Admin,
+	Helper\Taxonomy,
+};
 
 /**
  * The SEO Framework plugin
@@ -42,19 +45,59 @@ use The_SEO_Framework\Admin;
 final class ListTable extends Admin\Lists\Table {
 
 	/**
-	 * @since 4.0.0
-	 * @var string The column name.
+	 * Identifies the SEO Bar column.
+	 *
+	 * @since 5.2.2
+	 * @var string
 	 */
-	private $column_name = 'tsf-seo-bar-wrap';
+	public const COLUMN_NAME = 'tsf-seo-bar-wrap';
 
 	/**
 	 * Setups class and prepares quick edit.
 	 *
 	 * @hook admin_init 10
 	 * @since 5.0.0
+	 * @since 5.2.2 Now registers conflict batching for the stock term list table.
 	 */
 	public static function init_seo_bar() {
+
 		new self;
+
+		\add_filter(
+			'wp_list_table_class_name',
+			[ self::class, 'select_terms_list_table' ],
+			\PHP_INT_MAX,
+			2,
+		);
+	}
+
+	/**
+	 * Uses Core's term row traversal to batch conflict checks for the visible rows.
+	 *
+	 * Custom list table classes and individual AJAX rows use their existing paths.
+	 *
+	 * @hook wp_list_table_class_name PHP_INT_MAX
+	 * @since 5.2.2
+	 *
+	 * @param string $class The selected list table class.
+	 * @param array  $args  The list table constructor arguments.
+	 * @return string The list table class.
+	 */
+	public static function select_terms_list_table( $class, $args ) {
+
+		$screen = $args['screen'] ?? null;
+
+		if (
+			   \WP_Terms_List_Table::class === $class
+			&& 'edit-tags' === ( $screen->base ?? '' )
+			&& ! \wp_doing_ajax()
+			&& Taxonomy::is_supported( $screen->taxonomy )
+			&& Taxonomy\Base_URL::should_remove_taxonomy_base( $screen->taxonomy )
+		) {
+			return Terms_List_Table::class;
+		}
+
+		return $class;
 	}
 
 	/**
@@ -74,7 +117,7 @@ final class ListTable extends Admin\Lists\Table {
 	 */
 	public function add_column( $columns ) {
 
-		$seocolumn = [ $this->column_name => 'SEO' ];
+		$seocolumn = [ self::COLUMN_NAME => 'SEO' ];
 
 		$column_keys = array_keys( $columns );
 
@@ -135,7 +178,7 @@ final class ListTable extends Admin\Lists\Table {
 	 */
 	public function output_column_contents_for_post( $column_name, $post_id ) {
 
-		if ( $this->column_name !== $column_name ) return;
+		if ( self::COLUMN_NAME !== $column_name ) return;
 
 		// phpcs:disable WordPress.Security.EscapeOutput -- generate_bar escapes.
 		echo Builder::generate_bar( [ 'id' => $post_id ] );
@@ -164,7 +207,7 @@ final class ListTable extends Admin\Lists\Table {
 	 */
 	public function output_column_contents_for_term( $string, $column_name, $term_id ) {
 
-		if ( $this->column_name !== $column_name )
+		if ( self::COLUMN_NAME !== $column_name )
 			return $string;
 
 		if ( $this->doing_ajax )
@@ -192,7 +235,7 @@ final class ListTable extends Admin\Lists\Table {
 	 */
 	public function output_column_contents_for_user( $string, $column_name, $user_id ) {
 
-		if ( $this->column_name !== $column_name )
+		if ( self::COLUMN_NAME !== $column_name )
 			return $string;
 
 		return Builder::generate_bar( [ 'uid' => $user_id ] ) . $string;

@@ -8,10 +8,9 @@ namespace The_SEO_Framework\Sitemap\WP;
 
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
-use The_SEO_Framework\{
-	Helper\Query,
-	Sitemap,
-};
+use function The_SEO_Framework\flag;
+
+use The_SEO_Framework\Sitemap;
 
 /**
  * The SEO Framework plugin
@@ -46,7 +45,8 @@ final class Filter {
 	 * We do this via a filter, which is unconventional but a bypass.
 	 *
 	 * @hook wp_sitemaps_posts_query_args 11
-	 * @link <https://core.trac.wordpress.org/ticket/56954>
+	 * @link <https://core.trac.wordpress.org/ticket/56954> (closed with new function: is_sitemap())
+	 * @link <https://core.trac.wordpress.org/ticket/60552> (related discussion)
 	 * @since 4.2.7
 	 * @since 5.0.0 Renamed from `_trick_filter_doing_sitemap`.
 	 * @global \WP_Query $wp_query We test against the main query here.
@@ -58,10 +58,10 @@ final class Filter {
 
 		global $wp_query;
 
-		// If doing Core sitemaps, verify if is actual sitemap, and block if so.
+		// Mark the request only when Core recognizes its sitemap provider.
 		if ( isset( $wp_query->query_vars['sitemap'] ) )
 			if ( \wp_sitemaps_get_server()->registry->get_provider( $wp_query->query_vars['sitemap'] ) )
-				Query::is_sitemap( true );
+				flag( 'is_sitemap_query', true );
 
 		return $args;
 	}

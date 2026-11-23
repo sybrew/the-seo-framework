@@ -55,10 +55,17 @@ final class Page extends Main {
 
 	/**
 	 * @since 4.0.0
+	 * @since 5.2.2 Now controls regular assessments only.
 	 * @abstract
-	 * @var array All known tests.
+	 * @var string[] The regular test names.
 	 */
 	public static $tests = [ 'title', 'description', 'indexing', 'following', 'archiving', 'redirect' ];
+
+	/**
+	 * @since 5.2.2
+	 * @var array<string,string> Blocking assessment method names indexed by test name.
+	 */
+	protected const BLOCKING_TESTS = [ 'redirect' => 'test_blocking_redirect' ];
 
 	/**
 	 * Primes the cache.
@@ -135,30 +142,6 @@ final class Page extends Main {
 				'robotsassert' => Meta\Robots::get_collected_meta_assertions(),
 			],
 		];
-	}
-
-	/**
-	 * Tests for blocking redirection.
-	 *
-	 * @since 4.0.0
-	 * @abstract
-	 *
-	 * @return bool True if there's a blocking redirect, false otherwise.
-	 */
-	protected function has_blocking_redirect() {
-		return ! empty( $this->query_cache['meta']['redirect'] );
-	}
-
-	/**
-	 * Tests whether indexing replaces the other tests.
-	 *
-	 * @since 5.2.0
-	 * @abstract
-	 *
-	 * @return bool True when the indexing block replaces the other tests, false otherwise.
-	 */
-	protected function has_blocking_noindex() {
-		return false;
 	}
 
 	/**
@@ -1081,11 +1064,51 @@ final class Page extends Main {
 	}
 
 	/**
-	 * Runs redirect tests.
+	 * Assesses a configured redirect, including inactive redirects on drafts and trashed posts.
+	 *
+	 * @since 5.2.2
+	 *
+	 * @return ?array The blocking assessment if a redirect is configured, otherwise null.
+	 */
+	protected function test_blocking_redirect() {
+
+		if ( empty( $this->query_cache['meta']['redirect'] ) ) return;
+
+		$item = static::get_cache( 'post/redirect/default/1' )
+			?? static::set_cache(
+				'post/redirect/default/1',
+				[
+					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
+					'title'  => \__( 'Redirection', 'autodescription' ),
+					'status' => Builder::STATE_UNKNOWN,
+					'reason' => \__( 'Page redirects visitors.', 'autodescription' ),
+					'assess' => [
+						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
+					],
+					'meta'   => [ 'blocking' => true ],
+				],
+			);
+
+		if ( $this->query_cache['states']['isdraft'] ) {
+			$item['status']             = Builder::STATE_OKAY;
+			$item['reason']             = \__( 'Redirect is inactive.', 'autodescription' );
+			$item['assess']['redirect'] = \__( 'A redirect is stored but does nothing until the page is published.', 'autodescription' );
+		} elseif ( $this->query_cache['states']['istrashed'] ) {
+			$item['status']             = Builder::STATE_OKAY;
+			$item['reason']             = \__( 'Redirect is inactive.', 'autodescription' );
+			$item['assess']['redirect'] = \__( 'A redirect is stored but does nothing until the page is restored.', 'autodescription' );
+		}
+
+		return $item;
+	}
+
+	/**
+	 * Assesses a page without a redirect.
 	 *
 	 * @since 4.0.0
 	 * @since 5.2.0 A stored redirect on a draft or trashed page now warns that
 	 *              it does nothing until the page is published or restored.
+	 * @since 5.2.2 Now runs only for pages without a configured redirect.
 	 *
 	 * @return array $item {
 	 *     The SEO Bar redirect item.
@@ -1099,51 +1122,19 @@ final class Page extends Main {
 	 * }
 	 */
 	protected function test_redirect() {
-
-		if ( $this->has_blocking_redirect() ) {
-			$item = static::get_cache( 'post/redirect/default/1' ) ?? static::set_cache(
-				'post/redirect/default/1',
+		return static::get_cache( 'page/redirect/default/0' )
+			?? static::set_cache(
+				'page/redirect/default/0',
 				[
 					'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
 					'title'  => \__( 'Redirection', 'autodescription' ),
-					'status' => Builder::STATE_UNKNOWN,
-					'reason' => \__( 'Page redirects visitors.', 'autodescription' ),
+					'status' => Builder::STATE_GOOD,
+					'reason' => \__( 'Page does not redirect visitors.', 'autodescription' ),
 					'assess' => [
-						'redirect' => \__( 'All visitors and crawlers are being redirected. So, no other SEO enhancements are effective.', 'autodescription' ),
+						'redirect' => \__( 'Visitors and crawlers may view this page.', 'autodescription' ),
 					],
-					'meta'   => [
-						'blocking' => true,
-					],
+					'meta'   => [ 'blocking' => false ],
 				],
 			);
-
-			if ( $this->query_cache['states']['isdraft'] ) {
-				$item['status']             = Builder::STATE_OKAY;
-				$item['reason']             = \__( 'Redirect is inactive.', 'autodescription' );
-				$item['assess']['redirect'] = \__( 'A redirect is stored but does nothing until the page is published.', 'autodescription' );
-			} elseif ( $this->query_cache['states']['istrashed'] ) {
-				$item['status']             = Builder::STATE_OKAY;
-				$item['reason']             = \__( 'Redirect is inactive.', 'autodescription' );
-				$item['assess']['redirect'] = \__( 'A redirect is stored but does nothing until the page is restored.', 'autodescription' );
-			}
-
-			return $item;
-		}
-
-		return static::get_cache( 'page/redirect/default/0' ) ?? static::set_cache(
-			'page/redirect/default/0',
-			[
-				'symbol' => \_x( 'R', 'Redirect', 'autodescription' ),
-				'title'  => \__( 'Redirection', 'autodescription' ),
-				'status' => Builder::STATE_GOOD,
-				'reason' => \__( 'Page does not redirect visitors.', 'autodescription' ),
-				'assess' => [
-					'redirect' => \__( 'Visitors and crawlers may view this page.', 'autodescription' ),
-				],
-				'meta'   => [
-					'blocking' => false,
-				],
-			],
-		);
 	}
 }

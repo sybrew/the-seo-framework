@@ -99,6 +99,7 @@ function wpr_tsf_register_types() {
  * Creates baseline posts, pages, and terms once.
  *
  * @since 5.2.0
+ * @since 5.2.2 Now assigns a valid author to seeded content for author-based permalinks.
  */
 function wpr_tsf_seed_content() {
 
@@ -109,6 +110,10 @@ function wpr_tsf_seed_content() {
 
 	if ( get_option( 'wpr_tsf_baseline_ready' ) ) return;
 
+	$author = get_user_by( 'login', 'admin' );
+
+	if ( ! $author ) return;
+
 	if ( ! add_option( 'wpr_tsf_baseline_lock', 1 ) ) return;
 
 	update_option( 'posts_per_page', 2 );
@@ -117,6 +122,7 @@ function wpr_tsf_seed_content() {
 		wp_insert_post(
 			[
 				'post_title'   => 'Home',
+				'post_author'  => $author->ID,
 				'post_name'    => 'home',
 				'post_status'  => 'publish',
 				'post_type'    => 'page',
@@ -129,6 +135,7 @@ function wpr_tsf_seed_content() {
 		wp_insert_post(
 			[
 				'post_title'   => 'Blog',
+				'post_author'  => $author->ID,
 				'post_name'    => 'blog',
 				'post_status'  => 'publish',
 				'post_type'    => 'page',
@@ -140,6 +147,7 @@ function wpr_tsf_seed_content() {
 	wp_insert_post(
 		[
 			'post_title'    => 'Dated',
+			'post_author'   => $author->ID,
 			'post_name'     => 'dated',
 			'post_status'   => 'publish',
 			'post_type'     => 'post',
@@ -153,6 +161,7 @@ function wpr_tsf_seed_content() {
 		wp_insert_post(
 			[
 				'post_title'   => $slug,
+				'post_author'  => $author->ID,
 				'post_name'    => $slug,
 				'post_status'  => 'publish',
 				'post_type'    => 'post',
@@ -164,6 +173,7 @@ function wpr_tsf_seed_content() {
 	$book = wp_insert_post(
 		[
 			'post_title'   => 'Dune',
+			'post_author'  => $author->ID,
 			'post_name'    => 'dune',
 			'post_status'  => 'publish',
 			'post_type'    => 'wpr_book',
@@ -174,6 +184,7 @@ function wpr_tsf_seed_content() {
 	$manual = wp_insert_post(
 		[
 			'post_title'   => 'Manual',
+			'post_author'  => $author->ID,
 			'post_name'    => 'manual',
 			'post_status'  => 'publish',
 			'post_type'    => 'wpr_guide',
@@ -184,6 +195,7 @@ function wpr_tsf_seed_content() {
 	wp_insert_post(
 		[
 			'post_title'   => 'Chapter',
+			'post_author'  => $author->ID,
 			'post_name'    => 'chapter',
 			'post_status'  => 'publish',
 			'post_type'    => 'wpr_guide',
@@ -195,6 +207,7 @@ function wpr_tsf_seed_content() {
 	$redirect = wp_insert_post(
 		[
 			'post_title'   => 'Redirect post',
+			'post_author'  => $author->ID,
 			'post_name'    => 'wpr-redirect-post',
 			'post_status'  => 'publish',
 			'post_type'    => 'post',
@@ -217,6 +230,7 @@ function wpr_tsf_seed_content() {
 	wp_insert_post(
 		[
 			'post_title'   => 'Multipage',
+			'post_author'  => $author->ID,
 			'post_name'    => 'wpr-multipage',
 			'post_status'  => 'publish',
 			'post_type'    => 'post',

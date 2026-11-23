@@ -9,8 +9,9 @@ namespace The_SEO_Framework\Sitemap;
 \defined( 'THE_SEO_FRAMEWORK_PRESENT' ) or die;
 
 use function The_SEO_Framework\{
-	memo,
+	flag,
 	has_run,
+	memo,
 };
 
 use The_SEO_Framework\{
@@ -19,7 +20,6 @@ use The_SEO_Framework\{
 };
 use The_SEO_Framework\Helper\{
 	Headers,
-	Query,
 	Template,
 };
 
@@ -113,8 +113,8 @@ class Registry {
 		// No matched sitemap ID is found.
 		if ( empty( $sitemap_id ) ) return;
 
-		// Register we're on a sitemap.
-		Query::is_sitemap( true );
+		flag( 'is_sitemap_query', true );
+
 		\add_action( 'pre_get_posts', [ self::class, '_override_query_parameters' ] );
 
 		/**

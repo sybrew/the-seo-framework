@@ -38,8 +38,8 @@ use The_SEO_Framework\Helper\{
 
 /**
  * This file holds functions for upgrading the plugin.
- * This file will only be called ONCE if the required version option is lower
- * compared to The SEO Framework version constant.
+ * This file loads while the saved database version differs from the plugin's
+ * database version.
  *
  * @since 2.7.0
  * @since 3.2.4 Applied namespacing to this file. All method names have changed.
@@ -49,25 +49,29 @@ use The_SEO_Framework\Helper\{
  *       It's a generator/iterator, so we must wait to PHP>5.5 support.
  */
 
-\add_action( 'init', 'The_SEO_Framework\Bootstrap\_do_upgrade', 20 );
-\add_action( 'the_seo_framework_upgraded', 'The_SEO_Framework\Bootstrap\_prepare_upgrade_notice', 99, 2 );
-\add_action( 'the_seo_framework_upgraded', 'The_SEO_Framework\Bootstrap\_prepare_upgrade_suggestion', 100, 2 );
-\add_action( 'the_seo_framework_downgraded', 'The_SEO_Framework\Bootstrap\_prepare_downgrade_notice', 99, 2 );
-
-/**
- * Returns the version set before upgrading began.
- * Memoizes the return value.
- *
- * @since 3.0.0
- *
- * @return string The prior-to-upgrade TSF db version.
- */
-function _previous_db_version() {
-
-	static $memo;
-
-	return $memo ??= \get_option( 'the_seo_framework_upgraded_db_version', '0' );
-}
+\add_action(
+	'init',
+	'The_SEO_Framework\Bootstrap\_do_upgrade',
+	20,
+);
+\add_action(
+	'the_seo_framework_upgraded',
+	'The_SEO_Framework\Bootstrap\_prepare_upgrade_notice',
+	99,
+	2,
+);
+\add_action(
+	'the_seo_framework_upgraded',
+	'The_SEO_Framework\Bootstrap\_prepare_upgrade_suggestion',
+	100,
+	2,
+);
+\add_action(
+	'the_seo_framework_downgraded',
+	'The_SEO_Framework\Bootstrap\_prepare_downgrade_notice',
+	99,
+	2,
+);
 
 /**
  * Upgrade The SEO Framework to the latest version.
@@ -100,33 +104,41 @@ function _previous_db_version() {
  * @since 4.1.0 Now checks whether the lock is successfully set before proceeding. Preventing race conditions.
  * @since 4.2.1 No longer lowers the PHP execution time limit -- only increases it.
  * @since 5.0.0 No longer checks if TSF can load.
+ * @since 5.2.2 1. Now verifies the initial database version when backfilling it.
+ *              2. Now completes an upgrade or downgrade only after verifying the settings and database version.
+ *              3. Now defers the migration if a multisite blog switch is already active on entry.
  */
 function _do_upgrade() {
 
 	if ( \wp_doing_ajax() ) return;
 
-	if ( Query::is_seo_settings_page( 'page_query' ) ) { // $_GET['page']: admin_menu has not registered the hook yet.
+	if ( \is_multisite() && \ms_is_switched() ) return;
+
+	// Check $_GET['page'] before admin_menu registers the page hook.
+	if ( Query::is_seo_settings_page( 'page_query' ) ) {
 		// phpcs:ignore WordPress.Security.SafeRedirect -- self_admin_url() is safe.
 		\wp_redirect( \self_admin_url() );
 		exit;
 	}
 
-	$timeout = 5 * \MINUTE_IN_SECONDS; // Same as WP Core, function update_core().
+	// Use the same timeout as WordPress Core's update_core().
+	$timeout = 5 * \MINUTE_IN_SECONDS;
+	$lock    = _set_upgrade_lock( $timeout );
 
-	$lock = _set_upgrade_lock( $timeout );
-
-	// Lock failed to create--probably because it was already locked (or the database failed us).
+	// Another request may hold the lock, or the database write may have failed.
 	if ( ! $lock ) return;
 
-	// Register this AFTER the lock is set. Otherwise, it may clear the lock in another thread.
-	// This releases the lock when the upgrade crashes or when we forget to unlock it...
-	// ...if the database connection is still valid; otherwise, we'll have to wait for the $timeout to pass.
-	register_shutdown_function( 'The_SEO_Framework\Bootstrap\_release_upgrade_lock' );
+	// Register cleanup only after this request acquires the lock.
+	// If the database connection is lost, the lock expires after the timeout.
+	register_shutdown_function(
+		'The_SEO_Framework\Bootstrap\_release_upgrade_lock',
+	);
 
 	\wp_raise_memory_limit( 'tsf_upgrade' );
 
 	$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 
+	// A limit of 0 means execution time is unlimited.
 	if ( 0 !== $ini_max_execution_time && \function_exists( 'set_time_limit' ) )
 		set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
@@ -140,43 +152,58 @@ function _do_upgrade() {
 	\wp_cache_flush();
 	\wp_cache_delete( 'alloptions', 'options' );
 
-	$previous_version = _previous_db_version();
+	$previous_version = \the_seo_framework_db_version();
 
+	if ( \THE_SEO_FRAMEWORK_DB_VERSION === $previous_version ) return;
+
+	// Backfill the initial version on older sites. New sites start at the current version.
 	if ( ! \get_option( 'the_seo_framework_initial_db_version' ) ) {
-		// Sets to previous if previous is known. This is a late addition. New sites default to \THE_SEO_FRAMEWORK_DB_VERSION.
-		\update_option( 'the_seo_framework_initial_db_version', $previous_version ?: \THE_SEO_FRAMEWORK_DB_VERSION, false );
+		$initial_version = $previous_version ?: \THE_SEO_FRAMEWORK_DB_VERSION;
+
+		\update_option(
+			'the_seo_framework_initial_db_version',
+			$initial_version,
+			false, // don't autoload
+		);
+
+		if ( \get_option( 'the_seo_framework_initial_db_version' ) !== $initial_version )
+			return;
 	}
 
 	// Don't run the upgrade cycle if the user downgraded. Downgrade, instead.
 	if ( $previous_version > \THE_SEO_FRAMEWORK_DB_VERSION ) {
-		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
-		// If we do, add it in function _downgrade()'s loop instead.
-		// \do_action( 'the_seo_framework_do_downgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
-		$current_version = _downgrade( $previous_version );
+		if ( ! _downgrade() ) return;
 
 		/**
 		 * @since 4.1.0
-		 * @internal
+		 * @since 5.2.2 Now fires only after the settings and database version are verified.
+		 *
 		 * @param string $previous_version The previous version the site downgraded from, if any.
 		 * @param string $current_version  The current version of the site.
 		 */
-		\do_action( 'the_seo_framework_downgraded', (string) $previous_version, (string) $current_version );
+		\do_action(
+			'the_seo_framework_downgraded',
+			(string) $previous_version,
+			\THE_SEO_FRAMEWORK_DB_VERSION,
+		);
 	} else {
-		// Novel idea: Allow webmasters to register custom upgrades. Maybe later. See file PHPDoc's TODO.
-		// If we do, add it in function _upgrade()'s loop instead.
-		// \do_action( 'the_seo_framework_do_upgrade', $previous_version, \THE_SEO_FRAMEWORK_DB_VERSION );
 
-		$current_version = _upgrade( $previous_version );
+		if ( ! _upgrade( $previous_version ) ) return;
 
 		/**
 		 * @since 2.7.0
 		 * @since 4.1.0 Added first parameter, $previous_version
-		 * @internal
+		 * @since 5.2.2 Now fires only after the settings and database version are verified.
+		 *
 		 * @param string $previous_version The previous version the site upgraded from, if any.
-		 * @param string $current_version The current version of the site.
+		 * @param string $current_version  The current version of the site.
 		 */
-		\do_action( 'the_seo_framework_upgraded', (string) $previous_version, (string) $current_version );
+		\do_action(
+			'the_seo_framework_upgraded',
+			(string) $previous_version,
+			\THE_SEO_FRAMEWORK_DB_VERSION,
+		);
 	}
 }
 
@@ -184,53 +211,173 @@ function _do_upgrade() {
  * Downgrades the plugin's database.
  *
  * @since 4.1.1
+ * @since 5.2.2 1. Removed the unused $previous_version parameter.
+ *              2. Now returns whether the settings and installed database version were saved.
  *
- * @param string $previous_version The previous version the site downgraded from, if any.
- * @return string $current_version The current database version.
+ * @return bool Whether the settings and installed database version were saved.
  */
-function _downgrade( $previous_version ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-	// We aren't (currently) expecting issues where downgrading causes mayhem. 4051 did cause some, though. This was added later; just set to current.
+function _downgrade() {
 	return _set_to_current_version();
 }
 
 /**
  * Upgrades the plugin's database.
  *
- * NOTE do not skip versions. Sometimes, we add options. (e.g., _do_upgrade_1 & _do_upgrade_5001()).
- *
  * @since 4.1.0
- * @TODO detect database transaction failures before continuing the upgrade? But, WordPress doesn't do that, either.
+ * @since 5.2.2 Now returns false if a settings write or database version checkpoint fails.
  * @see WP Core upgrade_all()
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
- * @return string $current_version The current database version.
+ * @return bool Whether the settings and database version checkpoints were verified.
  */
 function _upgrade( $previous_version ) {
 
-	$current_version = $previous_version;
-
 	// phpcs:disable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine -- readability.
-	// NOTE: From update 3103 henceforth, the upgrade procedures should be backward compatible.
-	// This means no data may be erased for at least 1 major version, or 1 year, whichever is later.
-	// We must manually delete settings that are no longer used; we merge them otherwise.
-	// When a user upgrades beyond this range, they aren't expected to roll back.
+	// Keep upgrades backward compatible for at least one major version or one year, whichever is later.
 	$versions = [
-		'1',
 		'2701', '2802', '2900',
 		'3001', '3103', '3300',
 		'4051', '4103', '4110', '4200', '4270',
-		'5001', '5050', '5100', '5130', '5140', '5200',
+		'5001', '5050', '5100', '5130', '5140', '5200', '5220',
 	];
 	// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.ArrayItemNoNewLine
 
+	// Run each pending migration in version order and checkpoint the database version after each step.
 	foreach ( $versions as $_version ) {
-		if ( $current_version < $_version ) {
-			( __NAMESPACE__ . "\_do_upgrade_{$_version}" )();
-			$current_version = _set_version( $_version );
-		}
+		if ( $previous_version >= $_version ) continue;
+
+		if ( false === ( __NAMESPACE__ . "\_do_upgrade_$_version" )() )
+			return false;
+
+		if ( \THE_SEO_FRAMEWORK_DB_VERSION === $_version ) break;
+
+		if ( ! _set_version( $_version ) )
+			return false;
 	}
 
 	return _set_to_current_version();
+}
+
+/**
+ * Reads the original settings row before WordPress option filters translate its fields.
+ * The caller must hold the upgrade lock.
+ *
+ * @since 5.2.2
+ *
+ * @return mixed The stored value, including an empty array. Returns null for a missing row
+ *               or any other empty value, and false if the database read failed.
+ */
+function _get_upgrade_options() {
+
+	global $wpdb;
+
+	$value = $wpdb->get_var( $wpdb->prepare(
+		"SELECT option_value FROM $wpdb->options WHERE option_name = %s",
+		\THE_SEO_FRAMEWORK_SITE_OPTIONS,
+	) );
+
+	if ( $wpdb->last_error )
+		return false;
+
+	if ( \is_serialized( $value ) )
+		$value = unserialize( // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions -- this is the correct way.
+			trim( $value ),
+			[ 'allowed_classes' => false ],
+		);
+
+	// An empty array is a stored value that the writer can verify.
+	return \is_array( $value ) ? $value : ( $value ?: null );
+}
+
+/**
+ * Writes the full settings array directly to the options table and verifies the saved row.
+ * Bypassing option hooks prevents multilingual plugins from translating or rewriting settings during migrations.
+ * The caller must hold the upgrade lock.
+ *
+ * @since 5.2.2
+ * @global \wpdb $wpdb
+ *
+ * @param array $settings The prepared settings.
+ * @return bool Whether the database holds the prepared value, including an unchanged write.
+ */
+function _upgrade_option( $settings ) {
+
+	global $wpdb;
+
+	$exists = null !== $wpdb->get_var( $wpdb->prepare(
+		"SELECT 1 FROM $wpdb->options WHERE option_name = %s LIMIT 1",
+		\THE_SEO_FRAMEWORK_SITE_OPTIONS,
+	) );
+
+	if ( $wpdb->last_error )
+		return false;
+
+	$serialized = \maybe_serialize( $settings );
+
+	if ( $exists ) {
+		$result = $wpdb->update(
+			$wpdb->options,
+			[
+				'option_value' => $serialized,
+				'autoload'     => 'on',
+			],
+			[ 'option_name' => \THE_SEO_FRAMEWORK_SITE_OPTIONS ],
+		);
+	} else {
+		$result = $wpdb->insert(
+			$wpdb->options,
+			[
+				'option_name'  => \THE_SEO_FRAMEWORK_SITE_OPTIONS,
+				'option_value' => $serialized,
+				'autoload'     => 'on',
+			],
+		);
+	}
+
+	if ( false === $result )
+		return false;
+
+	\wp_cache_delete( 'notoptions', 'options' );
+	\wp_cache_delete( 'alloptions', 'options' );
+	\wp_cache_delete( \THE_SEO_FRAMEWORK_SITE_OPTIONS, 'options' );
+	Data\Plugin::flush_cache();
+
+	return _get_upgrade_options() === $settings;
+}
+
+/**
+ * Reads the original settings or their defaults before applying a migration.
+ *
+ * @since 5.2.2
+ *
+ * @return array|false The settings or their defaults, or false when the read failed.
+ */
+function _get_legacy_settings() {
+
+	$stored = _get_upgrade_options();
+
+	if ( false === $stored )
+		return false;
+
+	return \is_array( $stored ) ? $stored : Data\Plugin\Setup::get_default_options();
+}
+
+/**
+ * Saves selected settings without dropping fields later migrations may still need.
+ *
+ * @since 5.2.2
+ *
+ * @param array $changes The settings to update.
+ * @return bool Whether the settings were saved.
+ */
+function _update_upgrade_settings( $changes ) {
+
+	$stored = _get_legacy_settings();
+
+	if ( false === $stored )
+		return false;
+
+	return _upgrade_option( array_merge( $stored, $changes ) );
 }
 
 /**
@@ -288,7 +435,7 @@ function _set_upgrade_lock( $release_timeout ) {
 	}
 
 	// Update the lock, as by this point we've definitely got a lock, just need to fire the actions.
-	\update_option( $lock_option, time(), true );
+	\update_option( $lock_option, time(), true ); // true = autoload
 
 	return true;
 }
@@ -309,35 +456,56 @@ function _release_upgrade_lock() {
  * Sets upgraded database version.
  *
  * @since 4.1.1
+ * @since 5.2.2 1. Now expects the database version as a string.
+ *              2. Now returns whether the stored database version matches the requested version.
  *
- * @param string|int $version The actual database version.
- * @return string The actual database version.
+ * @param string $version The database version to save.
+ * @return bool Whether the version was saved or already set.
  */
 function _set_version( $version = \THE_SEO_FRAMEWORK_DB_VERSION ) {
 
-	\update_option( 'the_seo_framework_upgraded_db_version', (string) $version, true );
+	\update_option(
+		'the_seo_framework_upgraded_db_version',
+		$version,
+		true, // autoload
+	);
 
-	return (string) $version;
+	return \the_seo_framework_db_version() === $version;
 }
 
 /**
- * Upgrades the Database version to the latest version.
+ * Finalizes settings for the installed version before recording its database version.
  *
- * This happens if all iterations have been executed. This ensure this file will
- * no longer be required.
- * This should run once after every plugin update.
+ * Adds missing defaults and prunes unrecognized top-level keys without altering
+ * existing setting values.
  *
  * @since 2.7.0
  * @since 3.1.4 Now flushes the object cache after the setting's updated.
  * @since 4.1.0 Now also releases the upgrade lock, before flushing the cache.
+ * @since 5.2.2 1. Now leaves lock release to the upgrader's shutdown callback.
+ *              2. Now verifies the finalized settings before saving and verifying the database version.
  *
- * @return string The current database version.
+ * @return bool Whether the settings and installed database version were saved.
  */
 function _set_to_current_version() {
 
-	_set_version();
+	$stored = _get_upgrade_options();
 
-	_release_upgrade_lock();
+	if ( false === $stored )
+		return false;
+
+	$defaults = Data\Plugin\Setup::get_default_options();
+	$settings = array_merge(
+		$defaults,
+		\is_array( $stored ) ? array_intersect_key( $stored, $defaults ) : [],
+	);
+
+	if (
+		   ( $stored !== $settings && ! _upgrade_option( $settings ) )
+		|| ! _set_version()
+	) {
+		return false;
+	}
 
 	/**
 	 * Clear the cache to prevent a get_option() from retrieving a stale database version to the cache.
@@ -349,8 +517,7 @@ function _set_to_current_version() {
 	\wp_cache_flush();
 	\wp_cache_delete( 'alloptions', 'options' );
 
-	// The option update might've failed. Try to obtain the latest version.
-	return (string) \get_option( 'the_seo_framework_upgraded_db_version' );
+	return true;
 }
 
 /**
@@ -598,7 +765,10 @@ function _add_upgrade_notice( $notice = '' ) {
 
 	Admin\Notice\Persistent::register_notice(
 		"SEO: $notice",
-		'upgrade-' . ( hash( 'md5', $notice ) ?: uniqid( '', true ) ), // if md5 is unregistered, it'll return false
+		'upgrade-' . (
+			   hash( 'md5', $notice )
+			?: uniqid( '', true ) // if md5 is unregistered, it'll return false
+		),
 		[
 			'type' => 'info',
 		],
@@ -607,16 +777,6 @@ function _add_upgrade_notice( $notice = '' ) {
 			'capability'   => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
 		],
 	);
-}
-
-/**
- * Sets initial values for The SEO Framework.
- *
- * @since 3.1.0
- */
-function _do_upgrade_1() {
-	// Here, `Plugin\Setup::get_default_options()` will get called 3 times in a row. Alas.
-	\add_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS, Data\Plugin\Setup::get_default_options(), '', true );
 }
 
 /**
@@ -646,7 +806,6 @@ function _do_upgrade_2701() {
  * @since 2.8.0
  */
 function _do_upgrade_2802() {
-
 	// Delete old values from database. Removes backwards compatibility. 2701 is intentional.
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2701' )
 		\delete_option( 'autodescription-term-meta' );
@@ -658,14 +817,26 @@ function _do_upgrade_2802() {
  * @since 2.9.0
  * @since 3.1.0 Now only sets new options when defaults exists.
  * @since 4.1.1 No longer tests for default options.
+ * @since 5.2.2 Now verifies the settings write.
+ *
+ * @return false|null False if the settings write failed.
  */
 function _do_upgrade_2900() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '2900' ) {
-		$card_type = trim( Data\Plugin::get_option( 'twitter_card' ) );
+		$stored = _get_legacy_settings();
+
+		if ( false === $stored )
+			return false;
+
+		$card_type = trim( $stored['twitter_card'] ?? '' );
 
 		if ( 'photo' === $card_type ) {
-			Data\Plugin::update_option( 'twitter_card', 'summary_large_image' );
+			$stored['twitter_card'] = 'summary_large_image';
+
+			if ( ! _upgrade_option( $stored ) )
+				return false;
+
 			_add_upgrade_notice(
 				\__( 'Twitter Photo Cards have been deprecated. Your site now uses Summary Cards when applicable.', 'autodescription' ),
 			);
@@ -681,24 +852,35 @@ function _do_upgrade_2900() {
  * @since 3.0.6 'display_character_counter' option now correctly defaults to 1.
  * @since 3.1.0 Now only sets new options when defaults exist, and when it's an upgraded site.
  * @since 4.1.1 No longer tests for default options.
+ * @since 5.2.2 Now saves the site settings in one verified write.
+ *
+ * @return false|null False if the settings write failed.
  */
 function _do_upgrade_3001() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3001' ) {
-		// Only show notice if old option exists. Falls back to default upgrader otherwise.
-		$sitemap_timestamps = Data\Plugin::get_option( 'sitemap_timestamps' );
+		$stored = _get_legacy_settings();
 
-		if ( '' !== $sitemap_timestamps ) {
-			Data\Plugin::update_option( 'timestamps_format', (string) (int) $sitemap_timestamps );
+		if ( false === $stored )
+			return false;
+
+		$sitemap_timestamps = $stored['sitemap_timestamps'] ?? null;
+
+		$options = [
+			'timestamps_format'         => '' !== $sitemap_timestamps
+				? (string) (int) $sitemap_timestamps
+				: '1',
+			'display_pixel_counter'     => 1,
+			'display_character_counter' => 1,
+		];
+
+		if ( ! _upgrade_option( array_merge( $stored, $options ) ) )
+			return false;
+
+		if ( '' !== $sitemap_timestamps )
 			_add_upgrade_notice(
 				\__( 'The previous sitemap timestamp settings have been converted into new global timestamp settings.', 'autodescription' ),
 			);
-		} else {
-			Data\Plugin::update_option( 'timestamps_format', '1' );
-		}
-
-		Data\Plugin::update_option( 'display_pixel_counter', 1 );
-		Data\Plugin::update_option( 'display_character_counter', 1 );
 	}
 }
 
@@ -715,19 +897,28 @@ function _do_upgrade_3001() {
  * @since 3.1.0
  * @since 4.1.1 No longer tests for default options.
  * @since 5.0.0 Removed THE_SEO_FRAMEWORK_SITE_CACHE settings registration. (See 5001)
+ * @since 5.2.2 Now saves the site settings in one verified write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_3103() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '3103' ) {
-		// Transport title separator (option name typo).
-		Data\Plugin::update_option(
-			'title_separator',
-			Data\Plugin::get_option( 'title_seperator' ) ?: 'hyphen', // Typo.
-		);
+		$stored = _get_legacy_settings();
+
+		if ( false === $stored )
+			return false;
+
+		$options = [
+			'title_separator'     => ( $stored['title_seperator'] ?? '' ) ?: 'hyphen', // Typo.
+			'auto_description'    => 1,
+			'sitemap_query_limit' => 1000,
+			'title_strip_tags'    => 0, // Preserve previous behavior. The default for new sites is 1.
+		];
 
 		// Transport attachment_noindex, attachment_nofollow, and attachment_noarchive settings.
 		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-			$_attachment_option = (int) (bool) Data\Plugin::get_option( "attachment_$r" );
+			$_attachment_option = (int) ! empty( $stored[ "attachment_$r" ] );
 
 			$_value = [];
 
@@ -735,17 +926,10 @@ function _do_upgrade_3103() {
 			if ( $_attachment_option )
 				$_value['attachment'] = $_attachment_option;
 
-			Data\Plugin::update_option( Data\Plugin\Helper::get_robots_option_index( 'post_type', $r ), $_value );
+			$options[ Data\Plugin\Helper::get_robots_option_index( 'post_type', $r ) ] = $_value;
 		}
 
-		// Adds default auto description option.
-		Data\Plugin::update_option( 'auto_description', 1 );
-
-		// Add default sitemap limit option.
-		Data\Plugin::update_option( 'sitemap_query_limit', 1000 );
-
-		// Add non-default HTML stripping option. Defaulting to previous behavior.
-		Data\Plugin::update_option( 'title_strip_tags', 0 ); // NOTE: Default is 1.
+		return _upgrade_option( array_merge( $stored, $options ) );
 	}
 }
 
@@ -759,6 +943,9 @@ function _do_upgrade_3103() {
  *
  * @since 4.0.0
  * @since 4.0.5 The upgrader now updates "dash" to "hyphen".
+ * @since 5.2.2 Now saves the site settings in one verified write.
+ *
+ * @return false|null False if the settings write failed.
  */
 function _do_upgrade_3300() {
 
@@ -770,18 +957,22 @@ function _do_upgrade_3300() {
 		); // redundant?
 		\add_action( 'shutdown', 'flush_rewrite_rules' );
 
+		$stored = _get_legacy_settings();
+
+		if ( false === $stored )
+			return false;
+
+		$options = [];
+
 		// Convert 'dash' title option to 'hyphen', silently. Nothing notably changes for the user.
-		if ( 'dash' === Data\Plugin::get_option( 'title_separator' ) )
-			Data\Plugin::update_option( 'title_separator', 'hyphen' );
+		if ( 'dash' === ( $stored['title_separator'] ?? null ) )
+			$options['title_separator'] = 'hyphen';
 
 		// Flip the homepage title location to make it in line with all other titles.
-		$home_title_location = Data\Plugin::get_option( 'home_title_location' );
+		$options['home_title_location'] = 'left' === ( $stored['home_title_location'] ?? null ) ? 'right' : 'left';
 
-		if ( 'left' === $home_title_location ) {
-			Data\Plugin::update_option( 'home_title_location', 'right' );
-		} else {
-			Data\Plugin::update_option( 'home_title_location', 'left' );
-		}
+		if ( ! _upgrade_option( array_merge( $stored, $options ) ) )
+			return false;
 
 		_add_upgrade_notice(
 			\__( 'The positions in the "Meta Title Additions Location" setting for the homepage have been reversed, left to right, but the output has not been changed. If you must downgrade for some reason, remember to switch the location back again.', 'autodescription' ),
@@ -798,17 +989,20 @@ function _do_upgrade_3300() {
  * Registers the `theme_color` option, string.
  *
  * @since 4.0.5
+ * @since 5.2.2 Now saves the site settings in one verified write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_4051() {
-
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' ) {
-		Data\Plugin::update_option( 'advanced_query_protection', 0 );
-		Data\Plugin::update_option( 'index_the_feed', 0 );
-		Data\Plugin::update_option( 'baidu_verification', '' );
-		Data\Plugin::update_option( 'oembed_scripts', 1 );
-		Data\Plugin::update_option( 'oembed_remove_author', 0 );
-		Data\Plugin::update_option( 'theme_color', '' );
-	}
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4051' )
+		return _update_upgrade_settings( [
+			'advanced_query_protection' => 0,
+			'index_the_feed'            => 0,
+			'baidu_verification'        => '',
+			'oembed_scripts'            => 1,
+			'oembed_remove_author'      => 0,
+			'theme_color'               => '',
+		] );
 }
 
 /**
@@ -819,28 +1013,35 @@ function _do_upgrade_4051() {
  * Registers and migrates the robots taxonomy options. Sets defaults (['noindex']['post_format'] = 1).
  *
  * @since 4.1.0
+ * @since 5.2.2 Now saves the site settings in one verified write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_4103() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4103' ) {
-		Data\Plugin::update_option( 'disabled_taxonomies', [] );
-		Data\Plugin::update_option( 'sitemap_logo_url', '' );
-		Data\Plugin::update_option( 'sitemap_logo_id', 0 );
-		Data\Plugin::update_option( 'social_title_rem_additions', 0 );
+		$stored = _get_legacy_settings();
+
+		if ( false === $stored )
+			return false;
+
+		$options = [
+			'disabled_taxonomies'        => [],
+			'sitemap_logo_url'           => '',
+			'sitemap_logo_id'            => 0,
+			'social_title_rem_additions' => 0,
+		];
 
 		// Transport category_noindex/nofollow/noarchive and tag_noindex/nofollow/noarchive settings.
-		$_new_pt_option_defaults = [
-			'noindex'   => [
-				'post_format' => 1,
-			],
+		$robots_defaults = [
+			'noindex'   => [ 'post_format' => 1 ],
 			'nofollow'  => [],
 			'noarchive' => [],
 		];
-		foreach ( [ 'noindex', 'nofollow', 'noarchive' ] as $r ) {
-			$_value = $_new_pt_option_defaults[ $r ];
 
-			$_category_option = (int) (bool) Data\Plugin::get_option( "category_$r" );
-			$_post_tag_option = (int) (bool) Data\Plugin::get_option( "tag_$r" );
+		foreach ( $robots_defaults as $r => $_value ) {
+			$_category_option = (int) ! empty( $stored[ "category_$r" ] );
+			$_post_tag_option = (int) ! empty( $stored[ "tag_$r" ] );
 
 			if ( $_category_option )
 				$_value['category'] = $_category_option;
@@ -848,8 +1049,10 @@ function _do_upgrade_4103() {
 			if ( $_post_tag_option )
 				$_value['post_tag'] = $_post_tag_option;
 
-			Data\Plugin::update_option( Data\Plugin\Helper::get_robots_option_index( 'taxonomy', $r ), $_value );
+			$options[ Data\Plugin\Helper::get_robots_option_index( 'taxonomy', $r ) ] = $_value;
 		}
+
+		return _upgrade_option( array_merge( $stored, $options ) );
 	}
 }
 
@@ -860,13 +1063,16 @@ function _do_upgrade_4103() {
  * Registers the `oembed_use_social_image` option, Boolean. Differs from default option.
  *
  * @since 4.1.1
+ * @since 5.2.2 Now saves the site settings in one verified write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_4110() {
-
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' ) {
-		Data\Plugin::update_option( 'oembed_use_og_title', 0 );
-		Data\Plugin::update_option( 'oembed_use_social_image', 0 ); // Defaults to 1 for new sites!
-	}
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4110' )
+		return _update_upgrade_settings( [
+			'oembed_use_og_title'     => 0,
+			'oembed_use_social_image' => 0, // Defaults to 1 for new sites.
+		] );
 }
 
 /**
@@ -875,7 +1081,6 @@ function _do_upgrade_4110() {
  * @since 4.2.0
  */
 function _do_upgrade_4200() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4200' )
 		\delete_option( 'the_seo_framework_tested_upgrade_version' );
 }
@@ -884,11 +1089,13 @@ function _do_upgrade_4200() {
  * Registers the `auto_description_html_method` option, string.
  *
  * @since 4.2.7
+ * @since 5.2.2 Now verifies the settings write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_4270() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '4270' )
-		Data\Plugin::update_option( 'auto_description_html_method', 'fast' );
+		return _update_upgrade_settings( [ 'auto_description_html_method' => 'fast' ] );
 }
 
 /**
@@ -900,18 +1107,40 @@ function _do_upgrade_4270() {
  * Sets `homepage_twitter_card_type` to an empty string (aka default).
  *
  * @since 5.0.0
+ * @since 5.2.2 Now saves the site settings in one verified write.
  * @global \wpdb $wpdb
+ *
+ * @return false|null False if the settings write failed.
  */
 function _do_upgrade_5001() {
 
 	// Not a public "setting" -- only add the option to prevent additional db-queries when it's yet to be populated.
-	\add_option( \THE_SEO_FRAMEWORK_SITE_CACHE, Data\Plugin\Setup::get_default_site_caches(), '', true );
+	\add_option(
+		\THE_SEO_FRAMEWORK_SITE_CACHE,
+		Data\Plugin\Setup::get_default_site_caches(),
+		'',
+		true,
+	);
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5001' ) {
-		Data\Plugin::update_option(
-			'auto_description_html_method',
-			Data\Plugin::get_option( 'auto_descripton_html_method' ) ?: 'fast',
-		);
+		$stored = _get_legacy_settings();
+
+		if ( false === $stored )
+			return false;
+
+		$ld_json_enabled = ! empty( $stored['ld_json_searchbox'] )
+			|| ! empty( $stored['ld_json_breadcrumbs'] )
+			|| ! empty( $stored['knowledge_output'] );
+
+		$options = [
+			'auto_description_html_method' => ( $stored['auto_descripton_html_method'] ?? '' ) ?: 'fast',
+			'seo_bar_low_contrast'         => 0,
+			'ld_json_enabled'              => (int) $ld_json_enabled,
+			'homepage_twitter_card_type'   => '',
+		];
+
+		if ( ! _upgrade_option( array_merge( $stored, $options ) ) )
+			return false;
 
 		$site_cache = \get_option( 'autodescription-updates-cache' ) ?: [];
 
@@ -922,20 +1151,6 @@ function _do_upgrade_5001() {
 			// On downgrade, this will be repopulated.
 			\delete_option( 'autodescription-updates-cache' );
 		}
-
-		Data\Plugin::update_option( 'seo_bar_low_contrast', 0 );
-
-		if (
-			   Data\Plugin::get_option( 'ld_json_searchbox' )
-			|| Data\Plugin::get_option( 'ld_json_breadcrumbs' )
-			|| Data\Plugin::get_option( 'knowledge_output' )
-		) {
-			Data\Plugin::update_option( 'ld_json_enabled', 1 );
-		} else {
-			Data\Plugin::update_option( 'ld_json_enabled', 0 );
-		}
-
-		Data\Plugin::update_option( 'homepage_twitter_card_type', '' );
 
 		global $wpdb;
 
@@ -962,18 +1177,25 @@ function _do_upgrade_5001() {
 }
 
 /**
- * Changes `ping_use_cron_prerender` to `sitemap_cron_prerender`.
- * Subsequently, it removes indexes `ping_google` and `ping_bing`. Downgrading will keep these disabled, which is fine.
+ * Copies `ping_use_cron_prerender` to `sitemap_cron_prerender`.
+ * Final settings pruning removes the retired ping options.
  *
  * @since 5.0.5
+ * @since 5.2.2 Now verifies the settings write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_5050() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5050' ) {
-		Data\Plugin::update_option(
-			'sitemap_cron_prerender',
-			Data\Plugin::get_option( 'ping_use_cron_prerender' ) ?: 0,
-		);
+		$stored = _get_legacy_settings();
+
+		if ( false === $stored )
+			return false;
+
+		$stored['sitemap_cron_prerender'] = ( $stored['ping_use_cron_prerender'] ?? 0 ) ?: 0;
+
+		return _upgrade_option( $stored );
 	}
 }
 
@@ -981,17 +1203,18 @@ function _do_upgrade_5050() {
  * Registers new options 'robotstxt_block_ai', 'robotstxt_block_seo', 'homepage_canonical', and 'homepage_redirect'.
  *
  * @since 5.1.0
+ * @since 5.2.2 Now verifies the settings write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_5100() {
-
-	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5100' ) {
-		Data\Plugin::update_option( [
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5100' )
+		return _update_upgrade_settings( [
 			'robotstxt_block_ai'  => 0,
 			'robotstxt_block_seo' => 0,
 			'homepage_canonical'  => '',
 			'homepage_redirect'   => '',
 		] );
-	}
 }
 
 /**
@@ -999,11 +1222,13 @@ function _do_upgrade_5100() {
  * and 'display_user_edit_options'.
  *
  * @since 5.1.3
+ * @since 5.2.2 Now verifies the settings write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_5130() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5130' )
-		Data\Plugin::update_option( [
+		return _update_upgrade_settings( [
 			'display_list_edit_options' => 1,
 			'display_term_edit_options' => 1,
 			'display_user_edit_options' => 1,
@@ -1014,11 +1239,13 @@ function _do_upgrade_5130() {
  * Registers new option 'breadcrumb_use_meta_title'. Enabled for upgraded sites, disabled for new sites.
  *
  * @since 5.1.4
+ * @since 5.2.2 Now verifies the settings write.
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
  */
 function _do_upgrade_5140() {
-
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5140' )
-		Data\Plugin::update_option( 'breadcrumb_use_meta_title', 1 );
+		return _update_upgrade_settings( [ 'breadcrumb_use_meta_title' => 1 ] );
 }
 
 /**
@@ -1030,11 +1257,14 @@ function _do_upgrade_5140() {
  *
  * @since 5.2.0
  * @since 5.2.0 Now also registers `edit_proposed_values`, disabled for upgraded sites.
+ * @since 5.2.2 Now verifies the settings write.
+ *
+ * @return false|null False if the settings write failed.
  */
 function _do_upgrade_5200() {
 
 	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5200' ) {
-		Data\Plugin::update_option( [
+		if ( ! _update_upgrade_settings( [
 			'facebook_verification' => '',
 			'fediverse_site'        => '',
 			'fediverse_site_url'    => '',
@@ -1044,7 +1274,9 @@ function _do_upgrade_5200() {
 			'breadcrumb_taxonomy'   => [],
 			'knowledge_tiktok'      => '',
 			'edit_proposed_values'  => 0,
-		] );
+		] ) ) {
+			return false;
+		}
 
 		global $wpdb;
 
@@ -1075,4 +1307,16 @@ function _do_upgrade_5200() {
 			);
 		}
 	}
+}
+
+/**
+ * Disables taxonomy base removal on sites installed before database version 5220.
+ *
+ * @since 5.2.2
+ *
+ * @return bool|null Whether the settings were saved, or null if this migration did not apply.
+ */
+function _do_upgrade_5220() {
+	if ( \get_option( 'the_seo_framework_initial_db_version' ) < '5220' )
+		return _update_upgrade_settings( [ 'remove_taxonomy_bases' => [] ] );
 }

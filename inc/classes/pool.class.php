@@ -1006,6 +1006,20 @@ class Pool extends Legacy_API {
 			private $colloquial_handle     = 'tsf()->taxonomy()';
 			private $deprecated_methods    = [];
 			private $deprecated_properties = [];
+
+			/**
+			 * @since 5.2.2
+			 * @return \The_SEO_Framework\Helper\Taxonomy\Base_URL
+			 */
+			public static function base_url() {
+				return static::$subpool[ __FUNCTION__ ] ??= new class extends Helper\Taxonomy\Base_URL {
+					use Static_Deprecator;
+
+					private $colloquial_handle     = 'tsf()->taxonomy()->base_url()';
+					private $deprecated_methods    = [];
+					private $deprecated_properties = [];
+				};
+			}
 		};
 	}
 

@@ -83,17 +83,6 @@ if ( ! $headless['meta'] ) {
 	'option_page_capability_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
 	fn() => \THE_SEO_FRAMEWORK_SETTINGS_CAP,
 );
-/**
- * Register the required settings sanitization regardless of headlessness.
- * Other plugins may still update our options.
- * Also, register_settings only passes 1 parameter, while we need all 3.
- */
-\add_filter(
-	'sanitize_option_' . \THE_SEO_FRAMEWORK_SITE_OPTIONS,
-	[ Data\Filter\Plugin::class, 'filter_settings_update' ],
-	10,
-	3,
-);
 
 if ( ! $headless['settings'] ) {
 	// Register settings, saving, and the menu.

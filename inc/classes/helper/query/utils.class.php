@@ -49,13 +49,15 @@ class Utils {
 	 * NOTE: This is a sitewide test, not a per-post test.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.2 Now caches per site.
 	 * @see `wp_force_plain_post_permalink()`
+	 * @global int $blog_id
 	 *
 	 * @return bool
 	 */
 	public static function using_pretty_permalinks() {
-		return memo()
-			?? memo( '' !== \get_option( 'permalink_structure' ) );
+		return memo( null, $GLOBALS['blog_id'] )
+			?? memo( '' !== \get_option( 'permalink_structure' ), $GLOBALS['blog_id'] );
 	}
 
 	/**
@@ -73,6 +75,7 @@ class Utils {
 	 *              4. Also removed detection of `wp_doing_ajax()` and `wp_doing_cron()`,
 	 *                 this is now being handled by `_init_tsf()`.
 	 * @since 5.0.3 Now considers the query supported when the homepage is assigned a broken ID.
+	 * @since 5.2.2 Now waits for the `wp` action before caching front-end SEO support.
 	 *
 	 * @return bool
 	 */
@@ -119,7 +122,12 @@ class Utils {
 		 * @since 4.0.0
 		 * @param bool $supported Whether the query supports SEO.
 		 */
-		return memo( (bool) \apply_filters( 'the_seo_framework_query_supports_seo', $supported ) );
+		$supported = (bool) \apply_filters(
+			'the_seo_framework_query_supports_seo',
+			$supported,
+		);
+
+		return Cache::can_cache_query() ? memo( $supported ) : $supported;
 	}
 
 	/**
@@ -156,6 +164,7 @@ class Utils {
 	 * @since 4.2.8 Now blocks any publicly registered variable requested to the home-as-page.
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
 	 * @since 5.0.5 Now detects `should_be_404`, specifically for query variable `sitemap` and `sitemap-subtype`.
+	 * @since 5.2.2 Now waits for the `wp` action before caching front-end query protection.
 	 * @global \WP_Query $wp_query
 	 *
 	 * @return bool Whether the query is (accidentally) exploited.
@@ -170,18 +179,34 @@ class Utils {
 		if ( null !== $memo = memo() )
 			return $memo;
 
-		if ( ! Data\Plugin::get_option( 'advanced_query_protection' ) )
-			return memo( false );
+		$exploited = false;
 
 		// When the page ID is not 0, a real page will always be returned.
-		if ( Query::get_the_real_id() )
-			return memo( false );
+		if (
+			   Data\Plugin::get_option( 'advanced_query_protection' )
+			&& ! Query::get_the_real_id()
+		) {
+			// When no special query data is registered, ignore this. Don't set cache.
+			if ( ! isset( $GLOBALS['wp_query']->query ) )
+				return false;
+
+			$exploited = self::has_exploited_query_vars();
+		}
+
+		return Cache::can_cache_query() ? memo( $exploited ) : $exploited;
+	}
+
+	/**
+	 * Tests the main query variables for exploited endpoints.
+	 *
+	 * @since 5.2.2
+	 * @global \WP_Query $wp_query
+	 *
+	 * @return bool Whether the query variables match an exploited endpoint.
+	 */
+	private static function has_exploited_query_vars() {
 
 		global $wp_query;
-
-		// When no special query data is registered, ignore this. Don't set cache.
-		if ( ! isset( $wp_query->query ) )
-			return false;
 
 		/**
 		 * @since 4.0.5
@@ -215,7 +240,7 @@ class Utils {
 					'sentence',
 				],
 				// When the blog (home) is a page then these requests to any registered query variable will cause issues,
-				// but only when the page ID returns 0. (We already tested for `if ( Query::get_the_real_id() )` above).
+				// but only when the page ID returns 0, as tested in is_query_exploited().
 				// This global's property is only populated with requested parameters that match registered `public_query_vars`.
 				// We only need one to pass this test. We could use array_key_first()... but that may be nulled (out of our control).
 				'not_home_as_page' => array_keys( $GLOBALS['wp']->query_vars ?? [] ),
@@ -240,7 +265,7 @@ class Utils {
 							   '0' === $query[ $qv ]
 							|| ! is_numeric( $query[ $qv ] )
 						) {
-							return memo( true );
+							return true;
 						}
 						break;
 
@@ -251,19 +276,19 @@ class Utils {
 						// If WordPress didn't canonical_redirect() the user yet, it's exploited.
 						// WordPress mitigates this via a 404 query when a numeric value is found without a leading 0.
 						if ( ! preg_match( '/^[1-9]\d*$/', $query[ $qv ] ) )
-							return memo( true );
+							return true;
 						break;
 
 					case 'requires_s':
 						if ( ! isset( $query['s'] ) )
-							return memo( true );
+							return true;
 						break;
 
 					case 'not_home_as_page':
 						// isset($query[$qv]) is already executed. Just test if homepage ID still works.
-						// !Query::get_the_real_id() is already executed. Just test if home is a page.
+						// is_query_exploited() already checked the ID. Just test if home is a page.
 						if ( Query::is_blog_as_page() ) {
-							return memo( true );
+							return true;
 						} else {
 							// No need to test other 'not_home_as_page' types. Go to next type (if any).
 							continue 3; // 1: switch, 2: loop $qvs, 3: loop $exploitables.
@@ -273,7 +298,7 @@ class Utils {
 					case 'should_be_404':
 						// isset($query[$qv]) is already executed. Just test if we're also on a 404 page.
 						if ( \is_404() ) {
-							return memo( true );
+							return true;
 						} else {
 							// No need to test other 'not_front_page' types. Go to next type (if any).
 							continue 3; // 1: switch, 2: loop $qvs, 3: loop $exploitables.
@@ -282,7 +307,7 @@ class Utils {
 			}
 		}
 
-		return memo( false );
+		return false;
 	}
 
 	/**

@@ -15,6 +15,7 @@ use The_SEO_Framework\Admin\Settings\Layout\{
 use The_SEO_Framework\Helper\{
 	Format\Markdown,
 	Post_Type,
+	Query,
 	Taxonomy,
 };
 
@@ -364,6 +365,41 @@ switch ( $instance ) :
 			),
 			true,
 		);
+		?>
+		<hr>
+		<?php
+		HTML::header_title( \__( 'Taxonomy URL Settings', 'autodescription' ) );
+		HTML::description( \__( 'Removing taxonomy bases can make the URL hierarchy easier for visitors to navigate. Do not use these settings for taxonomies you do not use.', 'autodescription' ) );
+		HTML::description( \__( 'Term URL hierarchy and permalink prefixes are preserved. Original term URLs remain available. The default canonical URL uses the shortened URL.', 'autodescription' ) );
+		HTML::description( \__( 'Public pages, posts, and archives take precedence at the same URL. Between shortened term URLs, the taxonomy listed first takes precedence. The SEO Bar checks for conflicting term URLs.', 'autodescription' ) );
+		HTML::attention_description( \__( 'Restoring a taxonomy base can break links to shortened term URLs.', 'autodescription' ) );
+
+		if ( ! Query\Utils::using_pretty_permalinks() )
+			HTML::attention_description(
+				\__( 'Note: This site is using the plain permalink structure, so taxonomy bases cannot be removed.', 'autodescription' ),
+			);
+
+		$checkboxes = [];
+
+		// Render one base-removal toggle per eligible taxonomy in fallback priority order.
+		foreach ( Taxonomy\Base_URL::get_taxonomies() as $taxonomy ) {
+			$checkboxes[] = Input::make_checkbox( [
+				'id'     => [ 'remove_taxonomy_bases', $taxonomy ],
+				'label'  => \sprintf(
+					'%s &ndash; <code>%s</code>',
+					\sprintf(
+						/* translators: %s = Plural taxonomy label. */
+						\esc_html__( 'Remove the URL base from %s?', 'autodescription' ),
+						\esc_html( Taxonomy::get_label( $taxonomy, false ) ),
+					),
+					\esc_html( $taxonomy ),
+				),
+				'escape' => false,
+			] );
+		}
+
+		if ( $checkboxes )
+			HTML::wrap_fields( $checkboxes, true );
 		?>
 		<hr>
 		<?php
