@@ -290,10 +290,11 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 			4. Now returns false while a database upgrade is pending.
 		* TSF's option-specific pre-update filter checks the site's database version on each ordinary WordPress `update_option()` call and returns the stored settings while an upgrade is pending.
 		* `The_SEO_Framework\Data\Plugin\Setup::get_default_options()` (`tsf()->data()->plugin()->setup()->get_default_options()`) added `remove_taxonomy_bases`, disabled by default.
+		* `The_SEO_Framework\Meta\URI::get_custom_canonical_url_from_query()` (`tsf()->uri()->get_custom_canonical_url_from_query()`) and `The_SEO_Framework\Meta\URI::get_generated_url_from_query()` (`tsf()->uri()->get_generated_url_from_query()`) now memoize after the `wp` action.
 		* `The_SEO_Framework\Meta\URI\Utils::get_url_permastruct()` (`tsf()->uri()->utils()->get_url_permastruct()`) now accounts for taxonomy base removal when predicting term URLs.
 		* `The_SEO_Framework\Helper\Query::get_the_real_id()` (`tsf()->query()->get_the_real_id()`) now waits for the `wp` action before caching the front-end ID.
-		* `The_SEO_Framework\Helper\Query::get_the_front_page_id()` (`tsf()->query()->get_the_front_page_id()`) now caches per site and waits for the `wp` action before caching the front-end front page ID.
-		* `The_SEO_Framework\Helper\Query::is_static_front_page()` (`tsf()->query()->is_static_front_page()`) now caches per site and waits for the `wp` action before caching the front-end front page ID.
+		* `The_SEO_Framework\Helper\Query::get_the_front_page_id()` (`tsf()->query()->get_the_front_page_id()`) now waits for the `wp` action before caching the front-end front page ID.
+		* `The_SEO_Framework\Helper\Query::is_static_front_page()` (`tsf()->query()->is_static_front_page()`) now waits for the `wp` action before caching the front-end front page ID.
 		* `The_SEO_Framework\Helper\Query::is_sitemap()` (`tsf()->query()->is_sitemap()`) now uses the shared `is_sitemap_query` flag.
 		* `The_SEO_Framework\Helper\Query\Cache::memo()` (`tsf()->query()->cache()->memo()`):
 			1. Now waits for the `wp` action before caching front-end queries.

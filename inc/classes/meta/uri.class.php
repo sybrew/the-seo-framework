@@ -134,10 +134,15 @@ class URI {
 	 * @since 5.0.0
 	 * @since 5.2.0 1. Now makes a relative path absolute.
 	 *              2. Now returns the custom author archive canonical URL from user meta.
+	 * @since 5.2.2 Now memoizes the query result after the `wp` action.
 	 *
 	 * @return string The custom canonical URL, if any.
 	 */
 	public static function get_custom_canonical_url_from_query() {
+
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = umemo( __METHOD__ ) )
+			return $memo;
 
 		if ( Query::is_real_front_page() ) {
 			if ( Query::is_static_front_page() ) {
@@ -157,13 +162,16 @@ class URI {
 			$url = Data\Plugin\User::get_current_post_author_meta_item( 'canonical' );
 		}
 
-		if ( empty( $url ) )
-			return '';
+		$url = empty( $url )
+			? ''
+			: \sanitize_url(
+				URI\Utils::make_absolute_current_scheme_url( $url ),
+				[ 'https', 'http' ],
+			);
 
-		return \sanitize_url(
-			URI\Utils::make_absolute_current_scheme_url( $url ),
-			[ 'https', 'http' ],
-		);
+		return Query\Cache::can_cache_query()
+			? umemo( __METHOD__, $url )
+			: $url;
 	}
 
 	/**
@@ -216,10 +224,15 @@ class URI {
 	 * Gets generated canonical URL, based on query.
 	 *
 	 * @since 5.0.0
+	 * @since 5.2.2 Now memoizes the query result after the `wp` action.
 	 *
 	 * @return string The generated canonical URL.
 	 */
 	public static function get_generated_url_from_query() {
+
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = umemo( __METHOD__ ) )
+			return $memo;
 
 		if ( Query::is_real_front_page() ) {
 			$url = self::get_front_page_url();
@@ -239,7 +252,11 @@ class URI {
 			$url = self::get_search_url();
 		}
 
-		return $url ?? '' ?: '';
+		$url = $url ?? '' ?: '';
+
+		return Query\Cache::can_cache_query()
+			? umemo( __METHOD__, $url )
+			: $url;
 	}
 
 	/**

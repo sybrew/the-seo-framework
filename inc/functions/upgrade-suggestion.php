@@ -58,7 +58,7 @@ _prepare( $previous_version, $current_version );
  * @since 4.1.3 Commented out sale notification conditions, as those can't be met anyway.
  * @since 4.2.1 No longer tests WP and PHP requirements for Extension Manager.
  * @since 4.2.7 Removed test for Extension Manager upgrade.
- * @since 5.2.0 Now suggests sponsorship instead of the temporary sale.
+ * @since 5.2.0 Now temporarily suggests sponsorship instead of the sale.
  * @access private
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
@@ -88,9 +88,10 @@ function _prepare( $previous_version, $current_version ) {
 	}
 
 	if ( $show_notification ) {
-		// _suggest_temp_sale( $previous_version, $current_version );
 		// phpcs:ignore TSF.Performance.Opcodes.ShouldHaveNamespaceEscape
-		_suggest_sponsorship( $previous_version, $current_version );
+		_suggest_temp_sale( $previous_version, $current_version );
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+		// _suggest_sponsorship( $previous_version, $current_version );
 	}
 }
 
@@ -102,6 +103,7 @@ function _prepare( $previous_version, $current_version ) {
  * Win-win.
  *
  * @since 4.1.2
+ * @since 5.2.2 Updated copy, target version range, and expiration for the 2026 BFCM sale.
  * @access private
  *
  * @param string $previous_version The previous version the site upgraded from, if any.
@@ -109,17 +111,11 @@ function _prepare( $previous_version, $current_version ) {
  */
 function _suggest_temp_sale( $previous_version, $current_version ) {
 
-	if ( $previous_version < '5140' && $current_version < '5150' ) {
+	if ( $previous_version < '5220' && $current_version < '5230' ) {
 		Admin\Notice\Persistent::register_notice(
-			Markdown::convert(
-				\sprintf(
-					'<p>You\'re now on The SEO Framework v5.1.4 &mdash; thanks for sticking with us!</p><p>We spent the year [rethinking plugin distribution](%s). Because we\'re late, our BFCM sale runs 2 extra weeks: [50%% off extensions for life](%s).</p><p>This notice disappears December 16th or when dismissed.</p>',
-					'https://deploytroy.org/blog/official-release/',
-					'https://theseoframework.com/?p=3527',
-				),
-				[ 'a' ],
-				[ 'a_internal' => false ],
-			),
+			'<p>You\'re now on The SEO Framework v5.2.2 &mdash; thanks for sticking with us!</p>'
+			. '<p>Full author SEO controls arrived in v5.2.0. This update adds taxonomy base removal, which was originally planned for that release. Want to support what comes next? Claim a <a href="https://theseoframework.com/pricing/" target="_blank" rel="nofollow noreferrer noopener">50% BFCM discount<span class="screen-reader-text"> (opens in a new tab)</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a> on extensions.</p>'
+			. '<p>This notice disappears on December 7th or when dismissed.</p>',
 			'suggest-sale',
 			[
 				'type'   => 'info',
@@ -132,7 +128,7 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 				'capability'   => 'install_plugins',
 				'user'         => 0,
 				'count'        => 42,
-				'timeout'      => strtotime( 'December 16th, 2025, 23:00GMT+1' ) - time(),
+				'timeout'      => strtotime( 'December 7th, 2026, 23:59 UTC' ) - time(),
 			],
 		);
 	}

@@ -170,20 +170,15 @@ class Query {
 	 *
 	 * @since 2.6.0
 	 * @since 5.0.0 Moved from `\The_SEO_Framework\Load`.
-	 * @since 5.2.2 1. Now waits for the `wp` action before caching the front-end front page ID.
-	 *              2. Now caches per site.
-	 * @global int $blog_id
+	 * @since 5.2.2 Now waits for the `wp` action before caching the front-end front page ID.
 	 *
 	 * @return int the ID.
 	 */
 	public static function get_the_front_page_id() {
 
-		static $memo = [];
-
-		$blog_id = $GLOBALS['blog_id'];
-
-		if ( isset( $memo[ $blog_id ] ) )
-			return $memo[ $blog_id ];
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition -- I know.
+		if ( null !== $memo = umemo( __METHOD__ ) )
+			return $memo;
 
 		$id = Query\Utils::has_page_on_front()
 			? (int) \get_option( 'page_on_front' )
@@ -191,7 +186,7 @@ class Query {
 
 		// Wait for `wp`: Polylang's content-based language mode attaches its `option_page_on_front` filter at `wp` (priority 5).
 		return Query\Cache::can_cache_query()
-			? $memo[ $blog_id ] = $id
+			? umemo( __METHOD__, $id )
 			: $id;
 	}
 
@@ -891,8 +886,7 @@ class Query {
 	 * Detects the static front page.
 	 *
 	 * @since 5.0.0
-	 * @since 5.2.2 1. Now waits for the `wp` action before caching the front-end front page ID.
-	 *              2. Now caches per site.
+	 * @since 5.2.2 Now waits for the `wp` action before caching the front-end front page ID.
 	 *
 	 * @param int $id the Page ID to check. If empty, the current ID will be fetched.
 	 * @return bool True when homepage is static and given/current ID matches.
