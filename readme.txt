@@ -245,6 +245,10 @@ You can also output these breadcrumbs visually in your theme by [using a shortco
 
 == Changelog ==
 
+### 5.2.3
+
+Resolved an issue with notices not being dismissible [on all admin screens](https://theseoframework.com/?p=4709#detailed).
+
 ### 5.2.2
 
 This update lets you remove URL bases under **General Settings → Canonical**. Choose which public hierarchical taxonomies to shorten, including categories, WooCommerce product categories and brands, and custom taxonomies. For example, `/category/recipes/bread/` becomes `/recipes/bread/`. If the shorter URL is already taken, [the SEO Bar tells you](https://theseoframework.com/?p=4703#detailed).

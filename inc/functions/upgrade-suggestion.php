@@ -113,7 +113,7 @@ function _suggest_temp_sale( $previous_version, $current_version ) {
 
 	if ( $previous_version < '5220' && $current_version < '5230' ) {
 		Admin\Notice\Persistent::register_notice(
-			'<p>You\'re now on The SEO Framework v5.2.2 &mdash; thanks for sticking with us!</p>'
+			'<p>You\'re now on The SEO Framework v5.2.3 &mdash; thanks for sticking with us!</p>'
 			. '<p>Full author SEO controls arrived in v5.2.0. This update adds taxonomy base removal, which was originally planned for that release. Want to support what comes next? Claim a <a href="https://theseoframework.com/pricing/" target="_blank" rel="nofollow noreferrer noopener">50% BFCM discount<span class="screen-reader-text"> (opens in a new tab)</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a> on extensions.</p>'
 			. '<p>This notice disappears on December 7th or when dismissed.</p>',
 			'suggest-sale',

@@ -265,6 +265,7 @@ class Loader {
 	 *
 	 * @since 5.1.0
 	 * @since 5.2.0 No longer includes unused `manage_options` and `upload_files` l10n nonces.
+	 * @since 5.2.3 Now declares `wp-util` as a dependency for `tsf-ui`.
 	 *
 	 * @return array The script params.
 	 */
@@ -357,7 +358,7 @@ class Loader {
 			[
 				'id'       => 'tsf-ui',
 				'type'     => 'js',
-				'deps'     => [ 'tsf', 'tsf-utils', 'jquery' ],
+				'deps'     => [ 'tsf', 'tsf-utils', 'jquery', 'wp-util' ],
 				'autoload' => true,
 				'name'     => 'ui',
 				'base'     => \THE_SEO_FRAMEWORK_DIR_URL . 'lib/js/',
