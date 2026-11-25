@@ -5,7 +5,7 @@ Tags: seo, xml sitemap, google search, open graph, structured data
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4.0
-Stable tag: 5.2.2
+Stable tag: 5.2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
