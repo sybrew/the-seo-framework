@@ -70,10 +70,22 @@ Open `wp-admin/admin.php?page=theseoframework-settings`, or the post, term, or u
 
 A control you cannot find is a failed item. If Playwright is not connected, say so. Do not claim the controls were flicked.
 
+## Screenshots
+
+Check whether this release changed the admin layout, visible controls, or counts shown in the WordPress.org listing screenshots. If it did, ask the user whether they want updated screenshots made and where to save them.
+
+By default, save new screenshots to `.local/assets/wporg-screenshots/`. Capture them on the after site via Playwright, show the captured screenshots in chat, and tell the user where they were saved so they can review, improve, or move them into their WordPress.org SVN `assets/` directory (top-level beside `trunk/`, never inside `trunk/` or a tag):
+
+- **Format and naming**: Lowercase `screenshot-1.png`, `screenshot-2.png`, matching the numbered captions under `== Screenshots ==` in `readme.txt`. WordPress.org accepts only `.png` and `.jpg` (up to 10 MB each; WebP and AVIF are not supported). Use lossless 24-bit RGB PNG for admin UI so text and one-pixel borders stay sharp while flat panels compress small.
+- **Dimensions and framing**: WordPress.org sets no required pixel size for plugin screenshots (1200x900 applies to themes). Capture one desktop viewport (`fullPage: false`, `scale: 'css'`), such as `1440x810` (`16:9`) or matching the existing set's aspect ratio, so directory thumbnails remain readable. Do not apply CSS `zoom` before JavaScript overlay measurements run (floating title additions and tooltip arrows compare `getBoundingClientRect()` against unzoomed CSS pixels); capture at native 1x scale, or apply CSS `zoom` only after layout and overlays have settled.
+- **Clean capture**: Use the default `modern` admin color scheme, an expanded sidebar, and any requested demo site or user identity. Hide the browser scrollbar and Playground update badges only during capture via injected CSS or a temporary mu-plugin, and remove temporary helpers and capture files afterward.
+- **Hover cursors**: Never draw a synthetic SVG pointer. On Windows, composite the unscaled 32x32 frame (respecting its hotspot) from the standard `aero_*.cur` files in `C:\Windows\Cursors\` — skip the `_l` and `_xl` variants — matching the hovered element's computed CSS cursor (such as `aero_helpsel.cur` for `cursor: help` and `aero_link.cur` for `cursor: pointer`). Elsewhere, use keyboard focus to open tooltips without a pointer.
+- **SVN rules**: SVN commits are forbidden. Do not run `svn commit` or any SVN command that publishes changes or alters remote repository state. Remind the user to keep `svn:mime-type` set to `image/png` on `.png` assets so WordPress.org displays them inline instead of triggering a download.
+
 ## Translation template
 
 Run the [Makepot skill](../makepot/SKILL.md) last, after the release header and Stable tag are final and the other checks are complete. Compare the generated message strings with the previous template and verify the template header uses the release version.
 
 ## Report
 
-List each item as pass or fail: the release version, `Stable tag`, the compare summary, both WooCommerce reports with the tested versions, and each control you flicked with the effect you saw.
+List each item as pass or fail: the release version, `Stable tag`, the compare summary, both WooCommerce reports with the tested versions, each control you flicked with the effect you saw, and whether screenshots needed an update (with the user's decision or files updated).
