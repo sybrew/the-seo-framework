@@ -396,6 +396,31 @@ $social_format_hint = \sprintf(
 	<tbody>
 		<tr class=form-field>
 			<th scope=row valign=top>
+				<label for="tsf-user-meta[author_type]">
+					<strong><?= \esc_html_x( 'This author represents:', '...Organization or Person.', 'autodescription' ) ?></strong>
+				</label>
+			</th>
+			<td>
+				<select name="tsf-user-meta[author_type]" id="tsf-user-meta[author_type]">
+					<?php
+					foreach ( [
+						'person'       => \__( 'A Person', 'autodescription' ),
+						'organization' => \__( 'An Organization', 'autodescription' ),
+					] as $value => $name )
+						printf(
+							'<option value="%s" %s>%s</option>',
+							\esc_attr( $value ),
+							\selected( $meta['author_type'], $value, false ),
+							\esc_html( $name ),
+						);
+					?>
+				</select>
+				<p class=description><?php \esc_html_e( 'Structured data credits posts by this author to this person or organization.', 'autodescription' ); ?></p>
+			</td>
+		</tr>
+
+		<tr class=form-field>
+			<th scope=row valign=top>
 				<label for="tsf-user-meta[facebook_page]">
 					<strong><?php \esc_html_e( 'Facebook profile page', 'autodescription' ); ?></strong>
 				</label>
