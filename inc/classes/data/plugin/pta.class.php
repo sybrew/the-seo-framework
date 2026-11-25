@@ -195,4 +195,53 @@ class PTA {
 			$post_type ?: Query::get_current_post_type(),
 		);
 	}
+
+	/**
+	 * Updates a single post type archive meta value.
+	 *
+	 * Note that this method can be more resource intensive than you intend it to be,
+	 * as it reprocesses all post type archive meta.
+	 *
+	 * @since 5.2.1
+	 * @ignore Unused internally. Public API.
+	 *
+	 * @param string $item      The item to update.
+	 * @param mixed  $value     The value the item should be at.
+	 * @param string $post_type The post type.
+	 */
+	public static function update_single_meta_item( $item, $value, $post_type ) {
+
+		if ( empty( $post_type ) ) return;
+
+		$meta          = static::get_meta( $post_type );
+		$meta[ $item ] = $value;
+
+		static::save_meta( $post_type, $meta );
+	}
+
+	/**
+	 * Updates post type archive meta from input.
+	 *
+	 * Stores the data merged with the defaults under the post type in plugin option `pta`,
+	 * like the SEO Settings page does. Other post type archives keep their stored values.
+	 *
+	 * @since 5.2.1
+	 * @ignore Unused internally. Public API.
+	 *
+	 * @param string $post_type The post type.
+	 * @param array  $data      The data to save.
+	 */
+	public static function save_meta( $post_type, $data ) {
+
+		if ( empty( $post_type ) ) return;
+
+		// Use the stored revision: filtered or headless options may differ from the database.
+		$pta               = \get_option( \THE_SEO_FRAMEWORK_SITE_OPTIONS )['pta'] ?? [];
+		$pta[ $post_type ] = array_merge(
+			static::get_default_meta( $post_type ),
+			$data,
+		);
+
+		Data\Plugin::update_option( 'pta', $pta );
+	}
 }
